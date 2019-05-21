@@ -163,7 +163,7 @@
      transform="translate(0,-87)"
      id="layer1">
     <g
-       transform="matrix(3.8548572,0,0,3.8548572,-1240.6095,-470.71291)"
+       transform="matrix(3.8548572,0,0,3.8548572,-1241.144,-460.55667)"
        id="g29913">
       <g
          id="g29163"
@@ -239,17 +239,17 @@
       </g>
     </g>
     <text
-       y="253.383"
-       x="96.213013"
+       y="263.53925"
+       x="95.678474"
        id="text29237"
        style="font-variant:normal;font-weight:bold;font-stretch:normal;font-size:13.91504574px;font-family:Raleway;-inkscape-font-specification:Raleway-Bold;writing-mode:lr-tb;fill:#1a1a1a;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.24982452">
       <tspan
          style="fill:#1a1a1a;fill-opacity:1;stroke-width:1.24982452"
          id="tspan29235"
-         x="122.92988 188.67847" />
+         x="122.39534 188.14392" />
     </text>
     <g
-       transform="translate(0.26726953,3.2072343)"
+       transform="translate(-0.26726953,13.363476)"
        id="g29947">
       <text
          style="font-variant:normal;font-weight:bold;font-stretch:normal;font-size:27.38227654px;font-family:Raleway;-inkscape-font-specification:Raleway-Bold;writing-mode:lr-tb;fill:#1a1a1a;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.24982452"
@@ -275,7 +275,8 @@
       </text>
     </g>
     <flowRoot
-       style="fill:black;fill-opacity:1;stroke:none;font-family:sans-serif;font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;letter-spacing:0px;word-spacing:0px"
+       transform="translate(-0.53453906,10.156242)"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        id="flowRoot29949"
        xml:space="preserve"><flowRegion
          id="flowRegion29951"><rect
@@ -284,66 +285,5 @@
            height="57.142857"
            width="88.571426"
            id="rect29953" /></flowRegion><flowPara
-         id="flowPara29955" /></flowRoot>    <g
-       transform="translate(-1.0030593,24.070733)"
-       id="g29947-7">
-      <text
-         id="text29988"
-         y="217.71001"
-         x="162.57445"
-         style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-         xml:space="preserve"><tspan
-           style="stroke-width:0.26458332"
-           y="227.07378"
-           x="162.57445"
-           id="tspan29986" /></text>
-      <g
-         transform="translate(4.0090429)"
-         id="g30033">
-        <text
-           y="226.75449"
-           x="64.278206"
-           id="text29233-5"
-           style="font-variant:normal;font-weight:bold;font-stretch:normal;font-size:14.38907051px;font-family:Raleway;-inkscape-font-specification:Raleway-Bold;writing-mode:lr-tb;fill:#1a1a1a;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.65676838">
-          <tspan
-             y="226.75449"
-             x="64.278206"
-             style="fill:#1a1a1a;fill-opacity:1;stroke-width:0.65676838"
-             id="tspan29231-3">Escola</tspan>
-          <tspan
-             y="244.74083"
-             x="64.278206"
-             style="fill:#1a1a1a;fill-opacity:1;stroke-width:0.65676838"
-             id="tspan29984" />
-        </text>
-        <text
-           y="226.75957"
-           x="119.81521"
-           id="text29233-5-2"
-           style="font-variant:normal;font-weight:bold;font-stretch:normal;font-size:14.38907051px;font-family:Raleway;-inkscape-font-specification:Raleway-Bold;writing-mode:lr-tb;fill:#1a1a1a;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.65676838">
-          <tspan
-             y="226.75957"
-             x="119.81521"
-             style="fill:#1a1a1a;fill-opacity:1;stroke-width:0.65676838"
-             id="tspan29231-3-9">de</tspan>
-          <tspan
-             y="244.74591"
-             x="119.81521"
-             style="fill:#1a1a1a;fill-opacity:1;stroke-width:0.65676838"
-             id="tspan29984-1" />
-        </text>
-        <text
-           y="227.04305"
-           x="143.81668"
-           id="text29233-5-27"
-           style="font-variant:normal;font-weight:bold;font-stretch:normal;font-size:14.38907051px;font-family:Raleway;-inkscape-font-specification:Raleway-Bold;writing-mode:lr-tb;fill:#1a1a1a;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.65676838">
-          <tspan
-             y="227.04305"
-             x="143.81668"
-             style="fill:#1a1a1a;fill-opacity:1;stroke-width:0.65676838"
-             id="tspan29984-9">Condução</tspan>
-        </text>
-      </g>
-    </g>
-  </g>
+         id="flowPara29955" /></flowRoot>  </g>
 </svg>
