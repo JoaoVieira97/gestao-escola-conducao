@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Licensee: Hugo Oliveira(Universidade do Minho)
+License Type: Academic
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="dsm.Student" table="Student" lazy="false">
+		<id name="ID" column="ID" type="integer" unsaved-value="0">
+			<generator class="increment">
+			</generator>
+		</id>
+		<property name="firstName" column="FirstName" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="lastName" column="LastName" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="email" column="Email" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="password" column="Password" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="nif" column="Nif" type="long" length="20" not-null="true" lazy="false"/>
+		<property name="cc" column="Cc" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="address" column="Address" type="string" length="255" not-null="false" lazy="false"/>
+		<set name="ORM_Announcements" lazy="true" cascade="save-update,lock" inverse="false">
+			<key column="StudentID" not-null="true"/>
+			<one-to-many class="dsm.PersonalAnnouncement"/>
+		</set>
+		<set name="ORM_Registers" lazy="true" cascade="save-update,lock" inverse="false">
+			<key column="StudentID" not-null="true"/>
+			<one-to-many class="dsm.Register"/>
+		</set>
+		<set name="ORM_Exams" lazy="true" cascade="save-update,lock" inverse="false">
+			<key column="StudentID" not-null="true"/>
+			<one-to-many class="dsm.Exam"/>
+		</set>
+		<set name="ORM_Payments" lazy="true" cascade="all-delete-orphan" inverse="false">
+			<key column="StudentID" not-null="true"/>
+			<one-to-many class="dsm.Payment"/>
+		</set>
+		<set name="ORM_PracticalLessons" table="Student_PracticalLesson2" lazy="true" cascade="save-update,lock">
+			<key column="StudentID" not-null="true"/>
+			<many-to-many column="PracticalLessonID" class="dsm.PracticalLesson">
+			</many-to-many>
+		</set>
+		<set name="ORM_TheoreticalLessons" table="Student_TheoreticalLesson2" lazy="true" cascade="save-update,lock">
+			<key column="StudentID" not-null="true"/>
+			<many-to-many column="TheoreticalLessonID" class="dsm.TheoreticalLesson">
+			</many-to-many>
+		</set>
+	</class>
+</hibernate-mapping>
