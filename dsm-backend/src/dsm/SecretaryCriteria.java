@@ -24,6 +24,7 @@ public class SecretaryCriteria extends AbstractORMCriteria {
 	public final StringExpression lastName;
 	public final StringExpression email;
 	public final StringExpression password;
+	public final StringExpression role;
 	
 	public SecretaryCriteria(Criteria criteria) {
 		super(criteria);
@@ -32,6 +33,7 @@ public class SecretaryCriteria extends AbstractORMCriteria {
 		lastName = new StringExpression("lastName", this);
 		email = new StringExpression("email", this);
 		password = new StringExpression("password", this);
+		role = new StringExpression("role", this);
 	}
 	
 	public SecretaryCriteria(PersistentSession session) {

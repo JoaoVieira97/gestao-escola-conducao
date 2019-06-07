@@ -13,19 +13,16 @@
  */
 package dsm;
 
-public class Instructor extends User {
+public class Instructor extends dsm.User {
 	public Instructor() {
 	}
 	
 	private java.util.Set this_getSet (int key) {
-		if (key == ORMConstants.KEY_INSTRUCTOR_PRACTICALLESSONS) {
-			return ORM_practicalLessons;
-		}
-		else if (key == ORMConstants.KEY_INSTRUCTOR_WORKINGDAYS) {
+		if (key == ORMConstants.KEY_INSTRUCTOR_WORKINGDAYS) {
 			return ORM_workingDays;
 		}
-		else if (key == ORMConstants.KEY_INSTRUCTOR_THEORETICALLESSONS) {
-			return ORM_theoreticalLessons;
+		else if (key == ORMConstants.KEY_INSTRUCTOR_LESSONS) {
+			return ORM_lessons;
 		}
 		
 		return null;
@@ -38,21 +35,9 @@ public class Instructor extends User {
 		
 	};
 	
-	private java.util.Set ORM_practicalLessons = new java.util.HashSet();
-	
 	private java.util.Set ORM_workingDays = new java.util.HashSet();
 	
-	private java.util.Set ORM_theoreticalLessons = new java.util.HashSet();
-	
-	private void setORM_PracticalLessons(java.util.Set value) {
-		this.ORM_practicalLessons = value;
-	}
-	
-	private java.util.Set getORM_PracticalLessons() {
-		return ORM_practicalLessons;
-	}
-	
-	public final dsm.PracticalLessonSetCollection practicalLessons = new dsm.PracticalLessonSetCollection(this, _ormAdapter, ORMConstants.KEY_INSTRUCTOR_PRACTICALLESSONS, ORMConstants.KEY_PRACTICALLESSON_INSTRUCTOR, ORMConstants.KEY_MUL_ONE_TO_MANY);
+	private java.util.Set ORM_lessons = new java.util.HashSet();
 	
 	private void setORM_WorkingDays(java.util.Set value) {
 		this.ORM_workingDays = value;
@@ -62,17 +47,17 @@ public class Instructor extends User {
 		return ORM_workingDays;
 	}
 	
-	public final dsm.WorkingDaySetCollection workingDays = new dsm.WorkingDaySetCollection(this, _ormAdapter, ORMConstants.KEY_INSTRUCTOR_WORKINGDAYS, ORMConstants.KEY_MUL_ONE_TO_MANY);
+	public final dsm.WorkingDaySetCollection workingDays = new dsm.WorkingDaySetCollection(this, _ormAdapter, ORMConstants.KEY_INSTRUCTOR_WORKINGDAYS, ORMConstants.KEY_MUL_MANY_TO_MANY);
 	
-	private void setORM_TheoreticalLessons(java.util.Set value) {
-		this.ORM_theoreticalLessons = value;
+	private void setORM_Lessons(java.util.Set value) {
+		this.ORM_lessons = value;
 	}
 	
-	private java.util.Set getORM_TheoreticalLessons() {
-		return ORM_theoreticalLessons;
+	private java.util.Set getORM_Lessons() {
+		return ORM_lessons;
 	}
 	
-	public final dsm.TheoreticalLessonSetCollection theoreticalLessons = new dsm.TheoreticalLessonSetCollection(this, _ormAdapter, ORMConstants.KEY_INSTRUCTOR_THEORETICALLESSONS, ORMConstants.KEY_THEORETICALLESSON_INSTRUCTOR, ORMConstants.KEY_MUL_ONE_TO_MANY);
+	public final dsm.LessonSetCollection lessons = new dsm.LessonSetCollection(this, _ormAdapter, ORMConstants.KEY_INSTRUCTOR_LESSONS, ORMConstants.KEY_MUL_ONE_TO_MANY);
 	
 	public String toString() {
 		return super.toString();

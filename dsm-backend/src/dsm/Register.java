@@ -18,12 +18,12 @@ public class Register {
 	}
 	
 	private void this_setOwner(Object owner, int key) {
-		if (key == ORMConstants.KEY_REGISTER_INSTRUCTOR) {
-			this.instructor = (dsm.Instructor) owner;
+		if (key == ORMConstants.KEY_REGISTER_LICENSE) {
+			this.license = (dsm.LicenseCar) owner;
 		}
 		
-		else if (key == ORMConstants.KEY_REGISTER_LICENSE) {
-			this.license = (dsm.LicenseCar) owner;
+		else if (key == ORMConstants.KEY_REGISTER_INSTRUCTOR) {
+			this.instructor = (dsm.Instructor) owner;
 		}
 	}
 	
@@ -36,9 +36,9 @@ public class Register {
 	
 	private int ID;
 	
-	private dsm.LicenseCar license;
-	
 	private dsm.Instructor instructor;
+	
+	private dsm.LicenseCar license;
 	
 	private java.util.Date initialDate;
 	
@@ -62,20 +62,20 @@ public class Register {
 		return initialDate;
 	}
 	
-	public void setInstructor(dsm.Instructor value) {
-		this.instructor = value;
-	}
-	
-	public dsm.Instructor getInstructor() {
-		return instructor;
-	}
-	
 	public void setLicense(dsm.LicenseCar value) {
 		this.license = value;
 	}
 	
 	public dsm.LicenseCar getLicense() {
 		return license;
+	}
+	
+	public void setInstructor(dsm.Instructor value) {
+		this.instructor = value;
+	}
+	
+	public dsm.Instructor getInstructor() {
+		return instructor;
 	}
 	
 	public String toString() {

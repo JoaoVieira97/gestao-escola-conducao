@@ -18,12 +18,12 @@ public class Payment {
 	}
 	
 	private void this_setOwner(Object owner, int key) {
-		if (key == ORMConstants.KEY_PAYMENT_SECRETARY) {
-			this.secretary = (dsm.Secretary) owner;
+		if (key == ORMConstants.KEY_PAYMENT_LICENSE) {
+			this.license = (dsm.LicenseCar) owner;
 		}
 		
-		else if (key == ORMConstants.KEY_PAYMENT_LICENSECAR) {
-			this.licenseCar = (dsm.LicenseCar) owner;
+		else if (key == ORMConstants.KEY_PAYMENT_SECRETARY) {
+			this.secretary = (dsm.Secretary) owner;
 		}
 	}
 	
@@ -36,9 +36,11 @@ public class Payment {
 	
 	private int ID;
 	
-	private dsm.LicenseCar licenseCar;
-	
 	private dsm.Secretary secretary;
+	
+	private dsm.LicenseCar license;
+	
+	private double value;
 	
 	private java.util.Date timestamp;
 	
@@ -54,6 +56,14 @@ public class Payment {
 		return getID();
 	}
 	
+	public void setValue(double value) {
+		this.value = value;
+	}
+	
+	public double getValue() {
+		return value;
+	}
+	
 	public void setTimestamp(java.util.Date value) {
 		this.timestamp = value;
 	}
@@ -62,20 +72,20 @@ public class Payment {
 		return timestamp;
 	}
 	
+	public void setLicense(dsm.LicenseCar value) {
+		this.license = value;
+	}
+	
+	public dsm.LicenseCar getLicense() {
+		return license;
+	}
+	
 	public void setSecretary(dsm.Secretary value) {
 		this.secretary = value;
 	}
 	
 	public dsm.Secretary getSecretary() {
 		return secretary;
-	}
-	
-	public void setLicenseCar(dsm.LicenseCar value) {
-		this.licenseCar = value;
-	}
-	
-	public dsm.LicenseCar getLicenseCar() {
-		return licenseCar;
 	}
 	
 	public String toString() {

@@ -24,44 +24,40 @@ public class InstructorDetachedCriteria extends AbstractORMDetachedCriteria {
 	public final StringExpression lastName;
 	public final StringExpression email;
 	public final StringExpression password;
-	public final CollectionExpression practicalLessons;
+	public final StringExpression role;
 	public final CollectionExpression workingDays;
-	public final CollectionExpression theoreticalLessons;
+	public final CollectionExpression lessons;
 	
 	public InstructorDetachedCriteria() {
-		super(Instructor.class, InstructorCriteria.class);
+		super(dsm.Instructor.class, dsm.InstructorCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		firstName = new StringExpression("firstName", this.getDetachedCriteria());
 		lastName = new StringExpression("lastName", this.getDetachedCriteria());
 		email = new StringExpression("email", this.getDetachedCriteria());
 		password = new StringExpression("password", this.getDetachedCriteria());
-		practicalLessons = new CollectionExpression("ORM_PracticalLessons", this.getDetachedCriteria());
+		role = new StringExpression("role", this.getDetachedCriteria());
 		workingDays = new CollectionExpression("ORM_WorkingDays", this.getDetachedCriteria());
-		theoreticalLessons = new CollectionExpression("ORM_TheoreticalLessons", this.getDetachedCriteria());
+		lessons = new CollectionExpression("ORM_Lessons", this.getDetachedCriteria());
 	}
 	
 	public InstructorDetachedCriteria(DetachedCriteria aDetachedCriteria) {
-		super(aDetachedCriteria, InstructorCriteria.class);
+		super(aDetachedCriteria, dsm.InstructorCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		firstName = new StringExpression("firstName", this.getDetachedCriteria());
 		lastName = new StringExpression("lastName", this.getDetachedCriteria());
 		email = new StringExpression("email", this.getDetachedCriteria());
 		password = new StringExpression("password", this.getDetachedCriteria());
-		practicalLessons = new CollectionExpression("ORM_PracticalLessons", this.getDetachedCriteria());
+		role = new StringExpression("role", this.getDetachedCriteria());
 		workingDays = new CollectionExpression("ORM_WorkingDays", this.getDetachedCriteria());
-		theoreticalLessons = new CollectionExpression("ORM_TheoreticalLessons", this.getDetachedCriteria());
-	}
-	
-	public PracticalLessonDetachedCriteria createPracticalLessonsCriteria() {
-		return new PracticalLessonDetachedCriteria(createCriteria("ORM_PracticalLessons"));
+		lessons = new CollectionExpression("ORM_Lessons", this.getDetachedCriteria());
 	}
 	
 	public WorkingDayDetachedCriteria createWorkingDaysCriteria() {
 		return new WorkingDayDetachedCriteria(createCriteria("ORM_WorkingDays"));
 	}
 	
-	public TheoreticalLessonDetachedCriteria createTheoreticalLessonsCriteria() {
-		return new TheoreticalLessonDetachedCriteria(createCriteria("ORM_TheoreticalLessons"));
+	public LessonDetachedCriteria createLessonsCriteria() {
+		return new LessonDetachedCriteria(createCriteria("ORM_Lessons"));
 	}
 	
 	public Instructor uniqueInstructor(PersistentSession session) {

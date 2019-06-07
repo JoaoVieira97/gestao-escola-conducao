@@ -41,7 +41,7 @@ public class SchoolInfoDAO {
 		}
 	}
 	
-	public static SchoolInfo loadSchoolInfoByORMID(int ID, LockMode lockMode) throws PersistentException {
+	public static SchoolInfo loadSchoolInfoByORMID(int ID, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return loadSchoolInfoByORMID(session, ID, lockMode);
@@ -52,7 +52,7 @@ public class SchoolInfoDAO {
 		}
 	}
 	
-	public static SchoolInfo getSchoolInfoByORMID(int ID, LockMode lockMode) throws PersistentException {
+	public static SchoolInfo getSchoolInfoByORMID(int ID, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return getSchoolInfoByORMID(session, ID, lockMode);
@@ -65,7 +65,7 @@ public class SchoolInfoDAO {
 	
 	public static SchoolInfo loadSchoolInfoByORMID(PersistentSession session, int ID) throws PersistentException {
 		try {
-			return (SchoolInfo) session.load(SchoolInfo.class, new Integer(ID));
+			return (SchoolInfo) session.load(dsm.SchoolInfo.class, new Integer(ID));
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -75,7 +75,7 @@ public class SchoolInfoDAO {
 	
 	public static SchoolInfo getSchoolInfoByORMID(PersistentSession session, int ID) throws PersistentException {
 		try {
-			return (SchoolInfo) session.get(SchoolInfo.class, new Integer(ID));
+			return (SchoolInfo) session.get(dsm.SchoolInfo.class, new Integer(ID));
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -83,9 +83,9 @@ public class SchoolInfoDAO {
 		}
 	}
 	
-	public static SchoolInfo loadSchoolInfoByORMID(PersistentSession session, int ID, LockMode lockMode) throws PersistentException {
+	public static SchoolInfo loadSchoolInfoByORMID(PersistentSession session, int ID, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
-			return (SchoolInfo) session.load(SchoolInfo.class, new Integer(ID), lockMode);
+			return (SchoolInfo) session.load(dsm.SchoolInfo.class, new Integer(ID), lockMode);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -93,9 +93,9 @@ public class SchoolInfoDAO {
 		}
 	}
 	
-	public static SchoolInfo getSchoolInfoByORMID(PersistentSession session, int ID, LockMode lockMode) throws PersistentException {
+	public static SchoolInfo getSchoolInfoByORMID(PersistentSession session, int ID, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
-			return (SchoolInfo) session.get(SchoolInfo.class, new Integer(ID), lockMode);
+			return (SchoolInfo) session.get(dsm.SchoolInfo.class, new Integer(ID), lockMode);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -114,7 +114,7 @@ public class SchoolInfoDAO {
 		}
 	}
 	
-	public static List querySchoolInfo(String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static List querySchoolInfo(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return querySchoolInfo(session, condition, orderBy, lockMode);
@@ -136,7 +136,7 @@ public class SchoolInfoDAO {
 		}
 	}
 	
-	public static SchoolInfo[] listSchoolInfoByQuery(String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static SchoolInfo[] listSchoolInfoByQuery(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return listSchoolInfoByQuery(session, condition, orderBy, lockMode);
@@ -163,7 +163,7 @@ public class SchoolInfoDAO {
 		}
 	}
 	
-	public static List querySchoolInfo(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static List querySchoolInfo(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		StringBuffer sb = new StringBuffer("From dsm.SchoolInfo as SchoolInfo");
 		if (condition != null)
 			sb.append(" Where ").append(condition);
@@ -191,7 +191,7 @@ public class SchoolInfoDAO {
 		}
 	}
 	
-	public static SchoolInfo[] listSchoolInfoByQuery(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static SchoolInfo[] listSchoolInfoByQuery(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			List list = querySchoolInfo(session, condition, orderBy, lockMode);
 			return (SchoolInfo[]) list.toArray(new SchoolInfo[list.size()]);
@@ -213,7 +213,7 @@ public class SchoolInfoDAO {
 		}
 	}
 	
-	public static SchoolInfo loadSchoolInfoByQuery(String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static SchoolInfo loadSchoolInfoByQuery(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return loadSchoolInfoByQuery(session, condition, orderBy, lockMode);
@@ -232,7 +232,7 @@ public class SchoolInfoDAO {
 			return null;
 	}
 	
-	public static SchoolInfo loadSchoolInfoByQuery(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static SchoolInfo loadSchoolInfoByQuery(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		SchoolInfo[] schoolInfos = listSchoolInfoByQuery(session, condition, orderBy, lockMode);
 		if (schoolInfos != null && schoolInfos.length > 0)
 			return schoolInfos[0];
@@ -251,7 +251,7 @@ public class SchoolInfoDAO {
 		}
 	}
 	
-	public static java.util.Iterator iterateSchoolInfoByQuery(String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static java.util.Iterator iterateSchoolInfoByQuery(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return iterateSchoolInfoByQuery(session, condition, orderBy, lockMode);
@@ -278,7 +278,7 @@ public class SchoolInfoDAO {
 		}
 	}
 	
-	public static java.util.Iterator iterateSchoolInfoByQuery(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static java.util.Iterator iterateSchoolInfoByQuery(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		StringBuffer sb = new StringBuffer("From dsm.SchoolInfo as SchoolInfo");
 		if (condition != null)
 			sb.append(" Where ").append(condition);
@@ -296,10 +296,10 @@ public class SchoolInfoDAO {
 	}
 	
 	public static SchoolInfo createSchoolInfo() {
-		return new SchoolInfo();
+		return new dsm.SchoolInfo();
 	}
 	
-	public static boolean save(SchoolInfo schoolInfo) throws PersistentException {
+	public static boolean save(dsm.SchoolInfo schoolInfo) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().saveObject(schoolInfo);
 			return true;
@@ -310,7 +310,7 @@ public class SchoolInfoDAO {
 		}
 	}
 	
-	public static boolean delete(SchoolInfo schoolInfo) throws PersistentException {
+	public static boolean delete(dsm.SchoolInfo schoolInfo) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().deleteObject(schoolInfo);
 			return true;
@@ -321,7 +321,7 @@ public class SchoolInfoDAO {
 		}
 	}
 	
-	public static boolean refresh(SchoolInfo schoolInfo) throws PersistentException {
+	public static boolean refresh(dsm.SchoolInfo schoolInfo) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().getSession().refresh(schoolInfo);
 			return true;
@@ -332,7 +332,7 @@ public class SchoolInfoDAO {
 		}
 	}
 	
-	public static boolean evict(SchoolInfo schoolInfo) throws PersistentException {
+	public static boolean evict(dsm.SchoolInfo schoolInfo) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().getSession().evict(schoolInfo);
 			return true;

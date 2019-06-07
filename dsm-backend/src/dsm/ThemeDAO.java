@@ -41,7 +41,7 @@ public class ThemeDAO {
 		}
 	}
 	
-	public static Theme loadThemeByORMID(int ID, LockMode lockMode) throws PersistentException {
+	public static Theme loadThemeByORMID(int ID, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return loadThemeByORMID(session, ID, lockMode);
@@ -52,7 +52,7 @@ public class ThemeDAO {
 		}
 	}
 	
-	public static Theme getThemeByORMID(int ID, LockMode lockMode) throws PersistentException {
+	public static Theme getThemeByORMID(int ID, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return getThemeByORMID(session, ID, lockMode);
@@ -65,7 +65,7 @@ public class ThemeDAO {
 	
 	public static Theme loadThemeByORMID(PersistentSession session, int ID) throws PersistentException {
 		try {
-			return (Theme) session.load(Theme.class, new Integer(ID));
+			return (Theme) session.load(dsm.Theme.class, new Integer(ID));
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -75,7 +75,7 @@ public class ThemeDAO {
 	
 	public static Theme getThemeByORMID(PersistentSession session, int ID) throws PersistentException {
 		try {
-			return (Theme) session.get(Theme.class, new Integer(ID));
+			return (Theme) session.get(dsm.Theme.class, new Integer(ID));
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -83,9 +83,9 @@ public class ThemeDAO {
 		}
 	}
 	
-	public static Theme loadThemeByORMID(PersistentSession session, int ID, LockMode lockMode) throws PersistentException {
+	public static Theme loadThemeByORMID(PersistentSession session, int ID, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
-			return (Theme) session.load(Theme.class, new Integer(ID), lockMode);
+			return (Theme) session.load(dsm.Theme.class, new Integer(ID), lockMode);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -93,9 +93,9 @@ public class ThemeDAO {
 		}
 	}
 	
-	public static Theme getThemeByORMID(PersistentSession session, int ID, LockMode lockMode) throws PersistentException {
+	public static Theme getThemeByORMID(PersistentSession session, int ID, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
-			return (Theme) session.get(Theme.class, new Integer(ID), lockMode);
+			return (Theme) session.get(dsm.Theme.class, new Integer(ID), lockMode);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -114,7 +114,7 @@ public class ThemeDAO {
 		}
 	}
 	
-	public static List queryTheme(String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static List queryTheme(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return queryTheme(session, condition, orderBy, lockMode);
@@ -136,7 +136,7 @@ public class ThemeDAO {
 		}
 	}
 	
-	public static Theme[] listThemeByQuery(String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static Theme[] listThemeByQuery(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return listThemeByQuery(session, condition, orderBy, lockMode);
@@ -163,7 +163,7 @@ public class ThemeDAO {
 		}
 	}
 	
-	public static List queryTheme(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static List queryTheme(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		StringBuffer sb = new StringBuffer("From dsm.Theme as Theme");
 		if (condition != null)
 			sb.append(" Where ").append(condition);
@@ -191,7 +191,7 @@ public class ThemeDAO {
 		}
 	}
 	
-	public static Theme[] listThemeByQuery(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static Theme[] listThemeByQuery(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			List list = queryTheme(session, condition, orderBy, lockMode);
 			return (Theme[]) list.toArray(new Theme[list.size()]);
@@ -213,7 +213,7 @@ public class ThemeDAO {
 		}
 	}
 	
-	public static Theme loadThemeByQuery(String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static Theme loadThemeByQuery(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return loadThemeByQuery(session, condition, orderBy, lockMode);
@@ -232,7 +232,7 @@ public class ThemeDAO {
 			return null;
 	}
 	
-	public static Theme loadThemeByQuery(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static Theme loadThemeByQuery(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		Theme[] themes = listThemeByQuery(session, condition, orderBy, lockMode);
 		if (themes != null && themes.length > 0)
 			return themes[0];
@@ -251,7 +251,7 @@ public class ThemeDAO {
 		}
 	}
 	
-	public static java.util.Iterator iterateThemeByQuery(String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static java.util.Iterator iterateThemeByQuery(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return iterateThemeByQuery(session, condition, orderBy, lockMode);
@@ -278,7 +278,7 @@ public class ThemeDAO {
 		}
 	}
 	
-	public static java.util.Iterator iterateThemeByQuery(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static java.util.Iterator iterateThemeByQuery(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		StringBuffer sb = new StringBuffer("From dsm.Theme as Theme");
 		if (condition != null)
 			sb.append(" Where ").append(condition);
@@ -296,10 +296,10 @@ public class ThemeDAO {
 	}
 	
 	public static Theme createTheme() {
-		return new Theme();
+		return new dsm.Theme();
 	}
 	
-	public static boolean save(Theme theme) throws PersistentException {
+	public static boolean save(dsm.Theme theme) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().saveObject(theme);
 			return true;
@@ -310,7 +310,7 @@ public class ThemeDAO {
 		}
 	}
 	
-	public static boolean delete(Theme theme) throws PersistentException {
+	public static boolean delete(dsm.Theme theme) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().deleteObject(theme);
 			return true;
@@ -321,7 +321,7 @@ public class ThemeDAO {
 		}
 	}
 	
-	public static boolean refresh(Theme theme) throws PersistentException {
+	public static boolean refresh(dsm.Theme theme) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().getSession().refresh(theme);
 			return true;
@@ -332,7 +332,7 @@ public class ThemeDAO {
 		}
 	}
 	
-	public static boolean evict(Theme theme) throws PersistentException {
+	public static boolean evict(dsm.Theme theme) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().getSession().evict(theme);
 			return true;

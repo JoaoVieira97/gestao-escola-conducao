@@ -24,9 +24,9 @@ public class InstructorCriteria extends AbstractORMCriteria {
 	public final StringExpression lastName;
 	public final StringExpression email;
 	public final StringExpression password;
-	public final CollectionExpression practicalLessons;
+	public final StringExpression role;
 	public final CollectionExpression workingDays;
-	public final CollectionExpression theoreticalLessons;
+	public final CollectionExpression lessons;
 	
 	public InstructorCriteria(Criteria criteria) {
 		super(criteria);
@@ -35,9 +35,9 @@ public class InstructorCriteria extends AbstractORMCriteria {
 		lastName = new StringExpression("lastName", this);
 		email = new StringExpression("email", this);
 		password = new StringExpression("password", this);
-		practicalLessons = new CollectionExpression("ORM_PracticalLessons", this);
+		role = new StringExpression("role", this);
 		workingDays = new CollectionExpression("ORM_WorkingDays", this);
-		theoreticalLessons = new CollectionExpression("ORM_TheoreticalLessons", this);
+		lessons = new CollectionExpression("ORM_Lessons", this);
 	}
 	
 	public InstructorCriteria(PersistentSession session) {
@@ -48,16 +48,12 @@ public class InstructorCriteria extends AbstractORMCriteria {
 		this(DSMPersistentManager.instance().getSession());
 	}
 	
-	public PracticalLessonCriteria createPracticalLessonsCriteria() {
-		return new PracticalLessonCriteria(createCriteria("ORM_PracticalLessons"));
-	}
-	
 	public WorkingDayCriteria createWorkingDaysCriteria() {
 		return new WorkingDayCriteria(createCriteria("ORM_WorkingDays"));
 	}
 	
-	public TheoreticalLessonCriteria createTheoreticalLessonsCriteria() {
-		return new TheoreticalLessonCriteria(createCriteria("ORM_TheoreticalLessons"));
+	public LessonCriteria createLessonsCriteria() {
+		return new LessonCriteria(createCriteria("ORM_Lessons"));
 	}
 	
 	public Instructor uniqueInstructor() {

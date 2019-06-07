@@ -23,10 +23,9 @@ public class PracticalLessonCriteria extends AbstractORMCriteria {
 	public final DateExpression startTime;
 	public final IntegerExpression duration;
 	public final StringExpression state;
-	public final IntegerExpression instructorId;
-	public final AssociationExpression instructor;
-	public final BooleanExpression isStudentPresent;
 	public final CollectionExpression students;
+	public final CollectionExpression licenses;
+	public final BooleanExpression isStudentPresent;
 	
 	public PracticalLessonCriteria(Criteria criteria) {
 		super(criteria);
@@ -34,10 +33,9 @@ public class PracticalLessonCriteria extends AbstractORMCriteria {
 		startTime = new DateExpression("startTime", this);
 		duration = new IntegerExpression("duration", this);
 		state = new StringExpression("state", this);
-		instructorId = new IntegerExpression("instructor.ID", this);
-		instructor = new AssociationExpression("instructor", this);
-		isStudentPresent = new BooleanExpression("isStudentPresent", this);
 		students = new CollectionExpression("ORM_Students", this);
+		licenses = new CollectionExpression("ORM_Licenses", this);
+		isStudentPresent = new BooleanExpression("isStudentPresent", this);
 	}
 	
 	public PracticalLessonCriteria(PersistentSession session) {
@@ -48,12 +46,12 @@ public class PracticalLessonCriteria extends AbstractORMCriteria {
 		this(DSMPersistentManager.instance().getSession());
 	}
 	
-	public InstructorCriteria createInstructorCriteria() {
-		return new InstructorCriteria(createCriteria("instructor"));
-	}
-	
 	public StudentCriteria createStudentsCriteria() {
 		return new StudentCriteria(createCriteria("ORM_Students"));
+	}
+	
+	public LicenseCarCriteria createLicensesCriteria() {
+		return new LicenseCarCriteria(createCriteria("ORM_Licenses"));
 	}
 	
 	public PracticalLesson uniquePracticalLesson() {

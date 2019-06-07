@@ -10,8 +10,8 @@ License Type: Academic
 			<generator class="increment">
 			</generator>
 		</id>
-		<property name="maxTimeToCancel" column="MaxTimeToCancel" type="integer" length="10" not-null="true" lazy="false"/>
-		<property name="startTime" column="StartTime" type="integer" length="10" not-null="true" lazy="false"/>
-		<property name="endTime" column="EndTime" type="integer" length="10" not-null="true" lazy="false"/>
+		<property name="maxTimeToCancel" column="MaxTimeToCancel" type="time" not-null="true" lazy="false"/>
+		<property name="startTime" column="StartTime" type="time" not-null="true" lazy="false"/>
+		<property name="endTime" column="EndTime" type="time" not-null="true" lazy="false"/>
 	</class>
 </hibernate-mapping>

@@ -20,16 +20,16 @@ import org.orm.criteria.*;
 
 public class SchoolInfoCriteria extends AbstractORMCriteria {
 	public final IntegerExpression ID;
-	public final IntegerExpression maxTimeToCancel;
-	public final IntegerExpression startTime;
-	public final IntegerExpression endTime;
+	public final TimeExpression maxTimeToCancel;
+	public final TimeExpression startTime;
+	public final TimeExpression endTime;
 	
 	public SchoolInfoCriteria(Criteria criteria) {
 		super(criteria);
 		ID = new IntegerExpression("ID", this);
-		maxTimeToCancel = new IntegerExpression("maxTimeToCancel", this);
-		startTime = new IntegerExpression("startTime", this);
-		endTime = new IntegerExpression("endTime", this);
+		maxTimeToCancel = new TimeExpression("maxTimeToCancel", this);
+		startTime = new TimeExpression("startTime", this);
+		endTime = new TimeExpression("endTime", this);
 	}
 	
 	public SchoolInfoCriteria(PersistentSession session) {

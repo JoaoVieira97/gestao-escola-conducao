@@ -25,7 +25,7 @@ public class AnnouncementDetachedCriteria extends AbstractORMDetachedCriteria {
 	public final DateExpression timestamp;
 	
 	public AnnouncementDetachedCriteria() {
-		super(Announcement.class, AnnouncementCriteria.class);
+		super(dsm.Announcement.class, dsm.AnnouncementCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		title = new StringExpression("title", this.getDetachedCriteria());
 		description = new StringExpression("description", this.getDetachedCriteria());
@@ -33,7 +33,7 @@ public class AnnouncementDetachedCriteria extends AbstractORMDetachedCriteria {
 	}
 	
 	public AnnouncementDetachedCriteria(DetachedCriteria aDetachedCriteria) {
-		super(aDetachedCriteria, AnnouncementCriteria.class);
+		super(aDetachedCriteria, dsm.AnnouncementCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		title = new StringExpression("title", this.getDetachedCriteria());
 		description = new StringExpression("description", this.getDetachedCriteria());

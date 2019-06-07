@@ -27,6 +27,8 @@ public abstract class User {
 	
 	private String password;
 	
+	private String role;
+	
 	private void setID(int value) {
 		this.ID = value;
 	}
@@ -69,6 +71,14 @@ public abstract class User {
 	
 	public String getPassword() {
 		return password;
+	}
+	
+	public void setRole(String value) {
+		this.role = value;
+	}
+	
+	public String getRole() {
+		return role;
 	}
 	
 	public String toString() {

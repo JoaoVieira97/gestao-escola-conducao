@@ -19,11 +19,11 @@ public class SchoolInfo {
 	
 	private int ID;
 	
-	private int maxTimeToCancel;
+	private java.sql.Time maxTimeToCancel;
 	
-	private int startTime;
+	private java.sql.Time startTime;
 	
-	private int endTime;
+	private java.sql.Time endTime;
 	
 	private void setID(int value) {
 		this.ID = value;
@@ -37,27 +37,27 @@ public class SchoolInfo {
 		return getID();
 	}
 	
-	public void setMaxTimeToCancel(int value) {
+	public void setMaxTimeToCancel(java.sql.Time value) {
 		this.maxTimeToCancel = value;
 	}
 	
-	public int getMaxTimeToCancel() {
+	public java.sql.Time getMaxTimeToCancel() {
 		return maxTimeToCancel;
 	}
 	
-	public void setStartTime(int value) {
+	public void setStartTime(java.sql.Time value) {
 		this.startTime = value;
 	}
 	
-	public int getStartTime() {
+	public java.sql.Time getStartTime() {
 		return startTime;
 	}
 	
-	public void setEndTime(int value) {
+	public void setEndTime(java.sql.Time value) {
 		this.endTime = value;
 	}
 	
-	public int getEndTime() {
+	public java.sql.Time getEndTime() {
 		return endTime;
 	}
 	

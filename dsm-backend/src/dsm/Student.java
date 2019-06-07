@@ -13,28 +13,25 @@
  */
 package dsm;
 
-public class Student extends User {
+public class Student extends dsm.User {
 	public Student() {
 	}
 	
 	private java.util.Set this_getSet (int key) {
-		if (key == ORMConstants.KEY_STUDENT_ANNOUNCEMENTS) {
-			return ORM_announcements;
-		}
-		else if (key == ORMConstants.KEY_STUDENT_REGISTERS) {
-			return ORM_registers;
+		if (key == ORMConstants.KEY_STUDENT_PAYMENTS) {
+			return ORM_payments;
 		}
 		else if (key == ORMConstants.KEY_STUDENT_EXAMS) {
 			return ORM_exams;
 		}
-		else if (key == ORMConstants.KEY_STUDENT_PAYMENTS) {
-			return ORM_payments;
+		else if (key == ORMConstants.KEY_STUDENT_ANNOUNCEMENTS) {
+			return ORM_announcements;
 		}
-		else if (key == ORMConstants.KEY_STUDENT_PRACTICALLESSONS) {
-			return ORM_practicalLessons;
+		else if (key == ORMConstants.KEY_STUDENT_LESSONS) {
+			return ORM_lessons;
 		}
-		else if (key == ORMConstants.KEY_STUDENT_THEORETICALLESSONS) {
-			return ORM_theoreticalLessons;
+		else if (key == ORMConstants.KEY_STUDENT_REGISTERS) {
+			return ORM_registers;
 		}
 		
 		return null;
@@ -53,17 +50,17 @@ public class Student extends User {
 	
 	private String address;
 	
-	private java.util.Set ORM_announcements = new java.util.HashSet();
-	
-	private java.util.Set ORM_registers = new java.util.HashSet();
-	
-	private java.util.Set ORM_exams = new java.util.HashSet();
+	private java.util.Date birth;
 	
 	private java.util.Set ORM_payments = new java.util.HashSet();
 	
-	private java.util.Set ORM_practicalLessons = new java.util.HashSet();
+	private java.util.Set ORM_exams = new java.util.HashSet();
 	
-	private java.util.Set ORM_theoreticalLessons = new java.util.HashSet();
+	private java.util.Set ORM_announcements = new java.util.HashSet();
+	
+	private java.util.Set ORM_lessons = new java.util.HashSet();
+	
+	private java.util.Set ORM_registers = new java.util.HashSet();
 	
 	public void setNif(long value) {
 		this.nif = value;
@@ -89,35 +86,13 @@ public class Student extends User {
 		return address;
 	}
 	
-	private void setORM_Announcements(java.util.Set value) {
-		this.ORM_announcements = value;
+	public void setBirth(java.util.Date value) {
+		this.birth = value;
 	}
 	
-	private java.util.Set getORM_Announcements() {
-		return ORM_announcements;
+	public java.util.Date getBirth() {
+		return birth;
 	}
-	
-	public final dsm.PersonalAnnouncementSetCollection announcements = new dsm.PersonalAnnouncementSetCollection(this, _ormAdapter, ORMConstants.KEY_STUDENT_ANNOUNCEMENTS, ORMConstants.KEY_MUL_ONE_TO_MANY);
-	
-	private void setORM_Registers(java.util.Set value) {
-		this.ORM_registers = value;
-	}
-	
-	private java.util.Set getORM_Registers() {
-		return ORM_registers;
-	}
-	
-	public final dsm.RegisterSetCollection registers = new dsm.RegisterSetCollection(this, _ormAdapter, ORMConstants.KEY_STUDENT_REGISTERS, ORMConstants.KEY_MUL_ONE_TO_MANY);
-	
-	private void setORM_Exams(java.util.Set value) {
-		this.ORM_exams = value;
-	}
-	
-	private java.util.Set getORM_Exams() {
-		return ORM_exams;
-	}
-	
-	public final dsm.ExamSetCollection exams = new dsm.ExamSetCollection(this, _ormAdapter, ORMConstants.KEY_STUDENT_EXAMS, ORMConstants.KEY_MUL_ONE_TO_MANY);
 	
 	private void setORM_Payments(java.util.Set value) {
 		this.ORM_payments = value;
@@ -129,25 +104,45 @@ public class Student extends User {
 	
 	public final dsm.PaymentSetCollection payments = new dsm.PaymentSetCollection(this, _ormAdapter, ORMConstants.KEY_STUDENT_PAYMENTS, ORMConstants.KEY_MUL_ONE_TO_MANY);
 	
-	private void setORM_PracticalLessons(java.util.Set value) {
-		this.ORM_practicalLessons = value;
+	private void setORM_Exams(java.util.Set value) {
+		this.ORM_exams = value;
 	}
 	
-	private java.util.Set getORM_PracticalLessons() {
-		return ORM_practicalLessons;
+	private java.util.Set getORM_Exams() {
+		return ORM_exams;
 	}
 	
-	public final dsm.PracticalLessonSetCollection practicalLessons = new dsm.PracticalLessonSetCollection(this, _ormAdapter, ORMConstants.KEY_STUDENT_PRACTICALLESSONS, ORMConstants.KEY_PRACTICALLESSON_STUDENTS, ORMConstants.KEY_MUL_MANY_TO_MANY);
+	public final dsm.ExamSetCollection exams = new dsm.ExamSetCollection(this, _ormAdapter, ORMConstants.KEY_STUDENT_EXAMS, ORMConstants.KEY_MUL_ONE_TO_MANY);
 	
-	private void setORM_TheoreticalLessons(java.util.Set value) {
-		this.ORM_theoreticalLessons = value;
+	private void setORM_Announcements(java.util.Set value) {
+		this.ORM_announcements = value;
 	}
 	
-	private java.util.Set getORM_TheoreticalLessons() {
-		return ORM_theoreticalLessons;
+	private java.util.Set getORM_Announcements() {
+		return ORM_announcements;
 	}
 	
-	public final dsm.TheoreticalLessonSetCollection theoreticalLessons = new dsm.TheoreticalLessonSetCollection(this, _ormAdapter, ORMConstants.KEY_STUDENT_THEORETICALLESSONS, ORMConstants.KEY_THEORETICALLESSON_STUDENTS, ORMConstants.KEY_MUL_MANY_TO_MANY);
+	public final dsm.PersonalAnnouncementSetCollection announcements = new dsm.PersonalAnnouncementSetCollection(this, _ormAdapter, ORMConstants.KEY_STUDENT_ANNOUNCEMENTS, ORMConstants.KEY_MUL_ONE_TO_MANY);
+	
+	private void setORM_Lessons(java.util.Set value) {
+		this.ORM_lessons = value;
+	}
+	
+	private java.util.Set getORM_Lessons() {
+		return ORM_lessons;
+	}
+	
+	public final dsm.LessonSetCollection lessons = new dsm.LessonSetCollection(this, _ormAdapter, ORMConstants.KEY_STUDENT_LESSONS, ORMConstants.KEY_LESSON_STUDENTS, ORMConstants.KEY_MUL_MANY_TO_MANY);
+	
+	private void setORM_Registers(java.util.Set value) {
+		this.ORM_registers = value;
+	}
+	
+	private java.util.Set getORM_Registers() {
+		return ORM_registers;
+	}
+	
+	public final dsm.RegisterSetCollection registers = new dsm.RegisterSetCollection(this, _ormAdapter, ORMConstants.KEY_STUDENT_REGISTERS, ORMConstants.KEY_MUL_ONE_TO_MANY);
 	
 	public String toString() {
 		return super.toString();

@@ -71,6 +71,7 @@ public class PaymentSetCollection extends org.orm.util.ORMSet {
 	 * Return an sorted array containing all of the persistent objects in ORMSet
 	 * @param propertyName Name of the property for sorting:<ul>
 	 * <li>ID</li>
+	 * <li>value</li>
 	 * <li>timestamp</li>
 	 * </ul>
 	 * @return The persistent objects sorted array
@@ -83,6 +84,7 @@ public class PaymentSetCollection extends org.orm.util.ORMSet {
 	 * Return an sorted array containing all of the persistent objects in ORMSet
 	 * @param propertyName Name of the property for sorting:<ul>
 	 * <li>ID</li>
+	 * <li>value</li>
 	 * <li>timestamp</li>
 	 * </ul>
 	 * @param ascending true for ascending, false for descending

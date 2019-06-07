@@ -24,23 +24,26 @@ public class SecretaryDetachedCriteria extends AbstractORMDetachedCriteria {
 	public final StringExpression lastName;
 	public final StringExpression email;
 	public final StringExpression password;
+	public final StringExpression role;
 	
 	public SecretaryDetachedCriteria() {
-		super(Secretary.class, SecretaryCriteria.class);
+		super(dsm.Secretary.class, dsm.SecretaryCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		firstName = new StringExpression("firstName", this.getDetachedCriteria());
 		lastName = new StringExpression("lastName", this.getDetachedCriteria());
 		email = new StringExpression("email", this.getDetachedCriteria());
 		password = new StringExpression("password", this.getDetachedCriteria());
+		role = new StringExpression("role", this.getDetachedCriteria());
 	}
 	
 	public SecretaryDetachedCriteria(DetachedCriteria aDetachedCriteria) {
-		super(aDetachedCriteria, SecretaryCriteria.class);
+		super(aDetachedCriteria, dsm.SecretaryCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		firstName = new StringExpression("firstName", this.getDetachedCriteria());
 		lastName = new StringExpression("lastName", this.getDetachedCriteria());
 		email = new StringExpression("email", this.getDetachedCriteria());
 		password = new StringExpression("password", this.getDetachedCriteria());
+		role = new StringExpression("role", this.getDetachedCriteria());
 	}
 	
 	public Secretary uniqueSecretary(PersistentSession session) {

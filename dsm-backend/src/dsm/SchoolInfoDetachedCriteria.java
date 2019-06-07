@@ -20,24 +20,24 @@ import org.orm.criteria.*;
 
 public class SchoolInfoDetachedCriteria extends AbstractORMDetachedCriteria {
 	public final IntegerExpression ID;
-	public final IntegerExpression maxTimeToCancel;
-	public final IntegerExpression startTime;
-	public final IntegerExpression endTime;
+	public final TimeExpression maxTimeToCancel;
+	public final TimeExpression startTime;
+	public final TimeExpression endTime;
 	
 	public SchoolInfoDetachedCriteria() {
-		super(SchoolInfo.class, SchoolInfoCriteria.class);
+		super(dsm.SchoolInfo.class, dsm.SchoolInfoCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
-		maxTimeToCancel = new IntegerExpression("maxTimeToCancel", this.getDetachedCriteria());
-		startTime = new IntegerExpression("startTime", this.getDetachedCriteria());
-		endTime = new IntegerExpression("endTime", this.getDetachedCriteria());
+		maxTimeToCancel = new TimeExpression("maxTimeToCancel", this.getDetachedCriteria());
+		startTime = new TimeExpression("startTime", this.getDetachedCriteria());
+		endTime = new TimeExpression("endTime", this.getDetachedCriteria());
 	}
 	
 	public SchoolInfoDetachedCriteria(DetachedCriteria aDetachedCriteria) {
-		super(aDetachedCriteria, SchoolInfoCriteria.class);
+		super(aDetachedCriteria, dsm.SchoolInfoCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
-		maxTimeToCancel = new IntegerExpression("maxTimeToCancel", this.getDetachedCriteria());
-		startTime = new IntegerExpression("startTime", this.getDetachedCriteria());
-		endTime = new IntegerExpression("endTime", this.getDetachedCriteria());
+		maxTimeToCancel = new TimeExpression("maxTimeToCancel", this.getDetachedCriteria());
+		startTime = new TimeExpression("startTime", this.getDetachedCriteria());
+		endTime = new TimeExpression("endTime", this.getDetachedCriteria());
 	}
 	
 	public SchoolInfo uniqueSchoolInfo(PersistentSession session) {

@@ -41,7 +41,7 @@ public class PaymentDAO {
 		}
 	}
 	
-	public static Payment loadPaymentByORMID(int ID, LockMode lockMode) throws PersistentException {
+	public static Payment loadPaymentByORMID(int ID, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return loadPaymentByORMID(session, ID, lockMode);
@@ -52,7 +52,7 @@ public class PaymentDAO {
 		}
 	}
 	
-	public static Payment getPaymentByORMID(int ID, LockMode lockMode) throws PersistentException {
+	public static Payment getPaymentByORMID(int ID, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return getPaymentByORMID(session, ID, lockMode);
@@ -65,7 +65,7 @@ public class PaymentDAO {
 	
 	public static Payment loadPaymentByORMID(PersistentSession session, int ID) throws PersistentException {
 		try {
-			return (Payment) session.load(Payment.class, new Integer(ID));
+			return (Payment) session.load(dsm.Payment.class, new Integer(ID));
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -75,7 +75,7 @@ public class PaymentDAO {
 	
 	public static Payment getPaymentByORMID(PersistentSession session, int ID) throws PersistentException {
 		try {
-			return (Payment) session.get(Payment.class, new Integer(ID));
+			return (Payment) session.get(dsm.Payment.class, new Integer(ID));
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -83,9 +83,9 @@ public class PaymentDAO {
 		}
 	}
 	
-	public static Payment loadPaymentByORMID(PersistentSession session, int ID, LockMode lockMode) throws PersistentException {
+	public static Payment loadPaymentByORMID(PersistentSession session, int ID, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
-			return (Payment) session.load(Payment.class, new Integer(ID), lockMode);
+			return (Payment) session.load(dsm.Payment.class, new Integer(ID), lockMode);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -93,9 +93,9 @@ public class PaymentDAO {
 		}
 	}
 	
-	public static Payment getPaymentByORMID(PersistentSession session, int ID, LockMode lockMode) throws PersistentException {
+	public static Payment getPaymentByORMID(PersistentSession session, int ID, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
-			return (Payment) session.get(Payment.class, new Integer(ID), lockMode);
+			return (Payment) session.get(dsm.Payment.class, new Integer(ID), lockMode);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -114,7 +114,7 @@ public class PaymentDAO {
 		}
 	}
 	
-	public static List queryPayment(String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static List queryPayment(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return queryPayment(session, condition, orderBy, lockMode);
@@ -136,7 +136,7 @@ public class PaymentDAO {
 		}
 	}
 	
-	public static Payment[] listPaymentByQuery(String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static Payment[] listPaymentByQuery(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return listPaymentByQuery(session, condition, orderBy, lockMode);
@@ -163,7 +163,7 @@ public class PaymentDAO {
 		}
 	}
 	
-	public static List queryPayment(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static List queryPayment(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		StringBuffer sb = new StringBuffer("From dsm.Payment as Payment");
 		if (condition != null)
 			sb.append(" Where ").append(condition);
@@ -191,7 +191,7 @@ public class PaymentDAO {
 		}
 	}
 	
-	public static Payment[] listPaymentByQuery(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static Payment[] listPaymentByQuery(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			List list = queryPayment(session, condition, orderBy, lockMode);
 			return (Payment[]) list.toArray(new Payment[list.size()]);
@@ -213,7 +213,7 @@ public class PaymentDAO {
 		}
 	}
 	
-	public static Payment loadPaymentByQuery(String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static Payment loadPaymentByQuery(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return loadPaymentByQuery(session, condition, orderBy, lockMode);
@@ -232,7 +232,7 @@ public class PaymentDAO {
 			return null;
 	}
 	
-	public static Payment loadPaymentByQuery(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static Payment loadPaymentByQuery(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		Payment[] payments = listPaymentByQuery(session, condition, orderBy, lockMode);
 		if (payments != null && payments.length > 0)
 			return payments[0];
@@ -251,7 +251,7 @@ public class PaymentDAO {
 		}
 	}
 	
-	public static java.util.Iterator iteratePaymentByQuery(String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static java.util.Iterator iteratePaymentByQuery(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return iteratePaymentByQuery(session, condition, orderBy, lockMode);
@@ -278,7 +278,7 @@ public class PaymentDAO {
 		}
 	}
 	
-	public static java.util.Iterator iteratePaymentByQuery(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static java.util.Iterator iteratePaymentByQuery(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		StringBuffer sb = new StringBuffer("From dsm.Payment as Payment");
 		if (condition != null)
 			sb.append(" Where ").append(condition);
@@ -296,10 +296,10 @@ public class PaymentDAO {
 	}
 	
 	public static Payment createPayment() {
-		return new Payment();
+		return new dsm.Payment();
 	}
 	
-	public static boolean save(Payment payment) throws PersistentException {
+	public static boolean save(dsm.Payment payment) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().saveObject(payment);
 			return true;
@@ -310,7 +310,7 @@ public class PaymentDAO {
 		}
 	}
 	
-	public static boolean delete(Payment payment) throws PersistentException {
+	public static boolean delete(dsm.Payment payment) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().deleteObject(payment);
 			return true;
@@ -321,7 +321,7 @@ public class PaymentDAO {
 		}
 	}
 	
-	public static boolean refresh(Payment payment) throws PersistentException {
+	public static boolean refresh(dsm.Payment payment) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().getSession().refresh(payment);
 			return true;
@@ -332,7 +332,7 @@ public class PaymentDAO {
 		}
 	}
 	
-	public static boolean evict(Payment payment) throws PersistentException {
+	public static boolean evict(dsm.Payment payment) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().getSession().evict(payment);
 			return true;

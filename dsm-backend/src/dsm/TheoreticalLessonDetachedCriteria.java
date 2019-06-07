@@ -23,45 +23,42 @@ public class TheoreticalLessonDetachedCriteria extends AbstractORMDetachedCriter
 	public final DateExpression startTime;
 	public final IntegerExpression duration;
 	public final StringExpression state;
-	public final IntegerExpression instructorId;
-	public final AssociationExpression instructor;
 	public final CollectionExpression students;
+	public final CollectionExpression licenses;
 	public final CollectionExpression themes;
 	
 	public TheoreticalLessonDetachedCriteria() {
-		super(TheoreticalLesson.class, TheoreticalLessonCriteria.class);
+		super(dsm.TheoreticalLesson.class, dsm.TheoreticalLessonCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		startTime = new DateExpression("startTime", this.getDetachedCriteria());
 		duration = new IntegerExpression("duration", this.getDetachedCriteria());
 		state = new StringExpression("state", this.getDetachedCriteria());
-		instructorId = new IntegerExpression("instructor.ID", this.getDetachedCriteria());
-		instructor = new AssociationExpression("instructor", this.getDetachedCriteria());
 		students = new CollectionExpression("ORM_Students", this.getDetachedCriteria());
+		licenses = new CollectionExpression("ORM_Licenses", this.getDetachedCriteria());
 		themes = new CollectionExpression("ORM_Themes", this.getDetachedCriteria());
 	}
 	
 	public TheoreticalLessonDetachedCriteria(DetachedCriteria aDetachedCriteria) {
-		super(aDetachedCriteria, TheoreticalLessonCriteria.class);
+		super(aDetachedCriteria, dsm.TheoreticalLessonCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		startTime = new DateExpression("startTime", this.getDetachedCriteria());
 		duration = new IntegerExpression("duration", this.getDetachedCriteria());
 		state = new StringExpression("state", this.getDetachedCriteria());
-		instructorId = new IntegerExpression("instructor.ID", this.getDetachedCriteria());
-		instructor = new AssociationExpression("instructor", this.getDetachedCriteria());
 		students = new CollectionExpression("ORM_Students", this.getDetachedCriteria());
+		licenses = new CollectionExpression("ORM_Licenses", this.getDetachedCriteria());
 		themes = new CollectionExpression("ORM_Themes", this.getDetachedCriteria());
 	}
 	
-	public InstructorDetachedCriteria createInstructorCriteria() {
-		return new InstructorDetachedCriteria(createCriteria("instructor"));
+	public ThemeDetachedCriteria createThemesCriteria() {
+		return new ThemeDetachedCriteria(createCriteria("ORM_Themes"));
 	}
 	
 	public StudentDetachedCriteria createStudentsCriteria() {
 		return new StudentDetachedCriteria(createCriteria("ORM_Students"));
 	}
 	
-	public ThemeDetachedCriteria createThemesCriteria() {
-		return new ThemeDetachedCriteria(createCriteria("ORM_Themes"));
+	public LicenseCarDetachedCriteria createLicensesCriteria() {
+		return new LicenseCarDetachedCriteria(createCriteria("ORM_Licenses"));
 	}
 	
 	public TheoreticalLesson uniqueTheoreticalLesson(PersistentSession session) {

@@ -23,41 +23,38 @@ public class PracticalLessonDetachedCriteria extends AbstractORMDetachedCriteria
 	public final DateExpression startTime;
 	public final IntegerExpression duration;
 	public final StringExpression state;
-	public final IntegerExpression instructorId;
-	public final AssociationExpression instructor;
-	public final BooleanExpression isStudentPresent;
 	public final CollectionExpression students;
+	public final CollectionExpression licenses;
+	public final BooleanExpression isStudentPresent;
 	
 	public PracticalLessonDetachedCriteria() {
-		super(PracticalLesson.class, PracticalLessonCriteria.class);
+		super(dsm.PracticalLesson.class, dsm.PracticalLessonCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		startTime = new DateExpression("startTime", this.getDetachedCriteria());
 		duration = new IntegerExpression("duration", this.getDetachedCriteria());
 		state = new StringExpression("state", this.getDetachedCriteria());
-		instructorId = new IntegerExpression("instructor.ID", this.getDetachedCriteria());
-		instructor = new AssociationExpression("instructor", this.getDetachedCriteria());
-		isStudentPresent = new BooleanExpression("isStudentPresent", this.getDetachedCriteria());
 		students = new CollectionExpression("ORM_Students", this.getDetachedCriteria());
+		licenses = new CollectionExpression("ORM_Licenses", this.getDetachedCriteria());
+		isStudentPresent = new BooleanExpression("isStudentPresent", this.getDetachedCriteria());
 	}
 	
 	public PracticalLessonDetachedCriteria(DetachedCriteria aDetachedCriteria) {
-		super(aDetachedCriteria, PracticalLessonCriteria.class);
+		super(aDetachedCriteria, dsm.PracticalLessonCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		startTime = new DateExpression("startTime", this.getDetachedCriteria());
 		duration = new IntegerExpression("duration", this.getDetachedCriteria());
 		state = new StringExpression("state", this.getDetachedCriteria());
-		instructorId = new IntegerExpression("instructor.ID", this.getDetachedCriteria());
-		instructor = new AssociationExpression("instructor", this.getDetachedCriteria());
-		isStudentPresent = new BooleanExpression("isStudentPresent", this.getDetachedCriteria());
 		students = new CollectionExpression("ORM_Students", this.getDetachedCriteria());
-	}
-	
-	public InstructorDetachedCriteria createInstructorCriteria() {
-		return new InstructorDetachedCriteria(createCriteria("instructor"));
+		licenses = new CollectionExpression("ORM_Licenses", this.getDetachedCriteria());
+		isStudentPresent = new BooleanExpression("isStudentPresent", this.getDetachedCriteria());
 	}
 	
 	public StudentDetachedCriteria createStudentsCriteria() {
 		return new StudentDetachedCriteria(createCriteria("ORM_Students"));
+	}
+	
+	public LicenseCarDetachedCriteria createLicensesCriteria() {
+		return new LicenseCarDetachedCriteria(createCriteria("ORM_Licenses"));
 	}
 	
 	public PracticalLesson uniquePracticalLesson(PersistentSession session) {

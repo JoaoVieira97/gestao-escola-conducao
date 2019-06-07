@@ -73,6 +73,7 @@ public class StudentSetCollection extends org.orm.util.ORMSet {
 	 * <li>nif</li>
 	 * <li>cc</li>
 	 * <li>address</li>
+	 * <li>birth</li>
 	 * </ul>
 	 * @return The persistent objects sorted array
 	 */
@@ -86,6 +87,7 @@ public class StudentSetCollection extends org.orm.util.ORMSet {
 	 * <li>nif</li>
 	 * <li>cc</li>
 	 * <li>address</li>
+	 * <li>birth</li>
 	 * </ul>
 	 * @param ascending true for ascending, false for descending
 	 * @return The persistent objects sorted array

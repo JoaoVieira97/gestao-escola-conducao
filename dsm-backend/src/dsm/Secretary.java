@@ -13,7 +13,7 @@
  */
 package dsm;
 
-public class Secretary extends User {
+public class Secretary extends dsm.User {
 	public Secretary() {
 	}
 	

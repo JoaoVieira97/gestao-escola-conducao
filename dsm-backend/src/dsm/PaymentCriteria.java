@@ -20,19 +20,21 @@ import org.orm.criteria.*;
 
 public class PaymentCriteria extends AbstractORMCriteria {
 	public final IntegerExpression ID;
-	public final IntegerExpression licenseCarId;
-	public final AssociationExpression licenseCar;
 	public final IntegerExpression secretaryId;
 	public final AssociationExpression secretary;
+	public final IntegerExpression licenseId;
+	public final AssociationExpression license;
+	public final DoubleExpression value;
 	public final DateExpression timestamp;
 	
 	public PaymentCriteria(Criteria criteria) {
 		super(criteria);
 		ID = new IntegerExpression("ID", this);
-		licenseCarId = new IntegerExpression("licenseCar.ID", this);
-		licenseCar = new AssociationExpression("licenseCar", this);
-		secretaryId = new IntegerExpression("secretary.ID", this);
+		secretaryId = new IntegerExpression("secretary.", this);
 		secretary = new AssociationExpression("secretary", this);
+		licenseId = new IntegerExpression("license.ID", this);
+		license = new AssociationExpression("license", this);
+		value = new DoubleExpression("value", this);
 		timestamp = new DateExpression("timestamp", this);
 	}
 	
@@ -44,12 +46,12 @@ public class PaymentCriteria extends AbstractORMCriteria {
 		this(DSMPersistentManager.instance().getSession());
 	}
 	
-	public LicenseCarCriteria createLicenseCarCriteria() {
-		return new LicenseCarCriteria(createCriteria("licenseCar"));
-	}
-	
 	public SecretaryCriteria createSecretaryCriteria() {
 		return new SecretaryCriteria(createCriteria("secretary"));
+	}
+	
+	public LicenseCarCriteria createLicenseCriteria() {
+		return new LicenseCarCriteria(createCriteria("license"));
 	}
 	
 	public Payment uniquePayment() {

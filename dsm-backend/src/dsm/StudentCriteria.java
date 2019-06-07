@@ -24,15 +24,16 @@ public class StudentCriteria extends AbstractORMCriteria {
 	public final StringExpression lastName;
 	public final StringExpression email;
 	public final StringExpression password;
+	public final StringExpression role;
 	public final LongExpression nif;
 	public final StringExpression cc;
 	public final StringExpression address;
-	public final CollectionExpression announcements;
-	public final CollectionExpression registers;
-	public final CollectionExpression exams;
+	public final DateExpression birth;
 	public final CollectionExpression payments;
-	public final CollectionExpression practicalLessons;
-	public final CollectionExpression theoreticalLessons;
+	public final CollectionExpression exams;
+	public final CollectionExpression announcements;
+	public final CollectionExpression lessons;
+	public final CollectionExpression registers;
 	
 	public StudentCriteria(Criteria criteria) {
 		super(criteria);
@@ -41,15 +42,16 @@ public class StudentCriteria extends AbstractORMCriteria {
 		lastName = new StringExpression("lastName", this);
 		email = new StringExpression("email", this);
 		password = new StringExpression("password", this);
+		role = new StringExpression("role", this);
 		nif = new LongExpression("nif", this);
 		cc = new StringExpression("cc", this);
 		address = new StringExpression("address", this);
-		announcements = new CollectionExpression("ORM_Announcements", this);
-		registers = new CollectionExpression("ORM_Registers", this);
-		exams = new CollectionExpression("ORM_Exams", this);
+		birth = new DateExpression("birth", this);
 		payments = new CollectionExpression("ORM_Payments", this);
-		practicalLessons = new CollectionExpression("ORM_PracticalLessons", this);
-		theoreticalLessons = new CollectionExpression("ORM_TheoreticalLessons", this);
+		exams = new CollectionExpression("ORM_Exams", this);
+		announcements = new CollectionExpression("ORM_Announcements", this);
+		lessons = new CollectionExpression("ORM_Lessons", this);
+		registers = new CollectionExpression("ORM_Registers", this);
 	}
 	
 	public StudentCriteria(PersistentSession session) {
@@ -60,28 +62,24 @@ public class StudentCriteria extends AbstractORMCriteria {
 		this(DSMPersistentManager.instance().getSession());
 	}
 	
-	public PersonalAnnouncementCriteria createAnnouncementsCriteria() {
-		return new PersonalAnnouncementCriteria(createCriteria("ORM_Announcements"));
-	}
-	
-	public RegisterCriteria createRegistersCriteria() {
-		return new RegisterCriteria(createCriteria("ORM_Registers"));
+	public PaymentCriteria createPaymentsCriteria() {
+		return new PaymentCriteria(createCriteria("ORM_Payments"));
 	}
 	
 	public ExamCriteria createExamsCriteria() {
 		return new ExamCriteria(createCriteria("ORM_Exams"));
 	}
 	
-	public PaymentCriteria createPaymentsCriteria() {
-		return new PaymentCriteria(createCriteria("ORM_Payments"));
+	public PersonalAnnouncementCriteria createAnnouncementsCriteria() {
+		return new PersonalAnnouncementCriteria(createCriteria("ORM_Announcements"));
 	}
 	
-	public PracticalLessonCriteria createPracticalLessonsCriteria() {
-		return new PracticalLessonCriteria(createCriteria("ORM_PracticalLessons"));
+	public LessonCriteria createLessonsCriteria() {
+		return new LessonCriteria(createCriteria("ORM_Lessons"));
 	}
 	
-	public TheoreticalLessonCriteria createTheoreticalLessonsCriteria() {
-		return new TheoreticalLessonCriteria(createCriteria("ORM_TheoreticalLessons"));
+	public RegisterCriteria createRegistersCriteria() {
+		return new RegisterCriteria(createCriteria("ORM_Registers"));
 	}
 	
 	public Student uniqueStudent() {

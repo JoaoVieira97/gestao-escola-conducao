@@ -20,19 +20,19 @@ import org.orm.criteria.*;
 
 public class RegisterCriteria extends AbstractORMCriteria {
 	public final IntegerExpression ID;
-	public final IntegerExpression licenseId;
-	public final AssociationExpression license;
 	public final IntegerExpression instructorId;
 	public final AssociationExpression instructor;
+	public final IntegerExpression licenseId;
+	public final AssociationExpression license;
 	public final DateExpression initialDate;
 	
 	public RegisterCriteria(Criteria criteria) {
 		super(criteria);
 		ID = new IntegerExpression("ID", this);
+		instructorId = new IntegerExpression("instructor.", this);
+		instructor = new AssociationExpression("instructor", this);
 		licenseId = new IntegerExpression("license.ID", this);
 		license = new AssociationExpression("license", this);
-		instructorId = new IntegerExpression("instructor.ID", this);
-		instructor = new AssociationExpression("instructor", this);
 		initialDate = new DateExpression("initialDate", this);
 	}
 	
@@ -44,12 +44,12 @@ public class RegisterCriteria extends AbstractORMCriteria {
 		this(DSMPersistentManager.instance().getSession());
 	}
 	
-	public LicenseCarCriteria createLicenseCriteria() {
-		return new LicenseCarCriteria(createCriteria("license"));
-	}
-	
 	public InstructorCriteria createInstructorCriteria() {
 		return new InstructorCriteria(createCriteria("instructor"));
+	}
+	
+	public LicenseCarCriteria createLicenseCriteria() {
+		return new LicenseCarCriteria(createCriteria("license"));
 	}
 	
 	public Register uniqueRegister() {

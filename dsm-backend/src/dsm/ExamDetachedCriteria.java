@@ -24,14 +24,14 @@ public class ExamDetachedCriteria extends AbstractORMDetachedCriteria {
 	public final StringExpression description;
 	
 	public ExamDetachedCriteria() {
-		super(Exam.class, ExamCriteria.class);
+		super(dsm.Exam.class, dsm.ExamCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		startTime = new DateExpression("startTime", this.getDetachedCriteria());
 		description = new StringExpression("description", this.getDetachedCriteria());
 	}
 	
 	public ExamDetachedCriteria(DetachedCriteria aDetachedCriteria) {
-		super(aDetachedCriteria, ExamCriteria.class);
+		super(aDetachedCriteria, dsm.ExamCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		startTime = new DateExpression("startTime", this.getDetachedCriteria());
 		description = new StringExpression("description", this.getDetachedCriteria());

@@ -25,7 +25,7 @@ public class LicenseCarDetachedCriteria extends AbstractORMDetachedCriteria {
 	public final StringExpression name;
 	
 	public LicenseCarDetachedCriteria() {
-		super(LicenseCar.class, LicenseCarCriteria.class);
+		super(dsm.LicenseCar.class, dsm.LicenseCarCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		practicalLessons = new IntegerExpression("practicalLessons", this.getDetachedCriteria());
 		theoreticalLessons = new IntegerExpression("theoreticalLessons", this.getDetachedCriteria());
@@ -33,7 +33,7 @@ public class LicenseCarDetachedCriteria extends AbstractORMDetachedCriteria {
 	}
 	
 	public LicenseCarDetachedCriteria(DetachedCriteria aDetachedCriteria) {
-		super(aDetachedCriteria, LicenseCarCriteria.class);
+		super(aDetachedCriteria, dsm.LicenseCarCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		practicalLessons = new IntegerExpression("practicalLessons", this.getDetachedCriteria());
 		theoreticalLessons = new IntegerExpression("theoreticalLessons", this.getDetachedCriteria());

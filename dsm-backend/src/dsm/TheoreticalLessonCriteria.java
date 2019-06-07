@@ -23,9 +23,8 @@ public class TheoreticalLessonCriteria extends AbstractORMCriteria {
 	public final DateExpression startTime;
 	public final IntegerExpression duration;
 	public final StringExpression state;
-	public final IntegerExpression instructorId;
-	public final AssociationExpression instructor;
 	public final CollectionExpression students;
+	public final CollectionExpression licenses;
 	public final CollectionExpression themes;
 	
 	public TheoreticalLessonCriteria(Criteria criteria) {
@@ -34,9 +33,8 @@ public class TheoreticalLessonCriteria extends AbstractORMCriteria {
 		startTime = new DateExpression("startTime", this);
 		duration = new IntegerExpression("duration", this);
 		state = new StringExpression("state", this);
-		instructorId = new IntegerExpression("instructor.ID", this);
-		instructor = new AssociationExpression("instructor", this);
 		students = new CollectionExpression("ORM_Students", this);
+		licenses = new CollectionExpression("ORM_Licenses", this);
 		themes = new CollectionExpression("ORM_Themes", this);
 	}
 	
@@ -48,16 +46,16 @@ public class TheoreticalLessonCriteria extends AbstractORMCriteria {
 		this(DSMPersistentManager.instance().getSession());
 	}
 	
-	public InstructorCriteria createInstructorCriteria() {
-		return new InstructorCriteria(createCriteria("instructor"));
+	public ThemeCriteria createThemesCriteria() {
+		return new ThemeCriteria(createCriteria("ORM_Themes"));
 	}
 	
 	public StudentCriteria createStudentsCriteria() {
 		return new StudentCriteria(createCriteria("ORM_Students"));
 	}
 	
-	public ThemeCriteria createThemesCriteria() {
-		return new ThemeCriteria(createCriteria("ORM_Themes"));
+	public LicenseCarCriteria createLicensesCriteria() {
+		return new LicenseCarCriteria(createCriteria("ORM_Licenses"));
 	}
 	
 	public TheoreticalLesson uniqueTheoreticalLesson() {

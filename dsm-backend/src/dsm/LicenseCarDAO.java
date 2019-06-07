@@ -41,7 +41,7 @@ public class LicenseCarDAO {
 		}
 	}
 	
-	public static LicenseCar loadLicenseCarByORMID(int ID, LockMode lockMode) throws PersistentException {
+	public static LicenseCar loadLicenseCarByORMID(int ID, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return loadLicenseCarByORMID(session, ID, lockMode);
@@ -52,7 +52,7 @@ public class LicenseCarDAO {
 		}
 	}
 	
-	public static LicenseCar getLicenseCarByORMID(int ID, LockMode lockMode) throws PersistentException {
+	public static LicenseCar getLicenseCarByORMID(int ID, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return getLicenseCarByORMID(session, ID, lockMode);
@@ -65,7 +65,7 @@ public class LicenseCarDAO {
 	
 	public static LicenseCar loadLicenseCarByORMID(PersistentSession session, int ID) throws PersistentException {
 		try {
-			return (LicenseCar) session.load(LicenseCar.class, new Integer(ID));
+			return (LicenseCar) session.load(dsm.LicenseCar.class, new Integer(ID));
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -75,7 +75,7 @@ public class LicenseCarDAO {
 	
 	public static LicenseCar getLicenseCarByORMID(PersistentSession session, int ID) throws PersistentException {
 		try {
-			return (LicenseCar) session.get(LicenseCar.class, new Integer(ID));
+			return (LicenseCar) session.get(dsm.LicenseCar.class, new Integer(ID));
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -83,9 +83,9 @@ public class LicenseCarDAO {
 		}
 	}
 	
-	public static LicenseCar loadLicenseCarByORMID(PersistentSession session, int ID, LockMode lockMode) throws PersistentException {
+	public static LicenseCar loadLicenseCarByORMID(PersistentSession session, int ID, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
-			return (LicenseCar) session.load(LicenseCar.class, new Integer(ID), lockMode);
+			return (LicenseCar) session.load(dsm.LicenseCar.class, new Integer(ID), lockMode);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -93,9 +93,9 @@ public class LicenseCarDAO {
 		}
 	}
 	
-	public static LicenseCar getLicenseCarByORMID(PersistentSession session, int ID, LockMode lockMode) throws PersistentException {
+	public static LicenseCar getLicenseCarByORMID(PersistentSession session, int ID, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
-			return (LicenseCar) session.get(LicenseCar.class, new Integer(ID), lockMode);
+			return (LicenseCar) session.get(dsm.LicenseCar.class, new Integer(ID), lockMode);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -114,7 +114,7 @@ public class LicenseCarDAO {
 		}
 	}
 	
-	public static List queryLicenseCar(String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static List queryLicenseCar(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return queryLicenseCar(session, condition, orderBy, lockMode);
@@ -136,7 +136,7 @@ public class LicenseCarDAO {
 		}
 	}
 	
-	public static LicenseCar[] listLicenseCarByQuery(String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static LicenseCar[] listLicenseCarByQuery(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return listLicenseCarByQuery(session, condition, orderBy, lockMode);
@@ -163,7 +163,7 @@ public class LicenseCarDAO {
 		}
 	}
 	
-	public static List queryLicenseCar(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static List queryLicenseCar(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		StringBuffer sb = new StringBuffer("From dsm.LicenseCar as LicenseCar");
 		if (condition != null)
 			sb.append(" Where ").append(condition);
@@ -191,7 +191,7 @@ public class LicenseCarDAO {
 		}
 	}
 	
-	public static LicenseCar[] listLicenseCarByQuery(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static LicenseCar[] listLicenseCarByQuery(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			List list = queryLicenseCar(session, condition, orderBy, lockMode);
 			return (LicenseCar[]) list.toArray(new LicenseCar[list.size()]);
@@ -213,7 +213,7 @@ public class LicenseCarDAO {
 		}
 	}
 	
-	public static LicenseCar loadLicenseCarByQuery(String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static LicenseCar loadLicenseCarByQuery(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return loadLicenseCarByQuery(session, condition, orderBy, lockMode);
@@ -232,7 +232,7 @@ public class LicenseCarDAO {
 			return null;
 	}
 	
-	public static LicenseCar loadLicenseCarByQuery(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static LicenseCar loadLicenseCarByQuery(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		LicenseCar[] licenseCars = listLicenseCarByQuery(session, condition, orderBy, lockMode);
 		if (licenseCars != null && licenseCars.length > 0)
 			return licenseCars[0];
@@ -251,7 +251,7 @@ public class LicenseCarDAO {
 		}
 	}
 	
-	public static java.util.Iterator iterateLicenseCarByQuery(String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static java.util.Iterator iterateLicenseCarByQuery(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return iterateLicenseCarByQuery(session, condition, orderBy, lockMode);
@@ -278,7 +278,7 @@ public class LicenseCarDAO {
 		}
 	}
 	
-	public static java.util.Iterator iterateLicenseCarByQuery(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static java.util.Iterator iterateLicenseCarByQuery(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		StringBuffer sb = new StringBuffer("From dsm.LicenseCar as LicenseCar");
 		if (condition != null)
 			sb.append(" Where ").append(condition);
@@ -296,10 +296,10 @@ public class LicenseCarDAO {
 	}
 	
 	public static LicenseCar createLicenseCar() {
-		return new LicenseCar();
+		return new dsm.LicenseCar();
 	}
 	
-	public static boolean save(LicenseCar licenseCar) throws PersistentException {
+	public static boolean save(dsm.LicenseCar licenseCar) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().saveObject(licenseCar);
 			return true;
@@ -310,7 +310,7 @@ public class LicenseCarDAO {
 		}
 	}
 	
-	public static boolean delete(LicenseCar licenseCar) throws PersistentException {
+	public static boolean delete(dsm.LicenseCar licenseCar) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().deleteObject(licenseCar);
 			return true;
@@ -321,7 +321,7 @@ public class LicenseCarDAO {
 		}
 	}
 	
-	public static boolean refresh(LicenseCar licenseCar) throws PersistentException {
+	public static boolean refresh(dsm.LicenseCar licenseCar) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().getSession().refresh(licenseCar);
 			return true;
@@ -332,7 +332,7 @@ public class LicenseCarDAO {
 		}
 	}
 	
-	public static boolean evict(LicenseCar licenseCar) throws PersistentException {
+	public static boolean evict(dsm.LicenseCar licenseCar) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().getSession().evict(licenseCar);
 			return true;
