@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-@WebServlet(name = "GetStudents", urlPatterns = {"/students"})
+@WebServlet(name = "GetStudents", urlPatterns = {"/api/students"})
 public class GetStudents extends javax.servlet.http.HttpServlet {
 
     @Override

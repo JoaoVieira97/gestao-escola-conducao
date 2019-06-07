@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "GetLessons", urlPatterns = {"/lessons"})
+@WebServlet(name = "GetLessons", urlPatterns = {"/api/lessons"})
 public class GetLessons extends HttpServlet {
 
     @Override

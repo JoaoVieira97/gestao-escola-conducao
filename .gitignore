@@ -303,3 +303,4 @@ nb-configuration.xml
 .netbeans_update_resources
 
 dsm-backend/out
+docs/vpp/*.bak*
