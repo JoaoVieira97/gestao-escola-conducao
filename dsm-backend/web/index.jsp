@@ -58,10 +58,9 @@
       <h1>Driving School Management (DSM) is running!</h1>
       <div style="margin-top: 40px">
         <h3><a href="/dsm_backend/api/students">/api/students</a></h3>
+        <h3><a href="/dsm_backend/api/student/registers?id=1">/api/student/registers?id=1</a></h3>
         <h3><a href="/dsm_backend/api/lessons">/api/lessons</a></h3>
-        <h3>
-          <a href="/dsm_backend/api/authentication">/api/authentication</a>
-        </h3>
+        <h3><a href="/dsm_backend/api/authentication">/api/authentication</a></h3>
       </div>
     </div>
   </body>

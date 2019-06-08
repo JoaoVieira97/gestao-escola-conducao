@@ -13,16 +13,22 @@
  */
 package dsm;
 
+import com.google.gson.annotations.Expose;
+
 public class LicenseCar {
 	public LicenseCar() {
 	}
-	
+
+	@Expose
 	private int ID;
-	
+
+	@Expose
 	private int practicalLessons;
-	
+
+	@Expose
 	private int theoreticalLessons;
-	
+
+	@Expose
 	private String name;
 	
 	private void setID(int value) {

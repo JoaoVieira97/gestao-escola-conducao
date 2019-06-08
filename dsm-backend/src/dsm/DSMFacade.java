@@ -90,4 +90,12 @@ public class DSMFacade {
 
         return lessonBean.getLessons();
     }
+
+    /**
+     * Get the list of all registers of a specific student.
+     */
+    public static List<Register> getStudentRegisters(int studentId) {
+
+        return studentBean.getStudentRegisters(studentId);
+    }
 }

@@ -1,35 +1,68 @@
 package utils;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import dsm.Lesson;
+import dsm.Register;
 import dsm.Student;
 
 import java.util.List;
 
 public class JsonConverter {
 
-    public static String convertStudentsToString(List<Student> studentList) {
-
-        Gson gson = new GsonBuilder().create();
-        JsonArray jArray = gson.toJsonTree(studentList).getAsJsonArray();
-
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.add("students", jArray);
-
-        return jsonObject.toString();
+    private static  Gson gsonBuilder() {
+        return new GsonBuilder()
+                .excludeFieldsWithoutExposeAnnotation()
+                .serializeNulls()
+                //.setPrettyPrinting()
+                .create();
     }
 
-    public static String convertLessonsToString(List<Lesson> studentList) {
+    public static String convertStudentsToString(List<Student> studentList) {
 
-        Gson gson = new GsonBuilder().create();
-        JsonArray jArray = gson.toJsonTree(studentList).getAsJsonArray();
+        Gson gson = gsonBuilder();
+        JsonObject result = new JsonObject();
 
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.add("lessons", jArray);
+        if(studentList != null) {
+            result.addProperty("success", true);
+            result.add("students", gson.toJsonTree(studentList).getAsJsonArray());
+        }
+        else {
+            result.addProperty("success", false);
+        }
 
-        return jsonObject.toString();
+        return result.toString();
+    }
+
+    public static String convertRegistersToString(List<Register> registerList) {
+
+        Gson gson = gsonBuilder();
+        JsonObject result = new JsonObject();
+
+        if(registerList != null) {
+            result.addProperty("success", true);
+            result.add("studentRegister", gson.toJsonTree(registerList).getAsJsonArray());
+        }
+        else {
+            result.addProperty("success", false);
+        }
+
+        return result.toString();
+    }
+
+    public static String convertLessonsToString(List<Lesson> lessonsList) {
+
+        Gson gson = gsonBuilder();
+        JsonObject result = new JsonObject();
+
+        if(lessonsList != null) {
+
+            result.addProperty("success", true);
+            result.add("lessons", gson.toJsonTree(lessonsList).getAsJsonArray());
+        }
+        else {
+            result.addProperty("success", false);
+        }
+
+        return result.toString();
     }
 }

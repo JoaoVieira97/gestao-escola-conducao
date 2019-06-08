@@ -13,6 +13,8 @@
  */
 package dsm;
 
+import com.google.gson.annotations.Expose;
+
 public class Student extends dsm.User {
 	public Student() {
 	}
@@ -43,13 +45,17 @@ public class Student extends dsm.User {
 		}
 		
 	};
-	
+
+	@Expose
 	private long nif;
-	
+
+	@Expose
 	private String cc;
-	
+
+	@Expose
 	private String address;
-	
+
+	@Expose
 	private java.util.Date birth;
 	
 	private java.util.Set ORM_payments = new java.util.HashSet();
