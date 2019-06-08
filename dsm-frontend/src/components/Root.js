@@ -46,9 +46,10 @@ const Root = ({ store }) => {
                 <Switch>
                     <PrivateRoute exact path="/" component={HomePage} />
                     <PrivateRoute exact path="/home" component={HomePage} />
-                    <PrivateRoute exact path="/home2" component={HomePage} />
-                    <PrivateRoute exact path="/home3" component={HomePage} />
-                    <Route path="/" component={ErrorPage} />
+                    <PrivateRoute exact path="/lessons" component={HomePage} />
+                    <PrivateRoute exact path="/payments" component={HomePage} />
+                    <Route exact path="/contacts" render={ props => <ErrorPage {...props} />} />
+                    <Route path="/" render={ props => <ErrorPage {...props} />} />
                 </Switch>
             </React.Fragment>
         ),
@@ -56,8 +57,10 @@ const Root = ({ store }) => {
             <React.Fragment>
                 <Header userType={'default'} />
                 <Switch>
-                    <Route exact path="/login" component={LoginPage} />
-                    <Redirect from="/" to="/login" />
+                    <Route exact path="/home" render={ props => <LoginPage {...props} />} />
+                    <Route exact path="/driving-licenses" render={ props => <ErrorPage {...props} />} />
+                    <Route exact path="/contacts" render={ props => <ErrorPage {...props} />} />
+                    <Redirect from="/" to="/home" />
                 </Switch>
             </React.Fragment>
         )

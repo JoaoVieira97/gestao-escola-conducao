@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import {Button, Container} from 'semantic-ui-react';
 import Authentication from "./authentication/Authentication";
+import {headerStyle} from "../styles/styles";
 
 class Header extends React.Component {
 
@@ -12,7 +13,8 @@ class Header extends React.Component {
     handleLogout = async () => {
 
         await Authentication.logout();
-        this.props.history.push("/login");
+        //this.props.history.push("/login");
+        window.location.reload();
     };
 
     render() {
@@ -20,15 +22,16 @@ class Header extends React.Component {
         if(this.props.userType === 'student') {
 
             return (
-                <div className="ui fluid secondary pointing menu">
+                <div className="ui fluid secondary pointing menu" style={headerStyle}>
                     <Container>
-                        <NavLink activeClassName="active" className="ui item" to="/home" >Início</NavLink>
-                        <NavLink activeClassName="active" className="item" to="/home2">Página 1</NavLink>
-                        <NavLink activeClassName="active" className="item" to="/home3">Página 2</NavLink>
+                        <NavLink activeClassName="active" className="ui item" to="/home" >INÍCIO</NavLink>
+                        <NavLink activeClassName="active" className="ui item" to="/lessons">AULAS</NavLink>
+                        <NavLink activeClassName="active" className="ui item" to="/payments">PAGAMENTOS</NavLink>
+                        <NavLink activeClassName="active" className="ui item" to="/contacts" >CONTACTOS</NavLink>
                         <div className="right menu">
                             <div className="item">
                                 <Button className="ui button" onClick={this.handleLogout.bind(this)}>
-                                    Logout
+                                    LOGOUT
                                 </Button>
                             </div>
                         </div>
@@ -38,12 +41,11 @@ class Header extends React.Component {
         }
 
         return (
-            <div className="ui fluid secondary pointing menu">
+            <div className="ui fluid secondary pointing menu" style={headerStyle}>
                 <Container>
-                    <NavLink activeClassName="active" className="ui item" to="/home" >Início</NavLink>
-                    <div className="right menu">
-                        <NavLink activeClassName="active" className="item" to="/login" >Login</NavLink>
-                    </div>
+                    <NavLink activeClassName="active" className="ui item" to="/home" >INÍCIO</NavLink>
+                    <NavLink activeClassName="active" className="ui item" to="/driving-licenses" >CATEGORIAS</NavLink>
+                    <NavLink activeClassName="active" className="ui item" to="/contacts" >CONTACTOS</NavLink>
                 </Container>
             </div>
         );

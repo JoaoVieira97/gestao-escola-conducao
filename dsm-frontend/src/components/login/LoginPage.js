@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Container } from 'semantic-ui-react';
 
-
 class LoginPage extends Component {
 
     constructor(props) {
@@ -32,7 +31,7 @@ class LoginPage extends Component {
         this.setState({ [input.name]: value });
     };
 
-    handleLoginSubmit = async () => {
+    handleLoginSubmit = async (history) => {
 
         const { email, password, rememberMe } = this.state;
 
@@ -50,7 +49,8 @@ class LoginPage extends Component {
                 }
 
                 localStorage.setItem('userType', response.userType);
-                this.props.history.push('/home');
+                //this.props.history.push('/home');
+                window.location.reload();
             }
         }
     };
@@ -78,14 +78,19 @@ class LoginPage extends Component {
     }
 
     render() {
+
         return (
             <Container text={true}>
                 <div className="ui raised segment" style={{alignItems: 'center'}}>
-                    <img
+                    {
+                        /*
+                        <img
                         className="ui medium centered image"
                         src={require("../../images/logo_plain_svg.svg")}
                         alt={"logo"}
                     />
+                         */
+                    }
                     <form className="ui form">
                         <div className="field">
                             <label>E-mail</label>
@@ -126,10 +131,9 @@ class LoginPage extends Component {
                         </div>
                         <button
                             className="ui button"
-                            //type="submit"
-                            type="button"
+                            type="submit"
                             onClick={this.handleLoginSubmit.bind(this)}
-                        >Login</button>
+                        >LOGIN</button>
                     </form>
                 </div>
             </Container>
