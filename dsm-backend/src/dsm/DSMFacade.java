@@ -25,7 +25,7 @@ public class DSMFacade {
         try {
 
             Context c = new InitialContext();
-            return (UserBeanLocal) c.lookup("java:global/dsm_backend/UserBean!beans.UserBeanLocal");
+            return (UserBeanLocal) c.lookup("java:global/dsm_backend_war_exploded/UserBean!beans.UserBeanLocal");
 
         } catch (NamingException ne) {
             ne.printStackTrace();
@@ -42,7 +42,7 @@ public class DSMFacade {
         try {
 
             Context c = new InitialContext();
-            return (StudentBeanLocal) c.lookup("java:global/dsm_backend/StudentBean!beans.StudentBeanLocal");
+            return (StudentBeanLocal) c.lookup("java:global/dsm_backend_war_exploded/StudentBean!beans.StudentBeanLocal");
 
         } catch (NamingException ne) {
             ne.printStackTrace();
@@ -58,7 +58,7 @@ public class DSMFacade {
         try {
 
             Context c = new InitialContext();
-            return (LessonBeanLocal) c.lookup("java:global/dsm_backend/LessonBean!beans.LessonBeanLocal");
+            return (LessonBeanLocal) c.lookup("java:global/dsm_backend_war_exploded/LessonBean!beans.LessonBeanLocal");
 
         } catch (NamingException ne) {
             ne.printStackTrace();

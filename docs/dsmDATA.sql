@@ -62,7 +62,7 @@ INSERT INTO User (ID, FirstName, LastName, Email, Password, Role)
 INSERT INTO Student (Nif, Cc, Address, Birth, UserID)
 	VALUES 	(111111111, '111111111111', 'Braga, Póvoa de Lanhoso', '1997-04-04', 1),
 			(222222222, '222222222222', 'Braga', '1997-08-13', 2),
-            (333333333, '333333333333', 'Braga', '1997-05-04', 3);
+            (333333333, '333333333333', 'Braga', '1997-05-03', 3);
             
 INSERT INTO Instructor (UserID)
 	VALUES 	(4), (5);
