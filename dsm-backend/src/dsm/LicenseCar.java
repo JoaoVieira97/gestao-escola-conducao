@@ -13,22 +13,20 @@
  */
 package dsm;
 
-import com.google.gson.annotations.Expose;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties({"ormid"})
 
 public class LicenseCar {
 	public LicenseCar() {
 	}
 
-	@Expose
 	private int ID;
 
-	@Expose
 	private int practicalLessons;
 
-	@Expose
 	private int theoreticalLessons;
 
-	@Expose
 	private String name;
 	
 	private void setID(int value) {

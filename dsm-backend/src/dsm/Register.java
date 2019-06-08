@@ -13,8 +13,9 @@
  */
 package dsm;
 
-import com.google.gson.annotations.Expose;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@JsonIgnoreProperties({"ormid"})
 public class Register {
 	public Register() {
 	}
@@ -36,16 +37,12 @@ public class Register {
 		
 	};
 
-	@Expose
 	private int ID;
 
-	@Expose
 	private dsm.Instructor instructor;
 
-	@Expose
 	private dsm.LicenseCar license;
 
-	@Expose
 	private java.util.Date initialDate;
 	
 	private void setID(int value) {

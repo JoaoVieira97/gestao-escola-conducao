@@ -13,6 +13,9 @@
  */
 package dsm;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties({"password", "workingDays", "lessons", "ormid"})
 public class Instructor extends dsm.User {
 	public Instructor() {
 	}

@@ -13,8 +13,9 @@
  */
 package dsm;
 
-import com.google.gson.annotations.Expose;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@JsonIgnoreProperties({"payments", "exams", "announcements", "lessons", "registers", "ormid"})
 public class Student extends dsm.User {
 	public Student() {
 	}
@@ -46,26 +47,22 @@ public class Student extends dsm.User {
 		
 	};
 
-	@Expose
 	private long nif;
 
-	@Expose
 	private String cc;
 
-	@Expose
 	private String address;
 
-	@Expose
 	private java.util.Date birth;
-	
+
 	private java.util.Set ORM_payments = new java.util.HashSet();
-	
+
 	private java.util.Set ORM_exams = new java.util.HashSet();
-	
+
 	private java.util.Set ORM_announcements = new java.util.HashSet();
-	
+
 	private java.util.Set ORM_lessons = new java.util.HashSet();
-	
+
 	private java.util.Set ORM_registers = new java.util.HashSet();
 	
 	public void setNif(long value) {

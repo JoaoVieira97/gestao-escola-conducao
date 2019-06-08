@@ -1,5 +1,6 @@
 package web;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dsm.DSMFacade;
 import dsm.Lesson;
 import dsm.Student;
@@ -12,6 +13,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 @WebServlet(name = "GetLessons", urlPatterns = {"/api/lessons"})
@@ -35,14 +38,13 @@ public class GetLessons extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        response.setContentType("application/json;charset=UTF-8");
-
         // get lessons data
         List<Lesson> lessons = DSMFacade.getLessons();
-        String jsonString = JsonConverter.convertLessonsToString(lessons);
+        ObjectMapper mapper = new ObjectMapper();
+        String sJSON = mapper.writeValueAsString(lessons);
+        sJSON = "{\"success\":true,\"lessons\":" + sJSON + "}";
+        response.setContentType("application/json;charset=UTF-8");
+        response.getWriter().write(sJSON);
 
-        // return result
-        ServletOutputStream out = response.getOutputStream();
-        out.print(jsonString);
     }
 }

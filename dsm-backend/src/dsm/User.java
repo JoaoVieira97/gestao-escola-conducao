@@ -13,27 +13,20 @@
  */
 package dsm;
 
-import com.google.gson.annotations.Expose;
-
 public abstract class User {
 	public User() {
 	}
 
-	@Expose
 	private int ID;
 
-	@Expose
 	private String firstName;
 
-	@Expose
 	private String lastName;
 
-	@Expose
 	private String email;
 
 	private String password;
 
-	@Expose
 	private String role;
 	
 	private void setID(int value) {

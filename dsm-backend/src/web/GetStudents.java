@@ -1,15 +1,15 @@
 package web;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dsm.Student;
 import dsm.DSMFacade;
-import utils.JsonConverter;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.text.DateFormat;
 import java.util.List;
+import java.text.SimpleDateFormat;
 
 @WebServlet(name = "GetStudents", urlPatterns = {"/api/students"})
 public class GetStudents extends javax.servlet.http.HttpServlet {
@@ -32,14 +32,14 @@ public class GetStudents extends javax.servlet.http.HttpServlet {
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response)
             throws javax.servlet.ServletException, IOException {
 
-        response.setContentType("application/json;charset=UTF-8");
-
-        // get students data
         List<Student> students = DSMFacade.getStudents();
-        String jsonString = JsonConverter.convertStudentsToString(students);
+        ObjectMapper mapper = new ObjectMapper();
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        mapper.setDateFormat(df);
+        String sJSON = mapper.writeValueAsString(students);
+        sJSON = "{\"success\":true,\"students\":" + sJSON + "}";
+        response.setContentType("application/json;charset=UTF-8");
+        response.getWriter().write(sJSON);
 
-        // return result
-        ServletOutputStream out = response.getOutputStream();
-        out.print(jsonString);
     }
 }
