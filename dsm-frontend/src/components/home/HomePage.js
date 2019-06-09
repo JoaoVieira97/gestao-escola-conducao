@@ -11,6 +11,7 @@ class HomePage extends Component {
         };
     }
 
+
     render() {
         return (
             <Container text={true} textAlign={'center'}>

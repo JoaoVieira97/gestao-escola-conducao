@@ -58,7 +58,7 @@ const Root = ({ store }) => {
                 <Header userType={'default'} />
                 <Switch>
                     <Route exact path="/home" render={ props => <LoginPage {...props} />} />
-                    <Route exact path="/driving-licenses" render={ props => <ErrorPage {...props} />} />
+                    <Route exact path="/categories" render={ props => <ErrorPage {...props} />} />
                     <Route exact path="/contacts" render={ props => <ErrorPage {...props} />} />
                     <Redirect from="/" to="/home" />
                 </Switch>

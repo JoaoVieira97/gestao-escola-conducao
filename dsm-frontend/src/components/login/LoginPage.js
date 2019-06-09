@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Container } from 'semantic-ui-react';
 
 class LoginPage extends Component {
 
@@ -49,8 +48,7 @@ class LoginPage extends Component {
                 }
 
                 localStorage.setItem('userType', response.userType);
-                //this.props.history.push('/home');
-                window.location.reload();
+                this.props.history.push('/home');
             }
         }
     };
@@ -80,64 +78,63 @@ class LoginPage extends Component {
     render() {
 
         return (
-            <Container text={true}>
-                <div className="ui raised segment" style={{alignItems: 'center'}}>
-                    {
-                        /*
-                        <img
+            <div className="ui stackable grid container center aligned">
+                <div className="eight wide column">
+                    <img
+                        src={require("../../images/logo.png")}
                         className="ui medium centered image"
-                        src={require("../../images/logo_plain_svg.svg")}
+                        style={{marginBottom: "20px"}}
                         alt={"logo"}
                     />
-                         */
-                    }
                     <form className="ui form">
-                        <div className="field">
-                            <label>E-mail</label>
-                            <div className="ui left icon input">
-                                <input
-                                    type="email"
-                                    name={"email"}
-                                    ///defaultValue={this.state.email}
-                                    placeholder="Introduza o seu e-mail..."
-                                    onChange={this.handleInputChange}
-                                />
-                                <i className="mail icon" />
+                        <div className="ui stacked segment left aligned">
+                            <div className="field">
+                                <label>E-mail</label>
+                                <div className="ui left icon input">
+                                    <input
+                                        type="email"
+                                        name={"email"}
+                                        ///defaultValue={this.state.email}
+                                        placeholder="Introduza o seu e-mail..."
+                                        onChange={this.handleInputChange}
+                                    />
+                                    <i className="user icon" />
+                                </div>
                             </div>
-                        </div>
-                        <div className="field">
-                            <label>Palavra-passe</label>
-                            <div className="ui left icon input">
-                                <input
-                                    type="password"
-                                    name={"password"}
-                                    placeholder="Introduza a sua palavra-passe..."
-                                    onChange={this.handleInputChange}
-                                />
-                                <i className="lock icon" />
+                            <div className="field">
+                                <label>Palavra-passe</label>
+                                <div className="ui left icon input">
+                                    <input
+                                        type="password"
+                                        name={"password"}
+                                        placeholder="Introduza a sua palavra-passe..."
+                                        onChange={this.handleInputChange}
+                                    />
+                                    <i className="lock icon" />
+                                </div>
                             </div>
-                        </div>
-                        <div className="field">
-                            <div className="ui checkbox">
-                                <input
-                                    type="checkbox"
-                                    name={"rememberMe"}
-                                    defaultChecked={true}
-                                    onChange={this.handleInputChange}
-                                    tabIndex="0"
-                                />
-                                <label>Lembrar o meu acesso</label>
+                            <div className="field">
+                                <div className="ui checkbox">
+                                    <input
+                                        type="checkbox"
+                                        name={"rememberMe"}
+                                        defaultChecked={true}
+                                        onChange={this.handleInputChange}
+                                        tabIndex="0"
+                                    />
+                                    <label>Lembrar o meu acesso</label>
+                                </div>
                             </div>
+                            <button
+                                className="ui button"
+                                type="submit"
+                                onClick={this.handleLoginSubmit.bind(this)}
+                            >ENTRAR</button>
                         </div>
-                        <button
-                            className="ui button"
-                            type="submit"
-                            onClick={this.handleLoginSubmit.bind(this)}
-                        >LOGIN</button>
                     </form>
                 </div>
-            </Container>
-        );
+            </div>
+        )
     }
 }
 

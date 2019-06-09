@@ -13,7 +13,6 @@ class Header extends React.Component {
     handleLogout = async () => {
 
         await Authentication.logout();
-        //this.props.history.push("/login");
         window.location.reload();
     };
 
@@ -24,10 +23,13 @@ class Header extends React.Component {
             return (
                 <div className="ui fluid secondary pointing menu" style={headerStyle}>
                     <Container>
-                        <NavLink activeClassName="active" className="ui item" to="/home" >INÍCIO</NavLink>
-                        <NavLink activeClassName="active" className="ui item" to="/lessons">AULAS</NavLink>
-                        <NavLink activeClassName="active" className="ui item" to="/payments">PAGAMENTOS</NavLink>
-                        <NavLink activeClassName="active" className="ui item" to="/contacts" >CONTACTOS</NavLink>
+                        <NavLink activeClassName="active" className="ui item" to="/home" >
+                            <i className="home icon" />
+                            <p>INÍCIO</p>
+                        </NavLink>
+                        <NavLink className="ui item" to="/lessons">AULAS</NavLink>
+                        <NavLink className="ui item" to="/payments">PAGAMENTOS</NavLink>
+                        <NavLink className="ui item" to="/contacts" >CONTACTOS</NavLink>
                         <div className="right menu">
                             <div className="item">
                                 <Button className="ui button" onClick={this.handleLogout.bind(this)}>
@@ -44,8 +46,8 @@ class Header extends React.Component {
             <div className="ui fluid secondary pointing menu" style={headerStyle}>
                 <Container>
                     <NavLink activeClassName="active" className="ui item" to="/home" >INÍCIO</NavLink>
-                    <NavLink activeClassName="active" className="ui item" to="/driving-licenses" >CATEGORIAS</NavLink>
-                    <NavLink activeClassName="active" className="ui item" to="/contacts" >CONTACTOS</NavLink>
+                    <NavLink className="ui item" to="/categories" >CATEGORIAS</NavLink>
+                    <NavLink className="ui item" to="/contacts" >CONTACTOS</NavLink>
                 </Container>
             </div>
         );

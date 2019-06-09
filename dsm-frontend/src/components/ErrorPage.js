@@ -15,7 +15,7 @@ class ErrorPage extends Component {
                     <img
                         className="ui large centered image"
                         src={require("../images/DSM_404.png")}
-                        alt={"logo"}
+                        alt={"404"}
                     />
                 </div>
                 <div style={{marginTop: "50px"}}>

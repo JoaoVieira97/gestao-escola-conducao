@@ -13,7 +13,7 @@ class Footer extends Component {
                     <div className="three wide column" style={{marginTop: "20px"}}>
                         <Icon name='envelope' size='big' color={'grey'}/>
                     </div>
-                    <div className="ten wide column" style={{marginTop: "10px"}}>
+                    <div className="ten wide column" style={{marginTop: "15px"}}>
                         <h3 className="ui header">
                             Driving School Management
                             <div className="sub header" style={{marginTop: "5px"}}>

@@ -1,3 +1,5 @@
+export const grayColor = "#e0e1e2";
+
 export const footerStyle = {
     position: "fixed",
     left: 0,
