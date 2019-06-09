@@ -318,16 +318,16 @@ public class LessonDAO {
 	}
 	
 	public static boolean deleteAndDissociate(Lesson lesson)throws PersistentException {
-		if (lesson instanceof dsm.PracticalLesson) {
-			return dsm.PracticalLessonDAO.deleteAndDissociate((dsm.PracticalLesson) lesson);
+		if (lesson instanceof PracticalLesson) {
+			return PracticalLessonDAO.deleteAndDissociate((PracticalLesson) lesson);
 		}
 		
-		if (lesson instanceof dsm.TheoreticalLesson) {
-			return dsm.TheoreticalLessonDAO.deleteAndDissociate((dsm.TheoreticalLesson) lesson);
+		if (lesson instanceof TheoreticalLesson) {
+			return TheoreticalLessonDAO.deleteAndDissociate((TheoreticalLesson) lesson);
 		}
 		
 		try {
-			dsm.Student[] lStudentss = lesson.students.toArray();
+			Student[] lStudentss = lesson.students.toArray();
 			for(int i = 0; i < lStudentss.length; i++) {
 				lStudentss[i].lessons.remove(lesson);
 			}
@@ -340,16 +340,16 @@ public class LessonDAO {
 	}
 	
 	public static boolean deleteAndDissociate(Lesson lesson, PersistentSession session)throws PersistentException {
-		if (lesson instanceof dsm.PracticalLesson) {
-			return dsm.PracticalLessonDAO.deleteAndDissociate((dsm.PracticalLesson) lesson, session);
+		if (lesson instanceof PracticalLesson) {
+			return PracticalLessonDAO.deleteAndDissociate((PracticalLesson) lesson, session);
 		}
 		
-		if (lesson instanceof dsm.TheoreticalLesson) {
-			return dsm.TheoreticalLessonDAO.deleteAndDissociate((dsm.TheoreticalLesson) lesson, session);
+		if (lesson instanceof TheoreticalLesson) {
+			return TheoreticalLessonDAO.deleteAndDissociate((TheoreticalLesson) lesson, session);
 		}
 		
 		try {
-			dsm.Student[] lStudentss = lesson.students.toArray();
+			Student[] lStudentss = lesson.students.toArray();
 			for(int i = 0; i < lStudentss.length; i++) {
 				lStudentss[i].lessons.remove(lesson);
 			}

@@ -4,7 +4,7 @@ CREATE TABLE SchoolInfo (ID int(10) NOT NULL, MaxTimeToCancel time NOT NULL, Sta
 CREATE TABLE Register (ID int(10) NOT NULL, CategoryID int(10) NOT NULL, StudentUserID int(10) NOT NULL, InstructorUserID int(10) NOT NULL, InitialDate date, PRIMARY KEY (ID));
 CREATE TABLE Announcement (ID int(10) NOT NULL, StudentUserID int(10) NOT NULL, Title varchar(255), Description varchar(255), Timestamp date, Viewed tinyint(1), Discriminator varchar(255) NOT NULL, PRIMARY KEY (ID));
 CREATE TABLE Exam (ID int(10) NOT NULL, StudentUserID int(10) NOT NULL, StartTime date, Description varchar(255), PRIMARY KEY (ID));
-CREATE TABLE Payment (ID int(10) NOT NULL, SecretaryUserID int(10) NOT NULL, Value double NOT NULL, Timestamp date, PRIMARY KEY (ID));
+CREATE TABLE Payment (ID int(10) NOT NULL, RegisterID int(10) NOT NULL, SecretaryUserID int(10) NOT NULL, Value double NOT NULL, Timestamp date, PRIMARY KEY (ID));
 CREATE TABLE Secretary (UserID int(10) NOT NULL, PRIMARY KEY (UserID));
 CREATE TABLE Category (ID int(10) NOT NULL, PracticalLessons int(10) NOT NULL, TheoreticalLessons int(10) NOT NULL, Name varchar(255), PRIMARY KEY (ID));
 CREATE TABLE Student (Nif bigint(20) NOT NULL, Cc varchar(255), Address varchar(255), Birth date, UserID int(10) NOT NULL, PRIMARY KEY (UserID));
@@ -37,3 +37,4 @@ ALTER TABLE Instructor_WorkingDay ADD CONSTRAINT FKInstructor920476 FOREIGN KEY 
 ALTER TABLE Lesson ADD CONSTRAINT FKLesson72995 FOREIGN KEY (InstructorUserID) REFERENCES Instructor (UserID);
 ALTER TABLE Register ADD CONSTRAINT FKRegister747941 FOREIGN KEY (StudentUserID) REFERENCES Student (UserID);
 ALTER TABLE Register ADD CONSTRAINT FKRegister384374 FOREIGN KEY (CategoryID) REFERENCES Category (ID);
+ALTER TABLE Payment ADD CONSTRAINT FKPayment938649 FOREIGN KEY (RegisterID) REFERENCES Register (ID);

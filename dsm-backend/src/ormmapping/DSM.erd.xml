@@ -295,6 +295,18 @@
       <Index>false</Index>
       <UserTypes/>
     </Column>
+    <Column name="RegisterID">
+      <PrimaryKey>false</PrimaryKey>
+      <ForeignKey>true</ForeignKey>
+      <ReferencedColumn>dsm.Register.ID</ReferencedColumn>
+      <Type>9</Type>
+      <Length>10</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
     <Column name="SecretaryUserID">
       <PrimaryKey>false</PrimaryKey>
       <ForeignKey>true</ForeignKey>
@@ -925,6 +937,16 @@
     <ReferencedTable>Category</ReferencedTable>
     <Columns>
       <Column>CategoryID</Column>
+    </Columns>
+    <RefColumns>
+      <Column>ID</Column>
+    </RefColumns>
+  </ForeignKey>
+  <ForeignKey name="FKPayment938649">
+    <ReferenceTable>Payment</ReferenceTable>
+    <ReferencedTable>Register</ReferencedTable>
+    <Columns>
+      <Column>RegisterID</Column>
     </Columns>
     <RefColumns>
       <Column>ID</Column>

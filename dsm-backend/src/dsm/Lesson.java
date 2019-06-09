@@ -91,7 +91,7 @@ public abstract class Lesson {
 		return ORM_students;
 	}
 	
-	public final dsm.StudentSetCollection students = new dsm.StudentSetCollection(this, _ormAdapter, ORMConstants.KEY_LESSON_STUDENTS, ORMConstants.KEY_STUDENT_LESSONS, ORMConstants.KEY_MUL_MANY_TO_MANY);
+	public final StudentSetCollection students = new StudentSetCollection(this, _ormAdapter, ORMConstants.KEY_LESSON_STUDENTS, ORMConstants.KEY_STUDENT_LESSONS, ORMConstants.KEY_MUL_MANY_TO_MANY);
 	
 	private void setORM_Categories(java.util.Set value) {
 		this.ORM_categories = value;

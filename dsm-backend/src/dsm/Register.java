@@ -15,9 +15,18 @@ package dsm;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+
 @JsonIgnoreProperties({"ormid"})
 public class Register {
 	public Register() {
+	}
+	
+	private java.util.Set this_getSet (int key) {
+		if (key == ORMConstants.KEY_REGISTER_PAYMENTS) {
+			return ORM_payments;
+		}
+		
+		return null;
 	}
 	
 	private void this_setOwner(Object owner, int key) {
@@ -31,6 +40,10 @@ public class Register {
 	}
 	
 	org.orm.util.ORMAdapter _ormAdapter = new org.orm.util.AbstractORMAdapter() {
+		public java.util.Set getSet(int key) {
+			return this_getSet(key);
+		}
+		
 		public void setOwner(Object owner, int key) {
 			this_setOwner(owner, key);
 		}
@@ -44,6 +57,8 @@ public class Register {
 	private Instructor instructor;
 	
 	private java.util.Date initialDate;
+	
+	private java.util.Set ORM_payments = new java.util.HashSet();
 	
 	private void setID(int value) {
 		this.ID = value;
@@ -80,6 +95,16 @@ public class Register {
 	public Category getCategory() {
 		return category;
 	}
+	
+	private void setORM_Payments(java.util.Set value) {
+		this.ORM_payments = value;
+	}
+	
+	private java.util.Set getORM_Payments() {
+		return ORM_payments;
+	}
+	
+	public final PaymentSetCollection payments = new PaymentSetCollection(this, _ormAdapter, ORMConstants.KEY_REGISTER_PAYMENTS, ORMConstants.KEY_MUL_ONE_TO_MANY);
 	
 	public String toString() {
 		return String.valueOf(getID());

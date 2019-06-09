@@ -25,6 +25,7 @@ public class RegisterDetachedCriteria extends AbstractORMDetachedCriteria {
 	public final IntegerExpression instructorId;
 	public final AssociationExpression instructor;
 	public final DateExpression initialDate;
+	public final CollectionExpression payments;
 	
 	public RegisterDetachedCriteria() {
 		super(dsm.Register.class, dsm.RegisterCriteria.class);
@@ -34,6 +35,7 @@ public class RegisterDetachedCriteria extends AbstractORMDetachedCriteria {
 		instructorId = new IntegerExpression("instructor.", this.getDetachedCriteria());
 		instructor = new AssociationExpression("instructor", this.getDetachedCriteria());
 		initialDate = new DateExpression("initialDate", this.getDetachedCriteria());
+		payments = new CollectionExpression("ORM_Payments", this.getDetachedCriteria());
 	}
 	
 	public RegisterDetachedCriteria(DetachedCriteria aDetachedCriteria) {
@@ -44,6 +46,7 @@ public class RegisterDetachedCriteria extends AbstractORMDetachedCriteria {
 		instructorId = new IntegerExpression("instructor.", this.getDetachedCriteria());
 		instructor = new AssociationExpression("instructor", this.getDetachedCriteria());
 		initialDate = new DateExpression("initialDate", this.getDetachedCriteria());
+		payments = new CollectionExpression("ORM_Payments", this.getDetachedCriteria());
 	}
 	
 	public CategoryDetachedCriteria createCategoryCriteria() {
@@ -52,6 +55,10 @@ public class RegisterDetachedCriteria extends AbstractORMDetachedCriteria {
 	
 	public InstructorDetachedCriteria createInstructorCriteria() {
 		return new InstructorDetachedCriteria(createCriteria("instructor"));
+	}
+	
+	public PaymentDetachedCriteria createPaymentsCriteria() {
+		return new PaymentDetachedCriteria(createCriteria("ORM_Payments"));
 	}
 	
 	public Register uniqueRegister(PersistentSession session) {

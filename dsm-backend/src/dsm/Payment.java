@@ -17,9 +17,22 @@ public class Payment {
 	public Payment() {
 	}
 	
+	private void this_setOwner(Object owner, int key) {
+		if (key == ORMConstants.KEY_PAYMENT_SECRETARY) {
+			this.secretary = (Secretary) owner;
+		}
+	}
+	
+	org.orm.util.ORMAdapter _ormAdapter = new org.orm.util.AbstractORMAdapter() {
+		public void setOwner(Object owner, int key) {
+			this_setOwner(owner, key);
+		}
+		
+	};
+	
 	private int ID;
 	
-	private dsm.Secretary secretary;
+	private Secretary secretary;
 	
 	private double value;
 	
@@ -53,11 +66,11 @@ public class Payment {
 		return timestamp;
 	}
 	
-	public void setSecretary(dsm.Secretary value) {
+	public void setSecretary(Secretary value) {
 		this.secretary = value;
 	}
 	
-	public dsm.Secretary getSecretary() {
+	public Secretary getSecretary() {
 		return secretary;
 	}
 	

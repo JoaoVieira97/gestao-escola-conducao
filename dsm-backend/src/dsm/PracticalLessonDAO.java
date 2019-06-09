@@ -323,7 +323,7 @@ public class PracticalLessonDAO {
 	
 	public static boolean deleteAndDissociate(PracticalLesson practicalLesson)throws PersistentException {
 		try {
-			dsm.Student[] lStudentss = practicalLesson.students.toArray();
+			Student[] lStudentss = practicalLesson.students.toArray();
 			for(int i = 0; i < lStudentss.length; i++) {
 				lStudentss[i].lessons.remove(practicalLesson);
 			}
@@ -337,7 +337,7 @@ public class PracticalLessonDAO {
 	
 	public static boolean deleteAndDissociate(PracticalLesson practicalLesson, PersistentSession session)throws PersistentException {
 		try {
-			dsm.Student[] lStudentss = practicalLesson.students.toArray();
+			Student[] lStudentss = practicalLesson.students.toArray();
 			for(int i = 0; i < lStudentss.length; i++) {
 				lStudentss[i].lessons.remove(practicalLesson);
 			}

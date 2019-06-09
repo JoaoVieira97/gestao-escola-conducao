@@ -17,6 +17,19 @@ public class Payment {
 	public Payment() {
 	}
 	
+	private void this_setOwner(Object owner, int key) {
+		if (key == ORMConstants.KEY_PAYMENT_SECRETARY) {
+			this.secretary = (dsm.Secretary) owner;
+		}
+	}
+	
+	org.orm.util.ORMAdapter _ormAdapter = new org.orm.util.AbstractORMAdapter() {
+		public void setOwner(Object owner, int key) {
+			this_setOwner(owner, key);
+		}
+		
+	};
+	
 	private int ID;
 	
 	private dsm.Secretary secretary;

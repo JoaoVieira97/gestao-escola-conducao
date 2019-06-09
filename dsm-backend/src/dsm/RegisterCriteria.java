@@ -25,6 +25,7 @@ public class RegisterCriteria extends AbstractORMCriteria {
 	public final IntegerExpression instructorId;
 	public final AssociationExpression instructor;
 	public final DateExpression initialDate;
+	public final CollectionExpression payments;
 	
 	public RegisterCriteria(Criteria criteria) {
 		super(criteria);
@@ -34,6 +35,7 @@ public class RegisterCriteria extends AbstractORMCriteria {
 		instructorId = new IntegerExpression("instructor.", this);
 		instructor = new AssociationExpression("instructor", this);
 		initialDate = new DateExpression("initialDate", this);
+		payments = new CollectionExpression("ORM_Payments", this);
 	}
 	
 	public RegisterCriteria(PersistentSession session) {
@@ -50,6 +52,10 @@ public class RegisterCriteria extends AbstractORMCriteria {
 	
 	public InstructorCriteria createInstructorCriteria() {
 		return new InstructorCriteria(createCriteria("instructor"));
+	}
+	
+	public PaymentCriteria createPaymentsCriteria() {
+		return new PaymentCriteria(createCriteria("ORM_Payments"));
 	}
 	
 	public Register uniqueRegister() {

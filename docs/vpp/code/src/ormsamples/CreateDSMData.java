@@ -25,7 +25,7 @@ public class CreateDSMData {
 			// Initialize the properties of the persistent object here
 			dsm.PersonalAnnouncementDAO.save(ldsmPersonalAnnouncement);
 			dsm.Register ldsmRegister = dsm.RegisterDAO.createRegister();
-			// TODO Initialize the properties of the persistent object here, the following properties must be initialized before saving : instructor, category
+			// TODO Initialize the properties of the persistent object here, the following properties must be initialized before saving : payments, instructor, category
 			dsm.RegisterDAO.save(ldsmRegister);
 			dsm.Exam ldsmExam = dsm.ExamDAO.createExam();
 			// Initialize the properties of the persistent object here

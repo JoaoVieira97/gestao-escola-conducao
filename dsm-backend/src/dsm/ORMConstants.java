@@ -28,6 +28,8 @@ public interface ORMConstants extends org.orm.util.ORMBaseConstants {
 	
 	final int KEY_REGISTER_INSTRUCTOR = 942836633;
 	
+	final int KEY_REGISTER_PAYMENTS = 541989161;
+	
 	final int KEY_STUDENT_ANNOUNCEMENTS = 1021639912;
 	
 	final int KEY_STUDENT_EXAMS = 203917584;
