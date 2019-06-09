@@ -18,10 +18,7 @@ public class Student extends dsm.User {
 	}
 	
 	private java.util.Set this_getSet (int key) {
-		if (key == ORMConstants.KEY_STUDENT_PAYMENTS) {
-			return ORM_payments;
-		}
-		else if (key == ORMConstants.KEY_STUDENT_EXAMS) {
+		if (key == ORMConstants.KEY_STUDENT_EXAMS) {
 			return ORM_exams;
 		}
 		else if (key == ORMConstants.KEY_STUDENT_ANNOUNCEMENTS) {
@@ -51,8 +48,6 @@ public class Student extends dsm.User {
 	private String address;
 	
 	private java.util.Date birth;
-	
-	private java.util.Set ORM_payments = new java.util.HashSet();
 	
 	private java.util.Set ORM_exams = new java.util.HashSet();
 	
@@ -93,16 +88,6 @@ public class Student extends dsm.User {
 	public java.util.Date getBirth() {
 		return birth;
 	}
-	
-	private void setORM_Payments(java.util.Set value) {
-		this.ORM_payments = value;
-	}
-	
-	private java.util.Set getORM_Payments() {
-		return ORM_payments;
-	}
-	
-	public final dsm.PaymentSetCollection payments = new dsm.PaymentSetCollection(this, _ormAdapter, ORMConstants.KEY_STUDENT_PAYMENTS, ORMConstants.KEY_MUL_ONE_TO_MANY);
 	
 	private void setORM_Exams(java.util.Set value) {
 		this.ORM_exams = value;

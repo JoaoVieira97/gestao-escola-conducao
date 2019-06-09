@@ -24,7 +24,7 @@ public class TheoreticalLessonDetachedCriteria extends AbstractORMDetachedCriter
 	public final IntegerExpression duration;
 	public final StringExpression state;
 	public final CollectionExpression students;
-	public final CollectionExpression licenses;
+	public final CollectionExpression categories;
 	public final CollectionExpression themes;
 	
 	public TheoreticalLessonDetachedCriteria() {
@@ -34,7 +34,7 @@ public class TheoreticalLessonDetachedCriteria extends AbstractORMDetachedCriter
 		duration = new IntegerExpression("duration", this.getDetachedCriteria());
 		state = new StringExpression("state", this.getDetachedCriteria());
 		students = new CollectionExpression("ORM_Students", this.getDetachedCriteria());
-		licenses = new CollectionExpression("ORM_Licenses", this.getDetachedCriteria());
+		categories = new CollectionExpression("ORM_Categories", this.getDetachedCriteria());
 		themes = new CollectionExpression("ORM_Themes", this.getDetachedCriteria());
 	}
 	
@@ -45,7 +45,7 @@ public class TheoreticalLessonDetachedCriteria extends AbstractORMDetachedCriter
 		duration = new IntegerExpression("duration", this.getDetachedCriteria());
 		state = new StringExpression("state", this.getDetachedCriteria());
 		students = new CollectionExpression("ORM_Students", this.getDetachedCriteria());
-		licenses = new CollectionExpression("ORM_Licenses", this.getDetachedCriteria());
+		categories = new CollectionExpression("ORM_Categories", this.getDetachedCriteria());
 		themes = new CollectionExpression("ORM_Themes", this.getDetachedCriteria());
 	}
 	
@@ -57,8 +57,8 @@ public class TheoreticalLessonDetachedCriteria extends AbstractORMDetachedCriter
 		return new StudentDetachedCriteria(createCriteria("ORM_Students"));
 	}
 	
-	public LicenseCarDetachedCriteria createLicensesCriteria() {
-		return new LicenseCarDetachedCriteria(createCriteria("ORM_Licenses"));
+	public CategoryDetachedCriteria createCategoriesCriteria() {
+		return new CategoryDetachedCriteria(createCriteria("ORM_Categories"));
 	}
 	
 	public TheoreticalLesson uniqueTheoreticalLesson(PersistentSession session) {

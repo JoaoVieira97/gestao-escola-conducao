@@ -24,9 +24,9 @@ License Type: Academic
 		<property name="query.substitutions">true 1, false 0, yes 'Y', no 'N'</property>
 		<!-- mapping files -->
 		<mapping resource="ormmapping/dsm/Announcement.hbm.xml" />
+		<mapping resource="ormmapping/dsm/Category.hbm.xml" />
 		<mapping resource="ormmapping/dsm/Exam.hbm.xml" />
 		<mapping resource="ormmapping/dsm/Lesson.hbm.xml" />
-		<mapping resource="ormmapping/dsm/LicenseCar.hbm.xml" />
 		<mapping resource="ormmapping/dsm/Payment.hbm.xml" />
 		<mapping resource="ormmapping/dsm/Register.hbm.xml" />
 		<mapping resource="ormmapping/dsm/SchoolInfo.hbm.xml" />

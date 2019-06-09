@@ -25,7 +25,7 @@ public class SchoolInfoDetachedCriteria extends AbstractORMDetachedCriteria {
 	public final TimeExpression endTime;
 	
 	public SchoolInfoDetachedCriteria() {
-		super(dsm.SchoolInfo.class, dsm.SchoolInfoCriteria.class);
+		super(SchoolInfo.class, SchoolInfoCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		maxTimeToCancel = new TimeExpression("maxTimeToCancel", this.getDetachedCriteria());
 		startTime = new TimeExpression("startTime", this.getDetachedCriteria());
@@ -33,7 +33,7 @@ public class SchoolInfoDetachedCriteria extends AbstractORMDetachedCriteria {
 	}
 	
 	public SchoolInfoDetachedCriteria(DetachedCriteria aDetachedCriteria) {
-		super(aDetachedCriteria, dsm.SchoolInfoCriteria.class);
+		super(aDetachedCriteria, SchoolInfoCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		maxTimeToCancel = new TimeExpression("maxTimeToCancel", this.getDetachedCriteria());
 		startTime = new TimeExpression("startTime", this.getDetachedCriteria());

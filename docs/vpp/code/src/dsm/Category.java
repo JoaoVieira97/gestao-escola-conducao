@@ -13,8 +13,8 @@
  */
 package dsm;
 
-public class LicenseCar {
-	public LicenseCar() {
+public class Category {
+	public Category() {
 	}
 	
 	private int ID;

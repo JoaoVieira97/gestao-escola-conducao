@@ -5,13 +5,14 @@ License Type: Academic
 -->
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="dsm.LicenseCar" table="LicenseCar" lazy="false">
+	<class name="dsm.Payment" table="Payment" lazy="false">
 		<id name="ID" column="ID" type="integer" unsaved-value="0">
 			<generator class="increment">
 			</generator>
 		</id>
-		<property name="practicalLessons" column="PracticalLessons" type="integer" length="10" not-null="true" lazy="false"/>
-		<property name="theoreticalLessons" column="TheoreticalLessons" type="integer" length="10" not-null="true" lazy="false"/>
-		<property name="name" column="Name" type="string" length="255" not-null="false" lazy="false"/>
+		<many-to-one name="secretary" cascade="lock" column="SecretaryUserID" class="dsm.Secretary" not-null="true" lazy="proxy" access="field">
+		</many-to-one>
+		<property name="value" column="Value" type="double" not-null="true" lazy="false"/>
+		<property name="timestamp" column="Timestamp" type="date" not-null="false" lazy="false"/>
 	</class>
 </hibernate-mapping>

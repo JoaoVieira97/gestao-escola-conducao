@@ -23,13 +23,13 @@ public class ThemeDetachedCriteria extends AbstractORMDetachedCriteria {
 	public final StringExpression name;
 	
 	public ThemeDetachedCriteria() {
-		super(dsm.Theme.class, dsm.ThemeCriteria.class);
+		super(Theme.class, ThemeCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		name = new StringExpression("name", this.getDetachedCriteria());
 	}
 	
 	public ThemeDetachedCriteria(DetachedCriteria aDetachedCriteria) {
-		super(aDetachedCriteria, dsm.ThemeCriteria.class);
+		super(aDetachedCriteria, ThemeCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		name = new StringExpression("name", this.getDetachedCriteria());
 	}

@@ -29,14 +29,13 @@ public class StudentDetachedCriteria extends AbstractORMDetachedCriteria {
 	public final StringExpression cc;
 	public final StringExpression address;
 	public final DateExpression birth;
-	public final CollectionExpression payments;
 	public final CollectionExpression exams;
 	public final CollectionExpression announcements;
 	public final CollectionExpression lessons;
 	public final CollectionExpression registers;
 	
 	public StudentDetachedCriteria() {
-		super(dsm.Student.class, dsm.StudentCriteria.class);
+		super(Student.class, StudentCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		firstName = new StringExpression("firstName", this.getDetachedCriteria());
 		lastName = new StringExpression("lastName", this.getDetachedCriteria());
@@ -47,7 +46,6 @@ public class StudentDetachedCriteria extends AbstractORMDetachedCriteria {
 		cc = new StringExpression("cc", this.getDetachedCriteria());
 		address = new StringExpression("address", this.getDetachedCriteria());
 		birth = new DateExpression("birth", this.getDetachedCriteria());
-		payments = new CollectionExpression("ORM_Payments", this.getDetachedCriteria());
 		exams = new CollectionExpression("ORM_Exams", this.getDetachedCriteria());
 		announcements = new CollectionExpression("ORM_Announcements", this.getDetachedCriteria());
 		lessons = new CollectionExpression("ORM_Lessons", this.getDetachedCriteria());
@@ -55,7 +53,7 @@ public class StudentDetachedCriteria extends AbstractORMDetachedCriteria {
 	}
 	
 	public StudentDetachedCriteria(DetachedCriteria aDetachedCriteria) {
-		super(aDetachedCriteria, dsm.StudentCriteria.class);
+		super(aDetachedCriteria, StudentCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		firstName = new StringExpression("firstName", this.getDetachedCriteria());
 		lastName = new StringExpression("lastName", this.getDetachedCriteria());
@@ -66,15 +64,10 @@ public class StudentDetachedCriteria extends AbstractORMDetachedCriteria {
 		cc = new StringExpression("cc", this.getDetachedCriteria());
 		address = new StringExpression("address", this.getDetachedCriteria());
 		birth = new DateExpression("birth", this.getDetachedCriteria());
-		payments = new CollectionExpression("ORM_Payments", this.getDetachedCriteria());
 		exams = new CollectionExpression("ORM_Exams", this.getDetachedCriteria());
 		announcements = new CollectionExpression("ORM_Announcements", this.getDetachedCriteria());
 		lessons = new CollectionExpression("ORM_Lessons", this.getDetachedCriteria());
 		registers = new CollectionExpression("ORM_Registers", this.getDetachedCriteria());
-	}
-	
-	public PaymentDetachedCriteria createPaymentsCriteria() {
-		return new PaymentDetachedCriteria(createCriteria("ORM_Payments"));
 	}
 	
 	public ExamDetachedCriteria createExamsCriteria() {

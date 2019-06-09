@@ -25,22 +25,22 @@ public class CreateDSMData {
 			// Initialize the properties of the persistent object here
 			dsm.PersonalAnnouncementDAO.save(ldsmPersonalAnnouncement);
 			dsm.Register ldsmRegister = dsm.RegisterDAO.createRegister();
-			// TODO Initialize the properties of the persistent object here, the following properties must be initialized before saving : license, instructor
+			// TODO Initialize the properties of the persistent object here, the following properties must be initialized before saving : instructor, category
 			dsm.RegisterDAO.save(ldsmRegister);
 			dsm.Exam ldsmExam = dsm.ExamDAO.createExam();
 			// Initialize the properties of the persistent object here
 			dsm.ExamDAO.save(ldsmExam);
 			dsm.Payment ldsmPayment = dsm.PaymentDAO.createPayment();
-			// TODO Initialize the properties of the persistent object here, the following properties must be initialized before saving : value, license, secretary
+			// TODO Initialize the properties of the persistent object here, the following properties must be initialized before saving : value, secretary
 			dsm.PaymentDAO.save(ldsmPayment);
 			dsm.Secretary ldsmSecretary = dsm.SecretaryDAO.createSecretary();
 			// Initialize the properties of the persistent object here
 			dsm.SecretaryDAO.save(ldsmSecretary);
-			dsm.LicenseCar ldsmLicenseCar = dsm.LicenseCarDAO.createLicenseCar();
+			dsm.Category ldsmCategory = dsm.CategoryDAO.createCategory();
 			// TODO Initialize the properties of the persistent object here, the following properties must be initialized before saving : theoreticalLessons, practicalLessons
-			dsm.LicenseCarDAO.save(ldsmLicenseCar);
+			dsm.CategoryDAO.save(ldsmCategory);
 			dsm.Student ldsmStudent = dsm.StudentDAO.createStudent();
-			// TODO Initialize the properties of the persistent object here, the following properties must be initialized before saving : registers, lessons, announcements, exams, payments, nif
+			// TODO Initialize the properties of the persistent object here, the following properties must be initialized before saving : registers, lessons, announcements, exams, nif
 			dsm.StudentDAO.save(ldsmStudent);
 			dsm.Instructor ldsmInstructor = dsm.InstructorDAO.createInstructor();
 			// TODO Initialize the properties of the persistent object here, the following properties must be initialized before saving : lessons, workingDays

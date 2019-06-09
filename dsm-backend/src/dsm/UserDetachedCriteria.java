@@ -27,7 +27,7 @@ public class UserDetachedCriteria extends AbstractORMDetachedCriteria {
 	public final StringExpression role;
 	
 	public UserDetachedCriteria() {
-		super(dsm.User.class, dsm.UserCriteria.class);
+		super(User.class, UserCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		firstName = new StringExpression("firstName", this.getDetachedCriteria());
 		lastName = new StringExpression("lastName", this.getDetachedCriteria());
@@ -37,7 +37,7 @@ public class UserDetachedCriteria extends AbstractORMDetachedCriteria {
 	}
 	
 	public UserDetachedCriteria(DetachedCriteria aDetachedCriteria) {
-		super(aDetachedCriteria, dsm.UserCriteria.class);
+		super(aDetachedCriteria, UserCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		firstName = new StringExpression("firstName", this.getDetachedCriteria());
 		lastName = new StringExpression("lastName", this.getDetachedCriteria());

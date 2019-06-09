@@ -41,7 +41,7 @@ public class PracticalLessonDAO {
 		}
 	}
 	
-	public static PracticalLesson loadPracticalLessonByORMID(int ID, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static PracticalLesson loadPracticalLessonByORMID(int ID, LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return loadPracticalLessonByORMID(session, ID, lockMode);
@@ -52,7 +52,7 @@ public class PracticalLessonDAO {
 		}
 	}
 	
-	public static PracticalLesson getPracticalLessonByORMID(int ID, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static PracticalLesson getPracticalLessonByORMID(int ID, LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return getPracticalLessonByORMID(session, ID, lockMode);
@@ -65,7 +65,7 @@ public class PracticalLessonDAO {
 	
 	public static PracticalLesson loadPracticalLessonByORMID(PersistentSession session, int ID) throws PersistentException {
 		try {
-			return (PracticalLesson) session.load(dsm.PracticalLesson.class, new Integer(ID));
+			return (PracticalLesson) session.load(PracticalLesson.class, new Integer(ID));
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -75,7 +75,7 @@ public class PracticalLessonDAO {
 	
 	public static PracticalLesson getPracticalLessonByORMID(PersistentSession session, int ID) throws PersistentException {
 		try {
-			return (PracticalLesson) session.get(dsm.PracticalLesson.class, new Integer(ID));
+			return (PracticalLesson) session.get(PracticalLesson.class, new Integer(ID));
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -83,9 +83,9 @@ public class PracticalLessonDAO {
 		}
 	}
 	
-	public static PracticalLesson loadPracticalLessonByORMID(PersistentSession session, int ID, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static PracticalLesson loadPracticalLessonByORMID(PersistentSession session, int ID, LockMode lockMode) throws PersistentException {
 		try {
-			return (PracticalLesson) session.load(dsm.PracticalLesson.class, new Integer(ID), lockMode);
+			return (PracticalLesson) session.load(PracticalLesson.class, new Integer(ID), lockMode);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -93,9 +93,9 @@ public class PracticalLessonDAO {
 		}
 	}
 	
-	public static PracticalLesson getPracticalLessonByORMID(PersistentSession session, int ID, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static PracticalLesson getPracticalLessonByORMID(PersistentSession session, int ID, LockMode lockMode) throws PersistentException {
 		try {
-			return (PracticalLesson) session.get(dsm.PracticalLesson.class, new Integer(ID), lockMode);
+			return (PracticalLesson) session.get(PracticalLesson.class, new Integer(ID), lockMode);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -114,7 +114,7 @@ public class PracticalLessonDAO {
 		}
 	}
 	
-	public static List queryPracticalLesson(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static List queryPracticalLesson(String condition, String orderBy, LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return queryPracticalLesson(session, condition, orderBy, lockMode);
@@ -136,7 +136,7 @@ public class PracticalLessonDAO {
 		}
 	}
 	
-	public static PracticalLesson[] listPracticalLessonByQuery(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static PracticalLesson[] listPracticalLessonByQuery(String condition, String orderBy, LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return listPracticalLessonByQuery(session, condition, orderBy, lockMode);
@@ -163,7 +163,7 @@ public class PracticalLessonDAO {
 		}
 	}
 	
-	public static List queryPracticalLesson(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static List queryPracticalLesson(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
 		StringBuffer sb = new StringBuffer("From dsm.PracticalLesson as PracticalLesson");
 		if (condition != null)
 			sb.append(" Where ").append(condition);
@@ -191,7 +191,7 @@ public class PracticalLessonDAO {
 		}
 	}
 	
-	public static PracticalLesson[] listPracticalLessonByQuery(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static PracticalLesson[] listPracticalLessonByQuery(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
 		try {
 			List list = queryPracticalLesson(session, condition, orderBy, lockMode);
 			return (PracticalLesson[]) list.toArray(new PracticalLesson[list.size()]);
@@ -213,7 +213,7 @@ public class PracticalLessonDAO {
 		}
 	}
 	
-	public static PracticalLesson loadPracticalLessonByQuery(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static PracticalLesson loadPracticalLessonByQuery(String condition, String orderBy, LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return loadPracticalLessonByQuery(session, condition, orderBy, lockMode);
@@ -232,7 +232,7 @@ public class PracticalLessonDAO {
 			return null;
 	}
 	
-	public static PracticalLesson loadPracticalLessonByQuery(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static PracticalLesson loadPracticalLessonByQuery(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
 		PracticalLesson[] practicalLessons = listPracticalLessonByQuery(session, condition, orderBy, lockMode);
 		if (practicalLessons != null && practicalLessons.length > 0)
 			return practicalLessons[0];
@@ -251,7 +251,7 @@ public class PracticalLessonDAO {
 		}
 	}
 	
-	public static java.util.Iterator iteratePracticalLessonByQuery(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static java.util.Iterator iteratePracticalLessonByQuery(String condition, String orderBy, LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return iteratePracticalLessonByQuery(session, condition, orderBy, lockMode);
@@ -278,7 +278,7 @@ public class PracticalLessonDAO {
 		}
 	}
 	
-	public static java.util.Iterator iteratePracticalLessonByQuery(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static java.util.Iterator iteratePracticalLessonByQuery(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
 		StringBuffer sb = new StringBuffer("From dsm.PracticalLesson as PracticalLesson");
 		if (condition != null)
 			sb.append(" Where ").append(condition);
@@ -296,10 +296,10 @@ public class PracticalLessonDAO {
 	}
 	
 	public static PracticalLesson createPracticalLesson() {
-		return new dsm.PracticalLesson();
+		return new PracticalLesson();
 	}
 	
-	public static boolean save(dsm.PracticalLesson practicalLesson) throws PersistentException {
+	public static boolean save(PracticalLesson practicalLesson) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().saveObject(practicalLesson);
 			return true;
@@ -310,7 +310,7 @@ public class PracticalLessonDAO {
 		}
 	}
 	
-	public static boolean delete(dsm.PracticalLesson practicalLesson) throws PersistentException {
+	public static boolean delete(PracticalLesson practicalLesson) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().deleteObject(practicalLesson);
 			return true;
@@ -321,7 +321,7 @@ public class PracticalLessonDAO {
 		}
 	}
 	
-	public static boolean deleteAndDissociate(dsm.PracticalLesson practicalLesson)throws PersistentException {
+	public static boolean deleteAndDissociate(PracticalLesson practicalLesson)throws PersistentException {
 		try {
 			dsm.Student[] lStudentss = practicalLesson.students.toArray();
 			for(int i = 0; i < lStudentss.length; i++) {
@@ -335,7 +335,7 @@ public class PracticalLessonDAO {
 		}
 	}
 	
-	public static boolean deleteAndDissociate(dsm.PracticalLesson practicalLesson, org.orm.PersistentSession session)throws PersistentException {
+	public static boolean deleteAndDissociate(PracticalLesson practicalLesson, PersistentSession session)throws PersistentException {
 		try {
 			dsm.Student[] lStudentss = practicalLesson.students.toArray();
 			for(int i = 0; i < lStudentss.length; i++) {
@@ -354,7 +354,7 @@ public class PracticalLessonDAO {
 		}
 	}
 	
-	public static boolean refresh(dsm.PracticalLesson practicalLesson) throws PersistentException {
+	public static boolean refresh(PracticalLesson practicalLesson) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().getSession().refresh(practicalLesson);
 			return true;
@@ -365,7 +365,7 @@ public class PracticalLessonDAO {
 		}
 	}
 	
-	public static boolean evict(dsm.PracticalLesson practicalLesson) throws PersistentException {
+	public static boolean evict(PracticalLesson practicalLesson) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().getSession().evict(practicalLesson);
 			return true;

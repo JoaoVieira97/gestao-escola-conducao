@@ -12,8 +12,6 @@ License Type: Academic
 		</id>
 		<many-to-one name="secretary" cascade="lock" column="SecretaryUserID" class="dsm.Secretary" not-null="true" lazy="proxy" access="field">
 		</many-to-one>
-		<many-to-one name="license" cascade="lock" column="LicenseCarID" class="dsm.LicenseCar" not-null="true" lazy="proxy" access="field">
-		</many-to-one>
 		<property name="value" column="Value" type="double" not-null="true" lazy="false"/>
 		<property name="timestamp" column="Timestamp" type="date" not-null="false" lazy="false"/>
 	</class>

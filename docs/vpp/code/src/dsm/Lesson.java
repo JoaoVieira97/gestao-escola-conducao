@@ -21,8 +21,8 @@ public abstract class Lesson {
 		if (key == ORMConstants.KEY_LESSON_STUDENTS) {
 			return ORM_students;
 		}
-		else if (key == ORMConstants.KEY_LESSON_LICENSES) {
-			return ORM_licenses;
+		else if (key == ORMConstants.KEY_LESSON_CATEGORIES) {
+			return ORM_categories;
 		}
 		
 		return null;
@@ -45,7 +45,7 @@ public abstract class Lesson {
 	
 	private java.util.Set ORM_students = new java.util.HashSet();
 	
-	private java.util.Set ORM_licenses = new java.util.HashSet();
+	private java.util.Set ORM_categories = new java.util.HashSet();
 	
 	private void setID(int value) {
 		this.ID = value;
@@ -93,15 +93,15 @@ public abstract class Lesson {
 	
 	public final dsm.StudentSetCollection students = new dsm.StudentSetCollection(this, _ormAdapter, ORMConstants.KEY_LESSON_STUDENTS, ORMConstants.KEY_STUDENT_LESSONS, ORMConstants.KEY_MUL_MANY_TO_MANY);
 	
-	private void setORM_Licenses(java.util.Set value) {
-		this.ORM_licenses = value;
+	private void setORM_Categories(java.util.Set value) {
+		this.ORM_categories = value;
 	}
 	
-	private java.util.Set getORM_Licenses() {
-		return ORM_licenses;
+	private java.util.Set getORM_Categories() {
+		return ORM_categories;
 	}
 	
-	public final dsm.LicenseCarSetCollection licenses = new dsm.LicenseCarSetCollection(this, _ormAdapter, ORMConstants.KEY_LESSON_LICENSES, ORMConstants.KEY_MUL_MANY_TO_MANY);
+	public final dsm.CategorySetCollection categories = new dsm.CategorySetCollection(this, _ormAdapter, ORMConstants.KEY_LESSON_CATEGORIES, ORMConstants.KEY_MUL_MANY_TO_MANY);
 	
 	public String toString() {
 		return String.valueOf(getID());

@@ -20,38 +20,38 @@ import org.orm.criteria.*;
 
 public class RegisterDetachedCriteria extends AbstractORMDetachedCriteria {
 	public final IntegerExpression ID;
+	public final IntegerExpression categoryId;
+	public final AssociationExpression category;
 	public final IntegerExpression instructorId;
 	public final AssociationExpression instructor;
-	public final IntegerExpression licenseId;
-	public final AssociationExpression license;
 	public final DateExpression initialDate;
 	
 	public RegisterDetachedCriteria() {
 		super(dsm.Register.class, dsm.RegisterCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
+		categoryId = new IntegerExpression("category.ID", this.getDetachedCriteria());
+		category = new AssociationExpression("category", this.getDetachedCriteria());
 		instructorId = new IntegerExpression("instructor.", this.getDetachedCriteria());
 		instructor = new AssociationExpression("instructor", this.getDetachedCriteria());
-		licenseId = new IntegerExpression("license.ID", this.getDetachedCriteria());
-		license = new AssociationExpression("license", this.getDetachedCriteria());
 		initialDate = new DateExpression("initialDate", this.getDetachedCriteria());
 	}
 	
 	public RegisterDetachedCriteria(DetachedCriteria aDetachedCriteria) {
 		super(aDetachedCriteria, dsm.RegisterCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
+		categoryId = new IntegerExpression("category.ID", this.getDetachedCriteria());
+		category = new AssociationExpression("category", this.getDetachedCriteria());
 		instructorId = new IntegerExpression("instructor.", this.getDetachedCriteria());
 		instructor = new AssociationExpression("instructor", this.getDetachedCriteria());
-		licenseId = new IntegerExpression("license.ID", this.getDetachedCriteria());
-		license = new AssociationExpression("license", this.getDetachedCriteria());
 		initialDate = new DateExpression("initialDate", this.getDetachedCriteria());
+	}
+	
+	public CategoryDetachedCriteria createCategoryCriteria() {
+		return new CategoryDetachedCriteria(createCriteria("category"));
 	}
 	
 	public InstructorDetachedCriteria createInstructorCriteria() {
 		return new InstructorDetachedCriteria(createCriteria("instructor"));
-	}
-	
-	public LicenseCarDetachedCriteria createLicenseCriteria() {
-		return new LicenseCarDetachedCriteria(createCriteria("license"));
 	}
 	
 	public Register uniqueRegister(PersistentSession session) {

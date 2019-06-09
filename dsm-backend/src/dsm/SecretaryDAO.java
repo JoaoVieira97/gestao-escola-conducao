@@ -41,7 +41,7 @@ public class SecretaryDAO {
 		}
 	}
 	
-	public static Secretary loadSecretaryByORMID(int ID, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static Secretary loadSecretaryByORMID(int ID, LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return loadSecretaryByORMID(session, ID, lockMode);
@@ -52,7 +52,7 @@ public class SecretaryDAO {
 		}
 	}
 	
-	public static Secretary getSecretaryByORMID(int ID, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static Secretary getSecretaryByORMID(int ID, LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return getSecretaryByORMID(session, ID, lockMode);
@@ -65,7 +65,7 @@ public class SecretaryDAO {
 	
 	public static Secretary loadSecretaryByORMID(PersistentSession session, int ID) throws PersistentException {
 		try {
-			return (Secretary) session.load(dsm.Secretary.class, new Integer(ID));
+			return (Secretary) session.load(Secretary.class, new Integer(ID));
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -75,7 +75,7 @@ public class SecretaryDAO {
 	
 	public static Secretary getSecretaryByORMID(PersistentSession session, int ID) throws PersistentException {
 		try {
-			return (Secretary) session.get(dsm.Secretary.class, new Integer(ID));
+			return (Secretary) session.get(Secretary.class, new Integer(ID));
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -83,9 +83,9 @@ public class SecretaryDAO {
 		}
 	}
 	
-	public static Secretary loadSecretaryByORMID(PersistentSession session, int ID, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static Secretary loadSecretaryByORMID(PersistentSession session, int ID, LockMode lockMode) throws PersistentException {
 		try {
-			return (Secretary) session.load(dsm.Secretary.class, new Integer(ID), lockMode);
+			return (Secretary) session.load(Secretary.class, new Integer(ID), lockMode);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -93,9 +93,9 @@ public class SecretaryDAO {
 		}
 	}
 	
-	public static Secretary getSecretaryByORMID(PersistentSession session, int ID, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static Secretary getSecretaryByORMID(PersistentSession session, int ID, LockMode lockMode) throws PersistentException {
 		try {
-			return (Secretary) session.get(dsm.Secretary.class, new Integer(ID), lockMode);
+			return (Secretary) session.get(Secretary.class, new Integer(ID), lockMode);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -114,7 +114,7 @@ public class SecretaryDAO {
 		}
 	}
 	
-	public static List querySecretary(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static List querySecretary(String condition, String orderBy, LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return querySecretary(session, condition, orderBy, lockMode);
@@ -136,7 +136,7 @@ public class SecretaryDAO {
 		}
 	}
 	
-	public static Secretary[] listSecretaryByQuery(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static Secretary[] listSecretaryByQuery(String condition, String orderBy, LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return listSecretaryByQuery(session, condition, orderBy, lockMode);
@@ -163,7 +163,7 @@ public class SecretaryDAO {
 		}
 	}
 	
-	public static List querySecretary(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static List querySecretary(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
 		StringBuffer sb = new StringBuffer("From dsm.Secretary as Secretary");
 		if (condition != null)
 			sb.append(" Where ").append(condition);
@@ -191,7 +191,7 @@ public class SecretaryDAO {
 		}
 	}
 	
-	public static Secretary[] listSecretaryByQuery(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static Secretary[] listSecretaryByQuery(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
 		try {
 			List list = querySecretary(session, condition, orderBy, lockMode);
 			return (Secretary[]) list.toArray(new Secretary[list.size()]);
@@ -213,7 +213,7 @@ public class SecretaryDAO {
 		}
 	}
 	
-	public static Secretary loadSecretaryByQuery(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static Secretary loadSecretaryByQuery(String condition, String orderBy, LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return loadSecretaryByQuery(session, condition, orderBy, lockMode);
@@ -232,7 +232,7 @@ public class SecretaryDAO {
 			return null;
 	}
 	
-	public static Secretary loadSecretaryByQuery(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static Secretary loadSecretaryByQuery(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
 		Secretary[] secretarys = listSecretaryByQuery(session, condition, orderBy, lockMode);
 		if (secretarys != null && secretarys.length > 0)
 			return secretarys[0];
@@ -251,7 +251,7 @@ public class SecretaryDAO {
 		}
 	}
 	
-	public static java.util.Iterator iterateSecretaryByQuery(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static java.util.Iterator iterateSecretaryByQuery(String condition, String orderBy, LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return iterateSecretaryByQuery(session, condition, orderBy, lockMode);
@@ -278,7 +278,7 @@ public class SecretaryDAO {
 		}
 	}
 	
-	public static java.util.Iterator iterateSecretaryByQuery(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static java.util.Iterator iterateSecretaryByQuery(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
 		StringBuffer sb = new StringBuffer("From dsm.Secretary as Secretary");
 		if (condition != null)
 			sb.append(" Where ").append(condition);
@@ -296,10 +296,10 @@ public class SecretaryDAO {
 	}
 	
 	public static Secretary createSecretary() {
-		return new dsm.Secretary();
+		return new Secretary();
 	}
 	
-	public static boolean save(dsm.Secretary secretary) throws PersistentException {
+	public static boolean save(Secretary secretary) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().saveObject(secretary);
 			return true;
@@ -310,7 +310,7 @@ public class SecretaryDAO {
 		}
 	}
 	
-	public static boolean delete(dsm.Secretary secretary) throws PersistentException {
+	public static boolean delete(Secretary secretary) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().deleteObject(secretary);
 			return true;
@@ -321,7 +321,7 @@ public class SecretaryDAO {
 		}
 	}
 	
-	public static boolean refresh(dsm.Secretary secretary) throws PersistentException {
+	public static boolean refresh(Secretary secretary) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().getSession().refresh(secretary);
 			return true;
@@ -332,7 +332,7 @@ public class SecretaryDAO {
 		}
 	}
 	
-	public static boolean evict(dsm.Secretary secretary) throws PersistentException {
+	public static boolean evict(Secretary secretary) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().getSession().evict(secretary);
 			return true;

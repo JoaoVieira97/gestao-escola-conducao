@@ -13,7 +13,7 @@
  */
 package dsm;
 
-public class PracticalLesson extends dsm.Lesson {
+public class PracticalLesson extends Lesson {
 	public PracticalLesson() {
 	}
 	

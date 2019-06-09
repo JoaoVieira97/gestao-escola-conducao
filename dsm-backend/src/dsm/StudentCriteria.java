@@ -29,7 +29,6 @@ public class StudentCriteria extends AbstractORMCriteria {
 	public final StringExpression cc;
 	public final StringExpression address;
 	public final DateExpression birth;
-	public final CollectionExpression payments;
 	public final CollectionExpression exams;
 	public final CollectionExpression announcements;
 	public final CollectionExpression lessons;
@@ -47,7 +46,6 @@ public class StudentCriteria extends AbstractORMCriteria {
 		cc = new StringExpression("cc", this);
 		address = new StringExpression("address", this);
 		birth = new DateExpression("birth", this);
-		payments = new CollectionExpression("ORM_Payments", this);
 		exams = new CollectionExpression("ORM_Exams", this);
 		announcements = new CollectionExpression("ORM_Announcements", this);
 		lessons = new CollectionExpression("ORM_Lessons", this);
@@ -60,10 +58,6 @@ public class StudentCriteria extends AbstractORMCriteria {
 	
 	public StudentCriteria() throws PersistentException {
 		this(DSMPersistentManager.instance().getSession());
-	}
-	
-	public PaymentCriteria createPaymentsCriteria() {
-		return new PaymentCriteria(createCriteria("ORM_Payments"));
 	}
 	
 	public ExamCriteria createExamsCriteria() {

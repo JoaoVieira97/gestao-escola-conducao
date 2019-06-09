@@ -29,7 +29,7 @@ public class InstructorDetachedCriteria extends AbstractORMDetachedCriteria {
 	public final CollectionExpression lessons;
 	
 	public InstructorDetachedCriteria() {
-		super(dsm.Instructor.class, dsm.InstructorCriteria.class);
+		super(Instructor.class, InstructorCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		firstName = new StringExpression("firstName", this.getDetachedCriteria());
 		lastName = new StringExpression("lastName", this.getDetachedCriteria());
@@ -41,7 +41,7 @@ public class InstructorDetachedCriteria extends AbstractORMDetachedCriteria {
 	}
 	
 	public InstructorDetachedCriteria(DetachedCriteria aDetachedCriteria) {
-		super(aDetachedCriteria, dsm.InstructorCriteria.class);
+		super(aDetachedCriteria, InstructorCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		firstName = new StringExpression("firstName", this.getDetachedCriteria());
 		lastName = new StringExpression("lastName", this.getDetachedCriteria());

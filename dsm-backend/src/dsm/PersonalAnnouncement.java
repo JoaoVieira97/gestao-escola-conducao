@@ -13,7 +13,7 @@
  */
 package dsm;
 
-public class PersonalAnnouncement extends dsm.Announcement {
+public class PersonalAnnouncement extends Announcement {
 	public PersonalAnnouncement() {
 	}
 	

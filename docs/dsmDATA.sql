@@ -6,7 +6,7 @@ USE dsm;
 INSERT INTO SchoolInfo (ID, MaxTimeToCancel, StartTime, EndTime)
 	VALUES (1, '00:05:00','08:00:00','18:00:00');
 
-INSERT INTO LicenseCar (ID, PracticalLessons, TheoreticalLessons, Name)
+INSERT INTO Category (ID, PracticalLessons, TheoreticalLessons, Name)
 	VALUES 	(1, 32, 28, 'A1'),(2, 32, 28, 'A2'),(3, 32, 28, 'A'),(4, 32, 28, 'AM'),
             (5, 32, 28, 'B1'),(6, 32, 28, 'B'),
 			(7, 32, 28, 'C1'),(8, 32, 28, 'C'),
@@ -70,7 +70,7 @@ INSERT INTO Instructor (UserID)
 INSERT INTO Secretary (UserID)
 	VALUES 	(6), (7);
 
-INSERT INTO Register (ID, InstructorUserID, LicenseCarID, StudentUserID, InitialDate)
+INSERT INTO Register (ID, InstructorUserID, CategoryID, StudentUserID, InitialDate)
 	VALUES 	(1, 4, 6, 1, CURDATE()), 
 			(2, 4, 6, 2, CURDATE()),
             (3, 5, 6, 3, CURDATE());

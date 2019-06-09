@@ -18,9 +18,9 @@ License Type: Academic
 			<many-to-many column="StudentUserID" class="dsm.Student">
 			</many-to-many>
 		</set>
-		<set name="ORM_Licenses" table="Lesson_LicenseCar" lazy="true" cascade="save-update,lock">
+		<set name="ORM_Categories" table="Lesson_Category" lazy="true" cascade="save-update,lock">
 			<key column="LessonID" not-null="true"/>
-			<many-to-many column="LicenseCarID" class="dsm.LicenseCar">
+			<many-to-many column="CategoryID" class="dsm.Category">
 			</many-to-many>
 		</set>
 		<joined-subclass name="dsm.PracticalLesson" table="PracticalLesson" lazy="false">

@@ -41,7 +41,7 @@ public class StudentDAO {
 		}
 	}
 	
-	public static Student loadStudentByORMID(int ID, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static Student loadStudentByORMID(int ID, LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return loadStudentByORMID(session, ID, lockMode);
@@ -52,7 +52,7 @@ public class StudentDAO {
 		}
 	}
 	
-	public static Student getStudentByORMID(int ID, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static Student getStudentByORMID(int ID, LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return getStudentByORMID(session, ID, lockMode);
@@ -65,7 +65,7 @@ public class StudentDAO {
 	
 	public static Student loadStudentByORMID(PersistentSession session, int ID) throws PersistentException {
 		try {
-			return (Student) session.load(dsm.Student.class, new Integer(ID));
+			return (Student) session.load(Student.class, new Integer(ID));
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -75,7 +75,7 @@ public class StudentDAO {
 	
 	public static Student getStudentByORMID(PersistentSession session, int ID) throws PersistentException {
 		try {
-			return (Student) session.get(dsm.Student.class, new Integer(ID));
+			return (Student) session.get(Student.class, new Integer(ID));
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -83,9 +83,9 @@ public class StudentDAO {
 		}
 	}
 	
-	public static Student loadStudentByORMID(PersistentSession session, int ID, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static Student loadStudentByORMID(PersistentSession session, int ID, LockMode lockMode) throws PersistentException {
 		try {
-			return (Student) session.load(dsm.Student.class, new Integer(ID), lockMode);
+			return (Student) session.load(Student.class, new Integer(ID), lockMode);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -93,9 +93,9 @@ public class StudentDAO {
 		}
 	}
 	
-	public static Student getStudentByORMID(PersistentSession session, int ID, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static Student getStudentByORMID(PersistentSession session, int ID, LockMode lockMode) throws PersistentException {
 		try {
-			return (Student) session.get(dsm.Student.class, new Integer(ID), lockMode);
+			return (Student) session.get(Student.class, new Integer(ID), lockMode);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -114,7 +114,7 @@ public class StudentDAO {
 		}
 	}
 	
-	public static List queryStudent(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static List queryStudent(String condition, String orderBy, LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return queryStudent(session, condition, orderBy, lockMode);
@@ -136,7 +136,7 @@ public class StudentDAO {
 		}
 	}
 	
-	public static Student[] listStudentByQuery(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static Student[] listStudentByQuery(String condition, String orderBy, LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return listStudentByQuery(session, condition, orderBy, lockMode);
@@ -163,7 +163,7 @@ public class StudentDAO {
 		}
 	}
 	
-	public static List queryStudent(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static List queryStudent(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
 		StringBuffer sb = new StringBuffer("From dsm.Student as Student");
 		if (condition != null)
 			sb.append(" Where ").append(condition);
@@ -191,7 +191,7 @@ public class StudentDAO {
 		}
 	}
 	
-	public static Student[] listStudentByQuery(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static Student[] listStudentByQuery(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
 		try {
 			List list = queryStudent(session, condition, orderBy, lockMode);
 			return (Student[]) list.toArray(new Student[list.size()]);
@@ -213,7 +213,7 @@ public class StudentDAO {
 		}
 	}
 	
-	public static Student loadStudentByQuery(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static Student loadStudentByQuery(String condition, String orderBy, LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return loadStudentByQuery(session, condition, orderBy, lockMode);
@@ -232,7 +232,7 @@ public class StudentDAO {
 			return null;
 	}
 	
-	public static Student loadStudentByQuery(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static Student loadStudentByQuery(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
 		Student[] students = listStudentByQuery(session, condition, orderBy, lockMode);
 		if (students != null && students.length > 0)
 			return students[0];
@@ -251,7 +251,7 @@ public class StudentDAO {
 		}
 	}
 	
-	public static java.util.Iterator iterateStudentByQuery(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static java.util.Iterator iterateStudentByQuery(String condition, String orderBy, LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return iterateStudentByQuery(session, condition, orderBy, lockMode);
@@ -278,7 +278,7 @@ public class StudentDAO {
 		}
 	}
 	
-	public static java.util.Iterator iterateStudentByQuery(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static java.util.Iterator iterateStudentByQuery(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
 		StringBuffer sb = new StringBuffer("From dsm.Student as Student");
 		if (condition != null)
 			sb.append(" Where ").append(condition);
@@ -296,10 +296,10 @@ public class StudentDAO {
 	}
 	
 	public static Student createStudent() {
-		return new dsm.Student();
+		return new Student();
 	}
 	
-	public static boolean save(dsm.Student student) throws PersistentException {
+	public static boolean save(Student student) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().saveObject(student);
 			return true;
@@ -310,7 +310,7 @@ public class StudentDAO {
 		}
 	}
 	
-	public static boolean delete(dsm.Student student) throws PersistentException {
+	public static boolean delete(Student student) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().deleteObject(student);
 			return true;
@@ -321,9 +321,9 @@ public class StudentDAO {
 		}
 	}
 	
-	public static boolean deleteAndDissociate(dsm.Student student)throws PersistentException {
+	public static boolean deleteAndDissociate(Student student)throws PersistentException {
 		try {
-			dsm.Lesson[] lLessonss = student.lessons.toArray();
+			Lesson[] lLessonss = student.lessons.toArray();
 			for(int i = 0; i < lLessonss.length; i++) {
 				lLessonss[i].students.remove(student);
 			}
@@ -335,9 +335,9 @@ public class StudentDAO {
 		}
 	}
 	
-	public static boolean deleteAndDissociate(dsm.Student student, org.orm.PersistentSession session)throws PersistentException {
+	public static boolean deleteAndDissociate(Student student, PersistentSession session)throws PersistentException {
 		try {
-			dsm.Lesson[] lLessonss = student.lessons.toArray();
+			Lesson[] lLessonss = student.lessons.toArray();
 			for(int i = 0; i < lLessonss.length; i++) {
 				lLessonss[i].students.remove(student);
 			}
@@ -354,7 +354,7 @@ public class StudentDAO {
 		}
 	}
 	
-	public static boolean refresh(dsm.Student student) throws PersistentException {
+	public static boolean refresh(Student student) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().getSession().refresh(student);
 			return true;
@@ -365,7 +365,7 @@ public class StudentDAO {
 		}
 	}
 	
-	public static boolean evict(dsm.Student student) throws PersistentException {
+	public static boolean evict(Student student) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().getSession().evict(student);
 			return true;

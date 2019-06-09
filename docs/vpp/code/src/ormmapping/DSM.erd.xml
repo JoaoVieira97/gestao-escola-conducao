@@ -108,22 +108,10 @@
       <Index>false</Index>
       <UserTypes/>
     </Column>
-    <Column name="InstructorUserID">
+    <Column name="CategoryID">
       <PrimaryKey>false</PrimaryKey>
       <ForeignKey>true</ForeignKey>
-      <ReferencedColumn>dsm.Instructor.UserID</ReferencedColumn>
-      <Type>9</Type>
-      <Length>10</Length>
-      <Nullable>false</Nullable>
-      <IDGenerator>native</IDGenerator>
-      <Unique>false</Unique>
-      <Index>false</Index>
-      <UserTypes/>
-    </Column>
-    <Column name="LicenseCarID">
-      <PrimaryKey>false</PrimaryKey>
-      <ForeignKey>true</ForeignKey>
-      <ReferencedColumn>dsm.LicenseCar.ID</ReferencedColumn>
+      <ReferencedColumn>dsm.Category.ID</ReferencedColumn>
       <Type>9</Type>
       <Length>10</Length>
       <Nullable>false</Nullable>
@@ -136,6 +124,18 @@
       <PrimaryKey>false</PrimaryKey>
       <ForeignKey>true</ForeignKey>
       <ReferencedColumn>dsm.Student.UserID</ReferencedColumn>
+      <Type>9</Type>
+      <Length>10</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+    <Column name="InstructorUserID">
+      <PrimaryKey>false</PrimaryKey>
+      <ForeignKey>true</ForeignKey>
+      <ReferencedColumn>dsm.Instructor.UserID</ReferencedColumn>
       <Type>9</Type>
       <Length>10</Length>
       <Nullable>false</Nullable>
@@ -307,30 +307,6 @@
       <Index>false</Index>
       <UserTypes/>
     </Column>
-    <Column name="LicenseCarID">
-      <PrimaryKey>false</PrimaryKey>
-      <ForeignKey>true</ForeignKey>
-      <ReferencedColumn>dsm.LicenseCar.ID</ReferencedColumn>
-      <Type>9</Type>
-      <Length>10</Length>
-      <Nullable>false</Nullable>
-      <IDGenerator>native</IDGenerator>
-      <Unique>false</Unique>
-      <Index>false</Index>
-      <UserTypes/>
-    </Column>
-    <Column name="StudentUserID">
-      <PrimaryKey>false</PrimaryKey>
-      <ForeignKey>true</ForeignKey>
-      <ReferencedColumn>dsm.Student.UserID</ReferencedColumn>
-      <Type>9</Type>
-      <Length>10</Length>
-      <Nullable>false</Nullable>
-      <IDGenerator>native</IDGenerator>
-      <Unique>false</Unique>
-      <Index>false</Index>
-      <UserTypes/>
-    </Column>
     <Column name="Value">
       <PrimaryKey>false</PrimaryKey>
       <ForeignKey>false</ForeignKey>
@@ -368,7 +344,7 @@
       <UserTypes/>
     </Column>
   </Entity>
-  <Entity name="LicenseCar" Unlogged="false" PKClustered="0">
+  <Entity name="Category" Unlogged="false" PKClustered="0">
     <Column name="ID">
       <PrimaryKey>true</PrimaryKey>
       <ForeignKey>false</ForeignKey>
@@ -702,7 +678,7 @@
       <UserTypes/>
     </Column>
   </Entity>
-  <Entity name="Lesson_LicenseCar" Unlogged="false" PKClustered="0">
+  <Entity name="Lesson_Category" Unlogged="false" PKClustered="0">
     <Column name="LessonID">
       <PrimaryKey>true</PrimaryKey>
       <ForeignKey>true</ForeignKey>
@@ -715,10 +691,10 @@
       <Index>false</Index>
       <UserTypes/>
     </Column>
-    <Column name="LicenseCarID">
+    <Column name="CategoryID">
       <PrimaryKey>true</PrimaryKey>
       <ForeignKey>true</ForeignKey>
-      <ReferencedColumn>dsm.LicenseCar.ID</ReferencedColumn>
+      <ReferencedColumn>dsm.Category.ID</ReferencedColumn>
       <Type>9</Type>
       <Length>10</Length>
       <Nullable>false</Nullable>
@@ -824,16 +800,6 @@
       <Column>LessonID</Column>
     </RefColumns>
   </ForeignKey>
-  <ForeignKey name="FKPayment681118">
-    <ReferenceTable>Payment</ReferenceTable>
-    <ReferencedTable>Student</ReferencedTable>
-    <Columns>
-      <Column>StudentUserID</Column>
-    </Columns>
-    <RefColumns>
-      <Column>UserID</Column>
-    </RefColumns>
-  </ForeignKey>
   <ForeignKey name="FKExam479921">
     <ReferenceTable>Exam</ReferenceTable>
     <ReferencedTable>Student</ReferencedTable>
@@ -874,18 +840,8 @@
       <Column>ID</Column>
     </RefColumns>
   </ForeignKey>
-  <ForeignKey name="FKPayment214325">
-    <ReferenceTable>Payment</ReferenceTable>
-    <ReferencedTable>LicenseCar</ReferencedTable>
-    <Columns>
-      <Column>LicenseCarID</Column>
-    </Columns>
-    <RefColumns>
-      <Column>ID</Column>
-    </RefColumns>
-  </ForeignKey>
-  <ForeignKey name="FKLesson_Lic284559">
-    <ReferenceTable>Lesson_LicenseCar</ReferenceTable>
+  <ForeignKey name="FKLesson_Cat274835">
+    <ReferenceTable>Lesson_Category</ReferenceTable>
     <ReferencedTable>Lesson</ReferencedTable>
     <Columns>
       <Column>LessonID</Column>
@@ -894,11 +850,11 @@
       <Column>ID</Column>
     </RefColumns>
   </ForeignKey>
-  <ForeignKey name="FKLesson_Lic703619">
-    <ReferenceTable>Lesson_LicenseCar</ReferenceTable>
-    <ReferencedTable>LicenseCar</ReferencedTable>
+  <ForeignKey name="FKLesson_Cat885765">
+    <ReferenceTable>Lesson_Category</ReferenceTable>
+    <ReferencedTable>Category</ReferencedTable>
     <Columns>
-      <Column>LicenseCarID</Column>
+      <Column>CategoryID</Column>
     </Columns>
     <RefColumns>
       <Column>ID</Column>
@@ -912,26 +868,6 @@
     </Columns>
     <RefColumns>
       <Column>UserID</Column>
-    </RefColumns>
-  </ForeignKey>
-  <ForeignKey name="FKRegister747941">
-    <ReferenceTable>Register</ReferenceTable>
-    <ReferencedTable>Student</ReferencedTable>
-    <Columns>
-      <Column>StudentUserID</Column>
-    </Columns>
-    <RefColumns>
-      <Column>UserID</Column>
-    </RefColumns>
-  </ForeignKey>
-  <ForeignKey name="FKRegister214735">
-    <ReferenceTable>Register</ReferenceTable>
-    <ReferencedTable>LicenseCar</ReferencedTable>
-    <Columns>
-      <Column>LicenseCarID</Column>
-    </Columns>
-    <RefColumns>
-      <Column>ID</Column>
     </RefColumns>
   </ForeignKey>
   <ForeignKey name="FKRegister695484">
@@ -972,6 +908,26 @@
     </Columns>
     <RefColumns>
       <Column>UserID</Column>
+    </RefColumns>
+  </ForeignKey>
+  <ForeignKey name="FKRegister747941">
+    <ReferenceTable>Register</ReferenceTable>
+    <ReferencedTable>Student</ReferencedTable>
+    <Columns>
+      <Column>StudentUserID</Column>
+    </Columns>
+    <RefColumns>
+      <Column>UserID</Column>
+    </RefColumns>
+  </ForeignKey>
+  <ForeignKey name="FKRegister384374">
+    <ReferenceTable>Register</ReferenceTable>
+    <ReferencedTable>Category</ReferencedTable>
+    <Columns>
+      <Column>CategoryID</Column>
+    </Columns>
+    <RefColumns>
+      <Column>ID</Column>
     </RefColumns>
   </ForeignKey>
 </Model>

@@ -24,7 +24,7 @@ public class TheoreticalLessonCriteria extends AbstractORMCriteria {
 	public final IntegerExpression duration;
 	public final StringExpression state;
 	public final CollectionExpression students;
-	public final CollectionExpression licenses;
+	public final CollectionExpression categories;
 	public final CollectionExpression themes;
 	
 	public TheoreticalLessonCriteria(Criteria criteria) {
@@ -34,7 +34,7 @@ public class TheoreticalLessonCriteria extends AbstractORMCriteria {
 		duration = new IntegerExpression("duration", this);
 		state = new StringExpression("state", this);
 		students = new CollectionExpression("ORM_Students", this);
-		licenses = new CollectionExpression("ORM_Licenses", this);
+		categories = new CollectionExpression("ORM_Categories", this);
 		themes = new CollectionExpression("ORM_Themes", this);
 	}
 	
@@ -54,8 +54,8 @@ public class TheoreticalLessonCriteria extends AbstractORMCriteria {
 		return new StudentCriteria(createCriteria("ORM_Students"));
 	}
 	
-	public LicenseCarCriteria createLicensesCriteria() {
-		return new LicenseCarCriteria(createCriteria("ORM_Licenses"));
+	public CategoryCriteria createCategoriesCriteria() {
+		return new CategoryCriteria(createCriteria("ORM_Categories"));
 	}
 	
 	public TheoreticalLesson uniqueTheoreticalLesson() {

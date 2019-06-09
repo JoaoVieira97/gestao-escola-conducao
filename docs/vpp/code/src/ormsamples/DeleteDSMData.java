@@ -36,9 +36,9 @@ public class DeleteDSMData {
 			dsm.Secretary ldsmSecretary = dsm.SecretaryDAO.loadSecretaryByQuery(null, null);
 			// Delete the persistent object
 			dsm.SecretaryDAO.delete(ldsmSecretary);
-			dsm.LicenseCar ldsmLicenseCar = dsm.LicenseCarDAO.loadLicenseCarByQuery(null, null);
+			dsm.Category ldsmCategory = dsm.CategoryDAO.loadCategoryByQuery(null, null);
 			// Delete the persistent object
-			dsm.LicenseCarDAO.delete(ldsmLicenseCar);
+			dsm.CategoryDAO.delete(ldsmCategory);
 			dsm.Student ldsmStudent = dsm.StudentDAO.loadStudentByQuery(null, null);
 			// Delete the persistent object
 			dsm.StudentDAO.delete(ldsmStudent);

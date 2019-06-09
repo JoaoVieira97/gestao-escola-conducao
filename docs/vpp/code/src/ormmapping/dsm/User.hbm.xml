@@ -28,10 +28,6 @@ License Type: Academic
 			<property name="cc" column="Cc" type="string" length="255" not-null="false" lazy="false"/>
 			<property name="address" column="Address" type="string" length="255" not-null="false" lazy="false"/>
 			<property name="birth" column="Birth" type="date" not-null="false" lazy="false"/>
-			<set name="ORM_Payments" lazy="true" cascade="all-delete-orphan" inverse="false">
-				<key column="StudentUserID" not-null="true"/>
-				<one-to-many class="dsm.Payment"/>
-			</set>
 			<set name="ORM_Exams" lazy="true" cascade="save-update,lock" inverse="false">
 				<key column="StudentUserID" not-null="true"/>
 				<one-to-many class="dsm.Exam"/>
@@ -45,7 +41,7 @@ License Type: Academic
 				<many-to-many column="LessonID" class="dsm.Lesson">
 				</many-to-many>
 			</set>
-			<set name="ORM_Registers" lazy="true" cascade="save-update,lock" inverse="false">
+			<set name="ORM_Registers" lazy="true" cascade="all-delete-orphan" inverse="false">
 				<key column="StudentUserID" not-null="true"/>
 				<one-to-many class="dsm.Register"/>
 			</set>

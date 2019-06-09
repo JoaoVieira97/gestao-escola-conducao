@@ -41,7 +41,7 @@ public class LessonDAO {
 		}
 	}
 	
-	public static Lesson loadLessonByORMID(int ID, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static Lesson loadLessonByORMID(int ID, LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return loadLessonByORMID(session, ID, lockMode);
@@ -52,7 +52,7 @@ public class LessonDAO {
 		}
 	}
 	
-	public static Lesson getLessonByORMID(int ID, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static Lesson getLessonByORMID(int ID, LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return getLessonByORMID(session, ID, lockMode);
@@ -65,7 +65,7 @@ public class LessonDAO {
 	
 	public static Lesson loadLessonByORMID(PersistentSession session, int ID) throws PersistentException {
 		try {
-			return (Lesson) session.load(dsm.Lesson.class, new Integer(ID));
+			return (Lesson) session.load(Lesson.class, new Integer(ID));
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -75,7 +75,7 @@ public class LessonDAO {
 	
 	public static Lesson getLessonByORMID(PersistentSession session, int ID) throws PersistentException {
 		try {
-			return (Lesson) session.get(dsm.Lesson.class, new Integer(ID));
+			return (Lesson) session.get(Lesson.class, new Integer(ID));
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -83,9 +83,9 @@ public class LessonDAO {
 		}
 	}
 	
-	public static Lesson loadLessonByORMID(PersistentSession session, int ID, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static Lesson loadLessonByORMID(PersistentSession session, int ID, LockMode lockMode) throws PersistentException {
 		try {
-			return (Lesson) session.load(dsm.Lesson.class, new Integer(ID), lockMode);
+			return (Lesson) session.load(Lesson.class, new Integer(ID), lockMode);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -93,9 +93,9 @@ public class LessonDAO {
 		}
 	}
 	
-	public static Lesson getLessonByORMID(PersistentSession session, int ID, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static Lesson getLessonByORMID(PersistentSession session, int ID, LockMode lockMode) throws PersistentException {
 		try {
-			return (Lesson) session.get(dsm.Lesson.class, new Integer(ID), lockMode);
+			return (Lesson) session.get(Lesson.class, new Integer(ID), lockMode);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -114,7 +114,7 @@ public class LessonDAO {
 		}
 	}
 	
-	public static List queryLesson(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static List queryLesson(String condition, String orderBy, LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return queryLesson(session, condition, orderBy, lockMode);
@@ -136,7 +136,7 @@ public class LessonDAO {
 		}
 	}
 	
-	public static Lesson[] listLessonByQuery(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static Lesson[] listLessonByQuery(String condition, String orderBy, LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return listLessonByQuery(session, condition, orderBy, lockMode);
@@ -163,7 +163,7 @@ public class LessonDAO {
 		}
 	}
 	
-	public static List queryLesson(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static List queryLesson(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
 		StringBuffer sb = new StringBuffer("From dsm.Lesson as Lesson");
 		if (condition != null)
 			sb.append(" Where ").append(condition);
@@ -191,7 +191,7 @@ public class LessonDAO {
 		}
 	}
 	
-	public static Lesson[] listLessonByQuery(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static Lesson[] listLessonByQuery(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
 		try {
 			List list = queryLesson(session, condition, orderBy, lockMode);
 			return (Lesson[]) list.toArray(new Lesson[list.size()]);
@@ -213,7 +213,7 @@ public class LessonDAO {
 		}
 	}
 	
-	public static Lesson loadLessonByQuery(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static Lesson loadLessonByQuery(String condition, String orderBy, LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return loadLessonByQuery(session, condition, orderBy, lockMode);
@@ -232,7 +232,7 @@ public class LessonDAO {
 			return null;
 	}
 	
-	public static Lesson loadLessonByQuery(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static Lesson loadLessonByQuery(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
 		Lesson[] lessons = listLessonByQuery(session, condition, orderBy, lockMode);
 		if (lessons != null && lessons.length > 0)
 			return lessons[0];
@@ -251,7 +251,7 @@ public class LessonDAO {
 		}
 	}
 	
-	public static java.util.Iterator iterateLessonByQuery(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static java.util.Iterator iterateLessonByQuery(String condition, String orderBy, LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return iterateLessonByQuery(session, condition, orderBy, lockMode);
@@ -278,7 +278,7 @@ public class LessonDAO {
 		}
 	}
 	
-	public static java.util.Iterator iterateLessonByQuery(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static java.util.Iterator iterateLessonByQuery(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
 		StringBuffer sb = new StringBuffer("From dsm.Lesson as Lesson");
 		if (condition != null)
 			sb.append(" Where ").append(condition);
@@ -295,7 +295,7 @@ public class LessonDAO {
 		}
 	}
 	
-	public static boolean save(dsm.Lesson lesson) throws PersistentException {
+	public static boolean save(Lesson lesson) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().saveObject(lesson);
 			return true;
@@ -306,7 +306,7 @@ public class LessonDAO {
 		}
 	}
 	
-	public static boolean delete(dsm.Lesson lesson) throws PersistentException {
+	public static boolean delete(Lesson lesson) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().deleteObject(lesson);
 			return true;
@@ -317,7 +317,7 @@ public class LessonDAO {
 		}
 	}
 	
-	public static boolean deleteAndDissociate(dsm.Lesson lesson)throws PersistentException {
+	public static boolean deleteAndDissociate(Lesson lesson)throws PersistentException {
 		if (lesson instanceof dsm.PracticalLesson) {
 			return dsm.PracticalLessonDAO.deleteAndDissociate((dsm.PracticalLesson) lesson);
 		}
@@ -339,7 +339,7 @@ public class LessonDAO {
 		}
 	}
 	
-	public static boolean deleteAndDissociate(dsm.Lesson lesson, org.orm.PersistentSession session)throws PersistentException {
+	public static boolean deleteAndDissociate(Lesson lesson, PersistentSession session)throws PersistentException {
 		if (lesson instanceof dsm.PracticalLesson) {
 			return dsm.PracticalLessonDAO.deleteAndDissociate((dsm.PracticalLesson) lesson, session);
 		}
@@ -366,7 +366,7 @@ public class LessonDAO {
 		}
 	}
 	
-	public static boolean refresh(dsm.Lesson lesson) throws PersistentException {
+	public static boolean refresh(Lesson lesson) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().getSession().refresh(lesson);
 			return true;
@@ -377,7 +377,7 @@ public class LessonDAO {
 		}
 	}
 	
-	public static boolean evict(dsm.Lesson lesson) throws PersistentException {
+	public static boolean evict(Lesson lesson) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().getSession().evict(lesson);
 			return true;

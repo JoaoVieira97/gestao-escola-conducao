@@ -24,7 +24,7 @@ public class PracticalLessonCriteria extends AbstractORMCriteria {
 	public final IntegerExpression duration;
 	public final StringExpression state;
 	public final CollectionExpression students;
-	public final CollectionExpression licenses;
+	public final CollectionExpression categories;
 	public final BooleanExpression isStudentPresent;
 	
 	public PracticalLessonCriteria(Criteria criteria) {
@@ -34,7 +34,7 @@ public class PracticalLessonCriteria extends AbstractORMCriteria {
 		duration = new IntegerExpression("duration", this);
 		state = new StringExpression("state", this);
 		students = new CollectionExpression("ORM_Students", this);
-		licenses = new CollectionExpression("ORM_Licenses", this);
+		categories = new CollectionExpression("ORM_Categories", this);
 		isStudentPresent = new BooleanExpression("isStudentPresent", this);
 	}
 	
@@ -50,8 +50,8 @@ public class PracticalLessonCriteria extends AbstractORMCriteria {
 		return new StudentCriteria(createCriteria("ORM_Students"));
 	}
 	
-	public LicenseCarCriteria createLicensesCriteria() {
-		return new LicenseCarCriteria(createCriteria("ORM_Licenses"));
+	public CategoryCriteria createCategoriesCriteria() {
+		return new CategoryCriteria(createCriteria("ORM_Categories"));
 	}
 	
 	public PracticalLesson uniquePracticalLesson() {

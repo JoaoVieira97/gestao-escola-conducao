@@ -13,7 +13,7 @@
  */
 package dsm;
 
-public class TheoreticalLesson extends dsm.Lesson {
+public class TheoreticalLesson extends Lesson {
 	public TheoreticalLesson() {
 	}
 	
@@ -42,7 +42,7 @@ public class TheoreticalLesson extends dsm.Lesson {
 		return ORM_themes;
 	}
 	
-	public final dsm.ThemeSetCollection themes = new dsm.ThemeSetCollection(this, _ormAdapter, ORMConstants.KEY_THEORETICALLESSON_THEMES, ORMConstants.KEY_MUL_MANY_TO_MANY);
+	public final ThemeSetCollection themes = new ThemeSetCollection(this, _ormAdapter, ORMConstants.KEY_THEORETICALLESSON_THEMES, ORMConstants.KEY_MUL_MANY_TO_MANY);
 	
 	public String toString() {
 		return super.toString();

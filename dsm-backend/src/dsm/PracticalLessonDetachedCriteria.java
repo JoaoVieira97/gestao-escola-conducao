@@ -24,28 +24,28 @@ public class PracticalLessonDetachedCriteria extends AbstractORMDetachedCriteria
 	public final IntegerExpression duration;
 	public final StringExpression state;
 	public final CollectionExpression students;
-	public final CollectionExpression licenses;
+	public final CollectionExpression categories;
 	public final BooleanExpression isStudentPresent;
 	
 	public PracticalLessonDetachedCriteria() {
-		super(dsm.PracticalLesson.class, dsm.PracticalLessonCriteria.class);
+		super(PracticalLesson.class, PracticalLessonCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		startTime = new DateExpression("startTime", this.getDetachedCriteria());
 		duration = new IntegerExpression("duration", this.getDetachedCriteria());
 		state = new StringExpression("state", this.getDetachedCriteria());
 		students = new CollectionExpression("ORM_Students", this.getDetachedCriteria());
-		licenses = new CollectionExpression("ORM_Licenses", this.getDetachedCriteria());
+		categories = new CollectionExpression("ORM_Categories", this.getDetachedCriteria());
 		isStudentPresent = new BooleanExpression("isStudentPresent", this.getDetachedCriteria());
 	}
 	
 	public PracticalLessonDetachedCriteria(DetachedCriteria aDetachedCriteria) {
-		super(aDetachedCriteria, dsm.PracticalLessonCriteria.class);
+		super(aDetachedCriteria, PracticalLessonCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		startTime = new DateExpression("startTime", this.getDetachedCriteria());
 		duration = new IntegerExpression("duration", this.getDetachedCriteria());
 		state = new StringExpression("state", this.getDetachedCriteria());
 		students = new CollectionExpression("ORM_Students", this.getDetachedCriteria());
-		licenses = new CollectionExpression("ORM_Licenses", this.getDetachedCriteria());
+		categories = new CollectionExpression("ORM_Categories", this.getDetachedCriteria());
 		isStudentPresent = new BooleanExpression("isStudentPresent", this.getDetachedCriteria());
 	}
 	
@@ -53,8 +53,8 @@ public class PracticalLessonDetachedCriteria extends AbstractORMDetachedCriteria
 		return new StudentDetachedCriteria(createCriteria("ORM_Students"));
 	}
 	
-	public LicenseCarDetachedCriteria createLicensesCriteria() {
-		return new LicenseCarDetachedCriteria(createCriteria("ORM_Licenses"));
+	public CategoryDetachedCriteria createCategoriesCriteria() {
+		return new CategoryDetachedCriteria(createCriteria("ORM_Categories"));
 	}
 	
 	public PracticalLesson uniquePracticalLesson(PersistentSession session) {

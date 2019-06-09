@@ -36,9 +36,9 @@ public class RetrieveAndUpdateDSMData {
 			dsm.Secretary ldsmSecretary = dsm.SecretaryDAO.loadSecretaryByQuery(null, null);
 			// Update the properties of the persistent object
 			dsm.SecretaryDAO.save(ldsmSecretary);
-			dsm.LicenseCar ldsmLicenseCar = dsm.LicenseCarDAO.loadLicenseCarByQuery(null, null);
+			dsm.Category ldsmCategory = dsm.CategoryDAO.loadCategoryByQuery(null, null);
 			// Update the properties of the persistent object
-			dsm.LicenseCarDAO.save(ldsmLicenseCar);
+			dsm.CategoryDAO.save(ldsmCategory);
 			dsm.Student ldsmStudent = dsm.StudentDAO.loadStudentByQuery(null, null);
 			// Update the properties of the persistent object
 			dsm.StudentDAO.save(ldsmStudent);
@@ -114,11 +114,11 @@ public class RetrieveAndUpdateDSMData {
 		//ldsmSecretaryCriteria.ID.eq();
 		System.out.println(ldsmSecretaryCriteria.uniqueSecretary());
 		
-		System.out.println("Retrieving LicenseCar by LicenseCarCriteria");
-		dsm.LicenseCarCriteria ldsmLicenseCarCriteria = new dsm.LicenseCarCriteria();
+		System.out.println("Retrieving Category by CategoryCriteria");
+		dsm.CategoryCriteria ldsmCategoryCriteria = new dsm.CategoryCriteria();
 		// Please uncomment the follow line and fill in parameter(s)
-		//ldsmLicenseCarCriteria.ID.eq();
-		System.out.println(ldsmLicenseCarCriteria.uniqueLicenseCar());
+		//ldsmCategoryCriteria.ID.eq();
+		System.out.println(ldsmCategoryCriteria.uniqueCategory());
 		
 		System.out.println("Retrieving Student by StudentCriteria");
 		dsm.StudentCriteria ldsmStudentCriteria = new dsm.StudentCriteria();

@@ -22,8 +22,6 @@ public class PaymentCriteria extends AbstractORMCriteria {
 	public final IntegerExpression ID;
 	public final IntegerExpression secretaryId;
 	public final AssociationExpression secretary;
-	public final IntegerExpression licenseId;
-	public final AssociationExpression license;
 	public final DoubleExpression value;
 	public final DateExpression timestamp;
 	
@@ -32,8 +30,6 @@ public class PaymentCriteria extends AbstractORMCriteria {
 		ID = new IntegerExpression("ID", this);
 		secretaryId = new IntegerExpression("secretary.", this);
 		secretary = new AssociationExpression("secretary", this);
-		licenseId = new IntegerExpression("license.ID", this);
-		license = new AssociationExpression("license", this);
 		value = new DoubleExpression("value", this);
 		timestamp = new DateExpression("timestamp", this);
 	}
@@ -48,10 +44,6 @@ public class PaymentCriteria extends AbstractORMCriteria {
 	
 	public SecretaryCriteria createSecretaryCriteria() {
 		return new SecretaryCriteria(createCriteria("secretary"));
-	}
-	
-	public LicenseCarCriteria createLicenseCriteria() {
-		return new LicenseCarCriteria(createCriteria("license"));
 	}
 	
 	public Payment uniquePayment() {

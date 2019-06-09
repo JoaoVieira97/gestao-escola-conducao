@@ -27,7 +27,7 @@ public class SecretaryDetachedCriteria extends AbstractORMDetachedCriteria {
 	public final StringExpression role;
 	
 	public SecretaryDetachedCriteria() {
-		super(dsm.Secretary.class, dsm.SecretaryCriteria.class);
+		super(Secretary.class, SecretaryCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		firstName = new StringExpression("firstName", this.getDetachedCriteria());
 		lastName = new StringExpression("lastName", this.getDetachedCriteria());
@@ -37,7 +37,7 @@ public class SecretaryDetachedCriteria extends AbstractORMDetachedCriteria {
 	}
 	
 	public SecretaryDetachedCriteria(DetachedCriteria aDetachedCriteria) {
-		super(aDetachedCriteria, dsm.SecretaryCriteria.class);
+		super(aDetachedCriteria, SecretaryCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		firstName = new StringExpression("firstName", this.getDetachedCriteria());
 		lastName = new StringExpression("lastName", this.getDetachedCriteria());

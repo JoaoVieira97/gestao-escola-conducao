@@ -81,11 +81,11 @@ public class ListDSMData {
 		}
 		System.out.println(length + " record(s) retrieved.");
 		
-		System.out.println("Listing LicenseCar...");
-		dsm.LicenseCar[] dsmLicenseCars = dsm.LicenseCarDAO.listLicenseCarByQuery(null, null);
-		length = Math.min(dsmLicenseCars.length, ROW_COUNT);
+		System.out.println("Listing Category...");
+		dsm.Category[] dsmCategorys = dsm.CategoryDAO.listCategoryByQuery(null, null);
+		length = Math.min(dsmCategorys.length, ROW_COUNT);
 		for (int i = 0; i < length; i++) {
-			System.out.println(dsmLicenseCars[i]);
+			System.out.println(dsmCategorys[i]);
 		}
 		System.out.println(length + " record(s) retrieved.");
 		
@@ -232,17 +232,17 @@ public class ListDSMData {
 		}
 		System.out.println(length + " Secretary record(s) retrieved."); 
 		
-		System.out.println("Listing LicenseCar by Criteria...");
-		dsm.LicenseCarCriteria ldsmLicenseCarCriteria = new dsm.LicenseCarCriteria();
+		System.out.println("Listing Category by Criteria...");
+		dsm.CategoryCriteria ldsmCategoryCriteria = new dsm.CategoryCriteria();
 		// Please uncomment the follow line and fill in parameter(s) 
-		//ldsmLicenseCarCriteria.ID.eq();
-		ldsmLicenseCarCriteria.setMaxResults(ROW_COUNT);
-		dsm.LicenseCar[] dsmLicenseCars = ldsmLicenseCarCriteria.listLicenseCar();
-		length =dsmLicenseCars== null ? 0 : Math.min(dsmLicenseCars.length, ROW_COUNT); 
+		//ldsmCategoryCriteria.ID.eq();
+		ldsmCategoryCriteria.setMaxResults(ROW_COUNT);
+		dsm.Category[] dsmCategorys = ldsmCategoryCriteria.listCategory();
+		length =dsmCategorys== null ? 0 : Math.min(dsmCategorys.length, ROW_COUNT); 
 		for (int i = 0; i < length; i++) {
-			 System.out.println(dsmLicenseCars[i]);
+			 System.out.println(dsmCategorys[i]);
 		}
-		System.out.println(length + " LicenseCar record(s) retrieved."); 
+		System.out.println(length + " Category record(s) retrieved."); 
 		
 		System.out.println("Listing Student by Criteria...");
 		dsm.StudentCriteria ldsmStudentCriteria = new dsm.StudentCriteria();

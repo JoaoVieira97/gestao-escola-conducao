@@ -17,28 +17,9 @@ public class Payment {
 	public Payment() {
 	}
 	
-	private void this_setOwner(Object owner, int key) {
-		if (key == ORMConstants.KEY_PAYMENT_LICENSE) {
-			this.license = (dsm.LicenseCar) owner;
-		}
-		
-		else if (key == ORMConstants.KEY_PAYMENT_SECRETARY) {
-			this.secretary = (dsm.Secretary) owner;
-		}
-	}
-	
-	org.orm.util.ORMAdapter _ormAdapter = new org.orm.util.AbstractORMAdapter() {
-		public void setOwner(Object owner, int key) {
-			this_setOwner(owner, key);
-		}
-		
-	};
-	
 	private int ID;
 	
 	private dsm.Secretary secretary;
-	
-	private dsm.LicenseCar license;
 	
 	private double value;
 	
@@ -70,14 +51,6 @@ public class Payment {
 	
 	public java.util.Date getTimestamp() {
 		return timestamp;
-	}
-	
-	public void setLicense(dsm.LicenseCar value) {
-		this.license = value;
-	}
-	
-	public dsm.LicenseCar getLicense() {
-		return license;
 	}
 	
 	public void setSecretary(dsm.Secretary value) {

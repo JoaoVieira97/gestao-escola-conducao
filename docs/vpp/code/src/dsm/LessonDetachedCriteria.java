@@ -24,7 +24,7 @@ public class LessonDetachedCriteria extends AbstractORMDetachedCriteria {
 	public final IntegerExpression duration;
 	public final StringExpression state;
 	public final CollectionExpression students;
-	public final CollectionExpression licenses;
+	public final CollectionExpression categories;
 	
 	public LessonDetachedCriteria() {
 		super(dsm.Lesson.class, dsm.LessonCriteria.class);
@@ -33,7 +33,7 @@ public class LessonDetachedCriteria extends AbstractORMDetachedCriteria {
 		duration = new IntegerExpression("duration", this.getDetachedCriteria());
 		state = new StringExpression("state", this.getDetachedCriteria());
 		students = new CollectionExpression("ORM_Students", this.getDetachedCriteria());
-		licenses = new CollectionExpression("ORM_Licenses", this.getDetachedCriteria());
+		categories = new CollectionExpression("ORM_Categories", this.getDetachedCriteria());
 	}
 	
 	public LessonDetachedCriteria(DetachedCriteria aDetachedCriteria) {
@@ -43,15 +43,15 @@ public class LessonDetachedCriteria extends AbstractORMDetachedCriteria {
 		duration = new IntegerExpression("duration", this.getDetachedCriteria());
 		state = new StringExpression("state", this.getDetachedCriteria());
 		students = new CollectionExpression("ORM_Students", this.getDetachedCriteria());
-		licenses = new CollectionExpression("ORM_Licenses", this.getDetachedCriteria());
+		categories = new CollectionExpression("ORM_Categories", this.getDetachedCriteria());
 	}
 	
 	public StudentDetachedCriteria createStudentsCriteria() {
 		return new StudentDetachedCriteria(createCriteria("ORM_Students"));
 	}
 	
-	public LicenseCarDetachedCriteria createLicensesCriteria() {
-		return new LicenseCarDetachedCriteria(createCriteria("ORM_Licenses"));
+	public CategoryDetachedCriteria createCategoriesCriteria() {
+		return new CategoryDetachedCriteria(createCriteria("ORM_Categories"));
 	}
 	
 	public Lesson uniqueLesson(PersistentSession session) {

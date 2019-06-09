@@ -18,13 +18,13 @@ import org.orm.PersistentException;
 import org.orm.PersistentSession;
 import org.orm.criteria.*;
 
-public class LicenseCarCriteria extends AbstractORMCriteria {
+public class CategoryCriteria extends AbstractORMCriteria {
 	public final IntegerExpression ID;
 	public final IntegerExpression practicalLessons;
 	public final IntegerExpression theoreticalLessons;
 	public final StringExpression name;
 	
-	public LicenseCarCriteria(Criteria criteria) {
+	public CategoryCriteria(Criteria criteria) {
 		super(criteria);
 		ID = new IntegerExpression("ID", this);
 		practicalLessons = new IntegerExpression("practicalLessons", this);
@@ -32,21 +32,21 @@ public class LicenseCarCriteria extends AbstractORMCriteria {
 		name = new StringExpression("name", this);
 	}
 	
-	public LicenseCarCriteria(PersistentSession session) {
-		this(session.createCriteria(LicenseCar.class));
+	public CategoryCriteria(PersistentSession session) {
+		this(session.createCriteria(Category.class));
 	}
 	
-	public LicenseCarCriteria() throws PersistentException {
+	public CategoryCriteria() throws PersistentException {
 		this(DSMPersistentManager.instance().getSession());
 	}
 	
-	public LicenseCar uniqueLicenseCar() {
-		return (LicenseCar) super.uniqueResult();
+	public Category uniqueCategory() {
+		return (Category) super.uniqueResult();
 	}
 	
-	public LicenseCar[] listLicenseCar() {
+	public Category[] listCategory() {
 		java.util.List list = super.list();
-		return (LicenseCar[]) list.toArray(new LicenseCar[list.size()]);
+		return (Category[]) list.toArray(new Category[list.size()]);
 	}
 }
 

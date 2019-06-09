@@ -41,7 +41,7 @@ public class ExamDAO {
 		}
 	}
 	
-	public static Exam loadExamByORMID(int ID, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static Exam loadExamByORMID(int ID, LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return loadExamByORMID(session, ID, lockMode);
@@ -52,7 +52,7 @@ public class ExamDAO {
 		}
 	}
 	
-	public static Exam getExamByORMID(int ID, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static Exam getExamByORMID(int ID, LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return getExamByORMID(session, ID, lockMode);
@@ -65,7 +65,7 @@ public class ExamDAO {
 	
 	public static Exam loadExamByORMID(PersistentSession session, int ID) throws PersistentException {
 		try {
-			return (Exam) session.load(dsm.Exam.class, new Integer(ID));
+			return (Exam) session.load(Exam.class, new Integer(ID));
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -75,7 +75,7 @@ public class ExamDAO {
 	
 	public static Exam getExamByORMID(PersistentSession session, int ID) throws PersistentException {
 		try {
-			return (Exam) session.get(dsm.Exam.class, new Integer(ID));
+			return (Exam) session.get(Exam.class, new Integer(ID));
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -83,9 +83,9 @@ public class ExamDAO {
 		}
 	}
 	
-	public static Exam loadExamByORMID(PersistentSession session, int ID, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static Exam loadExamByORMID(PersistentSession session, int ID, LockMode lockMode) throws PersistentException {
 		try {
-			return (Exam) session.load(dsm.Exam.class, new Integer(ID), lockMode);
+			return (Exam) session.load(Exam.class, new Integer(ID), lockMode);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -93,9 +93,9 @@ public class ExamDAO {
 		}
 	}
 	
-	public static Exam getExamByORMID(PersistentSession session, int ID, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static Exam getExamByORMID(PersistentSession session, int ID, LockMode lockMode) throws PersistentException {
 		try {
-			return (Exam) session.get(dsm.Exam.class, new Integer(ID), lockMode);
+			return (Exam) session.get(Exam.class, new Integer(ID), lockMode);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -114,7 +114,7 @@ public class ExamDAO {
 		}
 	}
 	
-	public static List queryExam(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static List queryExam(String condition, String orderBy, LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return queryExam(session, condition, orderBy, lockMode);
@@ -136,7 +136,7 @@ public class ExamDAO {
 		}
 	}
 	
-	public static Exam[] listExamByQuery(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static Exam[] listExamByQuery(String condition, String orderBy, LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return listExamByQuery(session, condition, orderBy, lockMode);
@@ -163,7 +163,7 @@ public class ExamDAO {
 		}
 	}
 	
-	public static List queryExam(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static List queryExam(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
 		StringBuffer sb = new StringBuffer("From dsm.Exam as Exam");
 		if (condition != null)
 			sb.append(" Where ").append(condition);
@@ -191,7 +191,7 @@ public class ExamDAO {
 		}
 	}
 	
-	public static Exam[] listExamByQuery(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static Exam[] listExamByQuery(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
 		try {
 			List list = queryExam(session, condition, orderBy, lockMode);
 			return (Exam[]) list.toArray(new Exam[list.size()]);
@@ -213,7 +213,7 @@ public class ExamDAO {
 		}
 	}
 	
-	public static Exam loadExamByQuery(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static Exam loadExamByQuery(String condition, String orderBy, LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return loadExamByQuery(session, condition, orderBy, lockMode);
@@ -232,7 +232,7 @@ public class ExamDAO {
 			return null;
 	}
 	
-	public static Exam loadExamByQuery(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static Exam loadExamByQuery(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
 		Exam[] exams = listExamByQuery(session, condition, orderBy, lockMode);
 		if (exams != null && exams.length > 0)
 			return exams[0];
@@ -251,7 +251,7 @@ public class ExamDAO {
 		}
 	}
 	
-	public static java.util.Iterator iterateExamByQuery(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static java.util.Iterator iterateExamByQuery(String condition, String orderBy, LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return iterateExamByQuery(session, condition, orderBy, lockMode);
@@ -278,7 +278,7 @@ public class ExamDAO {
 		}
 	}
 	
-	public static java.util.Iterator iterateExamByQuery(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static java.util.Iterator iterateExamByQuery(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
 		StringBuffer sb = new StringBuffer("From dsm.Exam as Exam");
 		if (condition != null)
 			sb.append(" Where ").append(condition);
@@ -296,10 +296,10 @@ public class ExamDAO {
 	}
 	
 	public static Exam createExam() {
-		return new dsm.Exam();
+		return new Exam();
 	}
 	
-	public static boolean save(dsm.Exam exam) throws PersistentException {
+	public static boolean save(Exam exam) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().saveObject(exam);
 			return true;
@@ -310,7 +310,7 @@ public class ExamDAO {
 		}
 	}
 	
-	public static boolean delete(dsm.Exam exam) throws PersistentException {
+	public static boolean delete(Exam exam) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().deleteObject(exam);
 			return true;
@@ -321,7 +321,7 @@ public class ExamDAO {
 		}
 	}
 	
-	public static boolean refresh(dsm.Exam exam) throws PersistentException {
+	public static boolean refresh(Exam exam) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().getSession().refresh(exam);
 			return true;
@@ -332,7 +332,7 @@ public class ExamDAO {
 		}
 	}
 	
-	public static boolean evict(dsm.Exam exam) throws PersistentException {
+	public static boolean evict(Exam exam) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().getSession().evict(exam);
 			return true;

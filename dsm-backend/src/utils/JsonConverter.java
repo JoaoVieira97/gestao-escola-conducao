@@ -1,14 +1,9 @@
 package utils;
 
-import com.google.gson.*;
-import dsm.Lesson;
-import dsm.Register;
-import dsm.Student;
-
-import java.util.List;
 
 public class JsonConverter {
 
+    /*
     private static  Gson gsonBuilder() {
         return new GsonBuilder()
                 .excludeFieldsWithoutExposeAnnotation()
@@ -65,4 +60,5 @@ public class JsonConverter {
 
         return result.toString();
     }
+     */
 }

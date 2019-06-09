@@ -16,17 +16,16 @@ package dsm;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties({"ormid"})
-
-public class LicenseCar {
-	public LicenseCar() {
+public class Category {
+	public Category() {
 	}
-
+	
 	private int ID;
-
+	
 	private int practicalLessons;
-
+	
 	private int theoreticalLessons;
-
+	
 	private String name;
 	
 	private void setID(int value) {
