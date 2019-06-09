@@ -13,6 +13,9 @@
  */
 package dsm;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties({"payments", "exams", "announcements", "lessons", "registers", "ormid"})
 public class Student extends User {
 	public Student() {
 	}
