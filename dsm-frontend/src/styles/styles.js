@@ -7,7 +7,7 @@ export const footerStyle = {
     width :"100%",
     minHeight: "70px",
     backgroundColor: '#ffffff',
-    borderTop: '2px solid rgba(34,36,38,.15)',
+    borderTop: '10px solid rgba(34,36,38,.15)',
     textAlign: 'center',
 };
 

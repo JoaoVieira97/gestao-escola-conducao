@@ -14,7 +14,7 @@ class HomePage extends Component {
 
     render() {
         let card = (
-            <Card fluid scroll>
+            <Card fluid>
                 <Card.Content>
                     <Card.Header>Avisos Recentes</Card.Header>
                 </Card.Content>

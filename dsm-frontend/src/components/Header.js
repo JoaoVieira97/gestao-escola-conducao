@@ -16,6 +16,11 @@ class Header extends React.Component {
         window.location.reload();
     };
 
+    nameUser = () => {
+
+        return "NomeUser";
+    }
+
     render() {
 
         if(this.props.userType === 'student') {
@@ -41,6 +46,7 @@ class Header extends React.Component {
                         </NavLink>
                         <div className="right menu">
                             <div className="item">
+                                <p> Bem vindo, {this.nameUser()} </p>
                                 <Button className="ui button" onClick={this.handleLogout.bind(this)}>
                                     LOGOUT
                                 </Button>
