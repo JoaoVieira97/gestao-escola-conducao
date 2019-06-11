@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Grid, Container, Header, Card, Feed, Icon } from 'semantic-ui-react';
+import { Container, Card, Feed, Icon } from 'semantic-ui-react';
 
 class HomePage extends Component {
 
@@ -13,101 +13,50 @@ class HomePage extends Component {
 
 
     render() {
+<<<<<<< HEAD
         let card = (
             <Card fluid>
+=======
+        const cardExample = (
+            <div className={"ui fluid card"}>
+>>>>>>> fd9bd3dfce6fbcff9b1c71c10598f85c64b6578d
                 <Card.Content>
                     <Card.Header>Avisos Recentes</Card.Header>
                 </Card.Content>
                 <Card.Content>
                     <Feed>
-                        <Feed.Event>
-                            <Feed.Label>
-                                <Icon name='tasks'/>
-                            </Feed.Label>
-                            <Feed.Content>
-                                <Feed.Date content='há 1 dia' />
-                                <Feed.Summary>
-                                    A escola encontra-se encerrada.
-                                </Feed.Summary>
-                            </Feed.Content>
-                        </Feed.Event>
-
-                        <Feed.Event>
-                            <Feed.Label>
-                                <Icon name='tasks'/>
-                            </Feed.Label>
-                            <Feed.Content>
-                                <Feed.Date content='há 3 dias' />
-                                <Feed.Summary>
-                                    A escola encontra-se encerrada.
-                                </Feed.Summary>
-                            </Feed.Content>
-                        </Feed.Event>
-
-                        <Feed.Event>
-                            <Feed.Label>
-                                <Icon name='tasks'/>
-                            </Feed.Label>
-                            <Feed.Content>
-                                <Feed.Date content='há 4 dias' />
-                                <Feed.Summary>
-                                    A escola encontra-se encerrada.
-                                </Feed.Summary>
-                            </Feed.Content>
-                        </Feed.Event>
-
-                        <Feed.Event>
-                            <Feed.Label>
-                                <Icon name='tasks'/>
-                            </Feed.Label>
-                            <Feed.Content>
-                                <Feed.Date content='há 4 dias' />
-                                <Feed.Summary>
-                                    A escola encontra-se encerrada.
-                                </Feed.Summary>
-                            </Feed.Content>
-                        </Feed.Event>
-
-                        <Feed.Event>
-                            <Feed.Label>
-                                <Icon name='tasks'/>
-                            </Feed.Label>
-                            <Feed.Content>
-                                <Feed.Date content='há 4 dias' />
-                                <Feed.Summary>
-                                    A escola encontra-se encerrada.
-                                </Feed.Summary>
-                            </Feed.Content>
-                        </Feed.Event>
-
-                        <Feed.Event>
-                            <Feed.Label>
-                                <Icon name='tasks'/>
-                            </Feed.Label>
-                            <Feed.Content>
-                                <Feed.Date content='há 4 dias' />
-                                <Feed.Summary>
-                                    A escola encontra-se encerrada.
-                                </Feed.Summary>
-                            </Feed.Content>
-                        </Feed.Event>
+                        {
+                            Array.apply(
+                                null,
+                                { length: 7 }).map((e, i) => (
+                                <Feed.Event key={i}>
+                                    <Feed.Label>
+                                        <Icon name='tasks'/>
+                                    </Feed.Label>
+                                    <Feed.Content>
+                                        <Feed.Summary>
+                                            A escola encontra-se encerrada.
+                                        </Feed.Summary>
+                                        <Feed.Date content='há 1 dia' />
+                                    </Feed.Content>
+                                </Feed.Event>
+                            ))
+                        }
                     </Feed>
                 </Card.Content>
-            </Card>
+            </div>
         );
 
         return (
             <Container>
-                <Grid>
-                    <Grid.Row>
-                        <Grid.Column width={8}>
-                            {card}
-                        </Grid.Column>
-                        <Grid.Column width={8}>
-                            {card}
-                        </Grid.Column>
-                    </Grid.Row>
-                </Grid>
+                <div className="ui stackable two column centered grid">
+                    <div className="column">
+                        {cardExample}
+                    </div>
+                    <div className="column">
+                        {cardExample}
+                    </div>
+                </div>
             </Container>
         );
     }
