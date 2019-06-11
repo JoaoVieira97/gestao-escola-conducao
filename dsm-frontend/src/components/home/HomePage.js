@@ -13,13 +13,9 @@ class HomePage extends Component {
 
 
     render() {
-<<<<<<< HEAD
-        let card = (
-            <Card fluid>
-=======
+
         const cardExample = (
             <div className={"ui fluid card"}>
->>>>>>> fd9bd3dfce6fbcff9b1c71c10598f85c64b6578d
                 <Card.Content>
                     <Card.Header>Avisos Recentes</Card.Header>
                 </Card.Content>
