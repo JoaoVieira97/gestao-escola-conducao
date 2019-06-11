@@ -27,9 +27,18 @@ class Header extends React.Component {
                             <i className="home icon" />
                             <p>INÍCIO</p>
                         </NavLink>
-                        <NavLink className="ui item" to="/lessons">AULAS</NavLink>
-                        <NavLink className="ui item" to="/payments">PAGAMENTOS</NavLink>
-                        <NavLink className="ui item" to="/contacts" >CONTACTOS</NavLink>
+                        <NavLink className="ui item" to="/lessons">
+                            <i className="calendar alternate icon" />
+                            <p>AULAS</p>
+                        </NavLink>
+                        <NavLink className="ui item" to="/payments">
+                            <i className="euro icon" />
+                            <p>PAGAMENTOS</p>
+                        </NavLink>
+                        <NavLink className="ui item" to="/contacts" >
+                            <i className="address book icon" />
+                            <p>CONTACTOS</p>
+                        </NavLink>
                         <div className="right menu">
                             <div className="item">
                                 <Button className="ui button" onClick={this.handleLogout.bind(this)}>

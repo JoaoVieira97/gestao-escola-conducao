@@ -18,6 +18,7 @@ import Header from "./Header";
 import Footer from "./Footer"
 import LoginPage from './login/LoginPage';
 import HomePage from './home/HomePage';
+import LessonsPage from './lessons/LessonsPage';
 import ErrorPage from "./ErrorPage";
 
 
@@ -46,8 +47,8 @@ const Root = ({ store }) => {
                 <Switch>
                     <PrivateRoute exact path="/" component={HomePage} />
                     <PrivateRoute exact path="/home" component={HomePage} />
-                    <PrivateRoute exact path="/lessons" component={HomePage} />
-                    <PrivateRoute exact path="/payments" component={HomePage} />
+                    <PrivateRoute exact path="/lessons" component={LessonsPage} />
+                    <PrivateRoute exact path="/payments" component={LessonsPage} />
                     <Route exact path="/contacts" render={ props => <ErrorPage {...props} />} />
                     <Route path="/" render={ props => <ErrorPage {...props} />} />
                 </Switch>
