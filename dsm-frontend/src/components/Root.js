@@ -21,6 +21,7 @@ import HomePage from './home/HomePage';
 import LessonsPage from './lessons/LessonsPage';
 import PaymentsPage from './payments/PaymentsPage';
 import ErrorPage from "./ErrorPage";
+import AllStudents from "./students/AllStudents";
 
 
 
@@ -43,20 +44,22 @@ const Root = ({ store }) => {
 
     const routesByUser = {
         student: (
-            <React.Fragment>
+            <BrowserRouter>
                 <Header userType={'student'} />
                 <Switch>
                     <PrivateRoute exact path="/" component={HomePage} />
                     <PrivateRoute exact path="/home" component={HomePage} />
                     <PrivateRoute exact path="/lessons" component={LessonsPage} />
                     <PrivateRoute exact path="/payments" component={PaymentsPage} />
+                    <PrivateRoute exact path="/students" component={AllStudents} />
                     <Route exact path="/contacts" render={ props => <ErrorPage {...props} />} />
                     <Route path="/" render={ props => <ErrorPage {...props} />} />
                 </Switch>
-            </React.Fragment>
+                <Footer />
+            </BrowserRouter>
         ),
         default: (
-            <React.Fragment>
+            <BrowserRouter>
                 <Header userType={'default'} />
                 <Switch>
                     <Route exact path="/home" render={ props => <LoginPage {...props} />} />
@@ -64,7 +67,8 @@ const Root = ({ store }) => {
                     <Route exact path="/contacts" render={ props => <ErrorPage {...props} />} />
                     <Redirect from="/" to="/home" />
                 </Switch>
-            </React.Fragment>
+                <Footer />
+            </BrowserRouter>
         )
     };
 
@@ -85,10 +89,7 @@ const Root = ({ store }) => {
 
     return (
         <StoreProvider store={store}>
-            <BrowserRouter>
-                {content}
-                <Footer />
-            </BrowserRouter>
+            {content}
         </StoreProvider>
     );
 };

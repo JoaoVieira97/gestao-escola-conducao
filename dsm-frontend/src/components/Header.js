@@ -44,6 +44,10 @@ class Header extends React.Component {
                             <i className="address book icon" />
                             <p>CONTACTOS</p>
                         </NavLink>
+                        <NavLink className="ui item" to="/students" >
+                            <i className="users icon" />
+                            <p>ALUNOS</p>
+                        </NavLink>
                         <div className="right menu">
                             <div className="item">
                                 Bem vindo, {this.nameUser()}

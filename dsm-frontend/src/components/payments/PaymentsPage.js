@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
-import { Container, Header, Table, Menu, Icon, Grid, Dropdown } from 'semantic-ui-react';
+import { Container, Header, Table, Menu, Icon, Grid, Dropdown, Dimmer, Loader } from 'semantic-ui-react';
+import { fetchApi } from '../../services/api/index';
+
 
 class PaymentsPage extends Component {
 
@@ -7,6 +9,7 @@ class PaymentsPage extends Component {
         super(props);
 
         this.state = {
+            isLoading: true,
             payments: [],
             categories: [],
         }
@@ -14,17 +17,35 @@ class PaymentsPage extends Component {
 
     componentDidMount() {
 
-        this.fetchData();
+        fetchApi(
+            'get','/students',
+            {},  {},
+            this.successHandler, this.errorHandler
+        );
 
+        setTimeout( () => {
+            this.setState({isLoading: false});
+        }, 2000);
     }
 
-    async fetchData() {
+    /**
+     * Handle the response.
+     * @param response
+     */
+    successHandler = (response) => {
 
-        await fetch('http://localhost:8080/dsm_backend_war_exploded/api/students', {mode: 'no-cors'})
-            .then(response => response.json())
-                .then(parsedJSON => console.log(parsedJSON.results))
-                .catch(error => console.log('Parsing failed', error));
-    }
+        console.log(response.success);
+        console.log(response.students);
+    };
+
+    /**
+     * Handle the error.
+     * @param error
+     */
+    errorHandler = (error) => {
+
+        console.log(error);
+    };
 
     componentWillMount() {
 
@@ -77,6 +98,11 @@ class PaymentsPage extends Component {
 
         return (
             <Container style={{marginBottom: 100, marginTop: 50}}>
+
+                <Dimmer inverted active={this.state.isLoading}>
+                    <Loader>Loading</Loader>
+                </Dimmer>
+
                 <Grid columns={2} stackable>
                     <Grid.Column width={8} >
                         <Container textAlign={'center'}>
@@ -86,11 +112,11 @@ class PaymentsPage extends Component {
                             </Header>
                             <Header as='h3' textAlign='left'>
                                 Categoria: <Dropdown
-                                                placeholder='Seleciona uma categoria'
-                                                selection
-                                                clearable
-                                                options={this.state.categories}
-                                            />
+                                placeholder='Seleciona uma categoria'
+                                selection
+                                clearable
+                                options={this.state.categories}
+                            />
                             </Header>
 
                             <Header as='h3' textAlign={'left'}>
