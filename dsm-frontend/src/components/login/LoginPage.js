@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import {Button, Form, Message} from 'semantic-ui-react'
+import {fetchApi} from "../../services/api";
 
 class LoginPage extends Component {
 
@@ -9,17 +11,10 @@ class LoginPage extends Component {
         this.state = {
             email: "",
             password: "",
-            rememberMe: true
+            rememberMe: true,
+            loginError: false,
+            loginErrorMessage: ''
         };
-    }
-
-    componentDidMount() {
-
-        const rememberMe = localStorage.getItem('rememberMe') === 'true';
-        const email = rememberMe ? localStorage.getItem('email') : '';
-
-        this.setState({ email, rememberMe });
-        console.log(process.env.REACT_APP_RESTAPI);
     }
 
     handleInputChange = (event) => {
@@ -27,53 +22,71 @@ class LoginPage extends Component {
         const input = event.target;
         const value = input.type === 'checkbox' ? input.checked : input.value;
 
-        this.setState({ [input.name]: value });
+        this.setState({
+            loginError: false,
+            [input.name]: value
+        });
     };
 
-    handleLoginSubmit = async (history) => {
+    handleLoginSubmit = () => {
 
-        const { email, password, rememberMe } = this.state;
-
+        const { email, password } = this.state;
         if(email !== '' && password !== '') {
 
-            const response = await this._login();
-            if(response.success) {
+            fetchApi(
+                'post','/authentication',
+                {
+                    email: email,
+                    password: password
+                },  {},
+                this.successHandler, this.errorHandler
+            );
+        }
+    };
 
-                console.log("login success");
 
-                if(rememberMe) {
-                    localStorage.setItem('name', response.name);
-                    localStorage.setItem('token', response.token);
-                    localStorage.setItem('email', email);
-                }
+    /**
+     * Handle the response.
+     * @param response
+     */
+    successHandler = (response) => {
 
+        console.log(response);
+        if (response.success) {
+
+            if(this.state.rememberMe) {
+                localStorage.setItem('userToken', response.userToken);
                 localStorage.setItem('userType', response.userType);
-                this.props.history.push('/home');
             }
+
+            // TODO: set redux instead
+            localStorage.setItem('userToken', response.userToken);
+            localStorage.setItem('userType', response.userType);
+
+            this.props.history.push('/home');
+            window.location.reload();
+        }
+        else {
+            this.setState({
+                loginError: true,
+                loginErrorMessage: 'As credenciais que introduziu estão erradas.'
+            });
         }
     };
 
     /**
-     * User login
-     * @private
+     * Handle the error.
+     * @param error
      */
-    async _login() {
+    errorHandler = (error) => {
 
-        if(2%2===0) {
-            return {
-                success: true,
-                userType: 'student',
-                name: 'Driving School Management',
-                token: 'DX8TOKRSvHvQ4eZWghi62yxqNW3D9ooi',
-            };
-        }
-        else {
-            return {
-                success: false,
-                error: 'Credenciais erradas'
-            };
-        }
-    }
+        console.log(error);
+        this.setState({
+            loginError: true,
+            loginErrorMessage: 'Ocorreu um erro ao estabelecer conexão com o servidor principal.'
+        });
+    };
+
 
     render() {
 
@@ -86,22 +99,46 @@ class LoginPage extends Component {
                         style={{marginBottom: "20px"}}
                         alt={"logo"}
                     />
-                    <form className="ui form">
-                        <div className="ui stacked segment left aligned">
-                            <div className="field">
+                    <div className="ui stacked segment left aligned">
+                        <Form error={this.state.loginError}>
+                            {
+                                /*
+                                <Form.Input
+                                    type={"email"}
+                                    name={"email"}
+                                    label={'E-mail'}
+                                    placeholder={'Introduza o seu e-mail...'}
+                                    onChange={this.handleInputChange}
+                                    error={this.state.loginError}
+                                />
+                                <Form.Input
+                                    type={"password"}
+                                    name={"password"}
+                                    label={"Palavra-passe"}
+                                    placeholder={"Introduza a sua palavra-passe..."}
+                                    onChange={this.handleInputChange}
+                                    error={this.state.loginError}
+                                />
+                                 */
+                            }
+                            <Message
+                                error
+                                header={'Erro ao iniciar sessão'}
+                                content={this.state.loginErrorMessage}
+                            />
+                            <div className={this.state.loginError ? "error field" : "field"}>
                                 <label>E-mail</label>
                                 <div className="ui left icon input">
                                     <input
                                         type="email"
                                         name={"email"}
-                                        ///defaultValue={this.state.email}
                                         placeholder="Introduza o seu e-mail..."
                                         onChange={this.handleInputChange}
                                     />
                                     <i className="user icon" />
                                 </div>
                             </div>
-                            <div className="field">
+                            <div className={this.state.loginError ? "error field" : "field"}>
                                 <label>Palavra-passe</label>
                                 <div className="ui left icon input">
                                     <input
@@ -125,13 +162,15 @@ class LoginPage extends Component {
                                     <label>Lembrar o meu acesso</label>
                                 </div>
                             </div>
-                            <button
-                                className="ui button"
+                            <Button
                                 type="submit"
+                                className="ui button"
                                 onClick={this.handleLoginSubmit.bind(this)}
-                            >ENTRAR</button>
-                        </div>
-                    </form>
+                            >
+                                ENTRAR
+                            </Button>
+                        </Form>
+                    </div>
                 </div>
             </div>
         )

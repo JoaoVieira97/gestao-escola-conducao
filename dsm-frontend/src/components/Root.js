@@ -75,11 +75,11 @@ const Root = ({ store }) => {
     let content;
     const userType = localStorage.getItem('userType');
     switch (userType) {
-        case 'student':
+        case 'ROLE_STUDENT':
             content = routesByUser.student;
             break;
 
-        case 'coach':
+        case 'ROLE_INSTRUCTOR':
             content = routesByUser.student;
             break;
 

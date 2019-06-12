@@ -1,7 +1,21 @@
 import React, {Component} from 'react';
-import { Container, Card, Feed, Icon } from 'semantic-ui-react';
+import {Container, Card, Feed, Icon, Loader, Dimmer} from 'semantic-ui-react';
 
 class HomePage extends Component {
+
+    constructor(props){
+        super(props);
+
+        this.state = {
+            isLoading: true
+        };
+    }
+
+    componentDidMount() {
+        setTimeout(()=>{
+            this.setState({isLoading: false});
+        }, 1000);
+    }
 
     render() {
 
@@ -36,6 +50,9 @@ class HomePage extends Component {
 
         return (
             <Container>
+                <Dimmer inverted active={this.state.isLoading}>
+                    <Loader>A carregar</Loader>
+                </Dimmer>
                 <div className="ui stackable two column centered grid">
                     <div className="column">
                         {cardExample}

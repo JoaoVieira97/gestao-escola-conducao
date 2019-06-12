@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import {
     Container,
-    Dimmer,
-    Loader,
     Button,
     Icon,
     Table,
@@ -48,9 +46,9 @@ class AllStudents extends Component {
             this.successHandler, this.errorHandler
         );
 
-        this.setState({
-            isLoading: false
-        });
+        setTimeout(()=>{
+            this.setState({isLoading: false});
+        }, 1000);
     }
 
     /**
@@ -171,9 +169,6 @@ class AllStudents extends Component {
 
         return (
             <Container style={{marginTop: '30px'}}>
-                <Dimmer inverted active={this.state.isLoading}>
-                    <Loader>A carregar</Loader>
-                </Dimmer>
                 <Statistic.Group size={'tiny'} widths={'two'}>
                     <Statistic >
                         <Statistic.Value>
@@ -190,7 +185,7 @@ class AllStudents extends Component {
                         <Statistic.Label>Ativos</Statistic.Label>
                     </Statistic>
                 </Statistic.Group>
-                <Segment>
+                <Segment loading={this.state.isLoading}>
                     <Form>
                         <Form.Group widths='equal'>
                             <Button icon labelPosition='left'

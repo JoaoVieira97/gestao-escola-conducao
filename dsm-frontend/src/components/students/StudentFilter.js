@@ -33,7 +33,7 @@ export class StudentFilter extends React.Component {
         if (!this.state.filterValid) {
             popupMessage = 'Caracter inválido.';
         } else if (this.props.totalCount === 0) {
-            popupMessage = 'Nenhum resultado encontrado.'
+            //popupMessage = 'Nenhum resultado encontrado.'
         }
 
         return (

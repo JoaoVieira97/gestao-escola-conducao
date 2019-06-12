@@ -112,11 +112,9 @@ class Header extends React.Component {
                 <Responsive minWidth={993}>
                     <div className="ui fluid secondary pointing menu" style={headerStyle}>
                         <Container>
-                            {this.props.userType === 'student' &&
-                                StudentItemsWeb(this.handleLogout.bind(this))
-                            }
-                            {this.props.userType === 'default' &&
-                                {DefaultItems}
+                            {this.props.userType === 'student' ?
+                                StudentItemsWeb(this.handleLogout.bind(this)) :
+                                DefaultItems
                             }
                         </Container>
                     </div>
@@ -144,11 +142,9 @@ class Header extends React.Component {
                             icon={'close' }
                             onClick={this.handleHideClick}
                         />
-                        {this.props.userType === 'student' &&
-                            StudentItemsMobile(this.handleLogout.bind(this), this.handleHideClick.bind(this))
-                        }
-                        {this.props.userType === 'default' &&
-                            {DefaultItems}
+                        {this.props.userType === 'student' ?
+                            StudentItemsMobile(this.handleLogout.bind(this), this.handleHideClick.bind(this)) :
+                            DefaultItems
                         }
                     </Sidebar>
                 </Responsive>
