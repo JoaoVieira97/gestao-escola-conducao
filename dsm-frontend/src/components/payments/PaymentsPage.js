@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import { Container, Header, Table, Menu, Icon, Grid, Dropdown, Dimmer, Loader } from 'semantic-ui-react';
-import { fetchApi } from '../../services/api/index';
+import { Container, Header, Table, Menu, Icon, Grid, Dropdown } from 'semantic-ui-react';
 
 
 class PaymentsPage extends Component {
@@ -9,42 +8,9 @@ class PaymentsPage extends Component {
         super(props);
 
         this.state = {
-            isLoading: true,
             payments: [],
             categories: [],
         }
-    };
-
-    componentDidMount() {
-
-        fetchApi(
-            'get','/students',
-            {},  {},
-            this.successHandler, this.errorHandler
-        );
-
-        setTimeout( () => {
-            this.setState({isLoading: false});
-        }, 2000);
-    }
-
-    /**
-     * Handle the response.
-     * @param response
-     */
-    successHandler = (response) => {
-
-        console.log(response.success);
-        console.log(response.students);
-    };
-
-    /**
-     * Handle the error.
-     * @param error
-     */
-    errorHandler = (error) => {
-
-        console.log(error);
     };
 
     componentWillMount() {
@@ -97,12 +63,7 @@ class PaymentsPage extends Component {
         ));
 
         return (
-            <Container style={{marginBottom: 100, marginTop: 50}}>
-
-                <Dimmer inverted active={this.state.isLoading}>
-                    <Loader>Loading</Loader>
-                </Dimmer>
-
+            <Container>
                 <Grid columns={2} stackable>
                     <Grid.Column width={8} >
                         <Container textAlign={'center'}>

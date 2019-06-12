@@ -37,27 +37,23 @@ export class StudentFilter extends React.Component {
         }
 
         return (
-            <Form style={{marginTop: '10px'}}>
-                <Form.Group>
-                    <Form.Field>
-                        <Popup
-                            trigger={<Form.Input
-                                placeholder='Procurar...'
-                                name='filter'
-                                value={filter}
-                                error={!this.state.filterValid}
-                                onChange={this.handleOnChange}
-                                icon='search'
-                                loading={this.props.isSearching}
-                            />}
-                            content={popupMessage}
-                            on='click'
-                            open={!this.state.filterValid || this.props.totalCount === 0}
-                            position='right center'
-                        />
-                    </Form.Field>
-                </Form.Group>
-            </Form>
+            <Form.Field style={{marginTop: '10px'}}>
+                <Popup
+                    trigger={<Form.Input
+                        placeholder='Procurar...'
+                        name='filter'
+                        value={filter}
+                        error={!this.state.filterValid}
+                        onChange={this.handleOnChange}
+                        icon='search'
+                        loading={this.props.isSearching}
+                    />}
+                    content={popupMessage}
+                    on='click'
+                    open={!this.state.filterValid || this.props.totalCount === 0}
+                    position='right center'
+                />
+            </Form.Field>
         )
     }
 }

@@ -3,15 +3,6 @@ import { Container, Card, Feed, Icon } from 'semantic-ui-react';
 
 class HomePage extends Component {
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-
-        };
-    }
-
-
     render() {
 
         const cardExample = (

@@ -10,7 +10,8 @@ import {
     Pagination,
     Segment,
     Divider,
-    Dropdown
+    Dropdown,
+    Form
 } from 'semantic-ui-react';
 import _ from 'lodash';
 import { fetchApi } from '../../services/api/index';
@@ -169,7 +170,7 @@ class AllStudents extends Component {
         ));
 
         return (
-            <Container style={{marginBottom: 100, marginTop: 50}}>
+            <Container style={{marginTop: '30px'}}>
                 <Dimmer inverted active={this.state.isLoading}>
                     <Loader>A carregar</Loader>
                 </Dimmer>
@@ -190,16 +191,23 @@ class AllStudents extends Component {
                     </Statistic>
                 </Statistic.Group>
                 <Segment>
-                    <Button icon labelPosition='left' size='small' color='grey'>
-                        <Icon name='user' />
-                        <p>Adicionar</p>
-                    </Button>
-                    <StudentFilter
-                        filter={this.state.query}
-                        totalCount={this.state.totalCount}
-                        onSubmitFilter={this.onSubmitFilter.bind(this)}
-                        isSearching={this.state.isSearching}
-                    />
+                    <Form>
+                        <Form.Group widths='equal'>
+                            <Button icon labelPosition='left'
+                                    size='small' color='grey'
+                                    style={{marginTop: '10px', marginLeft: '5px'}}
+                            >
+                                <Icon name='user' />
+                                <p>Adicionar</p>
+                            </Button>
+                            <StudentFilter
+                                filter={this.state.query}
+                                totalCount={this.state.totalCount}
+                                onSubmitFilter={this.onSubmitFilter.bind(this)}
+                                isSearching={this.state.isSearching}
+                            />
+                        </Form.Group>
+                    </Form>
                     <Divider />
                     <React.Fragment>
                         {'Alunos por página: '}
