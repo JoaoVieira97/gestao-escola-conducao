@@ -30,10 +30,10 @@ class HomePage extends Component {
                                         <Icon name='tasks'/>
                                     </Feed.Label>
                                     <Feed.Content>
+                                        <Feed.Date content='há 1 dia' />
                                         <Feed.Summary>
                                             A escola encontra-se encerrada.
                                         </Feed.Summary>
-                                        <Feed.Date content='há 1 dia' />
                                     </Feed.Content>
                                 </Feed.Event>
                             ))

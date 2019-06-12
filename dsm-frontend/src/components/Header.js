@@ -46,7 +46,7 @@ class Header extends React.Component {
                         </NavLink>
                         <div className="right menu">
                             <div className="item">
-                                <p> Bem vindo, {this.nameUser()} </p>
+                                Bem vindo, {this.nameUser()}
                                 <Button className="ui button" onClick={this.handleLogout.bind(this)}>
                                     LOGOUT
                                 </Button>
