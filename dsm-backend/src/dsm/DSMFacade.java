@@ -4,6 +4,7 @@ import beans.LessonBeanLocal;
 import beans.StudentBeanLocal;
 import beans.UserBeanLocal;
 import org.orm.PersistentSession;
+import utils.Utils;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -68,9 +69,9 @@ public class DSMFacade {
 
 
     /**
-     * Login a user.
+     * Authentication a user.
      */
-    public static boolean login(PersistentSession session, String email, String password) {
+    public static String login(String email, String password) {
 
         return userBean.login(email, password);
     }

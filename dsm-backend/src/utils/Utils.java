@@ -9,10 +9,19 @@ import java.security.MessageDigest;
 
 public class Utils {
 
+    private final static String TOKEN = "qnHuUp4iXL6dmzymkcOa6iGLYAwsnURP";
+
+    /**
+     * Request access token validation.
+     */
+    public static boolean accessTokenValidation(HttpServletRequest request) {
+
+        String accessToken = request.getHeader("Authorization");
+        return accessToken.equals(TOKEN);
+    }
+
     /**
      * Hash the given password.
-     * @param original
-     * @return
      */
     public static String hash(String original) {
 
