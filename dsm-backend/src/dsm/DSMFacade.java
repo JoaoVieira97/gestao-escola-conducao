@@ -99,4 +99,29 @@ public class DSMFacade {
 
         return studentBean.getStudentRegisters(studentId);
     }
+
+    /**
+     * Get the list of all realized lessons of a specific student.
+     */
+    public static List<Lesson> getRealizedLessonsStudent(int studentId) {
+
+        return lessonBean.getRealizedLessonsStudent(studentId);
+    }
+
+    /**
+     * Get the list of all realized lessons of a specific student.
+     */
+    public static List<PracticalLesson> getRealizedPracticalLessonsStudent(int studentId) {
+
+        return lessonBean.getRealizedPracticalLessonsStudent(studentId);
+    }
+
+    /**
+     * Get the list of all realized lessons of a specific student.
+     */
+    public static List<TheoreticalLesson> getRealizedTheoreticalLessonsStudent(int studentId) {
+
+        return lessonBean.getRealizedTheoreticalLessonsStudent(studentId);
+    }
+
 }
