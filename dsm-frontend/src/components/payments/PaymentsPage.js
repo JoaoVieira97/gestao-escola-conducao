@@ -39,33 +39,6 @@ class PaymentsPage extends Component {
         }, 1000);
     }
 
-
-    componentWillMount() {
-
-        let payments = [
-            {
-                id: 1,
-                date: '20/10/2018',
-                paid: true,
-                description: 'Inscrição',
-                value: 100,
-            },
-            {
-                id: 2,
-                date: '20/12/2018',
-                paid: false,
-                description: '1ª Prestação',
-                value: 80,
-            },
-        ];
-
-        this.setState({
-            payments: payments,
-        })
-    }
-
-
-
     /**
      * Handle the response.
      * @param response
@@ -74,7 +47,6 @@ class PaymentsPage extends Component {
 
         if (response.success) {
             //key -> registers.id
-
 
             let categoriesRegister = response.registers.map(register => (register.category));
 
@@ -114,8 +86,6 @@ class PaymentsPage extends Component {
                 nameInstructor: nameInstructor,
                 payments: payments,
             });
-
-            console.log(this.state);
 
         }
     };
