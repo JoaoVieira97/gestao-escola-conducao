@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import { Container, Header, Table, Menu, Icon, Grid, Dropdown } from 'semantic-ui-react';
+import {fetchApi} from "../../services/api";
 
 
 class PaymentsPage extends Component {
@@ -8,10 +9,36 @@ class PaymentsPage extends Component {
         super(props);
 
         this.state = {
+            isLoading: true,
+            allRegisters: [],
             payments: [],
-            categories: [],
+            allCategories: [],
+            categoryChoosed: {
+                key: 'A',
+                text: 'A',
+                value: 'A',
+            },
+            dateSubscription: '',
+            dateLimit: '',
+            theoreticalLessons: 0,
+            practicalLessons: 0,
+            nameInstructor: '',
         }
     };
+
+    componentDidMount() {
+
+        fetchApi(
+            'get','/student/registers?id=1', //TODO Find userID
+            {},  {},
+            this.successHandler, this.errorHandler
+        );
+
+        setTimeout(()=>{
+            this.setState({isLoading: false});
+        }, 1000);
+    }
+
 
     componentWillMount() {
 
@@ -32,31 +59,83 @@ class PaymentsPage extends Component {
             },
         ];
 
-        let categories = [
-            {
-                key: 'Categoria A',
-                text: 'Categoria A',
-                value: 'Categoria A',
-            }
-        ];
-
         this.setState({
             payments: payments,
-            categories: categories
         })
     }
 
+
+
+    /**
+     * Handle the response.
+     * @param response
+     */
+    successHandler = (response) => {
+
+        if (response.success) {
+            //key -> registers.id
+
+
+            let categoriesRegister = response.registers.map(register => (register.category));
+
+            let categories = categoriesRegister.map( category => {
+                return {
+                    key: "Categoria " + category.id + category.name,
+                    value: "Categoria " + category.name,
+                    text: "Categoria " + category.name,
+                }
+            });
+
+            //VALORES PARA A CATEGORIA INICIAL
+            let dateSubscription = response.registers[0].initialDate;
+            let dateLimit = '20/10/2019';
+            let theoreticalLessons = categoriesRegister[0].theoreticalLessons;
+            let practicalLessons = categoriesRegister[0].practicalLessons;
+            let nameInstructor = response.registers[0].instructor.firstName + " " + response.registers[0].instructor.lastName;
+
+            //collection ou iterator??
+            let payments = response.registers[0].payments.collection.map( payment => {
+
+                return {
+                    id: payment.id,
+                    value: payment.value,
+                    timestamp: payment.timestamp,
+                }
+            });
+
+            this.setState({
+                allRegisters: response.registers,
+                allCategories: categories,
+                categoryChoosed: categories[0],
+                dateSubscription: dateSubscription,
+                dateLimit: dateLimit,
+                theoreticalLessons: theoreticalLessons,
+                practicalLessons: practicalLessons,
+                nameInstructor: nameInstructor,
+                payments: payments,
+            });
+
+            console.log(this.state);
+
+        }
+    };
+
+    /**
+     * Handle the error.
+     * @param error
+     */
+    errorHandler = (error) => {
+
+        console.log(error);
+    };
 
     render() {
 
         const payments = (
             this.state.payments.map(payment => (
                 <Table.Row key={payment.id}>
-                    <Table.Cell>{payment.date}</Table.Cell>
-                    <Table.Cell>
-                        {payment.paid === true ? <Icon name='check' color='green'/> : <Icon name='times' color='red'/> }
-                    </Table.Cell>
-                    <Table.Cell>{payment.description}</Table.Cell>
+                    <Table.Cell>{payment.timestamp}</Table.Cell>
+                    <Table.Cell> ... </Table.Cell>
                     <Table.Cell>{payment.value}€</Table.Cell>
                 </Table.Row>
             )
@@ -73,29 +152,30 @@ class PaymentsPage extends Component {
                             </Header>
                             <Header as='h3' textAlign='left'>
                                 Categoria: <Dropdown
-                                placeholder='Seleciona uma categoria'
+                                placeholder="Selecione uma categoria"
                                 selection
                                 clearable
-                                options={this.state.categories}
+                                options={this.state.allCategories}
+                                //defaultValue={this.state.categoryChoosed.value} NAO ESTÁ A DAR??
+                                //onChange={this.handleChange}
                             />
                             </Header>
 
                             <Header as='h3' textAlign={'left'}>
-                                Inscrição a: 20/10/2018
+                                Inscrição a: {this.state.dateSubscription}
                             </Header>
-                            <Header as='h3' textAlign={'left'}>Validade até:</Header>
-                            <Header as='h3' textAlign={'left'}>Aulas teóricas realizadas:</Header>
-                            <Header as='h3' textAlign={'left'}>Aulas práticas realizadas:</Header>
-                            <Header as='h3' textAlign={'left'}>Instrutor atual:</Header>
-                            <Header as='h3' textAlign={'left'}>Registo de exames:</Header>
+                            <Header as='h3' textAlign={'left'}>Validade até: {this.state.dateLimit}</Header>
+                            <Header as='h3' textAlign={'left'}>Aulas teóricas realizadas: x / {this.state.theoreticalLessons}</Header>
+                            <Header as='h3' textAlign={'left'}>Aulas práticas realizadas: y / {this.state.practicalLessons}</Header>
+                            <Header as='h3' textAlign={'left'}>Instrutor atual: {this.state.nameInstructor}</Header>
+                            <Header as='h3' textAlign={'left'}>Registo de exames: ... </Header>
                         </Container>
                     </Grid.Column>
                     <Grid.Column width={8} style={{marginTop:50}}>
-                        <Table fluid="true" striped stackable padded='very' verticalAlign='bottom'>
+                        <Table inverted fluid="true" striped stackable padded='very' verticalAlign='bottom'>
                             <Table.Header>
                                 <Table.Row>
-                                    <Table.HeaderCell>Data Limite</Table.HeaderCell>
-                                    <Table.HeaderCell>Pago?</Table.HeaderCell>
+                                    <Table.HeaderCell>Data Pagamento</Table.HeaderCell>
                                     <Table.HeaderCell>Descrição</Table.HeaderCell>
                                     <Table.HeaderCell>Valor</Table.HeaderCell>
                                 </Table.Row>
