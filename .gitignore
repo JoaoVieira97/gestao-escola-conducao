@@ -304,3 +304,4 @@ nb-configuration.xml
 
 dsm-backend/out
 docs/vpp/*.bak*
+docs/redis/.*

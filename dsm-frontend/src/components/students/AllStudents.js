@@ -57,14 +57,11 @@ class AllStudents extends Component {
      */
     successHandler = (response) => {
 
-        if (response.success) {
-
-            this.setState({
-                allStudents: response.students,
-                students: response.students,
-                totalCount: response.students.length
-            });
-        }
+        this.setState({
+            allStudents: response.data.students,
+            students: response.data.students,
+            totalCount: response.data.students.length
+        });
     };
 
     /**

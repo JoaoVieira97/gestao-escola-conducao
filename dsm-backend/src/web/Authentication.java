@@ -46,20 +46,18 @@ public class Authentication extends HttpServlet {
             // ------------------------------------------------------------
             String userType = DSMFacade.login(email, Utils.hash(password));
             if(userType != null) {
-
-                // TODO: fix userToken and generate one for each user
-                responseNode.put("success", true);
                 responseNode.put("userType", userType);
-                responseNode.put("userToken", "CCSvi6C1pG6m6QK5y4daChr3epgLZvHs");
+                responseNode.put("userToken", Utils.generateRandomToken());
+                response.setStatus(HttpServletResponse.SC_OK);
             }
             else {
-                responseNode.put("success", false);
                 responseNode.put("error", "Wrong credentials");
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             }
         }
         else {
-            responseNode.put("success", false);
-            responseNode.put("error", "Wrong access token");
+            responseNode.put("error", "Invalid API access token.");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
 
         response.setContentType("application/json;charset=UTF-8");

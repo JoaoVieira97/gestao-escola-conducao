@@ -6,7 +6,7 @@ import {
     Container,
     Sidebar, Menu, Icon
 } from 'semantic-ui-react';
-import Authentication from "./authentication/Authentication";
+import Authentication from '../services/session/Authentication';
 import {headerStyle} from "../styles/styles";
 
 const StudentItemsWeb = (handleLogout) => {

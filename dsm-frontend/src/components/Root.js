@@ -11,7 +11,7 @@ import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import 'semantic-ui-css/semantic.min.css'
 
 // Authentication
-import Authentication from './authentication/Authentication';
+import Authentication from '../services/session/Authentication';
 
 // Components
 import Header from "./Header";
@@ -30,7 +30,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
     <Route
         {...rest}
         render={props =>
-            !Authentication.isAuthenticated() ? (
+            Authentication.isAuthenticated() ? (
                 <Component {...props} />
             ) : (
                 <Redirect to={{ pathname: "/login", state: { from: props.location } }} />
@@ -73,7 +73,7 @@ const Root = ({ store }) => {
     };
 
     let content;
-    const userType = localStorage.getItem('userType');
+    const userType = Authentication.getUserType();
     switch (userType) {
         case 'ROLE_STUDENT':
             content = routesByUser.student;

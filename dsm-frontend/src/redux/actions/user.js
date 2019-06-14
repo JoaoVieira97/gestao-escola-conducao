@@ -6,9 +6,10 @@ export function clearUserState() {
     }
 }
 
-export function setUserToken(token) {
+export function setUserTokenAndType(userToken, userType) {
     return {
-        type: 'SET_USER_TOKEN',
-        token: token
+        type: 'SET_USER_TOKEN_AND_TYPE',
+        userToken: userToken,
+        userType: userType
     }
 }

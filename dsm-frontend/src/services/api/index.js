@@ -17,7 +17,7 @@ export const fetchApi = (
             ...headers
         }
     }).then(response => {
-        successHandler(response.data);
+        successHandler(response);
     }).catch(error => {
         errorHandler(error);
     });

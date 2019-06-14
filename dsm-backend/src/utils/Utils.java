@@ -1,15 +1,18 @@
 package utils;
 
 import dsm.DSMPersistentManager;
+import org.orm.PersistentException;
 import org.orm.PersistentSession;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.security.MessageDigest;
 
+import java.util.UUID;
+
 public class Utils {
 
-    private final static String TOKEN = "qnHuUp4iXL6dmzymkcOa6iGLYAwsnURP";
+    private final static String API_TOKEN = "qnHuUp4iXL6dmzymkcOa6iGLYAwsnURP";
 
     /**
      * Request access token validation.
@@ -17,7 +20,7 @@ public class Utils {
     public static boolean accessTokenValidation(HttpServletRequest request) {
 
         String accessToken = request.getHeader("Authorization");
-        return accessToken.equals(TOKEN);
+        return accessToken.equals(API_TOKEN);
     }
 
     /**
@@ -38,9 +41,49 @@ public class Utils {
     }
 
     /**
+     * Generate a random user token.
+     * @return random token
+     */
+    public static String generateRandomToken() {
+
+        return UUID.randomUUID().toString().replace("-", "");
+    }
+
+    /**
+     * Get a new session if needed.
+     * @param session
+     * @return PersistentSession
+     */
+    public static PersistentSession getSession(PersistentSession session) {
+        if (session == null) {
+            try {
+                session = DSMPersistentManager.instance().getSession();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return session;
+    }
+
+    /**
+     * Get a new session if needed.
+     * @return PersistentSession
+     */
+    public static PersistentSession getSession() {
+
+        try {
+            return DSMPersistentManager.instance().getSession();
+        } catch (PersistentException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    /**
      * Get a new session if needed.
      * @param request
-     * @return
+     * @return PersistentSession
      */
     public static PersistentSession getSession(HttpServletRequest request) {
 

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {Button, Form, Message} from 'semantic-ui-react'
 import {fetchApi} from "../../services/api";
+import Authentication from "../../services/session/Authentication";
 
 class LoginPage extends Component {
 
@@ -51,27 +52,10 @@ class LoginPage extends Component {
      */
     successHandler = (response) => {
 
-        console.log(response);
-        if (response.success) {
+        Authentication.login(response.data, this.state.rememberMe);
 
-            if(this.state.rememberMe) {
-                localStorage.setItem('userToken', response.userToken);
-                localStorage.setItem('userType', response.userType);
-            }
-
-            // TODO: set redux instead
-            localStorage.setItem('userToken', response.userToken);
-            localStorage.setItem('userType', response.userType);
-
-            this.props.history.push('/home');
-            window.location.reload();
-        }
-        else {
-            this.setState({
-                loginError: true,
-                loginErrorMessage: 'As credenciais que introduziu estão erradas.'
-            });
-        }
+        this.props.history.push('/home');
+        window.location.reload();
     };
 
     /**
@@ -80,11 +64,20 @@ class LoginPage extends Component {
      */
     errorHandler = (error) => {
 
-        console.log(error);
-        this.setState({
-            loginError: true,
-            loginErrorMessage: 'Ocorreu um erro ao estabelecer conexão com o servidor principal.'
-        });
+        // bad request
+        if(error.response.status === 400) {
+            this.setState({
+                loginError: true,
+                loginErrorMessage: 'As credenciais que introduziu estão erradas.'
+            });
+        }
+        // invalid API access token
+        else {
+            this.setState({
+                loginError: true,
+                loginErrorMessage: 'Ocorreu um erro ao estabelecer conexão com o servidor principal.'
+            });
+        }
     };
 
 
@@ -155,7 +148,7 @@ class LoginPage extends Component {
                                     <input
                                         type="checkbox"
                                         name={"rememberMe"}
-                                        defaultChecked={true}
+                                        defaultChecked={this.state.rememberMe}
                                         onChange={this.handleInputChange}
                                         tabIndex="0"
                                     />

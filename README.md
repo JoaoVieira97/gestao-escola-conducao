@@ -72,6 +72,7 @@ sh RunCreateDSMDatabaseSchema.sh
 ```
 
 - open IntellIj IDEA and prepare your env:
+
   - Setup **GlassFish** or WildFly server (File > Settings > Build ... > Application Servers)
   - Define output folder for compile and artifact files:
     - (File > Project Structure > Project
@@ -85,3 +86,22 @@ sh RunCreateDSMDatabaseSchema.sh
     - `+` > Web Application:Exploded > From Modules
   - Press `Apply` and `OK`
   - Now you just need to setup your `Edit Configurations` on top right menu
+
+- go to `dsm-deploy/redis` and build the docker image (JUST ONCE):
+
+  ```bash
+  docker build --tag=dsm-redis .
+  docker image ls
+  ```
+
+- if the image exist, you can now run the container:
+
+  ```bash
+  docker run dsm-redis
+  ```
+
+- press `CRTL-C` to kill the process and check if container has Exited:
+
+  ```bash
+  docker ps -a
+  ```
