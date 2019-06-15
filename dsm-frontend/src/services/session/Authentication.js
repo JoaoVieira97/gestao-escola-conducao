@@ -1,6 +1,5 @@
 import store from '../../redux/store';
 import { clearUserState, setUserTokenAndType } from "../../redux/actions/user";
-import {push} from 'connected-react-router';
 
 export default class Authentication {
 
@@ -59,10 +58,6 @@ export default class Authentication {
             // add on redux
             store.dispatch(
                 setUserTokenAndType(data.userToken, data.userType),
-            );
-
-            store.dispatch(
-                push('/home')
             );
 
             console.log(store.getState());

@@ -13,11 +13,7 @@ class PaymentsPage extends Component {
             allRegisters: [],
             payments: [],
             allCategories: [],
-            categoryChoosed: {
-                key: 'A',
-                text: 'A',
-                value: 'A',
-            },
+            categoryChoosed: {},
             dateSubscription: '',
             dateLimit: '',
             theoreticalLessons: 0,
@@ -44,47 +40,50 @@ class PaymentsPage extends Component {
      * @param response
      */
     successHandler = (response) => {
+        const data = response.data;
 
-        if (response.success) {
+        //Verify sucess on other way
+        if (data.success) {
             //key -> registers.id
 
-            let categoriesRegister = response.registers.map(register => (register.category));
+            let categoriesRegister = data.registers.map(register => (register.category));
 
             let categories = categoriesRegister.map( category => {
                 return {
-                    key: "Categoria " + category.id + category.name,
+                    key: "Categoria " + category.id + " " + category.name,
                     value: "Categoria " + category.name,
                     text: "Categoria " + category.name,
                 }
             });
 
+            /*
             //VALORES PARA A CATEGORIA INICIAL
-            let dateSubscription = response.registers[0].initialDate;
+            let dateSubscription = data.registers[0].initialDate;
             let dateLimit = '20/10/2019';
             let theoreticalLessons = categoriesRegister[0].theoreticalLessons;
             let practicalLessons = categoriesRegister[0].practicalLessons;
-            let nameInstructor = response.registers[0].instructor.firstName + " " + response.registers[0].instructor.lastName;
+            let nameInstructor = data.registers[0].instructor.firstName + " " + data.registers[0].instructor.lastName;
 
             //collection ou iterator??
-            let payments = response.registers[0].payments.collection.map( payment => {
+            let payments = data.registers[0].payments.collection.map( payment => {
 
                 return {
                     id: payment.id,
                     value: payment.value,
                     timestamp: payment.timestamp,
                 }
-            });
+            });*/
 
             this.setState({
-                allRegisters: response.registers,
+                allRegisters: data.registers,
                 allCategories: categories,
-                categoryChoosed: categories[0],
-                dateSubscription: dateSubscription,
-                dateLimit: dateLimit,
-                theoreticalLessons: theoreticalLessons,
-                practicalLessons: practicalLessons,
-                nameInstructor: nameInstructor,
-                payments: payments,
+                //categoryChoosed: categories[0],
+                //dateSubscription: dateSubscription,
+                //dateLimit: dateLimit,
+                //theoreticalLessons: theoreticalLessons,
+                //practicalLessons: practicalLessons,
+                //nameInstructor: nameInstructor,
+                //payments: payments,
             });
 
         }
@@ -97,6 +96,58 @@ class PaymentsPage extends Component {
     errorHandler = (error) => {
 
         console.log(error);
+    };
+
+    handleChange = (event, data) => {
+
+        if(data.value){
+
+            let categoryChoosed = this.state.allCategories.filter(category => (category.value === data.value));
+
+            let categoryId = (categoryChoosed[0].key.split(" "))[1];
+            categoryId = parseInt(categoryId,10);
+
+            let registerChoosed = this.state.allRegisters.filter(register => (register.category.id === categoryId));
+
+            let dateSubscription = registerChoosed[0].initialDate;
+            let dateLimit = '20/10/2019';
+            let theoreticalLessons = registerChoosed[0].category.theoreticalLessons;
+            let practicalLessons = registerChoosed[0].category.practicalLessons;
+            let nameInstructor = registerChoosed[0].instructor.firstName + " " + registerChoosed[0].instructor.lastName;
+
+            //collection ou iterator??
+            let payments = registerChoosed[0].payments.collection.map( payment => {
+
+                return {
+                    id: payment.id,
+                    value: payment.value,
+                    timestamp: payment.timestamp,
+                }
+            });
+
+            this.setState({
+                //categoryChoosed: registerChoosed[0].category,
+                dateSubscription: dateSubscription,
+                dateLimit: dateLimit,
+                theoreticalLessons: theoreticalLessons,
+                practicalLessons: practicalLessons,
+                nameInstructor: nameInstructor,
+                payments: payments,
+            });
+        }
+        else{
+            this.setState({
+                //categoryChoosed: registerChoosed[0].category,
+                dateSubscription: '',
+                dateLimit: '',
+                theoreticalLessons: 0,
+                practicalLessons: 0,
+                nameInstructor: '',
+                payments: [],
+            });
+
+        }
+
     };
 
     render() {
@@ -126,8 +177,8 @@ class PaymentsPage extends Component {
                                 selection
                                 clearable
                                 options={this.state.allCategories}
-                                //defaultValue={this.state.categoryChoosed.value} NAO ESTÁ A DAR??
-                                //onChange={this.handleChange}
+                                //defaultValue={this.state.categoryChoosed.value}
+                                onChange={this.handleChange}
                             />
                             </Header>
 
