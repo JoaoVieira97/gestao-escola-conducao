@@ -1,16 +1,15 @@
 package beans;
 
-import dsm.PersonalAnnouncement;
-import dsm.Register;
-import dsm.Student;
-import dsm.StudentDAO;
+import dsm.*;
 import org.orm.PersistentException;
 import org.orm.PersistentSession;
 import utils.Utils;
 
 import javax.ejb.Stateless;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Stateless(name = "StudentBean")
 public class StudentBean implements StudentBeanLocal {
@@ -60,6 +59,29 @@ public class StudentBean implements StudentBeanLocal {
 
         return null;
 
+    }
+
+    @Override
+    public List<Lesson> getStudentNextPracticalLessons(int studentID) {
+
+        try {
+
+            Student student = (Student) StudentDAO.getStudentByORMID(session, studentID);
+            if (student != null) {
+                List<Lesson> lessons = Arrays.asList(student.lessons.toArray());
+                List<Lesson> pratical_lessons = lessons.stream()
+                                                       .filter(l -> l instanceof PracticalLesson && l.getStartTime().after(new Date()))
+                                                       .collect(Collectors.toList());
+
+                return pratical_lessons;
+
+            }
+
+        } catch (PersistentException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
 }

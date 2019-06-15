@@ -48,6 +48,7 @@ public class UserBean implements UserBeanLocal {
         return null;
     }
 
+    @Override
     public List<Announcement> getAnnouncements(){
 
         try {

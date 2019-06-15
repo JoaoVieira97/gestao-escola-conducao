@@ -101,6 +101,14 @@ public class DSMFacade {
     }
 
     /**
+     * Get the list of next practical lessons of a specific student.
+     */
+    public static List<Lesson> getStudentNextPracticalLessons(int studentId){
+
+        return studentBean.getStudentNextPracticalLessons(studentId);
+    }
+
+    /**
      * Get the list of general announcements
      */
     public static List<Announcement> getAnnouncements(){
