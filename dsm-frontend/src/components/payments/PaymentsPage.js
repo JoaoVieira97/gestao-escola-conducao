@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Container, Header, Table, Menu, Icon, Grid, Dropdown } from 'semantic-ui-react';
+import {Container, Header, Table, Menu, Icon, Grid, Dropdown, Loader, Dimmer} from 'semantic-ui-react';
 import {fetchApi} from "../../services/api";
 
 
@@ -16,9 +16,14 @@ class PaymentsPage extends Component {
             categoryChoosed: {},
             dateSubscription: '',
             dateLimit: '',
-            theoreticalLessons: 0,
-            practicalLessons: 0,
+            totalTheoreticalLessons: 0,
+            theoreticalRealized: [],
+            numberTheoreticalRealized: 0,
+            totalPracticalLessons: 0,
+            practicalRealized: [],
+            numberPracticalRealized: 0,
             nameInstructor: '',
+            actualPaid: 0,
         }
     };
 
@@ -27,19 +32,27 @@ class PaymentsPage extends Component {
         fetchApi(
             'get','/student/registers?id=1', //TODO Find userID
             {},  {},
-            this.successHandler, this.errorHandler
+            this.successFetchRegisters, this.errorHandler
         );
 
+
+        fetchApi(
+            'get','/lessons/student?id=1', //TODO Find userID
+            {},  {},
+            this.successFetchLessons, this.errorHandler
+        );
+
+        /*
         setTimeout(()=>{
             this.setState({isLoading: false});
-        }, 1000);
+        }, 1000); */
     }
 
     /**
-     * Handle the response.
+     * Handle the response fetch registers.
      * @param response
      */
-    successHandler = (response) => {
+    successFetchRegisters = (response) => {
         const data = response.data;
 
         //Verify sucess on other way
@@ -50,7 +63,7 @@ class PaymentsPage extends Component {
 
             let categories = categoriesRegister.map( category => {
                 return {
-                    key: "Categoria " + category.id + " " + category.name,
+                    key: category.id,
                     value: "Categoria " + category.name,
                     text: "Categoria " + category.name,
                 }
@@ -77,17 +90,29 @@ class PaymentsPage extends Component {
             this.setState({
                 allRegisters: data.registers,
                 allCategories: categories,
-                //categoryChoosed: categories[0],
-                //dateSubscription: dateSubscription,
-                //dateLimit: dateLimit,
-                //theoreticalLessons: theoreticalLessons,
-                //practicalLessons: practicalLessons,
-                //nameInstructor: nameInstructor,
-                //payments: payments,
             });
 
         }
     };
+
+
+    successFetchLessons = (response) => {
+        const data = response.data;
+
+        //Verify sucess on other way
+        if (data.success) {
+            this.setState({
+                theoreticalRealized : data.theoreticalLessons,
+                practicalRealized : data.practicalLessons,
+            });
+        }
+
+        //stop loading
+        setTimeout(()=>{
+            this.setState({isLoading: false});
+        }, 1000);
+    };
+
 
     /**
      * Handle the error.
@@ -103,9 +128,7 @@ class PaymentsPage extends Component {
         if(data.value){
 
             let categoryChoosed = this.state.allCategories.filter(category => (category.value === data.value));
-
-            let categoryId = (categoryChoosed[0].key.split(" "))[1];
-            categoryId = parseInt(categoryId,10);
+            let categoryId = categoryChoosed[0].key;
 
             let registerChoosed = this.state.allRegisters.filter(register => (register.category.id === categoryId));
 
@@ -117,7 +140,6 @@ class PaymentsPage extends Component {
 
             //collection ou iterator??
             let payments = registerChoosed[0].payments.collection.map( payment => {
-
                 return {
                     id: payment.id,
                     value: payment.value,
@@ -125,14 +147,31 @@ class PaymentsPage extends Component {
                 }
             });
 
+            let actualPaid = payments.reduce( (acc, payment) => acc + payment.value, 0);
+
+            let categoriesPracticalRealized = this.state.practicalRealized.map( practLesson => (
+                practLesson.categories.collection));
+
+            let practicalRealized = categoriesPracticalRealized.map( category => (
+               category.filter( cat => (cat.id === categoryId))));
+
+            let categoriesTheoreticalRealized = this.state.theoreticalRealized.map( theoLesson => (
+                theoLesson.categories.collection));
+
+            let theoreticalRealized = categoriesTheoreticalRealized.map( category =>
+                    (category.filter( cat => (cat.id === categoryId))));
+
             this.setState({
                 //categoryChoosed: registerChoosed[0].category,
                 dateSubscription: dateSubscription,
                 dateLimit: dateLimit,
-                theoreticalLessons: theoreticalLessons,
-                practicalLessons: practicalLessons,
+                totalTheoreticalLessons: theoreticalLessons,
+                totalPracticalLessons: practicalLessons,
                 nameInstructor: nameInstructor,
                 payments: payments,
+                numberPracticalRealized: practicalRealized.length,
+                numberTheoreticalRealized: theoreticalRealized.length,
+                actualPaid: actualPaid,
             });
         }
         else{
@@ -140,10 +179,13 @@ class PaymentsPage extends Component {
                 //categoryChoosed: registerChoosed[0].category,
                 dateSubscription: '',
                 dateLimit: '',
-                theoreticalLessons: 0,
-                practicalLessons: 0,
+                totalTheoreticalLessons: 0,
+                numberPracticalRealized: 0,
+                numberTheoreticalRealized: 0,
+                totalPracticalLessons: 0,
                 nameInstructor: '',
                 payments: [],
+                actualPaid: 0,
             });
 
         }
@@ -164,6 +206,9 @@ class PaymentsPage extends Component {
 
         return (
             <Container>
+                <Dimmer inverted active={this.state.isLoading}>
+                    <Loader>A carregar</Loader>
+                </Dimmer>
                 <Grid columns={2} stackable>
                     <Grid.Column width={8} >
                         <Container textAlign={'center'}>
@@ -186,8 +231,8 @@ class PaymentsPage extends Component {
                                 Inscrição a: {this.state.dateSubscription}
                             </Header>
                             <Header as='h3' textAlign={'left'}>Validade até: {this.state.dateLimit}</Header>
-                            <Header as='h3' textAlign={'left'}>Aulas teóricas realizadas: x / {this.state.theoreticalLessons}</Header>
-                            <Header as='h3' textAlign={'left'}>Aulas práticas realizadas: y / {this.state.practicalLessons}</Header>
+                            <Header as='h3' textAlign={'left'}>Aulas teóricas realizadas: {this.state.numberTheoreticalRealized} / {this.state.totalTheoreticalLessons}</Header>
+                            <Header as='h3' textAlign={'left'}>Aulas práticas realizadas: {this.state.numberPracticalRealized} / {this.state.totalPracticalLessons}</Header>
                             <Header as='h3' textAlign={'left'}>Instrutor atual: {this.state.nameInstructor}</Header>
                             <Header as='h3' textAlign={'left'}>Registo de exames: ... </Header>
                         </Container>
@@ -209,7 +254,7 @@ class PaymentsPage extends Component {
                             <Table.Footer>
                                 <Table.Row>
                                     <Table.HeaderCell colSpan='4'>
-                                        <Header as='h3' textAlign={'right'}>Valor: 100€ / 500 €</Header>
+                                        <Header as='h3' textAlign={'right'}>Valor: {this.state.actualPaid}€ / 500 €</Header>
                                     </Table.HeaderCell>
                                 </Table.Row>
                                 <Table.Row>
