@@ -24,6 +24,7 @@ public class PaymentDetachedCriteria extends AbstractORMDetachedCriteria {
 	public final AssociationExpression secretary;
 	public final DoubleExpression value;
 	public final DateExpression timestamp;
+	public final StringExpression description;
 	
 	public PaymentDetachedCriteria() {
 		super(dsm.Payment.class, dsm.PaymentCriteria.class);
@@ -32,6 +33,7 @@ public class PaymentDetachedCriteria extends AbstractORMDetachedCriteria {
 		secretary = new AssociationExpression("secretary", this.getDetachedCriteria());
 		value = new DoubleExpression("value", this.getDetachedCriteria());
 		timestamp = new DateExpression("timestamp", this.getDetachedCriteria());
+		description = new StringExpression("description", this.getDetachedCriteria());
 	}
 	
 	public PaymentDetachedCriteria(DetachedCriteria aDetachedCriteria) {
@@ -41,6 +43,7 @@ public class PaymentDetachedCriteria extends AbstractORMDetachedCriteria {
 		secretary = new AssociationExpression("secretary", this.getDetachedCriteria());
 		value = new DoubleExpression("value", this.getDetachedCriteria());
 		timestamp = new DateExpression("timestamp", this.getDetachedCriteria());
+		description = new StringExpression("description", this.getDetachedCriteria());
 	}
 	
 	public SecretaryDetachedCriteria createSecretaryCriteria() {

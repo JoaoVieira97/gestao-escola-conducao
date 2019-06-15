@@ -10,8 +10,9 @@ License Type: Academic
 			<generator class="increment">
 			</generator>
 		</id>
+		<property name="name" column="Name" type="string" length="255" not-null="false" lazy="false"/>
 		<property name="practicalLessons" column="PracticalLessons" type="integer" length="10" not-null="true" lazy="false"/>
 		<property name="theoreticalLessons" column="TheoreticalLessons" type="integer" length="10" not-null="true" lazy="false"/>
-		<property name="name" column="Name" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="price" column="Price" type="float" not-null="true" lazy="false"/>
 	</class>
 </hibernate-mapping>

@@ -14,5 +14,6 @@ License Type: Academic
 		</many-to-one>
 		<property name="value" column="Value" type="double" not-null="true" lazy="false"/>
 		<property name="timestamp" column="Timestamp" type="date" not-null="false" lazy="false"/>
+		<property name="description" column="Description" type="string" length="255" not-null="false" lazy="false"/>
 	</class>
 </hibernate-mapping>

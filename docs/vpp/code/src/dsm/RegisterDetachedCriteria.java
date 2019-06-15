@@ -20,20 +20,20 @@ import org.orm.criteria.*;
 
 public class RegisterDetachedCriteria extends AbstractORMDetachedCriteria {
 	public final IntegerExpression ID;
-	public final IntegerExpression categoryId;
-	public final AssociationExpression category;
 	public final IntegerExpression instructorId;
 	public final AssociationExpression instructor;
+	public final IntegerExpression categoryId;
+	public final AssociationExpression category;
 	public final DateExpression initialDate;
 	public final CollectionExpression payments;
 	
 	public RegisterDetachedCriteria() {
 		super(dsm.Register.class, dsm.RegisterCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
-		categoryId = new IntegerExpression("category.ID", this.getDetachedCriteria());
-		category = new AssociationExpression("category", this.getDetachedCriteria());
 		instructorId = new IntegerExpression("instructor.", this.getDetachedCriteria());
 		instructor = new AssociationExpression("instructor", this.getDetachedCriteria());
+		categoryId = new IntegerExpression("category.ID", this.getDetachedCriteria());
+		category = new AssociationExpression("category", this.getDetachedCriteria());
 		initialDate = new DateExpression("initialDate", this.getDetachedCriteria());
 		payments = new CollectionExpression("ORM_Payments", this.getDetachedCriteria());
 	}
@@ -41,20 +41,20 @@ public class RegisterDetachedCriteria extends AbstractORMDetachedCriteria {
 	public RegisterDetachedCriteria(DetachedCriteria aDetachedCriteria) {
 		super(aDetachedCriteria, dsm.RegisterCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
-		categoryId = new IntegerExpression("category.ID", this.getDetachedCriteria());
-		category = new AssociationExpression("category", this.getDetachedCriteria());
 		instructorId = new IntegerExpression("instructor.", this.getDetachedCriteria());
 		instructor = new AssociationExpression("instructor", this.getDetachedCriteria());
+		categoryId = new IntegerExpression("category.ID", this.getDetachedCriteria());
+		category = new AssociationExpression("category", this.getDetachedCriteria());
 		initialDate = new DateExpression("initialDate", this.getDetachedCriteria());
 		payments = new CollectionExpression("ORM_Payments", this.getDetachedCriteria());
 	}
 	
-	public CategoryDetachedCriteria createCategoryCriteria() {
-		return new CategoryDetachedCriteria(createCriteria("category"));
-	}
-	
 	public InstructorDetachedCriteria createInstructorCriteria() {
 		return new InstructorDetachedCriteria(createCriteria("instructor"));
+	}
+	
+	public CategoryDetachedCriteria createCategoryCriteria() {
+		return new CategoryDetachedCriteria(createCriteria("category"));
 	}
 	
 	public PaymentDetachedCriteria createPaymentsCriteria() {

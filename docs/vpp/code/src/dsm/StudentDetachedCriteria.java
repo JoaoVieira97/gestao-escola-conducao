@@ -20,8 +20,7 @@ import org.orm.criteria.*;
 
 public class StudentDetachedCriteria extends AbstractORMDetachedCriteria {
 	public final IntegerExpression ID;
-	public final StringExpression firstName;
-	public final StringExpression lastName;
+	public final StringExpression name;
 	public final StringExpression email;
 	public final StringExpression password;
 	public final StringExpression role;
@@ -29,16 +28,15 @@ public class StudentDetachedCriteria extends AbstractORMDetachedCriteria {
 	public final StringExpression cc;
 	public final StringExpression address;
 	public final DateExpression birth;
-	public final CollectionExpression exams;
-	public final CollectionExpression announcements;
 	public final CollectionExpression lessons;
 	public final CollectionExpression registers;
+	public final CollectionExpression announcements;
+	public final CollectionExpression exams;
 	
 	public StudentDetachedCriteria() {
 		super(dsm.Student.class, dsm.StudentCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
-		firstName = new StringExpression("firstName", this.getDetachedCriteria());
-		lastName = new StringExpression("lastName", this.getDetachedCriteria());
+		name = new StringExpression("name", this.getDetachedCriteria());
 		email = new StringExpression("email", this.getDetachedCriteria());
 		password = new StringExpression("password", this.getDetachedCriteria());
 		role = new StringExpression("role", this.getDetachedCriteria());
@@ -46,17 +44,16 @@ public class StudentDetachedCriteria extends AbstractORMDetachedCriteria {
 		cc = new StringExpression("cc", this.getDetachedCriteria());
 		address = new StringExpression("address", this.getDetachedCriteria());
 		birth = new DateExpression("birth", this.getDetachedCriteria());
-		exams = new CollectionExpression("ORM_Exams", this.getDetachedCriteria());
-		announcements = new CollectionExpression("ORM_Announcements", this.getDetachedCriteria());
 		lessons = new CollectionExpression("ORM_Lessons", this.getDetachedCriteria());
 		registers = new CollectionExpression("ORM_Registers", this.getDetachedCriteria());
+		announcements = new CollectionExpression("ORM_Announcements", this.getDetachedCriteria());
+		exams = new CollectionExpression("ORM_Exams", this.getDetachedCriteria());
 	}
 	
 	public StudentDetachedCriteria(DetachedCriteria aDetachedCriteria) {
 		super(aDetachedCriteria, dsm.StudentCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
-		firstName = new StringExpression("firstName", this.getDetachedCriteria());
-		lastName = new StringExpression("lastName", this.getDetachedCriteria());
+		name = new StringExpression("name", this.getDetachedCriteria());
 		email = new StringExpression("email", this.getDetachedCriteria());
 		password = new StringExpression("password", this.getDetachedCriteria());
 		role = new StringExpression("role", this.getDetachedCriteria());
@@ -64,18 +61,10 @@ public class StudentDetachedCriteria extends AbstractORMDetachedCriteria {
 		cc = new StringExpression("cc", this.getDetachedCriteria());
 		address = new StringExpression("address", this.getDetachedCriteria());
 		birth = new DateExpression("birth", this.getDetachedCriteria());
-		exams = new CollectionExpression("ORM_Exams", this.getDetachedCriteria());
-		announcements = new CollectionExpression("ORM_Announcements", this.getDetachedCriteria());
 		lessons = new CollectionExpression("ORM_Lessons", this.getDetachedCriteria());
 		registers = new CollectionExpression("ORM_Registers", this.getDetachedCriteria());
-	}
-	
-	public ExamDetachedCriteria createExamsCriteria() {
-		return new ExamDetachedCriteria(createCriteria("ORM_Exams"));
-	}
-	
-	public PersonalAnnouncementDetachedCriteria createAnnouncementsCriteria() {
-		return new PersonalAnnouncementDetachedCriteria(createCriteria("ORM_Announcements"));
+		announcements = new CollectionExpression("ORM_Announcements", this.getDetachedCriteria());
+		exams = new CollectionExpression("ORM_Exams", this.getDetachedCriteria());
 	}
 	
 	public LessonDetachedCriteria createLessonsCriteria() {
@@ -84,6 +73,14 @@ public class StudentDetachedCriteria extends AbstractORMDetachedCriteria {
 	
 	public RegisterDetachedCriteria createRegistersCriteria() {
 		return new RegisterDetachedCriteria(createCriteria("ORM_Registers"));
+	}
+	
+	public PersonalAnnouncementDetachedCriteria createAnnouncementsCriteria() {
+		return new PersonalAnnouncementDetachedCriteria(createCriteria("ORM_Announcements"));
+	}
+	
+	public ExamDetachedCriteria createExamsCriteria() {
+		return new ExamDetachedCriteria(createCriteria("ORM_Exams"));
 	}
 	
 	public Student uniqueStudent(PersistentSession session) {

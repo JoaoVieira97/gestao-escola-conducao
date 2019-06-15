@@ -24,6 +24,7 @@ public class PaymentCriteria extends AbstractORMCriteria {
 	public final AssociationExpression secretary;
 	public final DoubleExpression value;
 	public final DateExpression timestamp;
+	public final StringExpression description;
 	
 	public PaymentCriteria(Criteria criteria) {
 		super(criteria);
@@ -32,6 +33,7 @@ public class PaymentCriteria extends AbstractORMCriteria {
 		secretary = new AssociationExpression("secretary", this);
 		value = new DoubleExpression("value", this);
 		timestamp = new DateExpression("timestamp", this);
+		description = new StringExpression("description", this);
 	}
 	
 	public PaymentCriteria(PersistentSession session) {

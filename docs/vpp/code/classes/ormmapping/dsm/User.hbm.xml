@@ -10,8 +10,7 @@ License Type: Academic
 			<generator class="increment">
 			</generator>
 		</id>
-		<property name="firstName" column="FirstName" type="string" length="255" not-null="false" lazy="false"/>
-		<property name="lastName" column="LastName" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="name" column="Name" type="string" length="255" not-null="false" lazy="false"/>
 		<property name="email" column="Email" type="string" length="255" not-null="false" lazy="false"/>
 		<property name="password" column="Password" type="string" length="255" not-null="false" lazy="false"/>
 		<property name="role" column="Role" type="string" length="255" not-null="false" lazy="false"/>
@@ -28,14 +27,6 @@ License Type: Academic
 			<property name="cc" column="Cc" type="string" length="255" not-null="false" lazy="false"/>
 			<property name="address" column="Address" type="string" length="255" not-null="false" lazy="false"/>
 			<property name="birth" column="Birth" type="date" not-null="false" lazy="false"/>
-			<set name="ORM_Exams" lazy="true" cascade="save-update,lock" inverse="false">
-				<key column="StudentUserID" not-null="true"/>
-				<one-to-many class="dsm.Exam"/>
-			</set>
-			<set name="ORM_Announcements" lazy="true" cascade="save-update,lock" inverse="false">
-				<key column="StudentUserID" not-null="true"/>
-				<one-to-many class="dsm.PersonalAnnouncement"/>
-			</set>
 			<set name="ORM_Lessons" table="Student_Lesson" lazy="true" cascade="save-update,lock">
 				<key column="StudentUserID" not-null="true"/>
 				<many-to-many column="LessonID" class="dsm.Lesson">
@@ -44,6 +35,14 @@ License Type: Academic
 			<set name="ORM_Registers" lazy="true" cascade="all-delete-orphan" inverse="false">
 				<key column="StudentUserID" not-null="true"/>
 				<one-to-many class="dsm.Register"/>
+			</set>
+			<set name="ORM_Announcements" lazy="true" cascade="all-delete-orphan" inverse="false">
+				<key column="StudentUserID" not-null="true"/>
+				<one-to-many class="dsm.PersonalAnnouncement"/>
+			</set>
+			<set name="ORM_Exams" lazy="true" cascade="all-delete-orphan" inverse="false">
+				<key column="StudentUserID" not-null="true"/>
+				<one-to-many class="dsm.Exam"/>
 			</set>
 		</joined-subclass>
 		<joined-subclass name="dsm.Instructor" table="Instructor" lazy="false">

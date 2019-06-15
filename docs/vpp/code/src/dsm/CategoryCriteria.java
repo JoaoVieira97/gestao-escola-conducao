@@ -20,16 +20,18 @@ import org.orm.criteria.*;
 
 public class CategoryCriteria extends AbstractORMCriteria {
 	public final IntegerExpression ID;
+	public final StringExpression name;
 	public final IntegerExpression practicalLessons;
 	public final IntegerExpression theoreticalLessons;
-	public final StringExpression name;
+	public final FloatExpression price;
 	
 	public CategoryCriteria(Criteria criteria) {
 		super(criteria);
 		ID = new IntegerExpression("ID", this);
+		name = new StringExpression("name", this);
 		practicalLessons = new IntegerExpression("practicalLessons", this);
 		theoreticalLessons = new IntegerExpression("theoreticalLessons", this);
-		name = new StringExpression("name", this);
+		price = new FloatExpression("price", this);
 	}
 	
 	public CategoryCriteria(PersistentSession session) {

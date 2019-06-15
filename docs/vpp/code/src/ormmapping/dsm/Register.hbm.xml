@@ -10,9 +10,9 @@ License Type: Academic
 			<generator class="increment">
 			</generator>
 		</id>
-		<many-to-one name="category" cascade="lock" column="CategoryID" class="dsm.Category" not-null="true" lazy="proxy" access="field">
+		<many-to-one name="instructor" cascade="lock" column="InstructorUserID" class="dsm.Instructor" not-null="true" lazy="proxy" access="field">
 		</many-to-one>
-		<many-to-one name="instructor" column="InstructorUserID" class="dsm.Instructor" cascade="save-update,lock" unique="true" not-null="true" lazy="proxy" access="field">
+		<many-to-one name="category" cascade="lock" column="CategoryID" class="dsm.Category" not-null="true" lazy="proxy" access="field">
 		</many-to-one>
 		<property name="initialDate" column="InitialDate" type="date" not-null="false" lazy="false"/>
 		<set name="ORM_Payments" lazy="true" cascade="all-delete-orphan" inverse="false">

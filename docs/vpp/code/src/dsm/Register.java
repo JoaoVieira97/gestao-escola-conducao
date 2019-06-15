@@ -26,12 +26,12 @@ public class Register {
 	}
 	
 	private void this_setOwner(Object owner, int key) {
-		if (key == ORMConstants.KEY_REGISTER_INSTRUCTOR) {
-			this.instructor = (dsm.Instructor) owner;
+		if (key == ORMConstants.KEY_REGISTER_CATEGORY) {
+			this.category = (dsm.Category) owner;
 		}
 		
-		else if (key == ORMConstants.KEY_REGISTER_CATEGORY) {
-			this.category = (dsm.Category) owner;
+		else if (key == ORMConstants.KEY_REGISTER_INSTRUCTOR) {
+			this.instructor = (dsm.Instructor) owner;
 		}
 	}
 	
@@ -48,9 +48,9 @@ public class Register {
 	
 	private int ID;
 	
-	private dsm.Category category;
-	
 	private dsm.Instructor instructor;
+	
+	private dsm.Category category;
 	
 	private java.util.Date initialDate;
 	
@@ -76,14 +76,6 @@ public class Register {
 		return initialDate;
 	}
 	
-	public void setInstructor(dsm.Instructor value) {
-		this.instructor = value;
-	}
-	
-	public dsm.Instructor getInstructor() {
-		return instructor;
-	}
-	
 	public void setCategory(dsm.Category value) {
 		this.category = value;
 	}
@@ -101,6 +93,14 @@ public class Register {
 	}
 	
 	public final dsm.PaymentSetCollection payments = new dsm.PaymentSetCollection(this, _ormAdapter, ORMConstants.KEY_REGISTER_PAYMENTS, ORMConstants.KEY_MUL_ONE_TO_MANY);
+	
+	public void setInstructor(dsm.Instructor value) {
+		this.instructor = value;
+	}
+	
+	public dsm.Instructor getInstructor() {
+		return instructor;
+	}
 	
 	public String toString() {
 		return String.valueOf(getID());

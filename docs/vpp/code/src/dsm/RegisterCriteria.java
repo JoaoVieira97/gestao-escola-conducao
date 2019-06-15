@@ -20,20 +20,20 @@ import org.orm.criteria.*;
 
 public class RegisterCriteria extends AbstractORMCriteria {
 	public final IntegerExpression ID;
-	public final IntegerExpression categoryId;
-	public final AssociationExpression category;
 	public final IntegerExpression instructorId;
 	public final AssociationExpression instructor;
+	public final IntegerExpression categoryId;
+	public final AssociationExpression category;
 	public final DateExpression initialDate;
 	public final CollectionExpression payments;
 	
 	public RegisterCriteria(Criteria criteria) {
 		super(criteria);
 		ID = new IntegerExpression("ID", this);
-		categoryId = new IntegerExpression("category.ID", this);
-		category = new AssociationExpression("category", this);
 		instructorId = new IntegerExpression("instructor.", this);
 		instructor = new AssociationExpression("instructor", this);
+		categoryId = new IntegerExpression("category.ID", this);
+		category = new AssociationExpression("category", this);
 		initialDate = new DateExpression("initialDate", this);
 		payments = new CollectionExpression("ORM_Payments", this);
 	}
@@ -46,12 +46,12 @@ public class RegisterCriteria extends AbstractORMCriteria {
 		this(DSMPersistentManager.instance().getSession());
 	}
 	
-	public CategoryCriteria createCategoryCriteria() {
-		return new CategoryCriteria(createCriteria("category"));
-	}
-	
 	public InstructorCriteria createInstructorCriteria() {
 		return new InstructorCriteria(createCriteria("instructor"));
+	}
+	
+	public CategoryCriteria createCategoryCriteria() {
+		return new CategoryCriteria(createCriteria("category"));
 	}
 	
 	public PaymentCriteria createPaymentsCriteria() {

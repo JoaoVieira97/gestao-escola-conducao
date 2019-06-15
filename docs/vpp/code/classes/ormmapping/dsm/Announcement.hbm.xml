@@ -5,17 +5,19 @@ License Type: Academic
 -->
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="dsm.Announcement" table="Announcement" lazy="false" discriminator-value="Announcement">
+	<class name="dsm.Announcement" table="Announcement" lazy="false">
 		<id name="ID" column="ID" type="integer" unsaved-value="0">
 			<generator class="increment">
 			</generator>
 		</id>
-		<discriminator column="Discriminator" type="string"/>
 		<property name="title" column="Title" type="string" length="255" not-null="false" lazy="false"/>
 		<property name="description" column="Description" type="string" length="255" not-null="false" lazy="false"/>
 		<property name="timestamp" column="Timestamp" type="date" not-null="false" lazy="false"/>
-		<subclass name="dsm.PersonalAnnouncement" discriminator-value="PersonalAnnouncement" lazy="false">
-			<property name="viewed" column="Viewed" type="boolean" length="1" not-null="false" lazy="false"/>
-		</subclass>
+		<joined-subclass name="dsm.PersonalAnnouncement" table="PersonalAnnouncement" lazy="false">
+			<key>
+				<column name="AnnouncementID"/>
+			</key>
+			<property name="viewed" column="Viewed" type="boolean" length="1" not-null="true" lazy="false"/>
+		</joined-subclass>
 	</class>
 </hibernate-mapping>
