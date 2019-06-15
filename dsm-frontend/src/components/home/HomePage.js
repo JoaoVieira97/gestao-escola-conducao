@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Container, Card, Feed, Icon, Loader, Dimmer} from 'semantic-ui-react';
+import {Container, Card, Feed, Icon, Loader, Dimmer, List, Divider} from 'semantic-ui-react';
 
 class HomePage extends Component {
 
@@ -19,17 +19,22 @@ class HomePage extends Component {
 
     render() {
 
-        const cardExample = (
-            <div className={"ui fluid card"}>
-                <Card.Content>
-                    <Card.Header>Avisos Recentes</Card.Header>
+        const personalAnnouncements = (
+            <div className={"ui fluid card pink"}>
+                <Card.Content labeled left>
+                    <Card.Header>
+      					<Icon.Group>
+                    		<Icon color='grey' name='user' />
+                    	</Icon.Group>
+      					Avisos pessoais recentes
+                    </Card.Header>
                 </Card.Content>
                 <Card.Content>
                     <Feed>
                         {
                             Array.apply(
                                 null,
-                                { length: 7 }).map((e, i) => (
+                                { length: 4 }).map((e, i) => (
                                 <Feed.Event key={i}>
                                     <Feed.Label>
                                         <Icon name='tasks'/>
@@ -37,7 +42,7 @@ class HomePage extends Component {
                                     <Feed.Content>
                                         <Feed.Date content='há 1 dia' />
                                         <Feed.Summary>
-                                            A escola encontra-se encerrada.
+                                            O teu exame está marcado para dia 23 de Julho.
                                         </Feed.Summary>
                                     </Feed.Content>
                                 </Feed.Event>
@@ -48,6 +53,76 @@ class HomePage extends Component {
             </div>
         );
 
+        const generalAnnouncements = (
+            <div className={"ui fluid card pink"}>
+                <Card.Content>
+                    <Card.Header>
+                    	<Icon.Group>
+                    		<Icon color='grey' name='group' />
+                    	</Icon.Group>
+                    	Avisos gerais recentes
+                    </Card.Header>
+                </Card.Content>
+                <Card.Content>
+                    <Feed>
+                        {
+                            Array.apply(
+                                null,
+                                { length: 5 }).map((e, i) => (
+                                <Feed.Event key={i}>
+                                    <Feed.Label>
+                                        <Icon name='tasks'/>
+                                    </Feed.Label>
+                                    <Feed.Content>
+                                        <Feed.Date content='há 1 dia' />
+                                        <Feed.Summary>
+                                            A escola encontra-se encerrada no próximo dia 1 de Julho.
+                                        </Feed.Summary>
+                                    </Feed.Content>
+                                </Feed.Event>
+                            ))
+                        }
+                    </Feed>
+                </Card.Content>
+            </div>
+        );
+
+        const nextEvents = (
+        	<div className={"ui fluid card pink"}>
+	        	<Card.Content>
+	                <Card.Header>
+	                	<Icon.Group>
+                    		<Icon color='grey' name='calendar' />
+                    	</Icon.Group>
+	                	Próximos eventos
+	                </Card.Header>
+	            </Card.Content>
+	            <Card.Content>
+		            <List divided>
+		            	{
+                            Array.apply(
+                                null,
+                                { length: 5 }).map((e, i) => (
+							    <List.Item style={{marginBottom: "10px"}}>
+							      	<Icon name='calendar outline' />
+							      	<List.Content>
+							        	<List.Header>Aula Prática - Categoria B</List.Header>
+							        	<List.Description>
+							          		12 / 01 / 2019
+							        	</List.Description>
+							        	<List.Description>
+							          		17h00
+							        	</List.Description>
+							      	</List.Content>
+							    </List.Item>
+							))
+						}				    
+				  	</List>
+			  	</Card.Content>
+		  	</div>
+        );
+
+
         return (
             <Container>
                 <Dimmer inverted active={this.state.isLoading}>
@@ -55,10 +130,11 @@ class HomePage extends Component {
                 </Dimmer>
                 <div className="ui stackable two column centered grid">
                     <div className="column">
-                        {cardExample}
+                        {personalAnnouncements}
+                        {generalAnnouncements}
                     </div>
                     <div className="column">
-                        {cardExample}
+                        {nextEvents}
                     </div>
                 </div>
             </Container>
