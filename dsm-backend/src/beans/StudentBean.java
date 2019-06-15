@@ -1,5 +1,6 @@
 package beans;
 
+import dsm.PersonalAnnouncement;
 import dsm.Register;
 import dsm.Student;
 import dsm.StudentDAO;
@@ -41,6 +42,24 @@ public class StudentBean implements StudentBeanLocal {
         }
 
         return null;
+    }
+
+    @Override
+    public List<PersonalAnnouncement> getStudentPersonalAnnouncements(int studentID) {
+
+        try {
+
+            Student student = (Student) StudentDAO.getStudentByORMID(session, studentID);
+            if (student != null) {
+                return Arrays.asList(student.announcements.toArray());
+            }
+
+        } catch (PersistentException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+
     }
 
 }

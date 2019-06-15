@@ -93,6 +93,14 @@ public class DSMFacade {
     }
 
     /**
+     * Get the list of personal announcements of a specific student.
+     */
+    public static List<PersonalAnnouncement> getStudentPersonalAnnouncements(int studentId){
+
+        return studentBean.getStudentPersonalAnnouncements(studentId);
+    }
+
+    /**
      * Get the list of all registers of a specific student.
      */
     public static List<Register> getStudentRegisters(int studentId) {
