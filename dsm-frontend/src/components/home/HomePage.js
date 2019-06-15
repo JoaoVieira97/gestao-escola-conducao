@@ -73,7 +73,7 @@ class HomePage extends Component {
                                         <Feed.Summary>
                                             {pa.title}
                                         </Feed.Summary>
-                                        <Feed text extra style={{marginTop: "-3px"}}>
+                                        <Feed style={{marginTop: "-3px"}}>
                                             {pa.description}
                                         </Feed>
                                     </Feed.Content>

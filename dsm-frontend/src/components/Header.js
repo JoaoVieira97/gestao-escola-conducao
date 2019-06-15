@@ -122,9 +122,12 @@ class Header extends React.Component {
                 {/* MOBILE */}
                 <Responsive maxWidth={992}>
                     <Menu secondary style={headerStyle}>
-                        <div style={{marginLeft: '20px', marginTop:' 15px'}}>
-                            <Icon name='bars' size={'large'} onClick={this.handleShowClick} />
-                        </div>
+                        <Menu.Item
+                            style={{paddingLeft: '15px', paddingTop:' 15px'}}
+                            position={'left'}
+                            icon={<Icon name='bars' size={'large'} />}
+                            onClick={this.handleShowClick}
+                        />
                     </Menu>
                     <Sidebar
                         as={Menu}
