@@ -75,9 +75,16 @@ INSERT INTO Register (ID, InstructorUserID, CategoryID, StudentUserID, InitialDa
 			(2, 4, 6, 2, CURDATE()),
             (3, 5, 6, 3, CURDATE());
 
-
-
-
-
-
-
+# ------------------------------------------------------------------------------------------------------------------------------------------------
+# STUDENTS PERSONAL ANNOUNCEMENTS
+# ------------------------------------------------------------------------------------------------------------------------------------------------
+INSERT INTO Announcement
+	VALUES	(1, 1, 'Aula cancelada 1', 'A sua aula do dia 12/07/2019 foi cancelada.', CURDATE(), false, 'PersonalAnnouncement'), 
+			(2, 2, 'Aula cancelada 2', 'A sua aula do dia 12/07/2019 foi cancelada.', CURDATE(), false, 'PersonalAnnouncement'), 
+			(3, 3, 'Aula cancelada 3', 'A sua aula do dia 12/07/2019 foi cancelada.', CURDATE(), false, 'PersonalAnnouncement'),
+			(4, 1, 'Exame marcado 1', 'O seu exame prático está marcado para o dia 15/07/2019.', CURDATE(), false, 'PersonalAnnouncement'), 
+			(5, 2, 'Exame marcado 2', 'O seu exame prático está marcado para o dia 15/07/2019.', CURDATE(), false, 'PersonalAnnouncement'), 
+			(6, 3, 'Exame marcado 3', 'O seu exame prático está marcado para o dia 15/07/2019.', CURDATE(), false, 'PersonalAnnouncement'),
+			(7, 1, 'Pagamento 1', 'O teu pagamento foi efetuado com sucesso.', CURDATE(), false, 'PersonalAnnouncement'), 
+			(8, 2, 'Pagamento 2', 'O teu pagamento foi efetuado com sucesso.', CURDATE(), false, 'PersonalAnnouncement'), 
+			(9, 3, 'Pagamento 3', 'O teu pagamento foi efetuado com sucesso.', CURDATE(), false, 'PersonalAnnouncement');
