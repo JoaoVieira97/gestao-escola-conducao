@@ -81,14 +81,24 @@ INSERT INTO Register (ID, InstructorUserID, CategoryID, StudentUserID, InitialDa
 # STUDENTS PERSONAL ANNOUNCEMENTS
 # ------------------------------------------------------------------------------------------------------------------------------------------------
 INSERT INTO Announcement (ID, Title, Description, Timestamp)
-	VALUES	(1, 'Escola fechada', 'A escola encontra-se encerrada no próximo dia 1 de Julho.', CURDATE()),
-			(2, 'Escola fechada', 'A escola encontra-se encerrada no próximo dia 2 de Julho.', CURDATE()), 
-			(3, 'Aula cancelada', 'A sua aula do dia 15/07/2019 foi cancelada.', CURDATE()),
-            (4, 'Aula cancelada', 'A sua aula do dia 16/07/2019 foi cancelada.', CURDATE()),
-            (5, 'Aula cancelada', 'A sua aula do dia 17/07/2019 foi cancelada.', CURDATE());
+	VALUES	(1, 'Escola fechada', 'A escola encontra-se encerrada no próximo dia 1 de Julho.', DATE("2019-06-02")),
+			(2, 'Escola fechada', 'A escola encontra-se encerrada no próximo dia 2 de Julho.', DATE("2019-06-03")), 
+			(3, 'Aula cancelada', 'A sua aula do dia 15/07/2019 foi cancelada.', DATE("2019-06-04")),
+            (4, 'Aula cancelada', 'A sua aula do dia 16/07/2019 foi cancelada.', DATE("2019-06-05")),
+            (5, 'Aula cancelada', 'A sua aula do dia 17/07/2019 foi cancelada.', DATE("2019-06-06")),
+            (6, 'Aula teórica', 'A aula teórica das 10h do dia 25 de Junho foi cancelada.', DATE("2019-06-07")),
+			(7, 'Aula teórica', 'A aula teórica de amanhã realiza-se excepcionalmente às 11h00.', DATE("2019-06-08")), 
+			(8, 'Exame teórico', 'O seu exame teórico está marcado para o dia 1 de Julho pelas 14h30.', DATE("2019-06-09")),
+            (9, 'Exame teórico', 'O seu exame teórico está marcado para o dia 2 de Julho pelas 15h30.', DATE("2019-06-10")),
+            (10, 'Exame teórico', 'O seu exame teórico está marcado para o dia 3 de Julho pelas 16h30.', DATE("2019-06-11"));
 
 INSERT INTO PersonalAnnouncement (AnnouncementID, StudentUserID, Viewed)
-	VALUES	(3, 1, false), (4, 2, false), (5, 3, false);
+	VALUES	(3, 1, false),
+			(4, 2, false), 
+            (5, 3, false),
+			(8, 1, false), 
+            (9, 2, false), 
+            (10, 3, false);
             
             
             

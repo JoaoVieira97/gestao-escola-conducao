@@ -101,6 +101,14 @@ public class DSMFacade {
     }
 
     /**
+     * Get the list of general announcements
+     */
+    public static List<Announcement> getAnnouncements(){
+
+        return userBean.getAnnouncements();
+    }
+
+    /**
      * Get the list of all registers of a specific student.
      */
     public static List<Register> getStudentRegisters(int studentId) {

@@ -1,8 +1,8 @@
 package web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dsm.Announcement;
 import dsm.DSMFacade;
-import dsm.PersonalAnnouncement;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,8 +14,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-@WebServlet(name = "GetStudentPersonalAnnouncements", urlPatterns = {"/api/student/personal_announcements"})
-public class GetStudentPersonalAnnouncements extends HttpServlet {
+@WebServlet(name = "GetAnnouncements", urlPatterns = {"/api/user/announcements"})
+public class GetAnnouncements extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -23,12 +23,8 @@ public class GetStudentPersonalAnnouncements extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        String studentId = request.getParameter("id");
-        int id = Integer.valueOf(studentId);
-
         // get personal announcements
-        List<PersonalAnnouncement> announcements = DSMFacade.getStudentPersonalAnnouncements(id);
+        List<Announcement> announcements = DSMFacade.getAnnouncements();
         ObjectMapper mapper = new ObjectMapper();
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         mapper.setDateFormat(df);

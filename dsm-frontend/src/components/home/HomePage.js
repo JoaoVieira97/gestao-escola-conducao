@@ -9,32 +9,52 @@ class HomePage extends Component {
 
         this.state = {
             isLoading: true,
-            personal_announcements: []
+            personal_announcements: [],
+            general_announcements: []
         };
     }
 
-    componentDidMount() {
-        setTimeout(()=>{
-            this.setState({isLoading: false});
-        }, 1000);
+    async componentDidMount() {
 
-        fetchApi(
+        await fetchApi(
             'get','/student/personal_announcements?id=3',
             {},  {},
-            this.successHandler, this.errorHandler
+            this.successHandlerPA, this.errorHandler
         )
+
+
+
+        await fetchApi(
+            'get','/user/announcements',
+            {},  {},
+            this.successHandlerA, this.errorHandler
+        )
+
     }
 
     /**
-     * Handle the response.
+     * Handle the response of personnalAnnouncements.
      * @param response
      */
-    successHandler = (response) => {
+    successHandlerPA = (response) => {
 
         if (response.data.success){
         	this.setState({
         		personal_announcements: response.data.announcements,
-        		isLoading: false,
+        	})
+        }
+    };
+
+    /**
+     * Handle the response of personnalAnnouncements.
+     * @param response
+     */
+    successHandlerA = (response) => {
+
+        if (response.data.success){
+        	this.setState({
+        		general_announcements: response.data.announcements,
+        		isLoading: false
         	})
         }
     };
@@ -51,7 +71,7 @@ class HomePage extends Component {
     render() {
 
         const personalAnnouncements = (
-            <div className={"ui fluid card pink"}>
+            <div className={"ui fluid card grey"}>
                 <Card.Content>
                     <Card.Header>
       					<Icon.Group>
@@ -87,7 +107,7 @@ class HomePage extends Component {
         );
 
         const generalAnnouncements = (
-            <div className={"ui fluid card pink"}>
+            <div className={"ui fluid card grey"}>
                 <Card.Content>
                     <Card.Header>
                     	<Icon.Group>
@@ -98,22 +118,24 @@ class HomePage extends Component {
                 </Card.Content>
                 <Card.Content>
                     <Feed>
-                        {
-                            Array.apply(
-                                null,
-                                { length: 5 }).map((e, i) => (
-                                <Feed.Event key={i}>
+                        {(this.state.general_announcements.length > 0) ?
+                            this.state.general_announcements.map(a => (
+                                <Feed.Event key={a.id}>
                                     <Feed.Label>
                                         <Icon name='tasks'/>
                                     </Feed.Label>
                                     <Feed.Content>
-                                        <Feed.Date content='há 1 dia' />
+                                        <Feed.Date content={a.timestamp} />
                                         <Feed.Summary>
-                                            A escola encontra-se encerrada no próximo dia 1 de Julho.
+                                            {a.title}
                                         </Feed.Summary>
+                                        <Feed style={{marginTop: "-3px"}}>
+                                            {a.description}
+                                        </Feed>
                                     </Feed.Content>
-                                </Feed.Event>
-                            ))
+                                </Feed.Event> 
+                            )) :
+                            <Header as='h4' color='grey'>Sem avisos para mostrar.</Header>
                         }
                     </Feed>
                 </Card.Content>
@@ -121,7 +143,7 @@ class HomePage extends Component {
         );
 
         const nextEvents = (
-        	<div className={"ui fluid card pink"}>
+        	<div className={"ui fluid card grey"}>
 	        	<Card.Content>
 	                <Card.Header>
 	                	<Icon.Group>

@@ -1,6 +1,9 @@
 package beans;
 
+import dsm.Announcement;
+
 import javax.ejb.Local;
+import java.util.List;
 
 @Local
 public interface UserBeanLocal {
@@ -10,5 +13,6 @@ public interface UserBeanLocal {
     String getName();
     String getEmail();
     String getPassword();
+    List<Announcement> getAnnouncements();
 
 }

@@ -6,6 +6,8 @@ import org.orm.PersistentSession;
 import utils.Utils;
 
 import javax.ejb.Stateless;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Stateless(name = "UserBean")
 public class UserBean implements UserBeanLocal {
@@ -45,4 +47,22 @@ public class UserBean implements UserBeanLocal {
     public String getPassword() {
         return null;
     }
+
+    public List<Announcement> getAnnouncements(){
+
+        try {
+            List<Announcement> all_announcements = (List<Announcement>) AnnouncementDAO.queryAnnouncement(session, "id>0", "timestamp desc");
+            List<Announcement> general_announcements =
+                    all_announcements.stream()
+                                     .filter(a -> !(a instanceof PersonalAnnouncement))
+                                     .collect(Collectors.toList());
+
+            return general_announcements;
+        } catch (PersistentException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
 }
