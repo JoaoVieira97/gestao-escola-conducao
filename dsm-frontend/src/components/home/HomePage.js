@@ -10,7 +10,9 @@ class HomePage extends Component {
         this.state = {
             isLoading: true,
             personal_announcements: [],
-            general_announcements: []
+            general_announcements: [],
+            next_practical_lessons: [],
+            next_exams: []
         };
     }
 
@@ -22,42 +24,87 @@ class HomePage extends Component {
             this.successHandlerPA, this.errorHandler
         )
 
-
-
         await fetchApi(
             'get','/user/announcements',
             {},  {},
             this.successHandlerA, this.errorHandler
         )
 
+        await fetchApi(
+            'get','/student/next_practical_lessons?id=3',
+            {},  {},
+            this.successHandlerPL, this.errorHandler
+        )
+
+        await fetchApi(
+            'get','/student/next_exams?id=3',
+            {},  {},
+            this.successHandlerE, this.errorHandler
+        )
+        
     }
 
     /**
      * Handle the response of personnalAnnouncements.
      * @param response
      */
-    successHandlerPA = (response) => {
+    successHandlerPA = async (response) => {
 
         if (response.data.success){
-        	this.setState({
+        	await this.setState({
         		personal_announcements: response.data.announcements,
         	})
         }
+
     };
 
     /**
      * Handle the response of personnalAnnouncements.
      * @param response
      */
-    successHandlerA = (response) => {
+    successHandlerA = async (response) => {
 
         if (response.data.success){
-        	this.setState({
+        	await this.setState({
         		general_announcements: response.data.announcements,
-        		isLoading: false
         	})
         }
+
     };
+
+    /**
+     * Handle the response of next student practical lessons.
+     * @param response
+     */
+    successHandlerPL = async (response) => {
+
+        if (response.data.success){
+            await this.setState({
+                next_practical_lessons: response.data.lessons,
+            })
+        }
+
+    };
+
+    /**
+     * Handle the response of next student exams.
+     * @param response
+     */
+    successHandlerE = async (response) => {
+
+        if (response.data.success){
+            await this.setState({
+                next_exams: response.data.exams,
+                isLoading: false
+            })
+        } else {
+            await this.setState({
+                isLoading: false
+            })
+        }
+
+    };
+
 
     /**
      * Handle the error.
@@ -65,10 +112,21 @@ class HomePage extends Component {
      */
     errorHandler = (error) => {
 
+    	console.log('erro')
+
         console.log(error)
+
     };
 
     render() {
+
+        const next_events = this.state.next_practical_lessons.concat(this.state.next_exams)
+        
+        next_events.sort(function(e1, e2) {
+            return new Date(e1.startTime) - new Date(e2.startTime);
+        });
+
+        console.log(next_events)
 
         const personalAnnouncements = (
             <div className={"ui fluid card grey"}>
@@ -154,23 +212,25 @@ class HomePage extends Component {
 	            </Card.Content>
 	            <Card.Content>
 		            <List divided>
-		            	{
-                            Array.apply(
-                                null,
-                                { length: 5 }).map((e, i) => (
-							    <List.Item key={i} style={{marginBottom: "10px"}}>
+		            	{(next_events.length > 0) ?
+                            next_events.map(e => (
+							    <List.Item key={e.id} style={{marginBottom: "10px"}}>
 							      	<Icon name='calendar outline' />
 							      	<List.Content>
-							        	<List.Header>Aula Prática - Categoria B</List.Header>
+                                        {(e.duration) ?
+							        	    <List.Header>Aula Prática</List.Header> :
+                                            <List.Header>{e.description}</List.Header>
+                                        }
 							        	<List.Description>
-							          		12 / 01 / 2019
+							          		{e.startTime}
 							        	</List.Description>
 							        	<List.Description>
-							          		17h00
+							          		__Horas__
 							        	</List.Description>
 							      	</List.Content>
 							    </List.Item>
-							))
+							)) :
+                            <Header as='h4' color='grey'>Sem eventos para mostrar.</Header>
 						}				    
 				  	</List>
 			  	</Card.Content>

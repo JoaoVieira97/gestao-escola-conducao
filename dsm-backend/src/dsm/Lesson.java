@@ -13,6 +13,9 @@
  */
 package dsm;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties({"students", "ormid"})
 public abstract class Lesson {
 	public Lesson() {
 	}

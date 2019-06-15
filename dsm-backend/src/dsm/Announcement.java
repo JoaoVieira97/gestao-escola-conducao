@@ -13,6 +13,9 @@
  */
 package dsm;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties({"ormid"})
 public class Announcement {
 	public Announcement() {
 	}

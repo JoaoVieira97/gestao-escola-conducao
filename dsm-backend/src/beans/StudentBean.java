@@ -70,10 +70,32 @@ public class StudentBean implements StudentBeanLocal {
             if (student != null) {
                 List<Lesson> lessons = Arrays.asList(student.lessons.toArray());
                 List<Lesson> pratical_lessons = lessons.stream()
-                                                       .filter(l -> l instanceof PracticalLesson && l.getStartTime().after(new Date()))
+                                                       .filter(l -> l instanceof PracticalLesson && l.getStartTime().after(new Date()) && l.getState().equals("reserved"))
                                                        .collect(Collectors.toList());
 
                 return pratical_lessons;
+
+            }
+
+        } catch (PersistentException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public List<Exam> getStudentNextExams(int studentID) {
+
+        try {
+
+            Student student = (Student) StudentDAO.getStudentByORMID(session, studentID);
+            if (student != null) {
+                List<Exam> exams = Arrays.asList(student.exams.toArray());
+                List<Exam> next_exams = exams.stream()
+                                               .filter(e -> e.getStartTime().after(new Date()))
+                                               .collect(Collectors.toList());
+
+                return next_exams;
 
             }
 

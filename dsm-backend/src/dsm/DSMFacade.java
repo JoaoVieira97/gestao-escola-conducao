@@ -109,6 +109,14 @@ public class DSMFacade {
     }
 
     /**
+     * Get the list of next exams of a specific student.
+     */
+    public static List<Exam> getStudentNextExams(int studentId){
+
+        return studentBean.getStudentNextExams(studentId);
+    }
+
+    /**
      * Get the list of general announcements
      */
     public static List<Announcement> getAnnouncements(){

@@ -12,5 +12,6 @@ public interface StudentBeanLocal {
     List<Register> getStudentRegisters(int studentID);
     List<PersonalAnnouncement> getStudentPersonalAnnouncements(int studentID);
     List<Lesson> getStudentNextPracticalLessons(int studentID);
+    public List<Exam> getStudentNextExams(int studentID);
 
 }
