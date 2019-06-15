@@ -21,17 +21,17 @@ public class Student extends User {
 	}
 	
 	private java.util.Set this_getSet (int key) {
-		if (key == ORMConstants.KEY_STUDENT_EXAMS) {
-			return ORM_exams;
-		}
-		else if (key == ORMConstants.KEY_STUDENT_ANNOUNCEMENTS) {
-			return ORM_announcements;
-		}
-		else if (key == ORMConstants.KEY_STUDENT_LESSONS) {
+		if (key == ORMConstants.KEY_STUDENT_LESSONS) {
 			return ORM_lessons;
 		}
 		else if (key == ORMConstants.KEY_STUDENT_REGISTERS) {
 			return ORM_registers;
+		}
+		else if (key == ORMConstants.KEY_STUDENT_ANNOUNCEMENTS) {
+			return ORM_announcements;
+		}
+		else if (key == ORMConstants.KEY_STUDENT_EXAMS) {
+			return ORM_exams;
 		}
 		
 		return null;
@@ -52,13 +52,13 @@ public class Student extends User {
 	
 	private java.util.Date birth;
 	
-	private java.util.Set ORM_exams = new java.util.HashSet();
-	
-	private java.util.Set ORM_announcements = new java.util.HashSet();
-	
 	private java.util.Set ORM_lessons = new java.util.HashSet();
 	
 	private java.util.Set ORM_registers = new java.util.HashSet();
+	
+	private java.util.Set ORM_announcements = new java.util.HashSet();
+	
+	private java.util.Set ORM_exams = new java.util.HashSet();
 	
 	public void setNif(long value) {
 		this.nif = value;
@@ -92,26 +92,6 @@ public class Student extends User {
 		return birth;
 	}
 	
-	private void setORM_Exams(java.util.Set value) {
-		this.ORM_exams = value;
-	}
-	
-	private java.util.Set getORM_Exams() {
-		return ORM_exams;
-	}
-	
-	public final ExamSetCollection exams = new ExamSetCollection(this, _ormAdapter, ORMConstants.KEY_STUDENT_EXAMS, ORMConstants.KEY_MUL_ONE_TO_MANY);
-	
-	private void setORM_Announcements(java.util.Set value) {
-		this.ORM_announcements = value;
-	}
-	
-	private java.util.Set getORM_Announcements() {
-		return ORM_announcements;
-	}
-	
-	public final PersonalAnnouncementSetCollection announcements = new PersonalAnnouncementSetCollection(this, _ormAdapter, ORMConstants.KEY_STUDENT_ANNOUNCEMENTS, ORMConstants.KEY_MUL_ONE_TO_MANY);
-	
 	private void setORM_Lessons(java.util.Set value) {
 		this.ORM_lessons = value;
 	}
@@ -131,6 +111,26 @@ public class Student extends User {
 	}
 	
 	public final RegisterSetCollection registers = new RegisterSetCollection(this, _ormAdapter, ORMConstants.KEY_STUDENT_REGISTERS, ORMConstants.KEY_MUL_ONE_TO_MANY);
+	
+	private void setORM_Announcements(java.util.Set value) {
+		this.ORM_announcements = value;
+	}
+	
+	private java.util.Set getORM_Announcements() {
+		return ORM_announcements;
+	}
+	
+	public final PersonalAnnouncementSetCollection announcements = new PersonalAnnouncementSetCollection(this, _ormAdapter, ORMConstants.KEY_STUDENT_ANNOUNCEMENTS, ORMConstants.KEY_MUL_ONE_TO_MANY);
+	
+	private void setORM_Exams(java.util.Set value) {
+		this.ORM_exams = value;
+	}
+	
+	private java.util.Set getORM_Exams() {
+		return ORM_exams;
+	}
+	
+	public final ExamSetCollection exams = new ExamSetCollection(this, _ormAdapter, ORMConstants.KEY_STUDENT_EXAMS, ORMConstants.KEY_MUL_ONE_TO_MANY);
 	
 	public String toString() {
 		return super.toString();

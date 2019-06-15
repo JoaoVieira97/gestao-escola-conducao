@@ -38,6 +38,8 @@ public class Payment {
 	
 	private java.util.Date timestamp;
 	
+	private String description;
+	
 	private void setID(int value) {
 		this.ID = value;
 	}
@@ -64,6 +66,14 @@ public class Payment {
 	
 	public java.util.Date getTimestamp() {
 		return timestamp;
+	}
+	
+	public void setDescription(String value) {
+		this.description = value;
+	}
+	
+	public String getDescription() {
+		return description;
 	}
 	
 	public void setSecretary(Secretary value) {

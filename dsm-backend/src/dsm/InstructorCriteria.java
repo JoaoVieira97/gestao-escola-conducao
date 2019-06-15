@@ -20,8 +20,7 @@ import org.orm.criteria.*;
 
 public class InstructorCriteria extends AbstractORMCriteria {
 	public final IntegerExpression ID;
-	public final StringExpression firstName;
-	public final StringExpression lastName;
+	public final StringExpression name;
 	public final StringExpression email;
 	public final StringExpression password;
 	public final StringExpression role;
@@ -31,8 +30,7 @@ public class InstructorCriteria extends AbstractORMCriteria {
 	public InstructorCriteria(Criteria criteria) {
 		super(criteria);
 		ID = new IntegerExpression("ID", this);
-		firstName = new StringExpression("firstName", this);
-		lastName = new StringExpression("lastName", this);
+		name = new StringExpression("name", this);
 		email = new StringExpression("email", this);
 		password = new StringExpression("password", this);
 		role = new StringExpression("role", this);

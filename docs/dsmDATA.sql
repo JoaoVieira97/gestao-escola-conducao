@@ -6,16 +6,16 @@ USE dsm;
 INSERT INTO SchoolInfo (ID, MaxTimeToCancel, StartTime, EndTime)
 	VALUES (1, '00:05:00','08:00:00','18:00:00');
 
-INSERT INTO Category (ID, PracticalLessons, TheoreticalLessons, Name)
-	VALUES 	(1, 32, 28, 'A1'),(2, 32, 28, 'A2'),(3, 32, 28, 'A'),(4, 32, 28, 'AM'),
-            (5, 32, 28, 'B1'),(6, 32, 28, 'B'),
-			(7, 32, 28, 'C1'),(8, 32, 28, 'C'),
-            (9, 32, 28, 'D1'),(10, 32, 28, 'D'),
-            (11, 32, 28, 'BE'),
-            (12, 32, 28, 'C1E'),
-            (13, 32, 28, 'CE'),
-            (14, 32, 28, 'D1E'),
-            (15, 32, 28, 'DE');
+INSERT INTO Category (ID, PracticalLessons, TheoreticalLessons, Name, Price)
+	VALUES 	(1, 32, 28, 'A1', 900),	(2, 32, 28, 'A2', 900),	(3, 32, 28, 'A', 900),(4, 32, 28, 'AM', 900),
+            (5, 32, 28, 'B1', 900),	(6, 32, 28, 'B', 900),
+			(7, 32, 28, 'C1', 900),	(8, 32, 28, 'C', 900),
+            (9, 32, 28, 'D1', 900),	(10, 32, 28, 'D', 900),
+            (11, 32, 28, 'BE', 900),
+            (12, 32, 28, 'C1E', 900),
+            (13, 32, 28, 'CE', 900),
+            (14, 32, 28, 'D1E', 900),
+            (15, 32, 28, 'DE', 900);
 
 INSERT INTO Theme (ID, Name)
 	VALUES 	(1, 'Velocidades'),(2, 'Cedência de Passagem'),
@@ -50,14 +50,14 @@ INSERT INTO Theme (ID, Name)
 # ------------------------------------------------------------------------------------------------------------------------------------------------
 # USERS DATA
 # ------------------------------------------------------------------------------------------------------------------------------------------------
-INSERT INTO User (ID, FirstName, LastName, Email, Password, Role)
-	VALUES 	(1, 'Hugo', 'Oliveira', 'hugo@gmail.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'ROLE_STUDENT'),
-			(2, 'Raphael', 'Oliveira', 'raphael@gmail.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'ROLE_STUDENT'),
-            (3, 'João', 'Vieira', 'joao@gmail.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'ROLE_STUDENT'),
-            (4, 'Instrutor', '1', 'instrutor_1@gmail.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'ROLE_INSTRUCTOR'),
-            (5, 'Instrutor', '2', 'instrutor_2@gmail.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'ROLE_INSTRUCTOR'),
-            (6, 'Secretary', '1', 'secretary_1@gmail.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'ROLE_SECRETARY'),
-            (7, 'Secretary', '2', 'secretary_2@gmail.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'ROLE_SECRETARY');
+INSERT INTO User (ID, Name, Email, Password, Role)
+	VALUES 	(1, 'Hugo Oliveira', 'hugo@gmail.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'ROLE_STUDENT'),
+			(2, 'Raphael Oliveira', 'raphael@gmail.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'ROLE_STUDENT'),
+            (3, 'João Vieira', 'joao@gmail.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'ROLE_STUDENT'),
+            (4, 'Instrutor 1', 'instrutor_1@gmail.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'ROLE_INSTRUCTOR'),
+            (5, 'Instrutor 2', 'instrutor_2@gmail.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'ROLE_INSTRUCTOR'),
+            (6, 'Secretary 1', 'secretary_1@gmail.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'ROLE_SECRETARY'),
+            (7, 'Secretary 2', 'secretary_2@gmail.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'ROLE_SECRETARY');
                         
 INSERT INTO Student (Nif, Cc, Address, Birth, UserID)
 	VALUES 	(111111111, '111111111111', 'Braga, Póvoa de Lanhoso', '1997-04-04', 1),
@@ -75,16 +75,21 @@ INSERT INTO Register (ID, InstructorUserID, CategoryID, StudentUserID, InitialDa
 			(2, 4, 6, 2, CURDATE()),
             (3, 5, 6, 3, CURDATE());
 
+
+
 # ------------------------------------------------------------------------------------------------------------------------------------------------
 # STUDENTS PERSONAL ANNOUNCEMENTS
 # ------------------------------------------------------------------------------------------------------------------------------------------------
-INSERT INTO Announcement
-	VALUES	(1, 1, 'Aula cancelada 1', 'A sua aula do dia 12/07/2019 foi cancelada.', CURDATE(), false, 'PersonalAnnouncement'), 
-			(2, 2, 'Aula cancelada 2', 'A sua aula do dia 12/07/2019 foi cancelada.', CURDATE(), false, 'PersonalAnnouncement'), 
-			(3, 3, 'Aula cancelada 3', 'A sua aula do dia 12/07/2019 foi cancelada.', CURDATE(), false, 'PersonalAnnouncement'),
-			(4, 1, 'Exame marcado 1', 'O seu exame prático está marcado para o dia 15/07/2019.', CURDATE(), false, 'PersonalAnnouncement'), 
-			(5, 2, 'Exame marcado 2', 'O seu exame prático está marcado para o dia 15/07/2019.', CURDATE(), false, 'PersonalAnnouncement'), 
-			(6, 3, 'Exame marcado 3', 'O seu exame prático está marcado para o dia 15/07/2019.', CURDATE(), false, 'PersonalAnnouncement'),
-			(7, 1, 'Pagamento 1', 'O teu pagamento foi efetuado com sucesso.', CURDATE(), false, 'PersonalAnnouncement'), 
-			(8, 2, 'Pagamento 2', 'O teu pagamento foi efetuado com sucesso.', CURDATE(), false, 'PersonalAnnouncement'), 
-			(9, 3, 'Pagamento 3', 'O teu pagamento foi efetuado com sucesso.', CURDATE(), false, 'PersonalAnnouncement');
+INSERT INTO Announcement (ID, Title, Description, Timestamp)
+	VALUES	(1, 'Escola fechada', 'A escola encontra-se encerrada no próximo dia 1 de Julho.', CURDATE()),
+			(2, 'Escola fechada', 'A escola encontra-se encerrada no próximo dia 2 de Julho.', CURDATE()), 
+			(3, 'Aula cancelada', 'A sua aula do dia 15/07/2019 foi cancelada.', CURDATE()),
+            (4, 'Aula cancelada', 'A sua aula do dia 16/07/2019 foi cancelada.', CURDATE()),
+            (5, 'Aula cancelada', 'A sua aula do dia 17/07/2019 foi cancelada.', CURDATE());
+
+INSERT INTO PersonalAnnouncement (AnnouncementID, StudentUserID, Viewed)
+	VALUES	(3, 1, false), (4, 2, false), (5, 3, false);
+            
+            
+            
+            

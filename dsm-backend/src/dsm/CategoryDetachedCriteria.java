@@ -20,24 +20,27 @@ import org.orm.criteria.*;
 
 public class CategoryDetachedCriteria extends AbstractORMDetachedCriteria {
 	public final IntegerExpression ID;
+	public final StringExpression name;
 	public final IntegerExpression practicalLessons;
 	public final IntegerExpression theoreticalLessons;
-	public final StringExpression name;
+	public final FloatExpression price;
 	
 	public CategoryDetachedCriteria() {
 		super(Category.class, CategoryCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
+		name = new StringExpression("name", this.getDetachedCriteria());
 		practicalLessons = new IntegerExpression("practicalLessons", this.getDetachedCriteria());
 		theoreticalLessons = new IntegerExpression("theoreticalLessons", this.getDetachedCriteria());
-		name = new StringExpression("name", this.getDetachedCriteria());
+		price = new FloatExpression("price", this.getDetachedCriteria());
 	}
 	
 	public CategoryDetachedCriteria(DetachedCriteria aDetachedCriteria) {
 		super(aDetachedCriteria, CategoryCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
+		name = new StringExpression("name", this.getDetachedCriteria());
 		practicalLessons = new IntegerExpression("practicalLessons", this.getDetachedCriteria());
 		theoreticalLessons = new IntegerExpression("theoreticalLessons", this.getDetachedCriteria());
-		name = new StringExpression("name", this.getDetachedCriteria());
+		price = new FloatExpression("price", this.getDetachedCriteria());
 	}
 	
 	public Category uniqueCategory(PersistentSession session) {

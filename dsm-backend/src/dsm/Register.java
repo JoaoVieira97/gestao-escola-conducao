@@ -30,12 +30,12 @@ public class Register {
 	}
 	
 	private void this_setOwner(Object owner, int key) {
-		if (key == ORMConstants.KEY_REGISTER_INSTRUCTOR) {
-			this.instructor = (Instructor) owner;
+		if (key == ORMConstants.KEY_REGISTER_CATEGORY) {
+			this.category = (Category) owner;
 		}
 		
-		else if (key == ORMConstants.KEY_REGISTER_CATEGORY) {
-			this.category = (Category) owner;
+		else if (key == ORMConstants.KEY_REGISTER_INSTRUCTOR) {
+			this.instructor = (Instructor) owner;
 		}
 	}
 	
@@ -52,9 +52,9 @@ public class Register {
 	
 	private int ID;
 	
-	private Category category;
-	
 	private Instructor instructor;
+	
+	private Category category;
 	
 	private java.util.Date initialDate;
 	
@@ -80,14 +80,6 @@ public class Register {
 		return initialDate;
 	}
 	
-	public void setInstructor(Instructor value) {
-		this.instructor = value;
-	}
-	
-	public Instructor getInstructor() {
-		return instructor;
-	}
-	
 	public void setCategory(Category value) {
 		this.category = value;
 	}
@@ -105,6 +97,14 @@ public class Register {
 	}
 	
 	public final PaymentSetCollection payments = new PaymentSetCollection(this, _ormAdapter, ORMConstants.KEY_REGISTER_PAYMENTS, ORMConstants.KEY_MUL_ONE_TO_MANY);
+	
+	public void setInstructor(Instructor value) {
+		this.instructor = value;
+	}
+	
+	public Instructor getInstructor() {
+		return instructor;
+	}
 	
 	public String toString() {
 		return String.valueOf(getID());

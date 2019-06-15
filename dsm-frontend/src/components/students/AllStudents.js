@@ -159,7 +159,7 @@ class AllStudents extends Component {
         const studentsRows = _.map(students, item => (
             <Table.Row key={item.id}>
                 <Table.Cell>{item.id}</Table.Cell>
-                <Table.Cell>{item.firstName + ' ' + item.lastName}</Table.Cell>
+                <Table.Cell>{item.name}</Table.Cell>
                 <Table.Cell>{item.email}</Table.Cell>
             </Table.Row>
         ));

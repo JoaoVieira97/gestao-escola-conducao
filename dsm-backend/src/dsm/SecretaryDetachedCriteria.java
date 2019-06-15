@@ -20,8 +20,7 @@ import org.orm.criteria.*;
 
 public class SecretaryDetachedCriteria extends AbstractORMDetachedCriteria {
 	public final IntegerExpression ID;
-	public final StringExpression firstName;
-	public final StringExpression lastName;
+	public final StringExpression name;
 	public final StringExpression email;
 	public final StringExpression password;
 	public final StringExpression role;
@@ -29,8 +28,7 @@ public class SecretaryDetachedCriteria extends AbstractORMDetachedCriteria {
 	public SecretaryDetachedCriteria() {
 		super(Secretary.class, SecretaryCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
-		firstName = new StringExpression("firstName", this.getDetachedCriteria());
-		lastName = new StringExpression("lastName", this.getDetachedCriteria());
+		name = new StringExpression("name", this.getDetachedCriteria());
 		email = new StringExpression("email", this.getDetachedCriteria());
 		password = new StringExpression("password", this.getDetachedCriteria());
 		role = new StringExpression("role", this.getDetachedCriteria());
@@ -39,8 +37,7 @@ public class SecretaryDetachedCriteria extends AbstractORMDetachedCriteria {
 	public SecretaryDetachedCriteria(DetachedCriteria aDetachedCriteria) {
 		super(aDetachedCriteria, SecretaryCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
-		firstName = new StringExpression("firstName", this.getDetachedCriteria());
-		lastName = new StringExpression("lastName", this.getDetachedCriteria());
+		name = new StringExpression("name", this.getDetachedCriteria());
 		email = new StringExpression("email", this.getDetachedCriteria());
 		password = new StringExpression("password", this.getDetachedCriteria());
 		role = new StringExpression("role", this.getDetachedCriteria());

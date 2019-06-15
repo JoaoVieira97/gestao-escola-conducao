@@ -22,11 +22,13 @@ public class Category {
 	
 	private int ID;
 	
+	private String name;
+	
 	private int practicalLessons;
 	
 	private int theoreticalLessons;
 	
-	private String name;
+	private float price;
 	
 	private void setID(int value) {
 		this.ID = value;
@@ -38,6 +40,14 @@ public class Category {
 	
 	public int getORMID() {
 		return getID();
+	}
+	
+	public void setName(String value) {
+		this.name = value;
+	}
+	
+	public String getName() {
+		return name;
 	}
 	
 	public void setPracticalLessons(int value) {
@@ -56,12 +66,12 @@ public class Category {
 		return theoreticalLessons;
 	}
 	
-	public void setName(String value) {
-		this.name = value;
+	public void setPrice(float value) {
+		this.price = value;
 	}
 	
-	public String getName() {
-		return name;
+	public float getPrice() {
+		return price;
 	}
 	
 	public String toString() {

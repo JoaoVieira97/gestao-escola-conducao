@@ -136,7 +136,7 @@ class PaymentsPage extends Component {
             let dateLimit = '20/10/2019';
             let theoreticalLessons = registerChoosed[0].category.theoreticalLessons;
             let practicalLessons = registerChoosed[0].category.practicalLessons;
-            let nameInstructor = registerChoosed[0].instructor.firstName + " " + registerChoosed[0].instructor.lastName;
+            let nameInstructor = registerChoosed[0].instructor.name;
 
             //collection ou iterator??
             let payments = registerChoosed[0].payments.collection.map( payment => {

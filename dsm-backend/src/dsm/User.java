@@ -22,9 +22,7 @@ public abstract class User {
 	
 	private int ID;
 	
-	private String firstName;
-	
-	private String lastName;
+	private String name;
 	
 	private String email;
 	
@@ -44,20 +42,12 @@ public abstract class User {
 		return getID();
 	}
 	
-	public void setFirstName(String value) {
-		this.firstName = value;
+	public void setName(String value) {
+		this.name = value;
 	}
 	
-	public String getFirstName() {
-		return firstName;
-	}
-	
-	public void setLastName(String value) {
-		this.lastName = value;
-	}
-	
-	public String getLastName() {
-		return lastName;
+	public String getName() {
+		return name;
 	}
 	
 	public void setEmail(String value) {

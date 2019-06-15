@@ -96,22 +96,22 @@
       <UserTypes/>
     </Column>
   </Entity>
-  <Entity name="Register" Unlogged="false" PKClustered="0">
-    <Column name="ID">
-      <PrimaryKey>true</PrimaryKey>
+  <Entity name="PersonalAnnouncement" Unlogged="false" PKClustered="0">
+    <Column name="Viewed">
+      <PrimaryKey>false</PrimaryKey>
       <ForeignKey>false</ForeignKey>
-      <Type>9</Type>
-      <Length>10</Length>
+      <Type>1</Type>
+      <Length>1</Length>
       <Nullable>false</Nullable>
       <IDGenerator>increment</IDGenerator>
       <Unique>false</Unique>
       <Index>false</Index>
       <UserTypes/>
     </Column>
-    <Column name="CategoryID">
-      <PrimaryKey>false</PrimaryKey>
+    <Column name="AnnouncementID">
+      <PrimaryKey>true</PrimaryKey>
       <ForeignKey>true</ForeignKey>
-      <ReferencedColumn>dsm.Category.ID</ReferencedColumn>
+      <ReferencedColumn>dsm.Announcement.ID</ReferencedColumn>
       <Type>9</Type>
       <Length>10</Length>
       <Nullable>false</Nullable>
@@ -132,10 +132,47 @@
       <Index>false</Index>
       <UserTypes/>
     </Column>
+  </Entity>
+  <Entity name="Register" Unlogged="false" PKClustered="0">
+    <Column name="ID">
+      <PrimaryKey>true</PrimaryKey>
+      <ForeignKey>false</ForeignKey>
+      <Type>9</Type>
+      <Length>10</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>increment</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
     <Column name="InstructorUserID">
       <PrimaryKey>false</PrimaryKey>
       <ForeignKey>true</ForeignKey>
       <ReferencedColumn>dsm.Instructor.UserID</ReferencedColumn>
+      <Type>9</Type>
+      <Length>10</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+    <Column name="CategoryID">
+      <PrimaryKey>false</PrimaryKey>
+      <ForeignKey>true</ForeignKey>
+      <ReferencedColumn>dsm.Category.ID</ReferencedColumn>
+      <Type>9</Type>
+      <Length>10</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+    <Column name="StudentUserID">
+      <PrimaryKey>false</PrimaryKey>
+      <ForeignKey>true</ForeignKey>
+      <ReferencedColumn>dsm.Student.UserID</ReferencedColumn>
       <Type>9</Type>
       <Length>10</Length>
       <Nullable>false</Nullable>
@@ -168,18 +205,6 @@
       <Index>false</Index>
       <UserTypes/>
     </Column>
-    <Column name="StudentUserID">
-      <PrimaryKey>false</PrimaryKey>
-      <ForeignKey>true</ForeignKey>
-      <ReferencedColumn>dsm.Student.UserID</ReferencedColumn>
-      <Type>9</Type>
-      <Length>10</Length>
-      <Nullable>false</Nullable>
-      <IDGenerator>native</IDGenerator>
-      <Unique>false</Unique>
-      <Index>false</Index>
-      <UserTypes/>
-    </Column>
     <Column name="Title">
       <PrimaryKey>false</PrimaryKey>
       <ForeignKey>false</ForeignKey>
@@ -208,28 +233,6 @@
       <Type>17</Type>
       <Length>0</Length>
       <Nullable>true</Nullable>
-      <IDGenerator>increment</IDGenerator>
-      <Unique>false</Unique>
-      <Index>false</Index>
-      <UserTypes/>
-    </Column>
-    <Column name="Viewed">
-      <PrimaryKey>false</PrimaryKey>
-      <ForeignKey>false</ForeignKey>
-      <Type>1</Type>
-      <Length>1</Length>
-      <Nullable>true</Nullable>
-      <IDGenerator>increment</IDGenerator>
-      <Unique>false</Unique>
-      <Index>false</Index>
-      <UserTypes/>
-    </Column>
-    <Column name="Discriminator">
-      <PrimaryKey>false</PrimaryKey>
-      <ForeignKey>false</ForeignKey>
-      <Type>27</Type>
-      <Length>255</Length>
-      <Nullable>false</Nullable>
       <IDGenerator>increment</IDGenerator>
       <Unique>false</Unique>
       <Index>false</Index>
@@ -341,6 +344,17 @@
       <Index>false</Index>
       <UserTypes/>
     </Column>
+    <Column name="Description">
+      <PrimaryKey>false</PrimaryKey>
+      <ForeignKey>false</ForeignKey>
+      <Type>27</Type>
+      <Length>255</Length>
+      <Nullable>true</Nullable>
+      <IDGenerator>increment</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
   </Entity>
   <Entity name="Secretary" Unlogged="false" PKClustered="0">
     <Column name="UserID">
@@ -368,6 +382,17 @@
       <Index>false</Index>
       <UserTypes/>
     </Column>
+    <Column name="Name">
+      <PrimaryKey>false</PrimaryKey>
+      <ForeignKey>false</ForeignKey>
+      <Type>27</Type>
+      <Length>255</Length>
+      <Nullable>true</Nullable>
+      <IDGenerator>increment</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
     <Column name="PracticalLessons">
       <PrimaryKey>false</PrimaryKey>
       <ForeignKey>false</ForeignKey>
@@ -390,12 +415,12 @@
       <Index>false</Index>
       <UserTypes/>
     </Column>
-    <Column name="Name">
+    <Column name="Price">
       <PrimaryKey>false</PrimaryKey>
       <ForeignKey>false</ForeignKey>
-      <Type>27</Type>
-      <Length>255</Length>
-      <Nullable>true</Nullable>
+      <Type>4</Type>
+      <Length>0</Length>
+      <Nullable>false</Nullable>
       <IDGenerator>increment</IDGenerator>
       <Unique>false</Unique>
       <Index>false</Index>
@@ -472,18 +497,7 @@
       <Index>false</Index>
       <UserTypes/>
     </Column>
-    <Column name="FirstName">
-      <PrimaryKey>false</PrimaryKey>
-      <ForeignKey>false</ForeignKey>
-      <Type>27</Type>
-      <Length>255</Length>
-      <Nullable>true</Nullable>
-      <IDGenerator>increment</IDGenerator>
-      <Unique>false</Unique>
-      <Index>false</Index>
-      <UserTypes/>
-    </Column>
-    <Column name="LastName">
+    <Column name="Name">
       <PrimaryKey>false</PrimaryKey>
       <ForeignKey>false</ForeignKey>
       <Type>27</Type>
@@ -752,6 +766,16 @@
       <Column>ID</Column>
     </RefColumns>
   </ForeignKey>
+  <ForeignKey name="FKPersonalAn134631">
+    <ReferenceTable>PersonalAnnouncement</ReferenceTable>
+    <ReferencedTable>Announcement</ReferencedTable>
+    <Columns>
+      <Column>AnnouncementID</Column>
+    </Columns>
+    <RefColumns>
+      <Column>ID</Column>
+    </RefColumns>
+  </ForeignKey>
   <ForeignKey name="FKSecretary93633">
     <ReferenceTable>Secretary</ReferenceTable>
     <ReferencedTable>User</ReferencedTable>
@@ -812,26 +836,6 @@
       <Column>LessonID</Column>
     </RefColumns>
   </ForeignKey>
-  <ForeignKey name="FKExam479921">
-    <ReferenceTable>Exam</ReferenceTable>
-    <ReferencedTable>Student</ReferencedTable>
-    <Columns>
-      <Column>StudentUserID</Column>
-    </Columns>
-    <RefColumns>
-      <Column>UserID</Column>
-    </RefColumns>
-  </ForeignKey>
-  <ForeignKey name="FKAnnounceme551434">
-    <ReferenceTable>Announcement</ReferenceTable>
-    <ReferencedTable>Student</ReferencedTable>
-    <Columns>
-      <Column>StudentUserID</Column>
-    </Columns>
-    <RefColumns>
-      <Column>UserID</Column>
-    </RefColumns>
-  </ForeignKey>
   <ForeignKey name="FKStudent_Le908520">
     <ReferenceTable>Student_Lesson</ReferenceTable>
     <ReferencedTable>Student</ReferencedTable>
@@ -877,16 +881,6 @@
     <ReferencedTable>Secretary</ReferencedTable>
     <Columns>
       <Column>SecretaryUserID</Column>
-    </Columns>
-    <RefColumns>
-      <Column>UserID</Column>
-    </RefColumns>
-  </ForeignKey>
-  <ForeignKey name="FKRegister695484">
-    <ReferenceTable>Register</ReferenceTable>
-    <ReferencedTable>Instructor</ReferencedTable>
-    <Columns>
-      <Column>InstructorUserID</Column>
     </Columns>
     <RefColumns>
       <Column>UserID</Column>
@@ -950,6 +944,36 @@
     </Columns>
     <RefColumns>
       <Column>ID</Column>
+    </RefColumns>
+  </ForeignKey>
+  <ForeignKey name="FKRegister695484">
+    <ReferenceTable>Register</ReferenceTable>
+    <ReferencedTable>Instructor</ReferencedTable>
+    <Columns>
+      <Column>InstructorUserID</Column>
+    </Columns>
+    <RefColumns>
+      <Column>UserID</Column>
+    </RefColumns>
+  </ForeignKey>
+  <ForeignKey name="FKPersonalAn447628">
+    <ReferenceTable>PersonalAnnouncement</ReferenceTable>
+    <ReferencedTable>Student</ReferencedTable>
+    <Columns>
+      <Column>StudentUserID</Column>
+    </Columns>
+    <RefColumns>
+      <Column>UserID</Column>
+    </RefColumns>
+  </ForeignKey>
+  <ForeignKey name="FKExam479921">
+    <ReferenceTable>Exam</ReferenceTable>
+    <ReferencedTable>Student</ReferencedTable>
+    <Columns>
+      <Column>StudentUserID</Column>
+    </Columns>
+    <RefColumns>
+      <Column>UserID</Column>
     </RefColumns>
   </ForeignKey>
 </Model>
