@@ -39,7 +39,7 @@ public class LessonBean implements LessonBeanLocal{
         List<Lesson> res = new ArrayList<>();
 
         for(Lesson lesson : lessons)
-            if(lesson.getState().equals("realizada")) res.add(lesson);
+            if(lesson.getState().equals("realized")) res.add(lesson);
 
         return lessons;
     }
@@ -56,11 +56,6 @@ public class LessonBean implements LessonBeanLocal{
             for (Lesson lesson : lessons) {
                 PracticalLesson practicalLesson = PracticalLessonDAO.getPracticalLessonByORMID(lesson.getID());
                 if(practicalLesson!=null && practicalLesson.getIsStudentPresent()) practicalLessons.add(practicalLesson);
-                /*
-                List<PracticalLesson> practLessons = (List<PracticalLesson>) PracticalLessonDAO.queryPracticalLesson
-                        ("LessonID =" + lesson.getID() + "AND IsStudentPresent=1", null);
-
-                if(practLessons!= null) practicalLessons.add(practLessons.get(0));*/
             }
 
            return practicalLessons;
@@ -84,11 +79,6 @@ public class LessonBean implements LessonBeanLocal{
             for (Lesson lesson : lessons) {
                 TheoreticalLesson theoreticalLesson = TheoreticalLessonDAO.getTheoreticalLessonByORMID(lesson.getID());
                 if(theoreticalLesson!=null) theoreticalLessons.add(theoreticalLesson);
-                /*
-                List<TheoreticalLesson> theoreLessons = (List<TheoreticalLesson>) TheoreticalLessonDAO.queryTheoreticalLesson
-                        ("LessonID =" + lesson.getID(), null);
-
-                if(theoreLessons!= null) theoreticalLessons.add(theoreLessons.get(0));*/
             }
 
             return theoreticalLessons;

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Container, Header, Table, Menu, Icon, Grid, Dropdown, Loader, Dimmer} from 'semantic-ui-react';
 import {fetchApi} from "../../services/api";
+import moment from 'moment';
 
 
 class PaymentsPage extends Component {
@@ -24,6 +25,7 @@ class PaymentsPage extends Component {
             numberPracticalRealized: 0,
             nameInstructor: '',
             actualPaid: 0,
+            totalPrice: 0,
         }
     };
 
@@ -69,24 +71,6 @@ class PaymentsPage extends Component {
                 }
             });
 
-            /*
-            //VALORES PARA A CATEGORIA INICIAL
-            let dateSubscription = data.registers[0].initialDate;
-            let dateLimit = '20/10/2019';
-            let theoreticalLessons = categoriesRegister[0].theoreticalLessons;
-            let practicalLessons = categoriesRegister[0].practicalLessons;
-            let nameInstructor = data.registers[0].instructor.firstName + " " + data.registers[0].instructor.lastName;
-
-            //collection ou iterator??
-            let payments = data.registers[0].payments.collection.map( payment => {
-
-                return {
-                    id: payment.id,
-                    value: payment.value,
-                    timestamp: payment.timestamp,
-                }
-            });*/
-
             this.setState({
                 allRegisters: data.registers,
                 allCategories: categories,
@@ -106,6 +90,9 @@ class PaymentsPage extends Component {
                 practicalRealized : data.practicalLessons,
             });
         }
+
+        console.log(this.state.practicalRealized);
+        console.log(this.state.theoreticalRealized);
 
         //stop loading
         setTimeout(()=>{
@@ -133,9 +120,10 @@ class PaymentsPage extends Component {
             let registerChoosed = this.state.allRegisters.filter(register => (register.category.id === categoryId));
 
             let dateSubscription = registerChoosed[0].initialDate;
-            let dateLimit = '20/10/2019';
+            let dateLimit = moment(dateSubscription).add(2,'years').format('YYYY-MM-DD');
             let theoreticalLessons = registerChoosed[0].category.theoreticalLessons;
             let practicalLessons = registerChoosed[0].category.practicalLessons;
+            let totalPrice = registerChoosed[0].category.price;
             let nameInstructor = registerChoosed[0].instructor.name;
 
             //collection ou iterator??
@@ -143,6 +131,7 @@ class PaymentsPage extends Component {
                 return {
                     id: payment.id,
                     value: payment.value,
+                    description: payment.description,
                     timestamp: payment.timestamp,
                 }
             });
@@ -155,11 +144,15 @@ class PaymentsPage extends Component {
             let practicalRealized = categoriesPracticalRealized.map( category => (
                category.filter( cat => (cat.id === categoryId))));
 
+            let numberP = practicalRealized.reduce( (acc, array) => acc + array.length, 0);
+
             let categoriesTheoreticalRealized = this.state.theoreticalRealized.map( theoLesson => (
                 theoLesson.categories.collection));
 
             let theoreticalRealized = categoriesTheoreticalRealized.map( category =>
                     (category.filter( cat => (cat.id === categoryId))));
+
+            let numberT = theoreticalRealized.reduce( (acc, array) => acc + array.length, 0);
 
             this.setState({
                 //categoryChoosed: registerChoosed[0].category,
@@ -167,11 +160,12 @@ class PaymentsPage extends Component {
                 dateLimit: dateLimit,
                 totalTheoreticalLessons: theoreticalLessons,
                 totalPracticalLessons: practicalLessons,
+                numberPracticalRealized: numberP,
+                numberTheoreticalRealized: numberT,
                 nameInstructor: nameInstructor,
                 payments: payments,
-                numberPracticalRealized: practicalRealized.length,
-                numberTheoreticalRealized: theoreticalRealized.length,
                 actualPaid: actualPaid,
+                totalPrice: totalPrice,
             });
         }
         else{
@@ -180,12 +174,13 @@ class PaymentsPage extends Component {
                 dateSubscription: '',
                 dateLimit: '',
                 totalTheoreticalLessons: 0,
+                totalPracticalLessons: 0,
                 numberPracticalRealized: 0,
                 numberTheoreticalRealized: 0,
-                totalPracticalLessons: 0,
                 nameInstructor: '',
                 payments: [],
                 actualPaid: 0,
+                totalPrice: 0,
             });
 
         }
@@ -198,7 +193,7 @@ class PaymentsPage extends Component {
             this.state.payments.map(payment => (
                 <Table.Row key={payment.id}>
                     <Table.Cell>{payment.timestamp}</Table.Cell>
-                    <Table.Cell> ... </Table.Cell>
+                    <Table.Cell>{payment.description} </Table.Cell>
                     <Table.Cell>{payment.value}€</Table.Cell>
                 </Table.Row>
             )
@@ -254,7 +249,8 @@ class PaymentsPage extends Component {
                             <Table.Footer>
                                 <Table.Row>
                                     <Table.HeaderCell colSpan='4'>
-                                        <Header as='h3' textAlign={'right'}>Valor: {this.state.actualPaid}€ / 500 €</Header>
+                                        <Header as='h3' textAlign={'right'} color='grey'>Valor: {this.state.actualPaid}€
+                                            / {this.state.totalPrice}€</Header>
                                     </Table.HeaderCell>
                                 </Table.Row>
                                 <Table.Row>
