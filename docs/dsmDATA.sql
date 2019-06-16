@@ -7,10 +7,16 @@ INSERT INTO SchoolInfo (ID, MaxTimeToCancel, StartTime, EndTime)
 	VALUES (1, '00:05:00','08:00:00','18:00:00');
 
 INSERT INTO Category (ID, PracticalLessons, TheoreticalLessons, Name, Price)
-	VALUES 	(1, 32, 28, 'A1', 900),	(2, 32, 28, 'A2', 900),	(3, 32, 28, 'A', 900),(4, 32, 28, 'AM', 900),
-            (5, 32, 28, 'B1', 900),	(6, 32, 28, 'B', 900),
-			(7, 32, 28, 'C1', 900),	(8, 32, 28, 'C', 900),
-            (9, 32, 28, 'D1', 900),	(10, 32, 28, 'D', 900),
+	VALUES 	(1, 32, 28, 'A1', 900),	
+			(2, 32, 28, 'A2', 900),	
+            (3, 32, 28, 'A', 900),
+            (4, 32, 28, 'AM', 900),
+            (5, 32, 28, 'B1', 900),	
+            (6, 32, 28, 'B', 900),
+			(7, 32, 28, 'C1', 900),	
+            (8, 32, 28, 'C', 900),
+            (9, 32, 28, 'D1', 900),	
+            (10, 32, 28, 'D', 900),
             (11, 32, 28, 'BE', 900),
             (12, 32, 28, 'C1E', 900),
             (13, 32, 28, 'CE', 900),
@@ -18,12 +24,18 @@ INSERT INTO Category (ID, PracticalLessons, TheoreticalLessons, Name, Price)
             (15, 32, 28, 'DE', 900);
 
 INSERT INTO Theme (ID, Name)
-	VALUES 	(1, 'Velocidades'),(2, 'Cedência de Passagem'),
-            (3, 'Via Pública'),(4, 'Manobras'),
-            (5, 'Contraordenações'),(6, 'Categorias de Veículos'),
-            (7, 'Reação, Travagem e Paragem'),(8, 'Circulação em Rotundas'),
-            (9, 'Luzes'),(10, 'Sinais Sonoros'),
-            (11, 'Segurança Ativa e Passiva'),(12, 'Classificação de Veículos'),
+	VALUES 	(1, 'Velocidades'),
+			(2, 'Cedência de Passagem'),
+            (3, 'Via Pública'),
+            (4, 'Manobras'),
+            (5, 'Contraordenações'),
+            (6, 'Categorias de Veículos'),
+            (7, 'Reação, Travagem e Paragem'),
+            (8, 'Circulação em Rotundas'),
+            (9, 'Luzes'),
+            (10, 'Sinais Sonoros'),
+            (11, 'Segurança Ativa e Passiva'),
+            (12, 'Classificação de Veículos'),
             (13, 'Sinais de Trânsito - Hierarquia da Sinalização'),
             (14, 'Sinais de Trânsito - Agentes da Autoriadade'),
             (15, 'Sinais de Trânsito - Sinalização Temporária'),
@@ -45,8 +57,6 @@ INSERT INTO Theme (ID, Name)
             (31, 'Sinais de Trânsito - Painés Adicionais'),
             (32, 'Outras Informações');
 
-
-    
 # ------------------------------------------------------------------------------------------------------------------------------------------------
 # USERS DATA
 # ------------------------------------------------------------------------------------------------------------------------------------------------
@@ -75,10 +85,8 @@ INSERT INTO Register (ID, InstructorUserID, CategoryID, StudentUserID, InitialDa
 			(2, 4, 6, 2, CURDATE()),
             (3, 5, 6, 3, CURDATE());
 
-
-
 # ------------------------------------------------------------------------------------------------------------------------------------------------
-# STUDENTS PERSONAL ANNOUNCEMENTS
+# STUDENTS PERSONAL ANNOUNCEMENTS AND GENERAL ANNOUNCEMENTS
 # ------------------------------------------------------------------------------------------------------------------------------------------------
 INSERT INTO Announcement (ID, Title, Description, Timestamp)
 	VALUES	(1, 'Escola fechada', 'A escola encontra-se encerrada no próximo dia 1 de Julho.', DATE("2019-06-02")),
@@ -99,7 +107,32 @@ INSERT INTO PersonalAnnouncement (AnnouncementID, StudentUserID, Viewed)
 			(8, 1, false), 
             (9, 2, false), 
             (10, 3, false);
+
+# ------------------------------------------------------------------------------------------------------------------------------------------------
+# STUDENTS NEXT EVENTS DATA (PRACTICAL CLASSES AND EXAMS)
+# ------------------------------------------------------------------------------------------------------------------------------------------------
             
-            
-            
-            
+# considering that Lesson state can be 'reserved', 'realized', 'canceled'.
+INSERT INTO Lesson (ID, InstructorUserID, StartTime, Duration, State)
+	VALUES (1, 4, DATE("2019-07-04 11:00:00"), 60, 'reserved'),
+		   (2, 4, DATE("2019-07-03 13:00:00"), 60, 'reserved'),
+           (3, 4, DATE("2019-07-06 11:00:00"), 60, 'reserved'),
+           (4, 4, DATE("2019-07-08 11:00:00"), 60, 'reserved');
+
+INSERT INTO Student_Lesson (StudentUserID, LessonID)
+	VALUES (1, 1),
+		   (2, 2),
+           (3, 3),
+           (3, 4);
+
+INSERT INTO PracticalLesson (IsStudentPresent, LessonID)
+	VALUES (false, 1),
+		   (false, 2),
+           (false, 3),
+           (false, 4);
+
+INSERT INTO Exam (ID, StudentUserID, StartTime, Description)
+	VALUES (1, 1, DATE("2019-07-01 14:30:00"), 'Exame Teórico - Categoria B'),
+		   (2, 2, DATE("2019-07-02 15:30:00"), 'Exame Teórico - Categoria B'),
+           (3, 3, DATE("2019-07-03 16:30:00"), 'Exame Teórico - Categoria B'),
+           (4, 3, DATE("2019-08-20 11:00:00"), 'Exame Prático - Categoria B');

@@ -237,7 +237,6 @@ class HomePage extends Component {
 		  	</div>
         );
 
-
         return (
             <Container>
                 <Dimmer inverted active={this.state.isLoading}>
