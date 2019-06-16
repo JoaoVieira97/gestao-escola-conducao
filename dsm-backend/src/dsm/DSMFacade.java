@@ -76,6 +76,23 @@ public class DSMFacade {
         return userBean.login(email, password);
     }
 
+
+    /**
+     * Get Name of a user.
+     */
+    public static String getName(int userId) {
+
+        return userBean.getName(userId);
+    }
+
+    /**
+     * Get Email of a user.
+     */
+    public static String getEmail(int userId) {
+
+        return userBean.getEmail(userId);
+    }
+
     /**
      * Get the list of all students.
      */
@@ -106,6 +123,14 @@ public class DSMFacade {
     public static List<Lesson> getStudentNextPracticalLessons(int studentId){
 
         return studentBean.getStudentNextPracticalLessons(studentId);
+    }
+
+    /**
+     * Get the list of exams of a specific student.
+     */
+    public static List<Exam> getStudentExams(int studentId){
+
+        return studentBean.getStudentExams(studentId);
     }
 
     /**

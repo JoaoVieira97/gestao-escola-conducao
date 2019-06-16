@@ -34,12 +34,28 @@ public class UserBean implements UserBeanLocal {
     }
 
     @Override
-    public String getName() {
+    public String getName(int userId) {
+
+        try {
+            User user = UserDAO.getUserByORMID(userId);
+            if (user != null) return user.getName();
+
+        } catch (PersistentException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
     @Override
-    public String getEmail() {
+    public String getEmail(int userId) {
+
+        try {
+            User user = UserDAO.getUserByORMID(userId);
+            if (user != null) return user.getEmail();
+
+        } catch (PersistentException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 

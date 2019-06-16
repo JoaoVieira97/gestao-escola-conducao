@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Container, Header, Table, Menu, Icon, Grid, Dropdown, Loader, Dimmer} from 'semantic-ui-react';
+import {Container, Header, Table, Icon, Grid, Dropdown, Loader, Dimmer, Pagination} from 'semantic-ui-react';
 import {fetchApi} from "../../services/api";
 import moment from 'moment';
 
@@ -11,6 +11,9 @@ class PaymentsPage extends Component {
 
         this.state = {
             isLoading: true,
+            nameUser: '',
+            emailUser: '',
+            exams: [],
             allRegisters: [],
             payments: [],
             allCategories: [],
@@ -26,19 +29,49 @@ class PaymentsPage extends Component {
             nameInstructor: '',
             actualPaid: 0,
             totalPrice: 0,
+            _limit: 5,
+            _page: 1,
         }
     };
 
-    componentDidMount() {
+    async componentDidMount() {
 
-        fetchApi(
+        await fetchApi(
+            'get','/student/information?id=1', //TODO Find userID
+            {},  {},
+            this.successFetchInformation, this.errorHandler
+        );
+
+        /*setTimeout(()=>{
+
+            fetchApi(
+                'get','/student/registers?id=1', //TODO Find userID
+                {},  {},
+                this.successFetchRegisters, this.errorHandler
+            );
+
+        }, 2000);*/
+
+
+        await fetchApi(
             'get','/student/registers?id=1', //TODO Find userID
             {},  {},
             this.successFetchRegisters, this.errorHandler
         );
 
+        /*
+        setTimeout(()=>{
 
-        fetchApi(
+            fetchApi(
+                'get','/lessons/student?id=1', //TODO Find userID
+                {},  {},
+                this.successFetchLessons, this.errorHandler
+            );
+
+        }, 2000);*/
+
+
+        await fetchApi(
             'get','/lessons/student?id=1', //TODO Find userID
             {},  {},
             this.successFetchLessons, this.errorHandler
@@ -49,6 +82,20 @@ class PaymentsPage extends Component {
             this.setState({isLoading: false});
         }, 1000); */
     }
+
+    /**
+     * Handle the response fetch registers.
+     * @param response
+     */
+    successFetchInformation = (response) => {
+        const data = response.data;
+
+        this.setState({
+            nameUser: data.name,
+            emailUser: data.email,
+            exams: data.exams,
+        });
+    };
 
     /**
      * Handle the response fetch registers.
@@ -80,6 +127,10 @@ class PaymentsPage extends Component {
     };
 
 
+    /**
+     * Handle the response fetch registers.
+     * @param response
+     */
     successFetchLessons = (response) => {
         const data = response.data;
 
@@ -90,9 +141,6 @@ class PaymentsPage extends Component {
                 practicalRealized : data.practicalLessons,
             });
         }
-
-        console.log(this.state.practicalRealized);
-        console.log(this.state.theoreticalRealized);
 
         //stop loading
         setTimeout(()=>{
@@ -108,6 +156,22 @@ class PaymentsPage extends Component {
     errorHandler = (error) => {
 
         console.log(error);
+
+        /*
+        // bad request
+        if(error.response.status === 400) {
+            this.setState({
+                loginError: true,
+                loginErrorMessage: 'As credenciais que introduziu estão erradas.'
+            });
+        }
+        // invalid API access token
+        else {
+            this.setState({
+                loginError: true,
+                loginErrorMessage: 'Ocorreu um erro ao estabelecer conexão com o servidor principal.'
+            });
+        }*/
     };
 
     handleChange = (event, data) => {
@@ -142,7 +206,7 @@ class PaymentsPage extends Component {
                 practLesson.categories.collection));
 
             let practicalRealized = categoriesPracticalRealized.map( category => (
-               category.filter( cat => (cat.id === categoryId))));
+                category.filter( cat => (cat.id === categoryId))));
 
             let numberP = practicalRealized.reduce( (acc, array) => acc + array.length, 0);
 
@@ -150,7 +214,7 @@ class PaymentsPage extends Component {
                 theoLesson.categories.collection));
 
             let theoreticalRealized = categoriesTheoreticalRealized.map( category =>
-                    (category.filter( cat => (cat.id === categoryId))));
+                (category.filter( cat => (cat.id === categoryId))));
 
             let numberT = theoreticalRealized.reduce( (acc, array) => acc + array.length, 0);
 
@@ -191,13 +255,13 @@ class PaymentsPage extends Component {
 
         const payments = (
             this.state.payments.map(payment => (
-                <Table.Row key={payment.id}>
-                    <Table.Cell>{payment.timestamp}</Table.Cell>
-                    <Table.Cell>{payment.description} </Table.Cell>
-                    <Table.Cell>{payment.value}€</Table.Cell>
-                </Table.Row>
-            )
-        ));
+                    <Table.Row key={payment.id}>
+                        <Table.Cell>{payment.timestamp}</Table.Cell>
+                        <Table.Cell>{payment.description} </Table.Cell>
+                        <Table.Cell>{payment.value}€</Table.Cell>
+                    </Table.Row>
+                )
+            ));
 
         return (
             <Container>
@@ -209,7 +273,7 @@ class PaymentsPage extends Component {
                         <Container textAlign={'center'}>
                             <Header as='h2' icon textAlign='center'>
                                 <Icon name='user circle' size='massive'/>
-                                <Header.Content>Nome Utilizador</Header.Content>
+                                <Header.Content>{this.state.nameUser}</Header.Content>
                             </Header>
                             <Header as='h3' textAlign='left'>
                                 Categoria: <Dropdown
@@ -229,7 +293,12 @@ class PaymentsPage extends Component {
                             <Header as='h3' textAlign={'left'}>Aulas teóricas realizadas: {this.state.numberTheoreticalRealized} / {this.state.totalTheoreticalLessons}</Header>
                             <Header as='h3' textAlign={'left'}>Aulas práticas realizadas: {this.state.numberPracticalRealized} / {this.state.totalPracticalLessons}</Header>
                             <Header as='h3' textAlign={'left'}>Instrutor atual: {this.state.nameInstructor}</Header>
-                            <Header as='h3' textAlign={'left'}>Registo de exames: ... </Header>
+                            <Header as='h3' textAlign={'left'}>Registo de exames:
+                                {
+                                    this.state.exams ? this.state.exams.map( exam =>
+                                        ( exam.description + ' em ' + exam.startTime + "\n")  ) : 'Não há registo de exames.'
+                                }
+                            </Header>
                         </Container>
                     </Grid.Column>
                     <Grid.Column width={8} style={{marginTop:50}}>
@@ -249,22 +318,23 @@ class PaymentsPage extends Component {
                             <Table.Footer>
                                 <Table.Row>
                                     <Table.HeaderCell colSpan='4'>
-                                        <Header as='h3' textAlign={'right'} color='grey'>Valor: {this.state.actualPaid}€
+                                        <Header as='h3' textAlign={'right'} inverted color='grey'>Montante Pago: {this.state.actualPaid}€
                                             / {this.state.totalPrice}€</Header>
                                     </Table.HeaderCell>
                                 </Table.Row>
                                 <Table.Row>
                                     <Table.HeaderCell colSpan='4'>
-                                        <Menu floated='right' pagination>
-                                            <Menu.Item as='a' icon>
-                                                <Icon name='chevron left' />
-                                            </Menu.Item>
-                                            <Menu.Item as='a'>1</Menu.Item>
-                                            <Menu.Item as='a'>2</Menu.Item>
-                                            <Menu.Item as='a' icon>
-                                                <Icon name='chevron right' />
-                                            </Menu.Item>
-                                        </Menu>
+                                        <Pagination
+                                            firstItem={null}
+                                            lastItem={null}
+                                            pointing
+                                            secondary
+                                            inverted
+                                            floated='right'
+                                            totalPages={Math.ceil(this.state.payments.length / this.state._limit)}
+                                            activePage={this.state._page}
+                                            //onPageChange={this.onChangePage.bind(this)}
+                                        />
                                     </Table.HeaderCell>
                                 </Table.Row>
                             </Table.Footer>

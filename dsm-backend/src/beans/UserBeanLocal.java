@@ -10,8 +10,8 @@ public interface UserBeanLocal {
 
     String login(String email, String password);
 
-    String getName();
-    String getEmail();
+    String getName(int userId);
+    String getEmail(int userId);
     String getPassword();
     List<Announcement> getAnnouncements();
 

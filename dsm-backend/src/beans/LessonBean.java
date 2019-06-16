@@ -23,7 +23,7 @@ public class LessonBean implements LessonBeanLocal{
         try {
 
             Student student = StudentDAO.getStudentByORMID(studentId);
-            return Arrays.asList(student.lessons.toArray());
+            if(student != null) return Arrays.asList(student.lessons.toArray());
 
         } catch (PersistentException e) {
             e.printStackTrace();
