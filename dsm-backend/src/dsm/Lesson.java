@@ -13,6 +13,7 @@
  */
 package dsm;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties({"students", "ormid"})
@@ -39,7 +40,8 @@ public abstract class Lesson {
 	};
 	
 	private int ID;
-	
+
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd-MM-yyyy hh:mm")
 	private java.util.Date startTime;
 	
 	private int duration;

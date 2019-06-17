@@ -5,8 +5,6 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dsm.DSMFacade;
 import dsm.Exam;
-import dsm.PracticalLesson;
-import dsm.TheoreticalLesson;
 import utils.Utils;
 
 import javax.servlet.ServletException;
@@ -15,8 +13,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 @WebServlet(name = "GetPersonalInformation", urlPatterns = {"/api/student/information"})
@@ -42,9 +38,6 @@ public class GetPersonalInformation extends HttpServlet {
             List<Exam> exams = DSMFacade.getStudentExams(id);
 
             //ArrayNode examsJSON = mapper.valueToTree(exams);
-
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-            mapper.setDateFormat(df);
 
             if(name!= null) {
                 responseNode.put("name",name);

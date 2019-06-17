@@ -13,8 +13,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 @WebServlet(name = "GetStudentNextExams", urlPatterns = {"/api/student/next_exams"})
@@ -38,9 +36,6 @@ public class GetStudentNextExams extends HttpServlet {
 
             // get next exams
             List<Exam> exams = DSMFacade.getStudentNextExams(id);
-
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-            mapper.setDateFormat(df);
 
             if(exams!= null) {
                 ArrayNode examsJSON = mapper.valueToTree(exams);

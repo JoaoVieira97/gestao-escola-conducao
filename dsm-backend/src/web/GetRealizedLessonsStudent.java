@@ -3,7 +3,6 @@ package web;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dsm.DSMFacade;
 import dsm.PracticalLesson;
-import dsm.Register;
 import dsm.TheoreticalLesson;
 
 import javax.servlet.ServletException;
@@ -12,8 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 @WebServlet(name = "GetRealizedLessonsStudent", urlPatterns = {"/api/lessons/student"})
@@ -39,8 +36,6 @@ public class GetRealizedLessonsStudent extends HttpServlet {
         List<TheoreticalLesson> theoreticalLessons = DSMFacade.getRealizedTheoreticalLessonsStudent(id);
 
         ObjectMapper mapper = new ObjectMapper();
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        mapper.setDateFormat(df);
 
         //TODO Remove students array from lessons
         String sJSONP = mapper.writeValueAsString(practicalLessons);

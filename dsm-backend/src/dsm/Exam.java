@@ -13,6 +13,7 @@
  */
 package dsm;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties({"ormid"})
@@ -21,9 +22,10 @@ public class Exam {
 	}
 	
 	private int ID;
-	
+
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd-MM-yyyy hh:mm")
 	private java.util.Date startTime;
-	
+
 	private String description;
 	
 	private void setID(int value) {

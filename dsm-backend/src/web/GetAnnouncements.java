@@ -13,8 +13,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 @WebServlet(name = "GetAnnouncements", urlPatterns = {"/api/user/announcements"})
@@ -35,9 +33,6 @@ public class GetAnnouncements extends HttpServlet {
 
             // get personal announcements
             List<Announcement> announcements = DSMFacade.getAnnouncements();
-
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-            mapper.setDateFormat(df);
 
             if(announcements!= null) {
                 ArrayNode announcementsJSON = mapper.valueToTree(announcements);

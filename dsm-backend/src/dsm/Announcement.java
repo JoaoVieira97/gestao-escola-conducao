@@ -13,6 +13,7 @@
  */
 package dsm;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties({"ormid"})
@@ -25,7 +26,8 @@ public class Announcement {
 	private String title;
 	
 	private String description;
-	
+
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd-MM-yyyy hh:mm")
 	private java.util.Date timestamp;
 	
 	private void setID(int value) {
