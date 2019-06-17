@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-Licensee: Hugo Oliveira(Universidade do Minho)
+Licensee: João Vieira(Universidade do Minho)
 License Type: Academic
 -->
 <project name="DSM" default="compile">

@@ -1,5 +1,7 @@
 USE dsm;
 
+SET time_zone = '+00:00';
+
 # ------------------------------------------------------------------------------------------------------------------------------------------------
 # SCHOOL DATA
 # ------------------------------------------------------------------------------------------------------------------------------------------------
@@ -89,16 +91,16 @@ INSERT INTO Register (ID, InstructorUserID, CategoryID, StudentUserID, InitialDa
 # STUDENTS PERSONAL ANNOUNCEMENTS AND GENERAL ANNOUNCEMENTS
 # ------------------------------------------------------------------------------------------------------------------------------------------------
 INSERT INTO Announcement (ID, Title, Description, Timestamp)
-	VALUES	(1, 'Escola fechada', 'A escola encontra-se encerrada no próximo dia 1 de Julho.', DATE("2019-06-02")),
-			(2, 'Escola fechada', 'A escola encontra-se encerrada no próximo dia 2 de Julho.', DATE("2019-06-03")), 
-			(3, 'Aula cancelada', 'A sua aula do dia 15/07/2019 foi cancelada.', DATE("2019-06-04")),
-            (4, 'Aula cancelada', 'A sua aula do dia 16/07/2019 foi cancelada.', DATE("2019-06-05")),
-            (5, 'Aula cancelada', 'A sua aula do dia 17/07/2019 foi cancelada.', DATE("2019-06-06")),
-            (6, 'Aula teórica', 'A aula teórica das 10h do dia 25 de Junho foi cancelada.', DATE("2019-06-07")),
-			(7, 'Aula teórica', 'A aula teórica de amanhã realiza-se excepcionalmente às 11h00.', DATE("2019-06-08")), 
-			(8, 'Exame teórico', 'O seu exame teórico está marcado para o dia 1 de Julho pelas 14h30.', DATE("2019-06-09")),
-            (9, 'Exame teórico', 'O seu exame teórico está marcado para o dia 2 de Julho pelas 15h30.', DATE("2019-06-10")),
-            (10, 'Exame teórico', 'O seu exame teórico está marcado para o dia 3 de Julho pelas 16h30.', DATE("2019-06-11"));
+	VALUES	(1, 'Escola fechada', 'A escola encontra-se encerrada no próximo dia 1 de Julho.', "2019-06-02 15:00:00"),
+			(2, 'Escola fechada', 'A escola encontra-se encerrada no próximo dia 2 de Julho.', "2019-06-03 16:00:00"), 
+			(3, 'Aula cancelada', 'A sua aula do dia 15/07/2019 foi cancelada.', "2019-06-04 15:30:00"),
+            (4, 'Aula cancelada', 'A sua aula do dia 16/07/2019 foi cancelada.', "2019-06-05 16:00:00"),
+            (5, 'Aula cancelada', 'A sua aula do dia 17/07/2019 foi cancelada.', "2019-06-06 17:45:00"),
+            (6, 'Aula teórica', 'A aula teórica das 10h do dia 25 de Junho foi cancelada.', "2019-06-07 11:10:00"),
+			(7, 'Aula teórica', 'A aula teórica de amanhã realiza-se excepcionalmente às 11h00.', "2019-06-08 15:30:00"), 
+			(8, 'Exame teórico', 'O seu exame teórico está marcado para o dia 1 de Julho pelas 14h30.', "2019-06-09 15:40:00"),
+            (9, 'Exame teórico', 'O seu exame teórico está marcado para o dia 2 de Julho pelas 15h30.', "2019-06-10 17:00:00"),
+            (10, 'Exame teórico', 'O seu exame teórico está marcado para o dia 3 de Julho pelas 16h30.', "2019-06-11 18:00:00");
 
 INSERT INTO PersonalAnnouncement (AnnouncementID, StudentUserID, Viewed)
 	VALUES	(3, 1, false),
@@ -114,10 +116,10 @@ INSERT INTO PersonalAnnouncement (AnnouncementID, StudentUserID, Viewed)
             
 # considering that Lesson state can be 'reserved', 'realized', 'canceled'.
 INSERT INTO Lesson (ID, InstructorUserID, StartTime, Duration, State)
-	VALUES (1, 4, DATE("2019-07-04 11:00:00"), 60, 'reserved'),
-		   (2, 4, DATE("2019-07-03 13:00:00"), 60, 'reserved'),
-           (3, 4, DATE("2019-07-06 11:00:00"), 60, 'reserved'),
-           (4, 4, DATE("2019-07-08 11:00:00"), 60, 'reserved');
+	VALUES (1, 4, "2019-07-04 11:00:00", 60, 'reserved'),
+		   (2, 4, "2019-07-03 13:00:00", 60, 'reserved'),
+           (3, 4, "2019-07-06 11:00:00", 60, 'reserved'),
+           (4, 4, "2019-07-08 11:00:00", 60, 'reserved');
 
 INSERT INTO Student_Lesson (StudentUserID, LessonID)
 	VALUES (1, 1),
@@ -132,7 +134,7 @@ INSERT INTO PracticalLesson (IsStudentPresent, LessonID)
            (false, 4);
 
 INSERT INTO Exam (ID, StudentUserID, StartTime, Description)
-	VALUES (1, 1, DATE("2019-07-01 14:30:00"), 'Exame Teórico - Categoria B'),
-		   (2, 2, DATE("2019-07-02 15:30:00"), 'Exame Teórico - Categoria B'),
-           (3, 3, DATE("2019-07-03 16:30:00"), 'Exame Teórico - Categoria B'),
-           (4, 3, DATE("2019-08-20 11:00:00"), 'Exame Prático - Categoria B');
+	VALUES (1, 1, "2019-07-01 14:30:00", 'Exame Teórico - Categoria B'),
+		   (2, 2, "2019-07-02 15:30:00", 'Exame Teórico - Categoria B'),
+           (3, 3, "2019-07-03 16:30:00", 'Exame Teórico - Categoria B'),
+           (4, 3, "2019-08-20 11:00:00", 'Exame Prático - Categoria B');

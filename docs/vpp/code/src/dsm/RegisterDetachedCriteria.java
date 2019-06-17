@@ -8,7 +8,7 @@
  */
 
 /**
- * Licensee: Hugo Oliveira(Universidade do Minho)
+ * Licensee: João Vieira(Universidade do Minho)
  * License Type: Academic
  */
 package dsm;

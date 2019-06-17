@@ -8,7 +8,7 @@
  */
 
 /**
- * Licensee: Hugo Oliveira(Universidade do Minho)
+ * Licensee: João Vieira(Universidade do Minho)
  * License Type: Academic
  */
 package dsm;
@@ -41,7 +41,7 @@ public class CategoryDAO {
 		}
 	}
 	
-	public static Category loadCategoryByORMID(int ID, LockMode lockMode) throws PersistentException {
+	public static Category loadCategoryByORMID(int ID, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return loadCategoryByORMID(session, ID, lockMode);
@@ -52,7 +52,7 @@ public class CategoryDAO {
 		}
 	}
 	
-	public static Category getCategoryByORMID(int ID, LockMode lockMode) throws PersistentException {
+	public static Category getCategoryByORMID(int ID, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return getCategoryByORMID(session, ID, lockMode);
@@ -65,7 +65,7 @@ public class CategoryDAO {
 	
 	public static Category loadCategoryByORMID(PersistentSession session, int ID) throws PersistentException {
 		try {
-			return (Category) session.load(Category.class, new Integer(ID));
+			return (Category) session.load(dsm.Category.class, new Integer(ID));
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -75,7 +75,7 @@ public class CategoryDAO {
 	
 	public static Category getCategoryByORMID(PersistentSession session, int ID) throws PersistentException {
 		try {
-			return (Category) session.get(Category.class, new Integer(ID));
+			return (Category) session.get(dsm.Category.class, new Integer(ID));
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -83,9 +83,9 @@ public class CategoryDAO {
 		}
 	}
 	
-	public static Category loadCategoryByORMID(PersistentSession session, int ID, LockMode lockMode) throws PersistentException {
+	public static Category loadCategoryByORMID(PersistentSession session, int ID, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
-			return (Category) session.load(Category.class, new Integer(ID), lockMode);
+			return (Category) session.load(dsm.Category.class, new Integer(ID), lockMode);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -93,9 +93,9 @@ public class CategoryDAO {
 		}
 	}
 	
-	public static Category getCategoryByORMID(PersistentSession session, int ID, LockMode lockMode) throws PersistentException {
+	public static Category getCategoryByORMID(PersistentSession session, int ID, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
-			return (Category) session.get(Category.class, new Integer(ID), lockMode);
+			return (Category) session.get(dsm.Category.class, new Integer(ID), lockMode);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -114,7 +114,7 @@ public class CategoryDAO {
 		}
 	}
 	
-	public static List queryCategory(String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static List queryCategory(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return queryCategory(session, condition, orderBy, lockMode);
@@ -136,7 +136,7 @@ public class CategoryDAO {
 		}
 	}
 	
-	public static Category[] listCategoryByQuery(String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static Category[] listCategoryByQuery(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return listCategoryByQuery(session, condition, orderBy, lockMode);
@@ -163,7 +163,7 @@ public class CategoryDAO {
 		}
 	}
 	
-	public static List queryCategory(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static List queryCategory(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		StringBuffer sb = new StringBuffer("From dsm.Category as Category");
 		if (condition != null)
 			sb.append(" Where ").append(condition);
@@ -191,7 +191,7 @@ public class CategoryDAO {
 		}
 	}
 	
-	public static Category[] listCategoryByQuery(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static Category[] listCategoryByQuery(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			List list = queryCategory(session, condition, orderBy, lockMode);
 			return (Category[]) list.toArray(new Category[list.size()]);
@@ -213,7 +213,7 @@ public class CategoryDAO {
 		}
 	}
 	
-	public static Category loadCategoryByQuery(String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static Category loadCategoryByQuery(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return loadCategoryByQuery(session, condition, orderBy, lockMode);
@@ -232,7 +232,7 @@ public class CategoryDAO {
 			return null;
 	}
 	
-	public static Category loadCategoryByQuery(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static Category loadCategoryByQuery(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		Category[] categorys = listCategoryByQuery(session, condition, orderBy, lockMode);
 		if (categorys != null && categorys.length > 0)
 			return categorys[0];
@@ -251,7 +251,7 @@ public class CategoryDAO {
 		}
 	}
 	
-	public static java.util.Iterator iterateCategoryByQuery(String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static java.util.Iterator iterateCategoryByQuery(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return iterateCategoryByQuery(session, condition, orderBy, lockMode);
@@ -278,7 +278,7 @@ public class CategoryDAO {
 		}
 	}
 	
-	public static java.util.Iterator iterateCategoryByQuery(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static java.util.Iterator iterateCategoryByQuery(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		StringBuffer sb = new StringBuffer("From dsm.Category as Category");
 		if (condition != null)
 			sb.append(" Where ").append(condition);
@@ -296,10 +296,10 @@ public class CategoryDAO {
 	}
 	
 	public static Category createCategory() {
-		return new Category();
+		return new dsm.Category();
 	}
 	
-	public static boolean save(Category category) throws PersistentException {
+	public static boolean save(dsm.Category category) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().saveObject(category);
 			return true;
@@ -310,7 +310,7 @@ public class CategoryDAO {
 		}
 	}
 	
-	public static boolean delete(Category category) throws PersistentException {
+	public static boolean delete(dsm.Category category) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().deleteObject(category);
 			return true;
@@ -321,7 +321,7 @@ public class CategoryDAO {
 		}
 	}
 	
-	public static boolean refresh(Category category) throws PersistentException {
+	public static boolean refresh(dsm.Category category) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().getSession().refresh(category);
 			return true;
@@ -332,7 +332,7 @@ public class CategoryDAO {
 		}
 	}
 	
-	public static boolean evict(Category category) throws PersistentException {
+	public static boolean evict(dsm.Category category) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().getSession().evict(category);
 			return true;

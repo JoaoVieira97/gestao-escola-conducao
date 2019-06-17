@@ -8,7 +8,7 @@
  */
 
 /**
- * Licensee: Hugo Oliveira(Universidade do Minho)
+ * Licensee: João Vieira(Universidade do Minho)
  * License Type: Academic
  */
 package dsm;
@@ -41,7 +41,7 @@ public class InstructorDAO {
 		}
 	}
 	
-	public static Instructor loadInstructorByORMID(int ID, LockMode lockMode) throws PersistentException {
+	public static Instructor loadInstructorByORMID(int ID, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return loadInstructorByORMID(session, ID, lockMode);
@@ -52,7 +52,7 @@ public class InstructorDAO {
 		}
 	}
 	
-	public static Instructor getInstructorByORMID(int ID, LockMode lockMode) throws PersistentException {
+	public static Instructor getInstructorByORMID(int ID, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return getInstructorByORMID(session, ID, lockMode);
@@ -65,7 +65,7 @@ public class InstructorDAO {
 	
 	public static Instructor loadInstructorByORMID(PersistentSession session, int ID) throws PersistentException {
 		try {
-			return (Instructor) session.load(Instructor.class, new Integer(ID));
+			return (Instructor) session.load(dsm.Instructor.class, new Integer(ID));
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -75,7 +75,7 @@ public class InstructorDAO {
 	
 	public static Instructor getInstructorByORMID(PersistentSession session, int ID) throws PersistentException {
 		try {
-			return (Instructor) session.get(Instructor.class, new Integer(ID));
+			return (Instructor) session.get(dsm.Instructor.class, new Integer(ID));
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -83,9 +83,9 @@ public class InstructorDAO {
 		}
 	}
 	
-	public static Instructor loadInstructorByORMID(PersistentSession session, int ID, LockMode lockMode) throws PersistentException {
+	public static Instructor loadInstructorByORMID(PersistentSession session, int ID, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
-			return (Instructor) session.load(Instructor.class, new Integer(ID), lockMode);
+			return (Instructor) session.load(dsm.Instructor.class, new Integer(ID), lockMode);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -93,9 +93,9 @@ public class InstructorDAO {
 		}
 	}
 	
-	public static Instructor getInstructorByORMID(PersistentSession session, int ID, LockMode lockMode) throws PersistentException {
+	public static Instructor getInstructorByORMID(PersistentSession session, int ID, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
-			return (Instructor) session.get(Instructor.class, new Integer(ID), lockMode);
+			return (Instructor) session.get(dsm.Instructor.class, new Integer(ID), lockMode);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -114,7 +114,7 @@ public class InstructorDAO {
 		}
 	}
 	
-	public static List queryInstructor(String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static List queryInstructor(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return queryInstructor(session, condition, orderBy, lockMode);
@@ -136,7 +136,7 @@ public class InstructorDAO {
 		}
 	}
 	
-	public static Instructor[] listInstructorByQuery(String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static Instructor[] listInstructorByQuery(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return listInstructorByQuery(session, condition, orderBy, lockMode);
@@ -163,7 +163,7 @@ public class InstructorDAO {
 		}
 	}
 	
-	public static List queryInstructor(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static List queryInstructor(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		StringBuffer sb = new StringBuffer("From dsm.Instructor as Instructor");
 		if (condition != null)
 			sb.append(" Where ").append(condition);
@@ -191,7 +191,7 @@ public class InstructorDAO {
 		}
 	}
 	
-	public static Instructor[] listInstructorByQuery(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static Instructor[] listInstructorByQuery(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			List list = queryInstructor(session, condition, orderBy, lockMode);
 			return (Instructor[]) list.toArray(new Instructor[list.size()]);
@@ -213,7 +213,7 @@ public class InstructorDAO {
 		}
 	}
 	
-	public static Instructor loadInstructorByQuery(String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static Instructor loadInstructorByQuery(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return loadInstructorByQuery(session, condition, orderBy, lockMode);
@@ -232,7 +232,7 @@ public class InstructorDAO {
 			return null;
 	}
 	
-	public static Instructor loadInstructorByQuery(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static Instructor loadInstructorByQuery(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		Instructor[] instructors = listInstructorByQuery(session, condition, orderBy, lockMode);
 		if (instructors != null && instructors.length > 0)
 			return instructors[0];
@@ -251,7 +251,7 @@ public class InstructorDAO {
 		}
 	}
 	
-	public static java.util.Iterator iterateInstructorByQuery(String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static java.util.Iterator iterateInstructorByQuery(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return iterateInstructorByQuery(session, condition, orderBy, lockMode);
@@ -278,7 +278,7 @@ public class InstructorDAO {
 		}
 	}
 	
-	public static java.util.Iterator iterateInstructorByQuery(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static java.util.Iterator iterateInstructorByQuery(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		StringBuffer sb = new StringBuffer("From dsm.Instructor as Instructor");
 		if (condition != null)
 			sb.append(" Where ").append(condition);
@@ -296,10 +296,10 @@ public class InstructorDAO {
 	}
 	
 	public static Instructor createInstructor() {
-		return new Instructor();
+		return new dsm.Instructor();
 	}
 	
-	public static boolean save(Instructor instructor) throws PersistentException {
+	public static boolean save(dsm.Instructor instructor) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().saveObject(instructor);
 			return true;
@@ -310,7 +310,7 @@ public class InstructorDAO {
 		}
 	}
 	
-	public static boolean delete(Instructor instructor) throws PersistentException {
+	public static boolean delete(dsm.Instructor instructor) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().deleteObject(instructor);
 			return true;
@@ -321,7 +321,7 @@ public class InstructorDAO {
 		}
 	}
 	
-	public static boolean refresh(Instructor instructor) throws PersistentException {
+	public static boolean refresh(dsm.Instructor instructor) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().getSession().refresh(instructor);
 			return true;
@@ -332,7 +332,7 @@ public class InstructorDAO {
 		}
 	}
 	
-	public static boolean evict(Instructor instructor) throws PersistentException {
+	public static boolean evict(dsm.Instructor instructor) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().getSession().evict(instructor);
 			return true;

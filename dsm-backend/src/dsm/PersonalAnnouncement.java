@@ -8,12 +8,12 @@
  */
 
 /**
- * Licensee: Hugo Oliveira(Universidade do Minho)
+ * Licensee: João Vieira(Universidade do Minho)
  * License Type: Academic
  */
 package dsm;
 
-public class PersonalAnnouncement extends Announcement {
+public class PersonalAnnouncement extends dsm.Announcement {
 	public PersonalAnnouncement() {
 	}
 	

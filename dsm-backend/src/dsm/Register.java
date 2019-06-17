@@ -8,13 +8,12 @@
  */
 
 /**
- * Licensee: Hugo Oliveira(Universidade do Minho)
+ * Licensee: João Vieira(Universidade do Minho)
  * License Type: Academic
  */
 package dsm;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 
 @JsonIgnoreProperties({"ormid"})
 public class Register {
@@ -31,11 +30,11 @@ public class Register {
 	
 	private void this_setOwner(Object owner, int key) {
 		if (key == ORMConstants.KEY_REGISTER_CATEGORY) {
-			this.category = (Category) owner;
+			this.category = (dsm.Category) owner;
 		}
 		
 		else if (key == ORMConstants.KEY_REGISTER_INSTRUCTOR) {
-			this.instructor = (Instructor) owner;
+			this.instructor = (dsm.Instructor) owner;
 		}
 	}
 	
@@ -52,9 +51,9 @@ public class Register {
 	
 	private int ID;
 	
-	private Instructor instructor;
+	private dsm.Instructor instructor;
 	
-	private Category category;
+	private dsm.Category category;
 	
 	private java.util.Date initialDate;
 	
@@ -80,11 +79,11 @@ public class Register {
 		return initialDate;
 	}
 	
-	public void setCategory(Category value) {
+	public void setCategory(dsm.Category value) {
 		this.category = value;
 	}
 	
-	public Category getCategory() {
+	public dsm.Category getCategory() {
 		return category;
 	}
 	
@@ -96,13 +95,13 @@ public class Register {
 		return ORM_payments;
 	}
 	
-	public final PaymentSetCollection payments = new PaymentSetCollection(this, _ormAdapter, ORMConstants.KEY_REGISTER_PAYMENTS, ORMConstants.KEY_MUL_ONE_TO_MANY);
+	public final dsm.PaymentSetCollection payments = new dsm.PaymentSetCollection(this, _ormAdapter, ORMConstants.KEY_REGISTER_PAYMENTS, ORMConstants.KEY_MUL_ONE_TO_MANY);
 	
-	public void setInstructor(Instructor value) {
+	public void setInstructor(dsm.Instructor value) {
 		this.instructor = value;
 	}
 	
-	public Instructor getInstructor() {
+	public dsm.Instructor getInstructor() {
 		return instructor;
 	}
 	

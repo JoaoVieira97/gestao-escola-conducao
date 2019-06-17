@@ -8,7 +8,7 @@
  */
 
 /**
- * Licensee: Hugo Oliveira(Universidade do Minho)
+ * Licensee: João Vieira(Universidade do Minho)
  * License Type: Academic
  */
 package dsm;
@@ -25,7 +25,7 @@ public class SchoolInfoDetachedCriteria extends AbstractORMDetachedCriteria {
 	public final TimeExpression endTime;
 	
 	public SchoolInfoDetachedCriteria() {
-		super(SchoolInfo.class, SchoolInfoCriteria.class);
+		super(dsm.SchoolInfo.class, dsm.SchoolInfoCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		maxTimeToCancel = new TimeExpression("maxTimeToCancel", this.getDetachedCriteria());
 		startTime = new TimeExpression("startTime", this.getDetachedCriteria());
@@ -33,7 +33,7 @@ public class SchoolInfoDetachedCriteria extends AbstractORMDetachedCriteria {
 	}
 	
 	public SchoolInfoDetachedCriteria(DetachedCriteria aDetachedCriteria) {
-		super(aDetachedCriteria, SchoolInfoCriteria.class);
+		super(aDetachedCriteria, dsm.SchoolInfoCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		maxTimeToCancel = new TimeExpression("maxTimeToCancel", this.getDetachedCriteria());
 		startTime = new TimeExpression("startTime", this.getDetachedCriteria());

@@ -8,7 +8,7 @@
  */
 
 /**
- * Licensee: Hugo Oliveira(Universidade do Minho)
+ * Licensee: João Vieira(Universidade do Minho)
  * License Type: Academic
  */
 package dsm;
@@ -16,7 +16,7 @@ package dsm;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties({"payments", "exams", "announcements", "lessons", "registers", "ormid"})
-public class Student extends User {
+public class Student extends dsm.User {
 	public Student() {
 	}
 	
@@ -100,7 +100,7 @@ public class Student extends User {
 		return ORM_lessons;
 	}
 	
-	public final LessonSetCollection lessons = new LessonSetCollection(this, _ormAdapter, ORMConstants.KEY_STUDENT_LESSONS, ORMConstants.KEY_LESSON_STUDENTS, ORMConstants.KEY_MUL_MANY_TO_MANY);
+	public final dsm.LessonSetCollection lessons = new dsm.LessonSetCollection(this, _ormAdapter, ORMConstants.KEY_STUDENT_LESSONS, ORMConstants.KEY_LESSON_STUDENTS, ORMConstants.KEY_MUL_MANY_TO_MANY);
 	
 	private void setORM_Registers(java.util.Set value) {
 		this.ORM_registers = value;
@@ -110,7 +110,7 @@ public class Student extends User {
 		return ORM_registers;
 	}
 	
-	public final RegisterSetCollection registers = new RegisterSetCollection(this, _ormAdapter, ORMConstants.KEY_STUDENT_REGISTERS, ORMConstants.KEY_MUL_ONE_TO_MANY);
+	public final dsm.RegisterSetCollection registers = new dsm.RegisterSetCollection(this, _ormAdapter, ORMConstants.KEY_STUDENT_REGISTERS, ORMConstants.KEY_MUL_ONE_TO_MANY);
 	
 	private void setORM_Announcements(java.util.Set value) {
 		this.ORM_announcements = value;
@@ -120,7 +120,7 @@ public class Student extends User {
 		return ORM_announcements;
 	}
 	
-	public final PersonalAnnouncementSetCollection announcements = new PersonalAnnouncementSetCollection(this, _ormAdapter, ORMConstants.KEY_STUDENT_ANNOUNCEMENTS, ORMConstants.KEY_MUL_ONE_TO_MANY);
+	public final dsm.PersonalAnnouncementSetCollection announcements = new dsm.PersonalAnnouncementSetCollection(this, _ormAdapter, ORMConstants.KEY_STUDENT_ANNOUNCEMENTS, ORMConstants.KEY_MUL_ONE_TO_MANY);
 	
 	private void setORM_Exams(java.util.Set value) {
 		this.ORM_exams = value;
@@ -130,7 +130,7 @@ public class Student extends User {
 		return ORM_exams;
 	}
 	
-	public final ExamSetCollection exams = new ExamSetCollection(this, _ormAdapter, ORMConstants.KEY_STUDENT_EXAMS, ORMConstants.KEY_MUL_ONE_TO_MANY);
+	public final dsm.ExamSetCollection exams = new dsm.ExamSetCollection(this, _ormAdapter, ORMConstants.KEY_STUDENT_EXAMS, ORMConstants.KEY_MUL_ONE_TO_MANY);
 	
 	public String toString() {
 		return super.toString();

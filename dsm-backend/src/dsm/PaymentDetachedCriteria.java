@@ -8,7 +8,7 @@
  */
 
 /**
- * Licensee: Hugo Oliveira(Universidade do Minho)
+ * Licensee: João Vieira(Universidade do Minho)
  * License Type: Academic
  */
 package dsm;
@@ -27,7 +27,7 @@ public class PaymentDetachedCriteria extends AbstractORMDetachedCriteria {
 	public final StringExpression description;
 	
 	public PaymentDetachedCriteria() {
-		super(Payment.class, PaymentCriteria.class);
+		super(dsm.Payment.class, dsm.PaymentCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		secretaryId = new IntegerExpression("secretary.", this.getDetachedCriteria());
 		secretary = new AssociationExpression("secretary", this.getDetachedCriteria());
@@ -37,7 +37,7 @@ public class PaymentDetachedCriteria extends AbstractORMDetachedCriteria {
 	}
 	
 	public PaymentDetachedCriteria(DetachedCriteria aDetachedCriteria) {
-		super(aDetachedCriteria, PaymentCriteria.class);
+		super(aDetachedCriteria, dsm.PaymentCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		secretaryId = new IntegerExpression("secretary.", this.getDetachedCriteria());
 		secretary = new AssociationExpression("secretary", this.getDetachedCriteria());

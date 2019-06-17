@@ -8,7 +8,7 @@
  */
 
 /**
- * Licensee: Hugo Oliveira(Universidade do Minho)
+ * Licensee: João Vieira(Universidade do Minho)
  * License Type: Academic
  */
 package dsm;
@@ -41,7 +41,7 @@ public class RegisterDAO {
 		}
 	}
 	
-	public static Register loadRegisterByORMID(int ID, LockMode lockMode) throws PersistentException {
+	public static Register loadRegisterByORMID(int ID, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return loadRegisterByORMID(session, ID, lockMode);
@@ -52,7 +52,7 @@ public class RegisterDAO {
 		}
 	}
 	
-	public static Register getRegisterByORMID(int ID, LockMode lockMode) throws PersistentException {
+	public static Register getRegisterByORMID(int ID, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return getRegisterByORMID(session, ID, lockMode);
@@ -65,7 +65,7 @@ public class RegisterDAO {
 	
 	public static Register loadRegisterByORMID(PersistentSession session, int ID) throws PersistentException {
 		try {
-			return (Register) session.load(Register.class, new Integer(ID));
+			return (Register) session.load(dsm.Register.class, new Integer(ID));
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -75,7 +75,7 @@ public class RegisterDAO {
 	
 	public static Register getRegisterByORMID(PersistentSession session, int ID) throws PersistentException {
 		try {
-			return (Register) session.get(Register.class, new Integer(ID));
+			return (Register) session.get(dsm.Register.class, new Integer(ID));
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -83,9 +83,9 @@ public class RegisterDAO {
 		}
 	}
 	
-	public static Register loadRegisterByORMID(PersistentSession session, int ID, LockMode lockMode) throws PersistentException {
+	public static Register loadRegisterByORMID(PersistentSession session, int ID, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
-			return (Register) session.load(Register.class, new Integer(ID), lockMode);
+			return (Register) session.load(dsm.Register.class, new Integer(ID), lockMode);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -93,9 +93,9 @@ public class RegisterDAO {
 		}
 	}
 	
-	public static Register getRegisterByORMID(PersistentSession session, int ID, LockMode lockMode) throws PersistentException {
+	public static Register getRegisterByORMID(PersistentSession session, int ID, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
-			return (Register) session.get(Register.class, new Integer(ID), lockMode);
+			return (Register) session.get(dsm.Register.class, new Integer(ID), lockMode);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -114,7 +114,7 @@ public class RegisterDAO {
 		}
 	}
 	
-	public static List queryRegister(String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static List queryRegister(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return queryRegister(session, condition, orderBy, lockMode);
@@ -136,7 +136,7 @@ public class RegisterDAO {
 		}
 	}
 	
-	public static Register[] listRegisterByQuery(String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static Register[] listRegisterByQuery(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return listRegisterByQuery(session, condition, orderBy, lockMode);
@@ -163,7 +163,7 @@ public class RegisterDAO {
 		}
 	}
 	
-	public static List queryRegister(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static List queryRegister(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		StringBuffer sb = new StringBuffer("From dsm.Register as Register");
 		if (condition != null)
 			sb.append(" Where ").append(condition);
@@ -191,7 +191,7 @@ public class RegisterDAO {
 		}
 	}
 	
-	public static Register[] listRegisterByQuery(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static Register[] listRegisterByQuery(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			List list = queryRegister(session, condition, orderBy, lockMode);
 			return (Register[]) list.toArray(new Register[list.size()]);
@@ -213,7 +213,7 @@ public class RegisterDAO {
 		}
 	}
 	
-	public static Register loadRegisterByQuery(String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static Register loadRegisterByQuery(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return loadRegisterByQuery(session, condition, orderBy, lockMode);
@@ -232,7 +232,7 @@ public class RegisterDAO {
 			return null;
 	}
 	
-	public static Register loadRegisterByQuery(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static Register loadRegisterByQuery(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		Register[] registers = listRegisterByQuery(session, condition, orderBy, lockMode);
 		if (registers != null && registers.length > 0)
 			return registers[0];
@@ -251,7 +251,7 @@ public class RegisterDAO {
 		}
 	}
 	
-	public static java.util.Iterator iterateRegisterByQuery(String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static java.util.Iterator iterateRegisterByQuery(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return iterateRegisterByQuery(session, condition, orderBy, lockMode);
@@ -278,7 +278,7 @@ public class RegisterDAO {
 		}
 	}
 	
-	public static java.util.Iterator iterateRegisterByQuery(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static java.util.Iterator iterateRegisterByQuery(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		StringBuffer sb = new StringBuffer("From dsm.Register as Register");
 		if (condition != null)
 			sb.append(" Where ").append(condition);
@@ -296,10 +296,10 @@ public class RegisterDAO {
 	}
 	
 	public static Register createRegister() {
-		return new Register();
+		return new dsm.Register();
 	}
 	
-	public static boolean save(Register register) throws PersistentException {
+	public static boolean save(dsm.Register register) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().saveObject(register);
 			return true;
@@ -310,7 +310,7 @@ public class RegisterDAO {
 		}
 	}
 	
-	public static boolean delete(Register register) throws PersistentException {
+	public static boolean delete(dsm.Register register) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().deleteObject(register);
 			return true;
@@ -321,7 +321,7 @@ public class RegisterDAO {
 		}
 	}
 	
-	public static boolean refresh(Register register) throws PersistentException {
+	public static boolean refresh(dsm.Register register) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().getSession().refresh(register);
 			return true;
@@ -332,7 +332,7 @@ public class RegisterDAO {
 		}
 	}
 	
-	public static boolean evict(Register register) throws PersistentException {
+	public static boolean evict(dsm.Register register) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().getSession().evict(register);
 			return true;

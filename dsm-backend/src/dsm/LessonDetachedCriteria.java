@@ -8,7 +8,7 @@
  */
 
 /**
- * Licensee: Hugo Oliveira(Universidade do Minho)
+ * Licensee: João Vieira(Universidade do Minho)
  * License Type: Academic
  */
 package dsm;
@@ -20,16 +20,16 @@ import org.orm.criteria.*;
 
 public class LessonDetachedCriteria extends AbstractORMDetachedCriteria {
 	public final IntegerExpression ID;
-	public final DateExpression startTime;
+	public final TimestampExpression startTime;
 	public final IntegerExpression duration;
 	public final StringExpression state;
 	public final CollectionExpression students;
 	public final CollectionExpression categories;
 	
 	public LessonDetachedCriteria() {
-		super(Lesson.class, LessonCriteria.class);
+		super(dsm.Lesson.class, dsm.LessonCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
-		startTime = new DateExpression("startTime", this.getDetachedCriteria());
+		startTime = new TimestampExpression("startTime", this.getDetachedCriteria());
 		duration = new IntegerExpression("duration", this.getDetachedCriteria());
 		state = new StringExpression("state", this.getDetachedCriteria());
 		students = new CollectionExpression("ORM_Students", this.getDetachedCriteria());
@@ -37,9 +37,9 @@ public class LessonDetachedCriteria extends AbstractORMDetachedCriteria {
 	}
 	
 	public LessonDetachedCriteria(DetachedCriteria aDetachedCriteria) {
-		super(aDetachedCriteria, LessonCriteria.class);
+		super(aDetachedCriteria, dsm.LessonCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
-		startTime = new DateExpression("startTime", this.getDetachedCriteria());
+		startTime = new TimestampExpression("startTime", this.getDetachedCriteria());
 		duration = new IntegerExpression("duration", this.getDetachedCriteria());
 		state = new StringExpression("state", this.getDetachedCriteria());
 		students = new CollectionExpression("ORM_Students", this.getDetachedCriteria());

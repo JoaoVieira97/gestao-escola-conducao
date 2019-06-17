@@ -8,7 +8,7 @@
  */
 
 /**
- * Licensee: Hugo Oliveira(Universidade do Minho)
+ * Licensee: João Vieira(Universidade do Minho)
  * License Type: Academic
  */
 package dsm;
@@ -41,8 +41,8 @@ public abstract class Lesson {
 	
 	private int ID;
 
-	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd-MM-yyyy hh:mm")
-	private java.util.Date startTime;
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy HH:mm")
+	private java.sql.Timestamp startTime;
 	
 	private int duration;
 	
@@ -64,11 +64,11 @@ public abstract class Lesson {
 		return getID();
 	}
 	
-	public void setStartTime(java.util.Date value) {
+	public void setStartTime(java.sql.Timestamp value) {
 		this.startTime = value;
 	}
 	
-	public java.util.Date getStartTime() {
+	public java.sql.Timestamp getStartTime() {
 		return startTime;
 	}
 	
@@ -96,7 +96,7 @@ public abstract class Lesson {
 		return ORM_students;
 	}
 	
-	public final StudentSetCollection students = new StudentSetCollection(this, _ormAdapter, ORMConstants.KEY_LESSON_STUDENTS, ORMConstants.KEY_STUDENT_LESSONS, ORMConstants.KEY_MUL_MANY_TO_MANY);
+	public final dsm.StudentSetCollection students = new dsm.StudentSetCollection(this, _ormAdapter, ORMConstants.KEY_LESSON_STUDENTS, ORMConstants.KEY_STUDENT_LESSONS, ORMConstants.KEY_MUL_MANY_TO_MANY);
 	
 	private void setORM_Categories(java.util.Set value) {
 		this.ORM_categories = value;
@@ -106,7 +106,7 @@ public abstract class Lesson {
 		return ORM_categories;
 	}
 	
-	public final CategorySetCollection categories = new CategorySetCollection(this, _ormAdapter, ORMConstants.KEY_LESSON_CATEGORIES, ORMConstants.KEY_MUL_MANY_TO_MANY);
+	public final dsm.CategorySetCollection categories = new dsm.CategorySetCollection(this, _ormAdapter, ORMConstants.KEY_LESSON_CATEGORIES, ORMConstants.KEY_MUL_MANY_TO_MANY);
 	
 	public String toString() {
 		return String.valueOf(getID());

@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!--
-Licensee: Hugo Oliveira(Universidade do Minho)
+Licensee: João Vieira(Universidade do Minho)
 License Type: Academic
 -->
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 	<class name="dsm.Lesson" table="Lesson" lazy="false">
 		<id name="ID" column="ID" type="integer" unsaved-value="0">
-			<generator class="increment">
+			<generator class="native">
 			</generator>
 		</id>
-		<property name="startTime" column="StartTime" type="date" not-null="false" lazy="false"/>
+		<property name="startTime" column="StartTime" type="timestamp" not-null="false" lazy="false"/>
 		<property name="duration" column="Duration" type="integer" length="10" not-null="true" lazy="false"/>
 		<property name="state" column="State" type="string" length="255" not-null="false" lazy="false"/>
 		<set name="ORM_Students" table="Student_Lesson" lazy="true" cascade="save-update,lock" inverse="true">

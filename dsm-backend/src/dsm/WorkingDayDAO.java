@@ -8,7 +8,7 @@
  */
 
 /**
- * Licensee: Hugo Oliveira(Universidade do Minho)
+ * Licensee: João Vieira(Universidade do Minho)
  * License Type: Academic
  */
 package dsm;
@@ -41,7 +41,7 @@ public class WorkingDayDAO {
 		}
 	}
 	
-	public static WorkingDay loadWorkingDayByORMID(int ID, LockMode lockMode) throws PersistentException {
+	public static WorkingDay loadWorkingDayByORMID(int ID, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return loadWorkingDayByORMID(session, ID, lockMode);
@@ -52,7 +52,7 @@ public class WorkingDayDAO {
 		}
 	}
 	
-	public static WorkingDay getWorkingDayByORMID(int ID, LockMode lockMode) throws PersistentException {
+	public static WorkingDay getWorkingDayByORMID(int ID, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return getWorkingDayByORMID(session, ID, lockMode);
@@ -65,7 +65,7 @@ public class WorkingDayDAO {
 	
 	public static WorkingDay loadWorkingDayByORMID(PersistentSession session, int ID) throws PersistentException {
 		try {
-			return (WorkingDay) session.load(WorkingDay.class, new Integer(ID));
+			return (WorkingDay) session.load(dsm.WorkingDay.class, new Integer(ID));
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -75,7 +75,7 @@ public class WorkingDayDAO {
 	
 	public static WorkingDay getWorkingDayByORMID(PersistentSession session, int ID) throws PersistentException {
 		try {
-			return (WorkingDay) session.get(WorkingDay.class, new Integer(ID));
+			return (WorkingDay) session.get(dsm.WorkingDay.class, new Integer(ID));
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -83,9 +83,9 @@ public class WorkingDayDAO {
 		}
 	}
 	
-	public static WorkingDay loadWorkingDayByORMID(PersistentSession session, int ID, LockMode lockMode) throws PersistentException {
+	public static WorkingDay loadWorkingDayByORMID(PersistentSession session, int ID, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
-			return (WorkingDay) session.load(WorkingDay.class, new Integer(ID), lockMode);
+			return (WorkingDay) session.load(dsm.WorkingDay.class, new Integer(ID), lockMode);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -93,9 +93,9 @@ public class WorkingDayDAO {
 		}
 	}
 	
-	public static WorkingDay getWorkingDayByORMID(PersistentSession session, int ID, LockMode lockMode) throws PersistentException {
+	public static WorkingDay getWorkingDayByORMID(PersistentSession session, int ID, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
-			return (WorkingDay) session.get(WorkingDay.class, new Integer(ID), lockMode);
+			return (WorkingDay) session.get(dsm.WorkingDay.class, new Integer(ID), lockMode);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -114,7 +114,7 @@ public class WorkingDayDAO {
 		}
 	}
 	
-	public static List queryWorkingDay(String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static List queryWorkingDay(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return queryWorkingDay(session, condition, orderBy, lockMode);
@@ -136,7 +136,7 @@ public class WorkingDayDAO {
 		}
 	}
 	
-	public static WorkingDay[] listWorkingDayByQuery(String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static WorkingDay[] listWorkingDayByQuery(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return listWorkingDayByQuery(session, condition, orderBy, lockMode);
@@ -163,7 +163,7 @@ public class WorkingDayDAO {
 		}
 	}
 	
-	public static List queryWorkingDay(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static List queryWorkingDay(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		StringBuffer sb = new StringBuffer("From dsm.WorkingDay as WorkingDay");
 		if (condition != null)
 			sb.append(" Where ").append(condition);
@@ -191,7 +191,7 @@ public class WorkingDayDAO {
 		}
 	}
 	
-	public static WorkingDay[] listWorkingDayByQuery(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static WorkingDay[] listWorkingDayByQuery(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			List list = queryWorkingDay(session, condition, orderBy, lockMode);
 			return (WorkingDay[]) list.toArray(new WorkingDay[list.size()]);
@@ -213,7 +213,7 @@ public class WorkingDayDAO {
 		}
 	}
 	
-	public static WorkingDay loadWorkingDayByQuery(String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static WorkingDay loadWorkingDayByQuery(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return loadWorkingDayByQuery(session, condition, orderBy, lockMode);
@@ -232,7 +232,7 @@ public class WorkingDayDAO {
 			return null;
 	}
 	
-	public static WorkingDay loadWorkingDayByQuery(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static WorkingDay loadWorkingDayByQuery(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		WorkingDay[] workingDays = listWorkingDayByQuery(session, condition, orderBy, lockMode);
 		if (workingDays != null && workingDays.length > 0)
 			return workingDays[0];
@@ -251,7 +251,7 @@ public class WorkingDayDAO {
 		}
 	}
 	
-	public static java.util.Iterator iterateWorkingDayByQuery(String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static java.util.Iterator iterateWorkingDayByQuery(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return iterateWorkingDayByQuery(session, condition, orderBy, lockMode);
@@ -278,7 +278,7 @@ public class WorkingDayDAO {
 		}
 	}
 	
-	public static java.util.Iterator iterateWorkingDayByQuery(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static java.util.Iterator iterateWorkingDayByQuery(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		StringBuffer sb = new StringBuffer("From dsm.WorkingDay as WorkingDay");
 		if (condition != null)
 			sb.append(" Where ").append(condition);
@@ -296,10 +296,10 @@ public class WorkingDayDAO {
 	}
 	
 	public static WorkingDay createWorkingDay() {
-		return new WorkingDay();
+		return new dsm.WorkingDay();
 	}
 	
-	public static boolean save(WorkingDay workingDay) throws PersistentException {
+	public static boolean save(dsm.WorkingDay workingDay) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().saveObject(workingDay);
 			return true;
@@ -310,7 +310,7 @@ public class WorkingDayDAO {
 		}
 	}
 	
-	public static boolean delete(WorkingDay workingDay) throws PersistentException {
+	public static boolean delete(dsm.WorkingDay workingDay) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().deleteObject(workingDay);
 			return true;
@@ -321,7 +321,7 @@ public class WorkingDayDAO {
 		}
 	}
 	
-	public static boolean refresh(WorkingDay workingDay) throws PersistentException {
+	public static boolean refresh(dsm.WorkingDay workingDay) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().getSession().refresh(workingDay);
 			return true;
@@ -332,7 +332,7 @@ public class WorkingDayDAO {
 		}
 	}
 	
-	public static boolean evict(WorkingDay workingDay) throws PersistentException {
+	public static boolean evict(dsm.WorkingDay workingDay) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().getSession().evict(workingDay);
 			return true;

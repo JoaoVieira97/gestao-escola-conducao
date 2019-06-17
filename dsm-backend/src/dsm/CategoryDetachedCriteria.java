@@ -8,7 +8,7 @@
  */
 
 /**
- * Licensee: Hugo Oliveira(Universidade do Minho)
+ * Licensee: João Vieira(Universidade do Minho)
  * License Type: Academic
  */
 package dsm;
@@ -26,7 +26,7 @@ public class CategoryDetachedCriteria extends AbstractORMDetachedCriteria {
 	public final FloatExpression price;
 	
 	public CategoryDetachedCriteria() {
-		super(Category.class, CategoryCriteria.class);
+		super(dsm.Category.class, dsm.CategoryCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		name = new StringExpression("name", this.getDetachedCriteria());
 		practicalLessons = new IntegerExpression("practicalLessons", this.getDetachedCriteria());
@@ -35,7 +35,7 @@ public class CategoryDetachedCriteria extends AbstractORMDetachedCriteria {
 	}
 	
 	public CategoryDetachedCriteria(DetachedCriteria aDetachedCriteria) {
-		super(aDetachedCriteria, CategoryCriteria.class);
+		super(aDetachedCriteria, dsm.CategoryCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		name = new StringExpression("name", this.getDetachedCriteria());
 		practicalLessons = new IntegerExpression("practicalLessons", this.getDetachedCriteria());

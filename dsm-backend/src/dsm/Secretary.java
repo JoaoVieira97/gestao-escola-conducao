@@ -8,12 +8,12 @@
  */
 
 /**
- * Licensee: Hugo Oliveira(Universidade do Minho)
+ * Licensee: João Vieira(Universidade do Minho)
  * License Type: Academic
  */
 package dsm;
 
-public class Secretary extends User {
+public class Secretary extends dsm.User {
 	public Secretary() {
 	}
 	

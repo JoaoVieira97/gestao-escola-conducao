@@ -8,7 +8,7 @@
  */
 
 /**
- * Licensee: Hugo Oliveira(Universidade do Minho)
+ * Licensee: João Vieira(Universidade do Minho)
  * License Type: Academic
  */
 package dsm;
@@ -20,20 +20,20 @@ import org.orm.criteria.*;
 
 public class ExamDetachedCriteria extends AbstractORMDetachedCriteria {
 	public final IntegerExpression ID;
-	public final DateExpression startTime;
+	public final TimestampExpression startTime;
 	public final StringExpression description;
 	
 	public ExamDetachedCriteria() {
-		super(Exam.class, ExamCriteria.class);
+		super(dsm.Exam.class, dsm.ExamCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
-		startTime = new DateExpression("startTime", this.getDetachedCriteria());
+		startTime = new TimestampExpression("startTime", this.getDetachedCriteria());
 		description = new StringExpression("description", this.getDetachedCriteria());
 	}
 	
 	public ExamDetachedCriteria(DetachedCriteria aDetachedCriteria) {
-		super(aDetachedCriteria, ExamCriteria.class);
+		super(aDetachedCriteria, dsm.ExamCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
-		startTime = new DateExpression("startTime", this.getDetachedCriteria());
+		startTime = new TimestampExpression("startTime", this.getDetachedCriteria());
 		description = new StringExpression("description", this.getDetachedCriteria());
 	}
 	

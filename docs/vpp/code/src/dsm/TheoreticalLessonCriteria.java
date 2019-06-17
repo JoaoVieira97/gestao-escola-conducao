@@ -8,7 +8,7 @@
  */
 
 /**
- * Licensee: Hugo Oliveira(Universidade do Minho)
+ * Licensee: João Vieira(Universidade do Minho)
  * License Type: Academic
  */
 package dsm;
@@ -20,7 +20,7 @@ import org.orm.criteria.*;
 
 public class TheoreticalLessonCriteria extends AbstractORMCriteria {
 	public final IntegerExpression ID;
-	public final DateExpression startTime;
+	public final TimestampExpression startTime;
 	public final IntegerExpression duration;
 	public final StringExpression state;
 	public final CollectionExpression students;
@@ -30,7 +30,7 @@ public class TheoreticalLessonCriteria extends AbstractORMCriteria {
 	public TheoreticalLessonCriteria(Criteria criteria) {
 		super(criteria);
 		ID = new IntegerExpression("ID", this);
-		startTime = new DateExpression("startTime", this);
+		startTime = new TimestampExpression("startTime", this);
 		duration = new IntegerExpression("duration", this);
 		state = new StringExpression("state", this);
 		students = new CollectionExpression("ORM_Students", this);

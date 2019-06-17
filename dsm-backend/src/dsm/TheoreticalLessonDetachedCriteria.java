@@ -8,7 +8,7 @@
  */
 
 /**
- * Licensee: Hugo Oliveira(Universidade do Minho)
+ * Licensee: João Vieira(Universidade do Minho)
  * License Type: Academic
  */
 package dsm;
@@ -20,7 +20,7 @@ import org.orm.criteria.*;
 
 public class TheoreticalLessonDetachedCriteria extends AbstractORMDetachedCriteria {
 	public final IntegerExpression ID;
-	public final DateExpression startTime;
+	public final TimestampExpression startTime;
 	public final IntegerExpression duration;
 	public final StringExpression state;
 	public final CollectionExpression students;
@@ -28,9 +28,9 @@ public class TheoreticalLessonDetachedCriteria extends AbstractORMDetachedCriter
 	public final CollectionExpression themes;
 	
 	public TheoreticalLessonDetachedCriteria() {
-		super(TheoreticalLesson.class, TheoreticalLessonCriteria.class);
+		super(dsm.TheoreticalLesson.class, dsm.TheoreticalLessonCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
-		startTime = new DateExpression("startTime", this.getDetachedCriteria());
+		startTime = new TimestampExpression("startTime", this.getDetachedCriteria());
 		duration = new IntegerExpression("duration", this.getDetachedCriteria());
 		state = new StringExpression("state", this.getDetachedCriteria());
 		students = new CollectionExpression("ORM_Students", this.getDetachedCriteria());
@@ -39,9 +39,9 @@ public class TheoreticalLessonDetachedCriteria extends AbstractORMDetachedCriter
 	}
 	
 	public TheoreticalLessonDetachedCriteria(DetachedCriteria aDetachedCriteria) {
-		super(aDetachedCriteria, TheoreticalLessonCriteria.class);
+		super(aDetachedCriteria, dsm.TheoreticalLessonCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
-		startTime = new DateExpression("startTime", this.getDetachedCriteria());
+		startTime = new TimestampExpression("startTime", this.getDetachedCriteria());
 		duration = new IntegerExpression("duration", this.getDetachedCriteria());
 		state = new StringExpression("state", this.getDetachedCriteria());
 		students = new CollectionExpression("ORM_Students", this.getDetachedCriteria());

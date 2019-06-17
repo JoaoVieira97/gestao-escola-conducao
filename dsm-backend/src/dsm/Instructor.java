@@ -8,12 +8,12 @@
  */
 
 /**
- * Licensee: Hugo Oliveira(Universidade do Minho)
+ * Licensee: João Vieira(Universidade do Minho)
  * License Type: Academic
  */
 package dsm;
 
-public class Instructor extends User {
+public class Instructor extends dsm.User {
 	public Instructor() {
 	}
 	
@@ -47,7 +47,7 @@ public class Instructor extends User {
 		return ORM_workingDays;
 	}
 	
-	public final WorkingDaySetCollection workingDays = new WorkingDaySetCollection(this, _ormAdapter, ORMConstants.KEY_INSTRUCTOR_WORKINGDAYS, ORMConstants.KEY_MUL_MANY_TO_MANY);
+	public final dsm.WorkingDaySetCollection workingDays = new dsm.WorkingDaySetCollection(this, _ormAdapter, ORMConstants.KEY_INSTRUCTOR_WORKINGDAYS, ORMConstants.KEY_MUL_MANY_TO_MANY);
 	
 	private void setORM_Lessons(java.util.Set value) {
 		this.ORM_lessons = value;
@@ -57,7 +57,7 @@ public class Instructor extends User {
 		return ORM_lessons;
 	}
 	
-	public final LessonSetCollection lessons = new LessonSetCollection(this, _ormAdapter, ORMConstants.KEY_INSTRUCTOR_LESSONS, ORMConstants.KEY_MUL_ONE_TO_MANY);
+	public final dsm.LessonSetCollection lessons = new dsm.LessonSetCollection(this, _ormAdapter, ORMConstants.KEY_INSTRUCTOR_LESSONS, ORMConstants.KEY_MUL_ONE_TO_MANY);
 	
 	public String toString() {
 		return super.toString();

@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!--
-Licensee: Hugo Oliveira(Universidade do Minho)
+Licensee: João Vieira(Universidade do Minho)
 License Type: Academic
 -->
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 	<class name="dsm.Announcement" table="Announcement" lazy="false">
 		<id name="ID" column="ID" type="integer" unsaved-value="0">
-			<generator class="increment">
+			<generator class="native">
 			</generator>
 		</id>
 		<property name="title" column="Title" type="string" length="255" not-null="false" lazy="false"/>
 		<property name="description" column="Description" type="string" length="255" not-null="false" lazy="false"/>
-		<property name="timestamp" column="Timestamp" type="date" not-null="false" lazy="false"/>
+		<property name="timestamp" column="Timestamp" type="timestamp" not-null="false" lazy="false"/>
 		<joined-subclass name="dsm.PersonalAnnouncement" table="PersonalAnnouncement" lazy="false">
 			<key>
 				<column name="AnnouncementID"/>

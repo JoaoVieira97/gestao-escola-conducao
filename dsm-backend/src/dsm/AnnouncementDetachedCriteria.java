@@ -8,7 +8,7 @@
  */
 
 /**
- * Licensee: Hugo Oliveira(Universidade do Minho)
+ * Licensee: João Vieira(Universidade do Minho)
  * License Type: Academic
  */
 package dsm;
@@ -22,22 +22,22 @@ public class AnnouncementDetachedCriteria extends AbstractORMDetachedCriteria {
 	public final IntegerExpression ID;
 	public final StringExpression title;
 	public final StringExpression description;
-	public final DateExpression timestamp;
+	public final TimestampExpression timestamp;
 	
 	public AnnouncementDetachedCriteria() {
-		super(Announcement.class, AnnouncementCriteria.class);
+		super(dsm.Announcement.class, dsm.AnnouncementCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		title = new StringExpression("title", this.getDetachedCriteria());
 		description = new StringExpression("description", this.getDetachedCriteria());
-		timestamp = new DateExpression("timestamp", this.getDetachedCriteria());
+		timestamp = new TimestampExpression("timestamp", this.getDetachedCriteria());
 	}
 	
 	public AnnouncementDetachedCriteria(DetachedCriteria aDetachedCriteria) {
-		super(aDetachedCriteria, AnnouncementCriteria.class);
+		super(aDetachedCriteria, dsm.AnnouncementCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		title = new StringExpression("title", this.getDetachedCriteria());
 		description = new StringExpression("description", this.getDetachedCriteria());
-		timestamp = new DateExpression("timestamp", this.getDetachedCriteria());
+		timestamp = new TimestampExpression("timestamp", this.getDetachedCriteria());
 	}
 	
 	public Announcement uniqueAnnouncement(PersistentSession session) {

@@ -8,7 +8,7 @@
  */
 
 /**
- * Licensee: Hugo Oliveira(Universidade do Minho)
+ * Licensee: João Vieira(Universidade do Minho)
  * License Type: Academic
  */
 package dsm;
@@ -27,8 +27,8 @@ public class Announcement {
 	
 	private String description;
 
-	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd-MM-yyyy hh:mm")
-	private java.util.Date timestamp;
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy HH:mm")
+	private java.sql.Timestamp timestamp;
 	
 	private void setID(int value) {
 		this.ID = value;
@@ -58,11 +58,11 @@ public class Announcement {
 		return description;
 	}
 	
-	public void setTimestamp(java.util.Date value) {
+	public void setTimestamp(java.sql.Timestamp value) {
 		this.timestamp = value;
 	}
 	
-	public java.util.Date getTimestamp() {
+	public java.sql.Timestamp getTimestamp() {
 		return timestamp;
 	}
 	

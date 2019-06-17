@@ -8,7 +8,7 @@
  */
 
 /**
- * Licensee: Hugo Oliveira(Universidade do Minho)
+ * Licensee: João Vieira(Universidade do Minho)
  * License Type: Academic
  */
 package dsm;
@@ -19,7 +19,7 @@ public class Exam {
 	
 	private int ID;
 	
-	private java.util.Date startTime;
+	private java.sql.Timestamp startTime;
 	
 	private String description;
 	
@@ -35,11 +35,11 @@ public class Exam {
 		return getID();
 	}
 	
-	public void setStartTime(java.util.Date value) {
+	public void setStartTime(java.sql.Timestamp value) {
 		this.startTime = value;
 	}
 	
-	public java.util.Date getStartTime() {
+	public java.sql.Timestamp getStartTime() {
 		return startTime;
 	}
 	

@@ -8,7 +8,7 @@
  */
 
 /**
- * Licensee: Hugo Oliveira(Universidade do Minho)
+ * Licensee: João Vieira(Universidade do Minho)
  * License Type: Academic
  */
 package dsm;
@@ -20,13 +20,13 @@ import org.orm.criteria.*;
 
 public class ExamCriteria extends AbstractORMCriteria {
 	public final IntegerExpression ID;
-	public final DateExpression startTime;
+	public final TimestampExpression startTime;
 	public final StringExpression description;
 	
 	public ExamCriteria(Criteria criteria) {
 		super(criteria);
 		ID = new IntegerExpression("ID", this);
-		startTime = new DateExpression("startTime", this);
+		startTime = new TimestampExpression("startTime", this);
 		description = new StringExpression("description", this);
 	}
 	

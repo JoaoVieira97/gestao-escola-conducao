@@ -8,7 +8,7 @@
  */
 
 /**
- * Licensee: Hugo Oliveira(Universidade do Minho)
+ * Licensee: João Vieira(Universidade do Minho)
  * License Type: Academic
  */
 package dsm;
@@ -41,7 +41,7 @@ public class PersonalAnnouncementDAO {
 		}
 	}
 	
-	public static PersonalAnnouncement loadPersonalAnnouncementByORMID(int ID, LockMode lockMode) throws PersistentException {
+	public static PersonalAnnouncement loadPersonalAnnouncementByORMID(int ID, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return loadPersonalAnnouncementByORMID(session, ID, lockMode);
@@ -52,7 +52,7 @@ public class PersonalAnnouncementDAO {
 		}
 	}
 	
-	public static PersonalAnnouncement getPersonalAnnouncementByORMID(int ID, LockMode lockMode) throws PersistentException {
+	public static PersonalAnnouncement getPersonalAnnouncementByORMID(int ID, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return getPersonalAnnouncementByORMID(session, ID, lockMode);
@@ -65,7 +65,7 @@ public class PersonalAnnouncementDAO {
 	
 	public static PersonalAnnouncement loadPersonalAnnouncementByORMID(PersistentSession session, int ID) throws PersistentException {
 		try {
-			return (PersonalAnnouncement) session.load(PersonalAnnouncement.class, new Integer(ID));
+			return (PersonalAnnouncement) session.load(dsm.PersonalAnnouncement.class, new Integer(ID));
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -75,7 +75,7 @@ public class PersonalAnnouncementDAO {
 	
 	public static PersonalAnnouncement getPersonalAnnouncementByORMID(PersistentSession session, int ID) throws PersistentException {
 		try {
-			return (PersonalAnnouncement) session.get(PersonalAnnouncement.class, new Integer(ID));
+			return (PersonalAnnouncement) session.get(dsm.PersonalAnnouncement.class, new Integer(ID));
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -83,9 +83,9 @@ public class PersonalAnnouncementDAO {
 		}
 	}
 	
-	public static PersonalAnnouncement loadPersonalAnnouncementByORMID(PersistentSession session, int ID, LockMode lockMode) throws PersistentException {
+	public static PersonalAnnouncement loadPersonalAnnouncementByORMID(PersistentSession session, int ID, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
-			return (PersonalAnnouncement) session.load(PersonalAnnouncement.class, new Integer(ID), lockMode);
+			return (PersonalAnnouncement) session.load(dsm.PersonalAnnouncement.class, new Integer(ID), lockMode);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -93,9 +93,9 @@ public class PersonalAnnouncementDAO {
 		}
 	}
 	
-	public static PersonalAnnouncement getPersonalAnnouncementByORMID(PersistentSession session, int ID, LockMode lockMode) throws PersistentException {
+	public static PersonalAnnouncement getPersonalAnnouncementByORMID(PersistentSession session, int ID, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
-			return (PersonalAnnouncement) session.get(PersonalAnnouncement.class, new Integer(ID), lockMode);
+			return (PersonalAnnouncement) session.get(dsm.PersonalAnnouncement.class, new Integer(ID), lockMode);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -114,7 +114,7 @@ public class PersonalAnnouncementDAO {
 		}
 	}
 	
-	public static List queryPersonalAnnouncement(String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static List queryPersonalAnnouncement(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return queryPersonalAnnouncement(session, condition, orderBy, lockMode);
@@ -136,7 +136,7 @@ public class PersonalAnnouncementDAO {
 		}
 	}
 	
-	public static PersonalAnnouncement[] listPersonalAnnouncementByQuery(String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static PersonalAnnouncement[] listPersonalAnnouncementByQuery(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return listPersonalAnnouncementByQuery(session, condition, orderBy, lockMode);
@@ -163,7 +163,7 @@ public class PersonalAnnouncementDAO {
 		}
 	}
 	
-	public static List queryPersonalAnnouncement(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static List queryPersonalAnnouncement(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		StringBuffer sb = new StringBuffer("From dsm.PersonalAnnouncement as PersonalAnnouncement");
 		if (condition != null)
 			sb.append(" Where ").append(condition);
@@ -191,7 +191,7 @@ public class PersonalAnnouncementDAO {
 		}
 	}
 	
-	public static PersonalAnnouncement[] listPersonalAnnouncementByQuery(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static PersonalAnnouncement[] listPersonalAnnouncementByQuery(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			List list = queryPersonalAnnouncement(session, condition, orderBy, lockMode);
 			return (PersonalAnnouncement[]) list.toArray(new PersonalAnnouncement[list.size()]);
@@ -213,7 +213,7 @@ public class PersonalAnnouncementDAO {
 		}
 	}
 	
-	public static PersonalAnnouncement loadPersonalAnnouncementByQuery(String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static PersonalAnnouncement loadPersonalAnnouncementByQuery(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return loadPersonalAnnouncementByQuery(session, condition, orderBy, lockMode);
@@ -232,7 +232,7 @@ public class PersonalAnnouncementDAO {
 			return null;
 	}
 	
-	public static PersonalAnnouncement loadPersonalAnnouncementByQuery(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static PersonalAnnouncement loadPersonalAnnouncementByQuery(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		PersonalAnnouncement[] personalAnnouncements = listPersonalAnnouncementByQuery(session, condition, orderBy, lockMode);
 		if (personalAnnouncements != null && personalAnnouncements.length > 0)
 			return personalAnnouncements[0];
@@ -251,7 +251,7 @@ public class PersonalAnnouncementDAO {
 		}
 	}
 	
-	public static java.util.Iterator iteratePersonalAnnouncementByQuery(String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static java.util.Iterator iteratePersonalAnnouncementByQuery(String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = DSMPersistentManager.instance().getSession();
 			return iteratePersonalAnnouncementByQuery(session, condition, orderBy, lockMode);
@@ -278,7 +278,7 @@ public class PersonalAnnouncementDAO {
 		}
 	}
 	
-	public static java.util.Iterator iteratePersonalAnnouncementByQuery(PersistentSession session, String condition, String orderBy, LockMode lockMode) throws PersistentException {
+	public static java.util.Iterator iteratePersonalAnnouncementByQuery(PersistentSession session, String condition, String orderBy, org.hibernate.LockMode lockMode) throws PersistentException {
 		StringBuffer sb = new StringBuffer("From dsm.PersonalAnnouncement as PersonalAnnouncement");
 		if (condition != null)
 			sb.append(" Where ").append(condition);
@@ -296,10 +296,10 @@ public class PersonalAnnouncementDAO {
 	}
 	
 	public static PersonalAnnouncement createPersonalAnnouncement() {
-		return new PersonalAnnouncement();
+		return new dsm.PersonalAnnouncement();
 	}
 	
-	public static boolean save(PersonalAnnouncement personalAnnouncement) throws PersistentException {
+	public static boolean save(dsm.PersonalAnnouncement personalAnnouncement) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().saveObject(personalAnnouncement);
 			return true;
@@ -310,7 +310,7 @@ public class PersonalAnnouncementDAO {
 		}
 	}
 	
-	public static boolean delete(PersonalAnnouncement personalAnnouncement) throws PersistentException {
+	public static boolean delete(dsm.PersonalAnnouncement personalAnnouncement) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().deleteObject(personalAnnouncement);
 			return true;
@@ -321,7 +321,7 @@ public class PersonalAnnouncementDAO {
 		}
 	}
 	
-	public static boolean refresh(PersonalAnnouncement personalAnnouncement) throws PersistentException {
+	public static boolean refresh(dsm.PersonalAnnouncement personalAnnouncement) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().getSession().refresh(personalAnnouncement);
 			return true;
@@ -332,7 +332,7 @@ public class PersonalAnnouncementDAO {
 		}
 	}
 	
-	public static boolean evict(PersonalAnnouncement personalAnnouncement) throws PersistentException {
+	public static boolean evict(dsm.PersonalAnnouncement personalAnnouncement) throws PersistentException {
 		try {
 			DSMPersistentManager.instance().getSession().evict(personalAnnouncement);
 			return true;

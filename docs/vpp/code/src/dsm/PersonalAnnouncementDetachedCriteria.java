@@ -8,7 +8,7 @@
  */
 
 /**
- * Licensee: Hugo Oliveira(Universidade do Minho)
+ * Licensee: João Vieira(Universidade do Minho)
  * License Type: Academic
  */
 package dsm;
@@ -22,7 +22,7 @@ public class PersonalAnnouncementDetachedCriteria extends AbstractORMDetachedCri
 	public final IntegerExpression ID;
 	public final StringExpression title;
 	public final StringExpression description;
-	public final DateExpression timestamp;
+	public final TimestampExpression timestamp;
 	public final BooleanExpression viewed;
 	
 	public PersonalAnnouncementDetachedCriteria() {
@@ -30,7 +30,7 @@ public class PersonalAnnouncementDetachedCriteria extends AbstractORMDetachedCri
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		title = new StringExpression("title", this.getDetachedCriteria());
 		description = new StringExpression("description", this.getDetachedCriteria());
-		timestamp = new DateExpression("timestamp", this.getDetachedCriteria());
+		timestamp = new TimestampExpression("timestamp", this.getDetachedCriteria());
 		viewed = new BooleanExpression("viewed", this.getDetachedCriteria());
 	}
 	
@@ -39,7 +39,7 @@ public class PersonalAnnouncementDetachedCriteria extends AbstractORMDetachedCri
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		title = new StringExpression("title", this.getDetachedCriteria());
 		description = new StringExpression("description", this.getDetachedCriteria());
-		timestamp = new DateExpression("timestamp", this.getDetachedCriteria());
+		timestamp = new TimestampExpression("timestamp", this.getDetachedCriteria());
 		viewed = new BooleanExpression("viewed", this.getDetachedCriteria());
 	}
 	

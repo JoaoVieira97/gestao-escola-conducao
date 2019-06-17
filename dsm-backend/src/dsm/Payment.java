@@ -8,7 +8,7 @@
  */
 
 /**
- * Licensee: Hugo Oliveira(Universidade do Minho)
+ * Licensee: João Vieira(Universidade do Minho)
  * License Type: Academic
  */
 package dsm;
@@ -19,7 +19,7 @@ public class Payment {
 	
 	private void this_setOwner(Object owner, int key) {
 		if (key == ORMConstants.KEY_PAYMENT_SECRETARY) {
-			this.secretary = (Secretary) owner;
+			this.secretary = (dsm.Secretary) owner;
 		}
 	}
 	
@@ -32,7 +32,7 @@ public class Payment {
 	
 	private int ID;
 	
-	private Secretary secretary;
+	private dsm.Secretary secretary;
 	
 	private double value;
 	
@@ -76,11 +76,11 @@ public class Payment {
 		return description;
 	}
 	
-	public void setSecretary(Secretary value) {
+	public void setSecretary(dsm.Secretary value) {
 		this.secretary = value;
 	}
 	
-	public Secretary getSecretary() {
+	public dsm.Secretary getSecretary() {
 		return secretary;
 	}
 	

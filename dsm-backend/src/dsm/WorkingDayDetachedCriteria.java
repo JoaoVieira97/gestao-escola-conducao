@@ -8,7 +8,7 @@
  */
 
 /**
- * Licensee: Hugo Oliveira(Universidade do Minho)
+ * Licensee: João Vieira(Universidade do Minho)
  * License Type: Academic
  */
 package dsm;
@@ -23,13 +23,13 @@ public class WorkingDayDetachedCriteria extends AbstractORMDetachedCriteria {
 	public final StringExpression name;
 	
 	public WorkingDayDetachedCriteria() {
-		super(WorkingDay.class, WorkingDayCriteria.class);
+		super(dsm.WorkingDay.class, dsm.WorkingDayCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		name = new StringExpression("name", this.getDetachedCriteria());
 	}
 	
 	public WorkingDayDetachedCriteria(DetachedCriteria aDetachedCriteria) {
-		super(aDetachedCriteria, WorkingDayCriteria.class);
+		super(aDetachedCriteria, dsm.WorkingDayCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		name = new StringExpression("name", this.getDetachedCriteria());
 	}

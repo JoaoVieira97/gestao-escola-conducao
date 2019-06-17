@@ -8,7 +8,7 @@
  */
 
 /**
- * Licensee: Hugo Oliveira(Universidade do Minho)
+ * Licensee: João Vieira(Universidade do Minho)
  * License Type: Academic
  */
 package dsm;
@@ -22,24 +22,24 @@ public class PersonalAnnouncementDetachedCriteria extends AbstractORMDetachedCri
 	public final IntegerExpression ID;
 	public final StringExpression title;
 	public final StringExpression description;
-	public final DateExpression timestamp;
+	public final TimestampExpression timestamp;
 	public final BooleanExpression viewed;
 	
 	public PersonalAnnouncementDetachedCriteria() {
-		super(PersonalAnnouncement.class, PersonalAnnouncementCriteria.class);
+		super(dsm.PersonalAnnouncement.class, dsm.PersonalAnnouncementCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		title = new StringExpression("title", this.getDetachedCriteria());
 		description = new StringExpression("description", this.getDetachedCriteria());
-		timestamp = new DateExpression("timestamp", this.getDetachedCriteria());
+		timestamp = new TimestampExpression("timestamp", this.getDetachedCriteria());
 		viewed = new BooleanExpression("viewed", this.getDetachedCriteria());
 	}
 	
 	public PersonalAnnouncementDetachedCriteria(DetachedCriteria aDetachedCriteria) {
-		super(aDetachedCriteria, PersonalAnnouncementCriteria.class);
+		super(aDetachedCriteria, dsm.PersonalAnnouncementCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		title = new StringExpression("title", this.getDetachedCriteria());
 		description = new StringExpression("description", this.getDetachedCriteria());
-		timestamp = new DateExpression("timestamp", this.getDetachedCriteria());
+		timestamp = new TimestampExpression("timestamp", this.getDetachedCriteria());
 		viewed = new BooleanExpression("viewed", this.getDetachedCriteria());
 	}
 	
