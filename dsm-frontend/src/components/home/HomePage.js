@@ -12,34 +12,37 @@ class HomePage extends Component {
             personal_announcements: [],
             general_announcements: [],
             next_practical_lessons: [],
-            next_exams: []
+            next_exams: [],
+            message_pa: 'Sem novos avisos para mostrar.',
+            message_ga: 'Sem avisos para mostrar.',
+            message_e: 'Sem eventos para mostrar.'
         };
     }
 
     async componentDidMount() {
-
+        
         await fetchApi(
             'get','/student/personal_announcements?id=3',
             {},  {},
-            this.successHandlerPA, this.errorHandler
+            this.successHandlerPA, this.errorHandlerPA
         )
 
         await fetchApi(
             'get','/user/announcements',
             {},  {},
-            this.successHandlerA, this.errorHandler
+            this.successHandlerA, this.errorHandlerA
         )
 
         await fetchApi(
             'get','/student/next_practical_lessons?id=3',
             {},  {},
-            this.successHandlerPL, this.errorHandler
+            this.successHandlerPL, this.errorHandlerE
         )
 
         await fetchApi(
             'get','/student/next_exams?id=3',
             {},  {},
-            this.successHandlerE, this.errorHandler
+            this.successHandlerE, this.errorHandlerE
         )
         
     }
@@ -50,11 +53,9 @@ class HomePage extends Component {
      */
     successHandlerPA = async (response) => {
 
-        if (response.data.success){
-        	await this.setState({
-        		personal_announcements: response.data.announcements,
-        	})
-        }
+        await this.setState({
+    		personal_announcements: response.data.announcements,
+        })
 
     };
 
@@ -64,12 +65,10 @@ class HomePage extends Component {
      */
     successHandlerA = async (response) => {
 
-        if (response.data.success){
-        	await this.setState({
-        		general_announcements: response.data.announcements,
-        	})
-        }
-
+        await this.setState({
+       		general_announcements: response.data.announcements,
+        })
+    
     };
 
     /**
@@ -78,11 +77,9 @@ class HomePage extends Component {
      */
     successHandlerPL = async (response) => {
 
-        if (response.data.success){
-            await this.setState({
-                next_practical_lessons: response.data.lessons,
-            })
-        }
+        await this.setState({
+            next_practical_lessons: response.data.lessons,
+        })
 
     };
 
@@ -92,47 +89,80 @@ class HomePage extends Component {
      */
     successHandlerE = async (response) => {
 
-        if (response.data.success){
-            await this.setState({
-                next_exams: response.data.exams,
-                isLoading: false
-            })
-        } else {
-            await this.setState({
-                isLoading: false
-            })
-        }
+        await this.setState({
+            next_exams: response.data.exams,
+            isLoading: false
+        })
 
     };
 
-
     /**
-     * Handle the error.
+     * Handle the error retrieving student personal announcements.
      * @param error
      */
-    errorHandler = (error) => {
+    errorHandlerPA = async (error) => {
 
-    	console.log('erro')
-
+    	console.log('error retrieving personal announcements')
         console.log(error)
+        await this.setState({
+            message_pa: 'Não foi possível obter avisos pessoais.'
+        })
+
+    };
+
+    /**
+     * Handle the error retrieving general announcements.
+     * @param error
+     */
+    errorHandlerPA = async (error) => {
+
+    	console.log('error retrieving general announcements')
+        console.log(error)
+        await this.setState({
+            message_ga: 'Não foi possível obter avisos gerais.'
+        })
+
+    };
+
+    /**
+     * Handle the error retrieving next student events.
+     * @param error
+     */
+    errorHandlerE = async (error) => {
+
+    	console.log('error retrieving next events')
+        console.log(error)
+        await this.setState({
+            message_e: 'Não foi possível obter avisos gerais.',
+            isLoading: false
+        })
 
     };
 
     render() {
 
-        const next_events = this.state.next_practical_lessons.concat(this.state.next_exams)
-        
+        const next_events = this.state.next_practical_lessons.concat(this.state.next_exams) 
         next_events.sort(function(e1, e2) {
             return new Date(e1.startTime) - new Date(e2.startTime);
         });
 
-        console.log(next_events)
+        const p_announcements = this.state.personal_announcements
+        p_announcements.sort(function(pa1, pa2) {
+            return new Date(pa2.timestamp) - new Date(pa1.timestamp);
+        });
+
+        const g_announcements = this.state.general_announcements
+        g_announcements.sort(function(ga1, ga2) {
+            return new Date(ga2.timestamp) - new Date(ga1.timestamp);
+        });
+
+        //console.log(next_events)
 
         const personalAnnouncements = (
             <div className={"ui fluid card grey"}>
                 <Card.Content>
                     <Card.Header>
-      					<Icon.Group>
+      					<Icon.Group style={{marginRight: "8px"}}>
                     		<Icon color='grey' name='user' />
                     	</Icon.Group>
       					Avisos pessoais recentes
@@ -140,8 +170,8 @@ class HomePage extends Component {
                 </Card.Content>
                 <Card.Content>
                     <Feed>
-                        {(this.state.personal_announcements.length > 0) ?
-                            this.state.personal_announcements.map(pa => (
+                        {(p_announcements.length > 0) ?
+                            p_announcements.map(pa => (
                                 <Feed.Event key={pa.id}>
                                     <Feed.Label>
                                         <Icon name='tasks'/>
@@ -157,7 +187,7 @@ class HomePage extends Component {
                                     </Feed.Content>
                                 </Feed.Event>
                             )) :
-                            <Header as='h4' color='grey'>Sem novos avisos para mostrar.</Header>
+                            <Header as='h4' color='grey'>{this.state.message_pa}</Header>
                         }
                     </Feed>
                 </Card.Content>
@@ -168,7 +198,7 @@ class HomePage extends Component {
             <div className={"ui fluid card grey"}>
                 <Card.Content>
                     <Card.Header>
-                    	<Icon.Group>
+                    	<Icon.Group style={{marginRight: "8px"}}>
                     		<Icon color='grey' name='group' />
                     	</Icon.Group>
                     	Avisos gerais recentes
@@ -176,8 +206,8 @@ class HomePage extends Component {
                 </Card.Content>
                 <Card.Content>
                     <Feed>
-                        {(this.state.general_announcements.length > 0) ?
-                            this.state.general_announcements.map(a => (
+                        {(g_announcements.length > 0) ?
+                            g_announcements.map(a => (
                                 <Feed.Event key={a.id}>
                                     <Feed.Label>
                                         <Icon name='tasks'/>
@@ -193,7 +223,7 @@ class HomePage extends Component {
                                     </Feed.Content>
                                 </Feed.Event> 
                             )) :
-                            <Header as='h4' color='grey'>Sem avisos para mostrar.</Header>
+                            <Header as='h4' color='grey'>{this.state.message_ga}</Header>
                         }
                     </Feed>
                 </Card.Content>
@@ -204,7 +234,7 @@ class HomePage extends Component {
         	<div className={"ui fluid card grey"}>
 	        	<Card.Content>
 	                <Card.Header>
-	                	<Icon.Group>
+	                	<Icon.Group style={{marginRight: "8px"}}>
                     		<Icon color='grey' name='calendar' />
                     	</Icon.Group>
 	                	Próximos eventos
@@ -214,23 +244,23 @@ class HomePage extends Component {
 		            <List divided>
 		            	{(next_events.length > 0) ?
                             next_events.map(e => (
-							    <List.Item key={e.id} style={{marginBottom: "10px"}}>
+							    <List.Item key={next_events.indexOf(e)} style={{marginBottom: "10px"}}>
 							      	<Icon name='calendar outline' />
 							      	<List.Content>
                                         {(e.duration) ?
 							        	    <List.Header>Aula Prática</List.Header> :
                                             <List.Header>{e.description}</List.Header>
                                         }
-							        	<List.Description>
-							          		{e.startTime}
+							        	<List.Description style={{marginTop: "3px"}}>
+							          		{e.startTime.split(" ")[0]}
 							        	</List.Description>
-							        	<List.Description>
-							          		__Horas__
+							        	<List.Description style={{marginTop: "3px"}}>
+                                            {e.startTime.split(" ")[1]}
 							        	</List.Description>
 							      	</List.Content>
 							    </List.Item>
 							)) :
-                            <Header as='h4' color='grey'>Sem eventos para mostrar.</Header>
+                            <Header as='h4' color='grey'>{this.state.message_e}</Header>
 						}				    
 				  	</List>
 			  	</Card.Content>
