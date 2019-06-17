@@ -62,29 +62,6 @@ public class StudentBean implements StudentBeanLocal {
     }
 
     @Override
-    public List<Lesson> getStudentNextPracticalLessons(int studentID) {
-
-        try {
-
-            Student student = (Student) StudentDAO.getStudentByORMID(session, studentID);
-            if (student != null) {
-                List<Lesson> lessons = Arrays.asList(student.lessons.toArray());
-                List<Lesson> pratical_lessons = lessons.stream()
-                                                       .filter(l -> l instanceof PracticalLesson && l.getStartTime().after(new Date()) && l.getState().equals("reserved"))
-                                                       .collect(Collectors.toList());
-
-                return pratical_lessons;
-
-            }
-
-        } catch (PersistentException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    @Override
     public List<Exam> getStudentExams(int studentID) {
 
         try {

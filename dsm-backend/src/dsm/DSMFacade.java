@@ -122,7 +122,7 @@ public class DSMFacade {
      */
     public static List<Lesson> getStudentNextPracticalLessons(int studentId){
 
-        return studentBean.getStudentNextPracticalLessons(studentId);
+        return lessonBean.getStudentNextPracticalLessons(studentId);
     }
 
     /**

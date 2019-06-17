@@ -1,8 +1,11 @@
 package web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import dsm.Announcement;
 import dsm.DSMFacade;
+import utils.Utils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,17 +26,38 @@ public class GetAnnouncements extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // get personal announcements
-        List<Announcement> announcements = DSMFacade.getAnnouncements();
+
         ObjectMapper mapper = new ObjectMapper();
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        mapper.setDateFormat(df);
-        String sJSON = mapper.writeValueAsString(announcements);
-        if (announcements != null)
-            sJSON = "{\"success\":true,\"announcements\":" + sJSON + "}";
-        else
-            sJSON = "{\"success\":false,\"announcements\":" + sJSON + "}";
+        ObjectNode responseNode = mapper.createObjectNode();
+
+        // check access token
+        if(Utils.accessTokenValidation(request)) {
+
+            // get personal announcements
+            List<Announcement> announcements = DSMFacade.getAnnouncements();
+
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            mapper.setDateFormat(df);
+
+            if(announcements!= null) {
+                ArrayNode announcementsJSON = mapper.valueToTree(announcements);
+                responseNode.putArray("announcements").addAll(announcementsJSON);
+                response.setStatus(HttpServletResponse.SC_OK);
+            }
+            else{
+                responseNode.put("error", "Can't retrieve general announcements");
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            }
+
+        }
+        else {
+            responseNode.put("error", "Invalid API access token.");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        }
+
         response.setContentType("application/json;charset=UTF-8");
-        response.getWriter().write(sJSON);
+        response.getWriter().write(
+                mapper.writerWithDefaultPrettyPrinter().writeValueAsString(responseNode)
+        );
     }
 }

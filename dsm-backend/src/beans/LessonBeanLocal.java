@@ -20,4 +20,6 @@ public interface LessonBeanLocal {
     List<PracticalLesson> getRealizedPracticalLessonsStudent(int studentId);
 
     List<TheoreticalLesson> getRealizedTheoreticalLessonsStudent(int studentId);
+
+    List<Lesson> getStudentNextPracticalLessons(int studentID);
 }

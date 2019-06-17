@@ -9,12 +9,13 @@ import java.util.List;
 public interface StudentBeanLocal {
 
     List<Student> getStudents();
+
     List<Register> getStudentRegisters(int studentID);
+
     List<PersonalAnnouncement> getStudentPersonalAnnouncements(int studentID);
-    List<Lesson> getStudentNextPracticalLessons(int studentID);
 
     List<Exam> getStudentExams(int studentID);
 
-    public List<Exam> getStudentNextExams(int studentID);
+    List<Exam> getStudentNextExams(int studentID);
 
 }

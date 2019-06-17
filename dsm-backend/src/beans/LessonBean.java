@@ -7,6 +7,7 @@ import javax.ejb.Stateless;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Stateless(name = "LessonBean")
 public class LessonBean implements LessonBeanLocal{
@@ -82,6 +83,29 @@ public class LessonBean implements LessonBeanLocal{
             }
 
             return theoreticalLessons;
+
+        } catch (PersistentException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<Lesson> getStudentNextPracticalLessons(int studentID) {
+
+        try {
+
+            Student student = (Student) StudentDAO.getStudentByORMID(studentID);
+            if (student != null) {
+                List<Lesson> lessons = Arrays.asList(student.lessons.toArray());
+                List<Lesson> pratical_lessons = lessons.stream()
+                        .filter(l -> l instanceof PracticalLesson && l.getState().equals("reserved"))
+                        .collect(Collectors.toList());
+
+                return pratical_lessons;
+
+            }
 
         } catch (PersistentException e) {
             e.printStackTrace();
