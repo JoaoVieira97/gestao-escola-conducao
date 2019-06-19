@@ -37,7 +37,7 @@ public class UserBean implements UserBeanLocal {
     public String getName(int userId) {
 
         try {
-            User user = UserDAO.getUserByORMID(userId);
+            User user = UserDAO.getUserByORMID(session, userId);
             if (user != null) return user.getName();
 
         } catch (PersistentException e) {
@@ -50,7 +50,7 @@ public class UserBean implements UserBeanLocal {
     public String getEmail(int userId) {
 
         try {
-            User user = UserDAO.getUserByORMID(userId);
+            User user = UserDAO.getUserByORMID(session, userId);
             if (user != null) return user.getEmail();
 
         } catch (PersistentException e) {

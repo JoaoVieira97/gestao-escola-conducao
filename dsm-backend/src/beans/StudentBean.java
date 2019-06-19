@@ -65,7 +65,7 @@ public class StudentBean implements StudentBeanLocal {
     public List<Exam> getStudentExams(int studentID) {
 
         try {
-            Student student =  StudentDAO.getStudentByORMID(studentID);
+            Student student =  StudentDAO.getStudentByORMID(session, studentID);
             if (student != null) return Arrays.asList(student.exams.toArray());
 
         } catch (PersistentException e) {

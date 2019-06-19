@@ -2,6 +2,8 @@ package beans;
 
 import dsm.*;
 import org.orm.PersistentException;
+import org.orm.PersistentSession;
+import utils.Utils;
 
 import javax.ejb.Stateless;
 import java.util.ArrayList;
@@ -12,6 +14,7 @@ import java.util.stream.Collectors;
 @Stateless(name = "LessonBean")
 public class LessonBean implements LessonBeanLocal{
 
+    private final static PersistentSession session = Utils.getSession();
 
     @Override
     public List<Lesson> getLessons() {
@@ -23,7 +26,7 @@ public class LessonBean implements LessonBeanLocal{
 
         try {
 
-            Student student = StudentDAO.getStudentByORMID(studentId);
+            Student student = StudentDAO.getStudentByORMID(session, studentId);
             if(student != null) return Arrays.asList(student.lessons.toArray());
 
         } catch (PersistentException e) {
@@ -55,7 +58,7 @@ public class LessonBean implements LessonBeanLocal{
             List<PracticalLesson> practicalLessons = new ArrayList<>();
 
             for (Lesson lesson : lessons) {
-                PracticalLesson practicalLesson = PracticalLessonDAO.getPracticalLessonByORMID(lesson.getID());
+                PracticalLesson practicalLesson = PracticalLessonDAO.getPracticalLessonByORMID(session, lesson.getID());
                 if(practicalLesson!=null && practicalLesson.getIsStudentPresent()) practicalLessons.add(practicalLesson);
             }
 
@@ -78,7 +81,7 @@ public class LessonBean implements LessonBeanLocal{
             List<TheoreticalLesson> theoreticalLessons = new ArrayList<>();
 
             for (Lesson lesson : lessons) {
-                TheoreticalLesson theoreticalLesson = TheoreticalLessonDAO.getTheoreticalLessonByORMID(lesson.getID());
+                TheoreticalLesson theoreticalLesson = TheoreticalLessonDAO.getTheoreticalLessonByORMID(session, lesson.getID());
                 if(theoreticalLesson!=null) theoreticalLessons.add(theoreticalLesson);
             }
 
@@ -94,23 +97,16 @@ public class LessonBean implements LessonBeanLocal{
     @Override
     public List<Lesson> getStudentNextPracticalLessons(int studentID) {
 
-        try {
+        List<Lesson> pratical_lessons = null;
 
-            Student student = (Student) StudentDAO.getStudentByORMID(studentID);
-            if (student != null) {
-                List<Lesson> lessons = Arrays.asList(student.lessons.toArray());
-                List<Lesson> pratical_lessons = lessons.stream()
-                        .filter(l -> l instanceof PracticalLesson && l.getState().equals("reserved"))
-                        .collect(Collectors.toList());
+        List<Lesson> lessons = this.getLessonsStudent(studentID);
 
-                return pratical_lessons;
-
-            }
-
-        } catch (PersistentException e) {
-            e.printStackTrace();
+        if (lessons!= null){
+            pratical_lessons = lessons.stream()
+                    .filter(l -> l instanceof PracticalLesson && l.getState().equals("reserved"))
+                    .collect(Collectors.toList());
         }
 
-        return null;
+        return pratical_lessons;
     }
 }

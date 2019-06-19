@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import {Container, Header, Table, Icon, Grid, Dropdown, Loader, Dimmer, Pagination} from 'semantic-ui-react';
+import {Container, Header, Table, Icon, Grid, Dropdown, Loader, Dimmer, Pagination, List} from 'semantic-ui-react';
 import {fetchApi} from "../../services/api";
 import moment from 'moment';
+import _ from "lodash";
 
 
 class PaymentsPage extends Component {
@@ -29,6 +30,9 @@ class PaymentsPage extends Component {
             nameInstructor: '',
             actualPaid: 0,
             totalPrice: 0,
+
+            _column: null,
+            _direction: null,
             _limit: 5,
             _page: 1,
         }
@@ -251,10 +255,41 @@ class PaymentsPage extends Component {
 
     };
 
+    onChangePage(event, data) {
+        const {activePage} = data;
+        if (activePage !== this.state._page) {
+            this.setState({ _page: activePage });
+        }
+    }
+
+    handleSort = clickedColumn => () => {
+
+        const { _column, payments, _direction } = this.state;
+
+        if (_column !== clickedColumn) {
+
+            this.setState({
+                _column: clickedColumn,
+                _direction: 'ascending',
+                payments: _.sortBy(payments, [clickedColumn]),
+            });
+        }
+        else {
+            this.setState({
+                payments: payments.reverse(),
+                _direction: _direction === 'ascending' ? 'descending' : 'ascending',
+            });
+        }
+    };
+
     render() {
 
-        const payments = (
-            this.state.payments.map(payment => (
+        const { payments, _column, _direction , _limit, _page } = this.state;
+
+        const paymentsPage = payments.slice( (_page - 1) * _limit , _page * _limit);
+
+        const paymentsR = (
+            paymentsPage.map(payment => (
                     <Table.Row key={payment.id}>
                         <Table.Cell>{payment.timestamp}</Table.Cell>
                         <Table.Cell>{payment.description} </Table.Cell>
@@ -263,8 +298,18 @@ class PaymentsPage extends Component {
                 )
             ));
 
+        const exams = (
+            this.state.exams.length>0 ? this.state.exams.map( exam =>
+                    <List.Item key={exam.id}>
+                        {exam.description + ' em ' +
+                            (exam.startTime.split(" "))[0] +
+                            ' às ' + (exam.startTime.split(" "))[1]}
+                    </List.Item>
+                 ) : ' Não há registo de exames.'
+        );
+
         return (
-            <Container>
+            <Container style={{marginBottom:100}}>
                 <Dimmer inverted active={this.state.isLoading}>
                     <Loader>A carregar</Loader>
                 </Dimmer>
@@ -294,25 +339,31 @@ class PaymentsPage extends Component {
                             <Header as='h3' textAlign={'left'}>Aulas práticas realizadas: {this.state.numberPracticalRealized} / {this.state.totalPracticalLessons}</Header>
                             <Header as='h3' textAlign={'left'}>Instrutor atual: {this.state.nameInstructor}</Header>
                             <Header as='h3' textAlign={'left'}>Registo de exames:
-                                {
-                                    this.state.exams ? this.state.exams.map( exam =>
-                                        ( exam.description + ' em ' + exam.startTime + "\n")  ) : 'Não há registo de exames.'
-                                }
+                                <List bulleted>
+                                    {exams}
+                                </List>
                             </Header>
                         </Container>
                     </Grid.Column>
                     <Grid.Column width={8} style={{marginTop:50}}>
-                        <Table inverted fluid="true" striped stackable padded='very' verticalAlign='bottom'>
+                        <Table sortable celled inverted fluid="true" striped stackable verticalAlign='bottom'>
                             <Table.Header>
                                 <Table.Row>
-                                    <Table.HeaderCell>Data Pagamento</Table.HeaderCell>
-                                    <Table.HeaderCell>Descrição</Table.HeaderCell>
-                                    <Table.HeaderCell>Valor</Table.HeaderCell>
+                                    <Table.HeaderCell
+                                        collapsing
+                                        sorted={_column === 'date' ? _direction : null}
+                                        onClick={this.handleSort('date')}>Data do Pagamento
+                                    </Table.HeaderCell>
+                                    <Table.HeaderCell> Descrição </Table.HeaderCell>
+                                    <Table.HeaderCell
+                                        sorted={_column === 'value' ? _direction : null}
+                                        onClick={this.handleSort('value')}>Valor
+                                    </Table.HeaderCell>
                                 </Table.Row>
                             </Table.Header>
 
                             <Table.Body>
-                                {payments}
+                                {paymentsR}
                             </Table.Body>
 
                             <Table.Footer>
@@ -333,7 +384,7 @@ class PaymentsPage extends Component {
                                             floated='right'
                                             totalPages={Math.ceil(this.state.payments.length / this.state._limit)}
                                             activePage={this.state._page}
-                                            //onPageChange={this.onChangePage.bind(this)}
+                                            onPageChange={this.onChangePage.bind(this)}
                                         />
                                     </Table.HeaderCell>
                                 </Table.Row>

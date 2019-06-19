@@ -85,7 +85,13 @@ INSERT INTO Secretary (UserID)
 INSERT INTO Register (ID, InstructorUserID, CategoryID, StudentUserID, InitialDate)
 	VALUES 	(1, 4, 6, 1, CURDATE()), 
 			(2, 4, 6, 2, CURDATE()),
-            (3, 5, 6, 3, CURDATE());
+            (3, 5, 6, 3, CURDATE()),
+            (4, 5, 3, 1, '2019-08-01');
+
+INSERT INTO Payment (ID, RegisterID, SecretaryUserID, Value, Timestamp, Description)
+    VALUES  (1, 1, 6, 100.0, CURDATE(), 'Inscrição'),
+            (2, 1, 6, 120.0, '2019-07-01', 'Primeira prestação'),
+            (3, 4, 6, 100.0, '2019-08-01', 'Inscrição');            
 
 # ------------------------------------------------------------------------------------------------------------------------------------------------
 # STUDENTS PERSONAL ANNOUNCEMENTS AND GENERAL ANNOUNCEMENTS
@@ -119,19 +125,37 @@ INSERT INTO Lesson (ID, InstructorUserID, StartTime, Duration, State)
 	VALUES (1, 4, "2019-07-04 11:00:00", 60, 'reserved'),
 		   (2, 4, "2019-07-03 13:00:00", 60, 'reserved'),
            (3, 4, "2019-07-06 11:00:00", 60, 'reserved'),
-           (4, 4, "2019-07-08 11:00:00", 60, 'reserved');
+           (4, 4, "2019-07-08 11:00:00", 60, 'reserved'),
+           (5, 4, '2019-06-20 17:00:00', 60, 'realized'),
+           (6, 4, '2019-06-21 17:00:00', 60, 'realized'),
+           (7, 4, '2019-06-22 10:00:00', 60, 'realized'),
+           (8, 5, '2019-08-05 17:00:00', 60, 'realized'),
+           (9, 5, '2019-08-10 10:00:00', 60, 'realized');
 
 INSERT INTO Student_Lesson (StudentUserID, LessonID)
-	VALUES (1, 1),
-		   (2, 2),
-           (3, 3),
-           (3, 4);
+	VALUES (1, 1), (2, 2),
+           (3, 3), (3, 4),
+           (1, 5), (1, 6),
+           (1, 7), (1, 8),
+           (1, 9);
 
 INSERT INTO PracticalLesson (IsStudentPresent, LessonID)
 	VALUES (false, 1),
 		   (false, 2),
            (false, 3),
-           (false, 4);
+           (false, 4),
+           (true, 5),
+           (false, 6),
+           (true, 8);
+INSERT INTO TheoreticalLesson (LessonID)
+    VALUES (7), (9);
+
+INSERT INTO Lesson_Category (LessonID, CategoryID)
+    VALUES (5, 6),
+           (6, 6),
+           (7, 6),
+           (8, 3),
+           (9, 3);               
 
 INSERT INTO Exam (ID, StudentUserID, StartTime, Description)
 	VALUES (1, 1, "2019-07-01 14:30:00", 'Exame Teórico - Categoria B'),
