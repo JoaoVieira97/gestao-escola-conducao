@@ -14,15 +14,15 @@ import 'semantic-ui-css/semantic.min.css'
 import Authentication from '../services/session/Authentication';
 
 // Components
-import Header from "./Header";
-import Footer from "./Footer"
+import Header from './Header';
+import Footer from './Footer';
 import LoginPage from './login/LoginPage';
 import HomePage from './home/HomePage';
 import LessonsPage from './lessons/LessonsPage';
 import PaymentsPage from './payments/PaymentsPage';
-import ErrorPage from "./ErrorPage";
-import AllStudents from "./students/AllStudents";
-
+import ErrorPage from './ErrorPage';
+import AllStudents from './students/AllStudents';
+import Announcements from './announcements/Announcements';
 
 
 
@@ -51,6 +51,7 @@ const Root = ({ store }) => {
                     <PrivateRoute exact path="/lessons" component={LessonsPage} />
                     <PrivateRoute exact path="/payments" component={PaymentsPage} />
                     <PrivateRoute exact path="/students" component={AllStudents} />
+                    <PrivateRoute exact path="/announcements" component={Announcements} />
                     <Route exact path="/contacts" render={ props => <ErrorPage {...props} />} />
                     <Redirect from="/" exact to="/home" />
                     <Route path="/" render={ props => <ErrorPage {...props} />} />

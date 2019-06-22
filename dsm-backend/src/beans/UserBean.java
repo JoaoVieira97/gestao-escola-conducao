@@ -126,4 +126,31 @@ public class UserBean implements UserBeanLocal {
 
         return null;
     }
+
+    /**
+     * Get most recent school announcements.
+     * @return
+     */
+    @Override
+    public List<Announcement> getRecentAnnouncements(){
+
+        try {
+
+            session = getSession();
+
+            List<Announcement> all_announcements = (List<Announcement>) AnnouncementDAO.queryAnnouncement(session, "id>0", "timestamp desc");
+            List<Announcement> recent_general_announcements =
+                    all_announcements.stream()
+                            .filter(a -> !(a instanceof PersonalAnnouncement))
+                            .limit(5)
+                            .sorted(Comparator.comparing(Announcement::getTimestamp).reversed())
+                            .collect(Collectors.toList());
+
+            return recent_general_announcements;
+        } catch (PersistentException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 }

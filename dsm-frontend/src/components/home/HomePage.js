@@ -20,31 +20,31 @@ class HomePage extends Component {
         };
     }
 
-    async componentDidMount() {
+    componentDidMount() {
         
-        await fetchApi(
+        fetchApi(
             'get','/student/personal_announcements?id=3',
             {},  {},
             this.successHandlerPA, this.errorHandlerPA
-        )
+        );
 
-        await fetchApi(
-            'get','/user/announcements',
+        fetchApi(
+            'get','/user/announcements?filter=recent',
             {},  {},
             this.successHandlerA, this.errorHandlerA
-        )
+        );
 
-        await fetchApi(
+        fetchApi(
             'get','/student/next_practical_lessons?id=3',
             {},  {},
             this.successHandlerPL, this.errorHandlerE
-        )
+        );
 
-        await fetchApi(
+        fetchApi(
             'get','/student/next_exams?id=3',
             {},  {},
             this.successHandlerE, this.errorHandlerE
-        )
+        );
         
     }
 
@@ -56,19 +56,19 @@ class HomePage extends Component {
 
         await this.setState({
     		personal_announcements: response.data.announcements,
-        })
+        });
 
     };
 
     /**
-     * Handle the response of personnalAnnouncements.
+     * Handle the response of general Announcements.
      * @param response
      */
     successHandlerA = async (response) => {
 
         await this.setState({
        		general_announcements: response.data.announcements,
-        })
+        });
     
     };
 
@@ -80,7 +80,7 @@ class HomePage extends Component {
 
         await this.setState({
             next_practical_lessons: response.data.lessons,
-        })
+        });
 
     };
 
@@ -93,7 +93,7 @@ class HomePage extends Component {
         await this.setState({
             next_exams: response.data.exams,
             isLoading: false
-        })
+        });
 
     };
 
@@ -107,7 +107,7 @@ class HomePage extends Component {
         console.log(error)
         await this.setState({
             message_pa: 'Não foi possível obter avisos pessoais.'
-        })
+        });
 
     };
 
@@ -121,7 +121,7 @@ class HomePage extends Component {
         console.log(error)
         await this.setState({
             message_ga: 'Não foi possível obter avisos gerais.'
-        })
+        });
 
     };
 
@@ -136,37 +136,37 @@ class HomePage extends Component {
         await this.setState({
             message_e: 'Não foi possível obter avisos gerais.',
             isLoading: false
-        })
+        });
 
     };
 
-    async viewedAnnouncement(pa){
+    viewedAnnouncement(pa){
 
         this.setState({
             mark_as_viewed: pa.id
-        })
+        });
 
-        await fetchApi(
+        fetchApi(
             'post','/student/viewed_personal_announcement',
             {
             	id: pa.id
             },  {},
             this.successHandlerViewed, this.errorHandlerViewed
-        )
+        );
 
     }
 
     successHandlerViewed = async (response) => {
-    	
+
         this.setState({
             personal_announcements: this.state.personal_announcements.filter((pa) => pa.id !== this.state.mark_as_viewed),
-        })
+        });
 
     };
 
-    errorHandlerE = async (error) => {
+    errorHandlerViewed = async (error) => {
 
-    	console.log(error)
+    	console.log(error);
 
     };
 
@@ -232,6 +232,16 @@ class HomePage extends Component {
                     		<Icon color='grey' name='group' />
                     	</Icon.Group>
                     	Avisos gerais recentes
+                        <Button 
+                            icon
+                            size='mini'
+                            floated='right'
+                            labelPosition='right'
+                            onClick={() => this.props.history.push('/announcements')}
+                        >
+                            Ver mais
+                            <Icon name='plus' />
+                        </Button>
                     </Card.Header>
                 </Card.Content>
                 <Card.Content>
@@ -305,7 +315,7 @@ class HomePage extends Component {
                 <div className="ui stackable two column centered grid">
                     <div className="column">
                         {personalAnnouncements}
-                        {generalAnnouncements}
+                        {generalAnnouncements}					
                     </div>
                     <div className="column">
                         {nextEvents}

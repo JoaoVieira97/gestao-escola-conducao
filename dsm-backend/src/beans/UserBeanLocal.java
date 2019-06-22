@@ -13,5 +13,6 @@ public interface UserBeanLocal {
     String getName(int userId);
     String getEmail(int userId);
     List<Announcement> getAnnouncements();
+    List<Announcement> getRecentAnnouncements();
 
 }

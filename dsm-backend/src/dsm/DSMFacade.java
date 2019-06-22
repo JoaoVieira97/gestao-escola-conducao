@@ -160,6 +160,14 @@ public class DSMFacade {
     }
 
     /**
+     * Get the list of most recent general announcements
+     */
+    public static List<Announcement> getRecentAnnouncements(){
+
+        return userBean.getRecentAnnouncements();
+    }
+
+    /**
      * Get the list of all registers of a specific student.
      */
     public static List<Register> getStudentRegisters(int studentId) {

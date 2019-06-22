@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+// http://localhost:8080/dsm_backend_war_exploded/api/user/announcements?filter=all    -> get all general announcements
+// http://localhost:8080/dsm_backend_war_exploded/api/user/announcements?filter=recent -> get only recent general announcements
 @WebServlet(name = "GetAnnouncements", urlPatterns = {"/api/user/announcements"})
 public class GetAnnouncements extends HttpServlet {
 
@@ -29,23 +31,34 @@ public class GetAnnouncements extends HttpServlet {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode responseNode = mapper.createObjectNode();
 
-        // check access token
         if(Utils.accessTokenValidation(request)) {
 
-            // get personal announcements
-            List<Announcement> announcements = DSMFacade.getAnnouncements();
+            String filter = request.getParameter("filter");
+
+            List<Announcement> announcements = null;
+
+            if (filter != null && filter.equals("all")){
+
+                // get all announcements
+                announcements = DSMFacade.getAnnouncements();
+            } else if (filter != null && filter.equals("recent")) {
+
+                // get recent announcements
+                announcements = DSMFacade.getRecentAnnouncements();
+            }
 
             if(announcements!= null) {
                 ArrayNode announcementsJSON = mapper.valueToTree(announcements);
                 responseNode.putArray("announcements").addAll(announcementsJSON);
                 response.setStatus(HttpServletResponse.SC_OK);
             }
-            else{
-                responseNode.put("error", "Can't retrieve general announcements");
-                response.setStatus(HttpServletResponse.SC_OK);
-            }
 
+            else{
+                responseNode.put("error", "Can't retrieve announcements");
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            }
         }
+
         else {
             responseNode.put("error", "Invalid API access token.");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -55,5 +68,6 @@ public class GetAnnouncements extends HttpServlet {
         response.getWriter().write(
                 mapper.writerWithDefaultPrettyPrinter().writeValueAsString(responseNode)
         );
+
     }
 }
