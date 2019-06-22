@@ -79,7 +79,7 @@ sh RunCreateDSMDatabaseSchema.sh
     - define output path: `gestao-escola-conducao/dsm-backend/out`
   - Add dependencies that are on _lib_ folder (File > Project Structure > Libraries) and **JUST** add:
     - orm.jar
-    - gson-2.8.5.jar
+    - all jackson jar files
     - commons-pool2-2.6.2.jar
     - jedis-3.0.1.jar
   - Add a Artifact (File > Project Structure > Artifacts) and follow this steps:
@@ -87,21 +87,18 @@ sh RunCreateDSMDatabaseSchema.sh
   - Press `Apply` and `OK`
   - Now you just need to setup your `Edit Configurations` on top right menu
 
-- go to `dsm-deploy/redis` and build the docker image (JUST ONCE):
+### Redis Service
+
+- Download `Redis` image if is needed:
 
   ```bash
-  docker build --tag=dsm-redis .
-  docker image ls
+  docker pull redis:5.0.4
   ```
 
-- if the image exist, you can now run the container:
+- Start `Redis` container:
 
   ```bash
-  docker run dsm-redis
+  docker run -p 6379:6379 redis:5.0.4
   ```
 
-- press `CRTL-C` to kill the process and check if container has Exited:
-
-  ```bash
-  docker ps -a
-  ```
+- Kill it by doing `CTRL-C`

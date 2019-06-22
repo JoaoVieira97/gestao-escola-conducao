@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Header, Icon, Menu, Card, Grid, List} from 'semantic-ui-react';
+import {Header, Icon, Menu, Card, Grid, List, Loader, Dimmer, Message} from 'semantic-ui-react';
 import {categoryStyle} from "../../styles/styles";
 import {fetchApi} from "../../services/api";
 
@@ -13,31 +13,22 @@ class LessonsPage extends Component {
             allCategories: [],
             allNextPracticalLessons:[],
             showPracticalLessons:[],
-            activeItem: '',
+            messageLesson: 'Sem aulas marcadas.',
+            messageRegisters:'Sem registos efetuados',
+            //messageRegistersError: false,
+            _activeItem: '',
 
             isLoading : true,
         };
     }
 
-    async componentDidMount() {
+    componentDidMount() {
 
-        await fetchApi(
+        fetchApi(
             'get','/student/registers?id=1', //TODO Find userID
             {},  {},
-            this.successFetchRegisters, this.errorHandler
+            this.successFetchRegisters, this.errorFetchRegisters
         );
-
-        //TODO Fix this
-        setTimeout(
-            await fetchApi(
-                'get','/student/next_practical_lessons?id=1',
-                {},  {},
-                this.successFetchNextPracticalLessons, this.errorHandler
-            ),
-            5000
-        );
-
-
 
     }
 
@@ -61,8 +52,14 @@ class LessonsPage extends Component {
         this.setState({
             allRegisters: data.registers,
             allCategories: categories,
-            activeItem: categories[0].name,
+            _activeItem: categories[0].name,
         });
+
+        fetchApi(
+            'get','/student/next_practical_lessons?id=1',
+            {},  {},
+            this.successFetchNextPracticalLessons, this.errorFetchNextPracticalLessons
+        )
 
     };
 
@@ -70,7 +67,7 @@ class LessonsPage extends Component {
      * Handle the response of next practical lessons of a specific student.
      * @param response
      */
-    successFetchNextPracticalLessons = async (response) => {
+    successFetchNextPracticalLessons = (response) => {
 
         const data = response.data;
 
@@ -88,7 +85,6 @@ class LessonsPage extends Component {
                      if (categories[i].id === categoryId) {
                          practicalsCategoryChoosed.push({
                              id: practLesson.id,
-                             description: practLesson.description,
                              startTime: practLesson.startTime,
                              duration: practLesson.duration,
                          });
@@ -97,7 +93,7 @@ class LessonsPage extends Component {
              });
         }
 
-        await this.setState({
+        this.setState({
             allNextPracticalLessons: response.data.lessons,
             showPracticalLessons: practicalsCategoryChoosed,
             isLoading: false,
@@ -108,9 +104,15 @@ class LessonsPage extends Component {
      * Handle the error.
      * @param error
      */
-    errorHandler = (error) => {
+    errorFetchRegisters = (error) => {
 
+        console.log('error retrieving registers');
         console.log(error);
+        this.setState({
+            //messageRegistersError: true,
+            messageRegisters: 'Não foi possível obter os seus registos.',
+            isLoading: false,
+        })
 
         /*
         // bad request
@@ -129,10 +131,60 @@ class LessonsPage extends Component {
         }*/
     };
 
-    handleItemClick = (e, { name }) => this.setState({ activeItem: name });
+    /**
+     * Handle the error retrieving next student events.
+     * @param error
+     */
+    errorFetchNextPracticalLessons = (error) => {
+
+        console.log('error retrieving next lessons');
+        console.log(error);
+        this.setState({
+            messageLesson: 'Não foi possível obter as suas próximas aulas marcadas.',
+            isLoading: false,
+        })
+
+    };
+
+    handleItemClick = (event, data) => {
+
+        this.setState({
+            _activeItem: data.name,
+            isLoading: true,
+        });
+
+        let categoryChoosed = this.state.allCategories.filter(category => (category.name === data.name));
+        let categoryId = categoryChoosed ? categoryChoosed[0].id : -1 ;
+
+        let practicalsCategoryChoosed = [];
+
+        if(categoryId !==-1){
+            this.state.allNextPracticalLessons.forEach(practLesson => {
+
+                let categories = practLesson.categories.collection;
+
+                for (let i = 0; i < categories.length; i++) {
+
+                    if (categories[i].id === categoryId) {
+                        practicalsCategoryChoosed.push({
+                            id: practLesson.id,
+                            startTime: practLesson.startTime,
+                            duration: practLesson.duration,
+                        });
+                    }
+                }
+            });
+        }
+
+        this.setState({
+            showPracticalLessons: practicalsCategoryChoosed,
+            isLoading: false,
+        });
+    };
+
 
     render() {
-        const { activeItem, allCategories } = this.state;
+        const { _activeItem, allCategories } = this.state;
 
         let categories;
         categories = (
@@ -141,7 +193,7 @@ class LessonsPage extends Component {
                     <Menu.Item
                         key={category.id}
                         name={category.name}
-                        active={activeItem === category.name}
+                        active={_activeItem === category.name}
                         onClick={this.handleItemClick}
                     >
                     </Menu.Item>
@@ -161,63 +213,66 @@ class LessonsPage extends Component {
                         <Icon.Group style={{marginRight: "8px"}}>
                             <Icon color='grey' name='calendar' />
                         </Icon.Group>
-                        Próximas aulas marcadas
+                        Próximas aulas práticas
                     </Card.Header>
                 </Card.Content>
                 <Card.Content>
                     <List divided>
                         {(next_lessons.length > 0) ?
                             next_lessons.map(lesson => (
-                                <List.Item key={next_lessons.indexOf(lesson)} style={{marginBottom: "10px"}}>
+                                <List.Item key={lesson.id} style={{marginBottom: "10px"}}>
                                     <Icon name='calendar outline' />
                                     <List.Content>
-                                        {(lesson.duration) ?
-                                            <List.Header>Aula Prática</List.Header> :
-                                            <List.Header>{lesson.description}</List.Header>
-                                        }
+                                        <List.Header>Aula Prática</List.Header>
                                         <List.Description style={{marginTop: "3px"}}>
-                                            {lesson.startTime.split(" ")[0]}
+                                            <b>Início:</b> {" "+ lesson.startTime.split(" ")[0]} às
+                                            {" " + lesson.startTime.split(" ")[1].replace(":","h")+"min"}
                                         </List.Description>
                                         <List.Description style={{marginTop: "3px"}}>
-                                            {lesson.startTime.split(" ")[1]}
+                                            <b>Duração:</b> {lesson.duration +" min"}
                                         </List.Description>
                                     </List.Content>
                                 </List.Item>
                             )) :
-                            <Header as='h4' color='grey'>NÃO HÁ AULAS</Header>
+                            <Header as='h4' color='grey'>{this.state.messageLesson}</Header>
                         }
                     </List>
                 </Card.Content>
             </div>
         );
 
-        /*
-        let renderCategoriesStyle = allCategories.length > 0 ?
+        let renderCategories = allCategories.length > 0 ?
             (
-                <div style={categoryStyle}>
-                    <Menu pointing secondary >
-                        {categories}
-                    </Menu>
+                <div>
+                    <div style={categoryStyle}>
+                        <Menu pointing secondary >
+                            {categories}
+                        </Menu>
+                    </div>
+                    <Grid columns={2} stackable>
+                        <Grid.Column width={8} >
+                            {nextLessons}
+                        </Grid.Column>
+                    </Grid>
                 </div>
             ) :
             (
                 <div>
-                    <p> LESSONS PAGE </p>
+                    <Message
+                        size={'big'}
+                        error
+                        header={'Erro ao obter registos'}
+                        content={this.state.messageRegisters}
+                    />
                 </div>
-            );*/
+            );
 
         return (
             <div>
-                <div style={categoryStyle}>
-                    <Menu pointing secondary >
-                        {categories}
-                    </Menu>
-                </div>
-                <Grid columns={2} stackable>
-                    <Grid.Column width={8} >
-                        {nextLessons}
-                    </Grid.Column>
-                </Grid>
+                <Dimmer inverted active={this.state.isLoading}>
+                    <Loader>A carregar</Loader>
+                </Dimmer>
+                {renderCategories}
             </div>
         )
     }

@@ -1,6 +1,7 @@
 package dsm;
 
 import beans.LessonBeanLocal;
+import beans.RedisBeanLocal;
 import beans.StudentBeanLocal;
 import beans.UserBeanLocal;
 import org.orm.PersistentSession;
@@ -17,6 +18,7 @@ public class DSMFacade {
     private static UserBeanLocal userBean = lookupUserBeanLocal();
     private static StudentBeanLocal studentBean = lookupStudentBeanLocal();
     private static LessonBeanLocal lessonBean = lookupLessonBeanLocal();
+    private static RedisBeanLocal redisBean = lookupRedisBeanLocal();
 
     /**
      * Get and access to StudentBean features.
@@ -68,6 +70,29 @@ public class DSMFacade {
         return null;
     }
 
+    /**
+     * Get and access to LessonBean features.
+     * @return LessonBeanLocal
+     */
+    private static RedisBeanLocal lookupRedisBeanLocal() {
+        try {
+
+            Context c = new InitialContext();
+            return (RedisBeanLocal) c.lookup("java:global/dsm_backend_war_exploded/RedisBean!beans.RedisBeanLocal");
+
+        } catch (NamingException ne) {
+            ne.printStackTrace();
+        }
+        return null;
+    }
+
+
+    public static void setUserToken(String token, String email) {
+
+        redisBean.setUserToken(token, email);
+    }
+
+
 
     /**
      * Authentication a user.
@@ -76,7 +101,6 @@ public class DSMFacade {
 
         return userBean.login(email, password);
     }
-
 
     /**
      * Get Name of a user.
