@@ -12,9 +12,9 @@ import java.util.List;
 @Local
 public interface LessonBeanLocal {
 
-    List<Lesson> getLessonsStudent(PersistentSession session, int studentId);
-    List<Lesson> getRealizedLessonsStudent(PersistentSession session, int studentId);
-    List<PracticalLesson> getRealizedPracticalLessonsStudent(PersistentSession session, int studentId);
-    List<TheoreticalLesson> getRealizedTheoreticalLessonsStudent(PersistentSession session, int studentId);
-    List<Lesson> getStudentNextPracticalLessons(PersistentSession session, int studentID);
+    List<Lesson> getLessonsStudent(int studentId);
+    List<Lesson> getRealizedLessonsStudent(int studentId);
+    List<PracticalLesson> getRealizedPracticalLessonsStudent(int studentId);
+    List<TheoreticalLesson> getRealizedTheoreticalLessonsStudent(int studentId);
+    List<Lesson> getStudentNextPracticalLessons(int studentID);
 }

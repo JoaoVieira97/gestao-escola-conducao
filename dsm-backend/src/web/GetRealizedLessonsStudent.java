@@ -33,11 +33,9 @@ public class GetRealizedLessonsStudent extends HttpServlet {
         String studentId = request.getParameter("id");
         int id = Integer.valueOf(studentId);
 
-        PersistentSession session = Utils.getSession(request);
-
         // get lessons data
-        List<PracticalLesson> practicalLessons = DSMFacade.getRealizedPracticalLessonsStudent(session, id);
-        List<TheoreticalLesson> theoreticalLessons = DSMFacade.getRealizedTheoreticalLessonsStudent(session, id);
+        List<PracticalLesson> practicalLessons = DSMFacade.getRealizedPracticalLessonsStudent(id);
+        List<TheoreticalLesson> theoreticalLessons = DSMFacade.getRealizedTheoreticalLessonsStudent(id);
 
         ObjectMapper mapper = new ObjectMapper();
 

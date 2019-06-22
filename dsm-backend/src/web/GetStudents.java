@@ -34,9 +34,8 @@ public class GetStudents extends javax.servlet.http.HttpServlet {
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response)
             throws javax.servlet.ServletException, IOException {
 
-        PersistentSession session = Utils.getSession(request);
 
-        List<Student> students = DSMFacade.getStudents(session);
+        List<Student> students = DSMFacade.getStudents();
         ObjectMapper mapper = new ObjectMapper();
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         mapper.setDateFormat(df);

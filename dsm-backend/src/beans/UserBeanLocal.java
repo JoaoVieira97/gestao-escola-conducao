@@ -9,9 +9,9 @@ import java.util.List;
 @Local
 public interface UserBeanLocal {
 
-    String login(PersistentSession session, String email, String password);
-    String getName(PersistentSession session, int userId);
-    String getEmail(PersistentSession session, int userId);
-    List<Announcement> getAnnouncements(PersistentSession session);
+    String login(String email, String password);
+    String getName(int userId);
+    String getEmail(int userId);
+    List<Announcement> getAnnouncements();
 
 }

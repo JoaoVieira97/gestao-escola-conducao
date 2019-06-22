@@ -32,13 +32,11 @@ public class GetStudentNextPracticalLessons extends HttpServlet {
         // check access token
         if(Utils.accessTokenValidation(request)) {
 
-            PersistentSession session = Utils.getSession(request);
-
             String studentId = request.getParameter("id");
             int id = Integer.valueOf(studentId);
 
             // get next practical lessons
-            List<Lesson> lessons = DSMFacade.getStudentNextPracticalLessons(session, id);
+            List<Lesson> lessons = DSMFacade.getStudentNextPracticalLessons(id);
 
             if(lessons != null) {
                 ArrayNode lessonsJSON = mapper.valueToTree(lessons);

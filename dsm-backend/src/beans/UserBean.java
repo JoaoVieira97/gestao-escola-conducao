@@ -6,10 +6,30 @@ import org.orm.PersistentSession;
 
 import javax.ejb.Stateless;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Stateless(name = "UserBean")
 public class UserBean implements UserBeanLocal {
+
+    private final static Logger log = Logger.getLogger(UserBean.class.getName());
+
+    private static PersistentSession session = null;
+
+    private PersistentSession getSession() {
+        if (session == null) {
+            try {
+                log.info("Creating new persistent session!");
+                session = DSMPersistentManager.instance().getSession();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        else
+            log.info("Reusing persistent session!");
+
+        return session;
+    }
 
     /**
      * User authentication.
@@ -18,9 +38,11 @@ public class UserBean implements UserBeanLocal {
      * @return
      */
     @Override
-    public String login(PersistentSession session, String email, String password) {
+    public String login(String email, String password) {
 
         try {
+
+            session = getSession();
 
             User user = UserDAO.loadUserByQuery(session,
                 "email='"+email+"' AND password='"+password+"'",
@@ -42,9 +64,11 @@ public class UserBean implements UserBeanLocal {
      * @return
      */
     @Override
-    public String getName(PersistentSession session, int userId) {
+    public String getName(int userId) {
 
         try {
+
+            session = getSession();
 
             User user = UserDAO.getUserByORMID(session, userId);
             if (user != null) return user.getName();
@@ -61,9 +85,11 @@ public class UserBean implements UserBeanLocal {
      * @return
      */
     @Override
-    public String getEmail(PersistentSession session, int userId) {
+    public String getEmail(int userId) {
 
         try {
+
+            session = getSession();
 
             User user = UserDAO.getUserByORMID(session, userId);
             if (user != null) return user.getEmail();
@@ -79,9 +105,11 @@ public class UserBean implements UserBeanLocal {
      * @return
      */
     @Override
-    public List<Announcement> getAnnouncements(PersistentSession session){
+    public List<Announcement> getAnnouncements(){
 
         try {
+
+            session = getSession();
 
             List<Announcement> all_announcements = (List<Announcement>) AnnouncementDAO.queryAnnouncement(session, "id>0", "timestamp desc");
             List<Announcement> general_announcements =

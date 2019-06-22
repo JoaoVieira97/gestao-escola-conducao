@@ -6,12 +6,31 @@ import org.orm.PersistentSession;
 
 import javax.ejb.Stateless;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Stateless(name = "LessonBean")
 public class LessonBean implements LessonBeanLocal{
+
+    private final static Logger log = Logger.getLogger(LessonBean.class.getName());
+
+    private static PersistentSession session = null;
+
+    private PersistentSession getSession() {
+        if (session == null) {
+            try {
+                log.info("Creating new persistent session!");
+                session = DSMPersistentManager.instance().getSession();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        else
+            log.info("Reusing persistent session!");
+
+        return session;
+    }
 
     /**
      * Get user lessons.
@@ -19,9 +38,11 @@ public class LessonBean implements LessonBeanLocal{
      * @return
      */
     @Override
-    public List<Lesson> getLessonsStudent(PersistentSession session, int studentId) {
+    public List<Lesson> getLessonsStudent(int studentId) {
 
         try {
+
+            session = getSession();
 
             Student student = StudentDAO.getStudentByORMID(session, studentId);
             if(student != null) // return Arrays.asList(student.lessons.toArray());
@@ -40,9 +61,9 @@ public class LessonBean implements LessonBeanLocal{
      * @return
      */
     @Override
-    public List<Lesson> getRealizedLessonsStudent(PersistentSession session, int studentId) {
+    public List<Lesson> getRealizedLessonsStudent(int studentId) {
 
-        List<Lesson> lessons = this.getLessonsStudent(session, studentId);
+        List<Lesson> lessons = this.getLessonsStudent(studentId);
         List<Lesson> res = new ArrayList<>();
 
         for(Lesson lesson : lessons)
@@ -57,11 +78,11 @@ public class LessonBean implements LessonBeanLocal{
      * @return
      */
     @Override
-    public List<PracticalLesson> getRealizedPracticalLessonsStudent(PersistentSession session, int studentId) {
+    public List<PracticalLesson> getRealizedPracticalLessonsStudent(int studentId) {
 
         try {
 
-            List<Lesson> lessons = this.getRealizedLessonsStudent(session, studentId);
+            List<Lesson> lessons = this.getRealizedLessonsStudent(studentId);
             List<PracticalLesson> practicalLessons = new ArrayList<>();
 
             for (Lesson lesson : lessons) {
@@ -84,11 +105,11 @@ public class LessonBean implements LessonBeanLocal{
      * @return
      */
     @Override
-    public List<TheoreticalLesson> getRealizedTheoreticalLessonsStudent(PersistentSession session, int studentId) {
+    public List<TheoreticalLesson> getRealizedTheoreticalLessonsStudent(int studentId) {
 
         try {
 
-            List<Lesson> lessons = this.getRealizedLessonsStudent(session, studentId);
+            List<Lesson> lessons = this.getRealizedLessonsStudent(studentId);
             List<TheoreticalLesson> theoreticalLessons = new ArrayList<>();
 
             for (Lesson lesson : lessons) {
@@ -111,10 +132,10 @@ public class LessonBean implements LessonBeanLocal{
      * @return
      */
     @Override
-    public List<Lesson> getStudentNextPracticalLessons(PersistentSession session, int studentID) {
+    public List<Lesson> getStudentNextPracticalLessons(int studentID) {
 
         List<Lesson> pratical_lessons = null;
-        List<Lesson> lessons = this.getLessonsStudent(session, studentID);
+        List<Lesson> lessons = this.getLessonsStudent(studentID);
 
         if (lessons!= null){
             pratical_lessons = lessons.stream()

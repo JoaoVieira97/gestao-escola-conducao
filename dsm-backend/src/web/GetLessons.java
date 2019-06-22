@@ -35,10 +35,8 @@ public class GetLessons extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        PersistentSession session = Utils.getSession(request);
-
         // get lessons data
-        List<Lesson> lessons = DSMFacade.getLessons(session);
+        List<Lesson> lessons = DSMFacade.getLessons();
         ObjectMapper mapper = new ObjectMapper();
         String sJSON = mapper.writeValueAsString(lessons);
         sJSON = "{\"success\":true,\"lessons\":" + sJSON + "}";

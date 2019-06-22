@@ -30,15 +30,13 @@ public class GetPersonalInformation extends HttpServlet {
         // check access token
         if(Utils.accessTokenValidation(request)) {
 
-            PersistentSession session = Utils.getSession(request);
-
             String studentId = request.getParameter("id");
             int id = Integer.valueOf(studentId);
 
             // get user data
-            String name = DSMFacade.getName(session, id);
-            String email = DSMFacade.getEmail(session, id);
-            List<Exam> exams = DSMFacade.getStudentExams(session, id);
+            String name = DSMFacade.getName(id);
+            String email = DSMFacade.getEmail(id);
+            List<Exam> exams = DSMFacade.getStudentExams(id);
 
             //ArrayNode examsJSON = mapper.valueToTree(exams);
 

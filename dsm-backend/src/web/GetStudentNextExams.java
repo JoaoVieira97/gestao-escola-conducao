@@ -32,13 +32,11 @@ public class GetStudentNextExams extends HttpServlet {
         // check access token
         if(Utils.accessTokenValidation(request)) {
 
-            PersistentSession session = Utils.getSession(request);
-
             String studentId = request.getParameter("id");
             int id = Integer.valueOf(studentId);
 
             // get next exams
-            List<Exam> exams = DSMFacade.getStudentNextExams(session, id);
+            List<Exam> exams = DSMFacade.getStudentNextExams(id);
 
             if(exams!= null) {
                 ArrayNode examsJSON = mapper.valueToTree(exams);

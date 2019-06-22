@@ -38,13 +38,11 @@ public class GetStudentRegister extends HttpServlet {
         // check access token
         if(Utils.accessTokenValidation(request)) {
 
-            PersistentSession session = Utils.getSession(request);
-
             String studentId = request.getParameter("id");
             int id = Integer.valueOf(studentId);
 
             // get student registers
-            List<Register> registers = DSMFacade.getStudentRegisters(session, id);
+            List<Register> registers = DSMFacade.getStudentRegisters(id);
 
             if(registers!= null) {
                 ArrayNode registersJSON = mapper.valueToTree(registers);

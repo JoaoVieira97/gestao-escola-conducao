@@ -9,19 +9,42 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Stateless(name = "StudentBean")
 public class StudentBean implements StudentBeanLocal {
+
+    private final static Logger log = Logger.getLogger(StudentBean.class.getName());
+
+    private static PersistentSession session = null;
+
+    private PersistentSession getSession() {
+        if (session == null) {
+            try {
+                log.info("Creating new persistent session!");
+                session = DSMPersistentManager.instance().getSession();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        else
+            log.info("Reusing persistent session!");
+
+        return session;
+    }
 
     /**
      * Get all students order by id.
      * @return
      */
     @Override
-    public List<Student> getStudents(PersistentSession session) {
+    public List<Student> getStudents() {
 
         try {
+
+            session = getSession();
+
             return (List<Student>) StudentDAO.queryStudent(session,"id>0", "id");
         } catch (PersistentException e) {
             e.printStackTrace();
@@ -36,9 +59,12 @@ public class StudentBean implements StudentBeanLocal {
      * @return
      */
     @Override
-    public List<Register> getStudentRegisters(PersistentSession session, int studentID) {
+    public List<Register> getStudentRegisters(int studentID) {
 
         try {
+
+            session = getSession();
+
             Student student = StudentDAO.getStudentByORMID(session, studentID);
             //return Arrays.asList(student.registers.toArray());
             return new ArrayList<Register>(student.registers.getCollection());
@@ -56,9 +82,11 @@ public class StudentBean implements StudentBeanLocal {
      * @return
      */
     @Override
-    public List<PersonalAnnouncement> getStudentPersonalAnnouncements(PersistentSession session, int studentID) {
+    public List<PersonalAnnouncement> getStudentPersonalAnnouncements(int studentID) {
 
         try {
+
+            session = getSession();
 
             Student student = StudentDAO.getStudentByORMID(session, studentID);
             if (student != null) {
@@ -82,13 +110,16 @@ public class StudentBean implements StudentBeanLocal {
      * @return
      */
     @Override
-    public boolean setPersonalAnnouncementAsViewed(PersistentSession session, int announcementID){
+    public boolean setPersonalAnnouncementAsViewed(int announcementID){
 
         try {
 
-            PersonalAnnouncement pa = PersonalAnnouncementDAO.getPersonalAnnouncementByORMID(announcementID);
+            session = getSession();
+
+            PersonalAnnouncement pa = PersonalAnnouncementDAO.getPersonalAnnouncementByORMID(session, announcementID);
             if (pa != null){
                 pa.setViewed(true);
+
                 PersonalAnnouncementDAO.save(pa);
                 return true;
             }
@@ -105,9 +136,11 @@ public class StudentBean implements StudentBeanLocal {
      * @return
      */
     @Override
-    public List<Exam> getStudentExams(PersistentSession session, int studentID) {
+    public List<Exam> getStudentExams(int studentID) {
 
         try {
+
+            session = getSession();
 
             Student student =  StudentDAO.getStudentByORMID(session, studentID);
             if (student != null) //return Arrays.asList(student.exams.toArray());
@@ -126,9 +159,9 @@ public class StudentBean implements StudentBeanLocal {
      * @return
      */
     @Override
-    public List<Exam> getStudentNextExams(PersistentSession session, int studentID) {
+    public List<Exam> getStudentNextExams(int studentID) {
 
-        List<Exam> exams = this.getStudentExams(session, studentID);
+        List<Exam> exams = this.getStudentExams(studentID);
         List<Exam> next_exams = null;
 
         if(exams!=null) {

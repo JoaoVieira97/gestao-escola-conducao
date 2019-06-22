@@ -38,13 +38,11 @@ public class GetStudentPersonalAnnouncements extends HttpServlet {
         // check access token
         if(Utils.accessTokenValidation(request)) {
 
-            PersistentSession session = Utils.getSession(request);
-
             String studentId = request.getParameter("id");
             int id = Integer.valueOf(studentId);
 
             // get personal announcements
-            List<PersonalAnnouncement> announcements = DSMFacade.getStudentPersonalAnnouncements(session, id);
+            List<PersonalAnnouncement> announcements = DSMFacade.getStudentPersonalAnnouncements(id);
 
             if(announcements!= null) {
                 ArrayNode announcementsJSON = mapper.valueToTree(announcements);

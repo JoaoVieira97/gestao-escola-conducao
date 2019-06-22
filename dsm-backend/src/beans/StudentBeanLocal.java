@@ -9,11 +9,11 @@ import java.util.List;
 @Local
 public interface StudentBeanLocal {
 
-    List<Student> getStudents(PersistentSession session);
-    List<Register> getStudentRegisters(PersistentSession session, int studentID);
-    List<PersonalAnnouncement> getStudentPersonalAnnouncements(PersistentSession session, int studentID);
-    boolean setPersonalAnnouncementAsViewed(PersistentSession session, int announcementID);
-    List<Exam> getStudentExams(PersistentSession session, int studentID);
-    List<Exam> getStudentNextExams(PersistentSession session, int studentID);
+    List<Student> getStudents();
+    List<Register> getStudentRegisters(int studentID);
+    List<PersonalAnnouncement> getStudentPersonalAnnouncements(int studentID);
+    boolean setPersonalAnnouncementAsViewed(int announcementID);
+    List<Exam> getStudentExams(int studentID);
+    List<Exam> getStudentNextExams(int studentID);
 
 }

@@ -32,10 +32,8 @@ public class GetAnnouncements extends HttpServlet {
         // check access token
         if(Utils.accessTokenValidation(request)) {
 
-            PersistentSession session = Utils.getSession(request);
-
             // get personal announcements
-            List<Announcement> announcements = DSMFacade.getAnnouncements(session);
+            List<Announcement> announcements = DSMFacade.getAnnouncements();
 
             if(announcements!= null) {
                 ArrayNode announcementsJSON = mapper.valueToTree(announcements);

@@ -25,13 +25,11 @@ public class SetPersonalAnnouncementAsViewed extends HttpServlet {
         // check access token
         if(Utils.accessTokenValidation(request)) {
 
-            PersistentSession session = Utils.getSession(request);
-
             String announcementId = request.getParameter("id");
             int id = Integer.valueOf(announcementId);
 
             // mark announcement as viewed
-            boolean viewed = DSMFacade.viewedPersonalAnnouncement(session, id);
+            boolean viewed = DSMFacade.viewedPersonalAnnouncement(id);
             if(viewed) {
                 responseNode.put("success", viewed);
                 response.setStatus(HttpServletResponse.SC_OK);
