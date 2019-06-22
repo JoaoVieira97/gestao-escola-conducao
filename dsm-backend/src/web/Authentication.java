@@ -3,7 +3,6 @@ package web;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dsm.DSMFacade;
-import org.orm.PersistentSession;
 import utils.Utils;
 
 import javax.servlet.ServletException;
@@ -47,8 +46,13 @@ public class Authentication extends HttpServlet {
             // ------------------------------------------------------------
             String userType = DSMFacade.login(email, Utils.hash(password));
             if(userType != null) {
+
+                String randomToken = Utils.generateRandomToken();
+
+                //DSMFacade.setUserToken(randomToken, email);
+
                 responseNode.put("userType", userType);
-                responseNode.put("userToken", Utils.generateRandomToken());
+                responseNode.put("userToken", randomToken);
                 response.setStatus(HttpServletResponse.SC_OK);
             }
             else {
