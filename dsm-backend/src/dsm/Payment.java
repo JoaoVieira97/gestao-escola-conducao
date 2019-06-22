@@ -13,6 +13,10 @@
  */
 package dsm;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties({"ormid"})
 public class Payment {
 	public Payment() {
 	}
@@ -35,7 +39,8 @@ public class Payment {
 	private dsm.Secretary secretary;
 	
 	private double value;
-	
+
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
 	private java.util.Date timestamp;
 	
 	private String description;

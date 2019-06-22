@@ -63,6 +63,7 @@
         <h3><a href="/dsm_backend_war_exploded/api/authentication">/api/authentication</a></h3>
         <h3><a href="/dsm_backend_war_exploded/api/lessons/student?id=1">/api/lessons/student?id=1</a></h3>
         <h3><a href="/dsm_backend_war_exploded/api/student/information?id=1">/api/student/information?id=1</a></h3>
+        <h3><a href="/dsm_backend_war_exploded/api/student/next_exams?id=3">/api/student/next_exams?id=3</a></h3>
       </div>
     </div>
   </body>

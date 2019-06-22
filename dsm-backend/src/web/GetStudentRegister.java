@@ -1,8 +1,12 @@
 package web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import dsm.DSMFacade;
+import dsm.Exam;
 import dsm.Register;
+import utils.Utils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,18 +31,38 @@ public class GetStudentRegister extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String studentId = request.getParameter("id");
-        int id = Integer.valueOf(studentId);
-
-        // get lessons data
-        List<Register> registers = DSMFacade.getStudentRegisters(id);
         ObjectMapper mapper = new ObjectMapper();
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        mapper.setDateFormat(df);
-        String sJSON = mapper.writeValueAsString(registers);
-        sJSON = "{\"success\":true,\"registers\":" + sJSON + "}";
+        ObjectNode responseNode = mapper.createObjectNode();
+
+        // check access token
+        if(Utils.accessTokenValidation(request)) {
+
+            String studentId = request.getParameter("id");
+            int id = Integer.valueOf(studentId);
+
+            // get student registers
+            List<Register> registers = DSMFacade.getStudentRegisters(id);
+
+            if(registers!= null) {
+                ArrayNode registersJSON = mapper.valueToTree(registers);
+                responseNode.putArray("registers").addAll(registersJSON);
+                response.setStatus(HttpServletResponse.SC_OK);
+            }
+            else{
+                responseNode.put("error", "Wrong id");
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            }
+
+        }
+        else {
+            responseNode.put("error", "Invalid API access token.");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        }
+
         response.setContentType("application/json;charset=UTF-8");
-        response.getWriter().write(sJSON);
+        response.getWriter().write(
+                mapper.writerWithDefaultPrettyPrinter().writeValueAsString(responseNode)
+        );
 
     }
 }

@@ -13,6 +13,7 @@
  */
 package dsm;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties({"payments", "exams", "announcements", "lessons", "registers", "ormid"})
@@ -49,7 +50,8 @@ public class Student extends dsm.User {
 	private String cc;
 	
 	private String address;
-	
+
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
 	private java.util.Date birth;
 	
 	private java.util.Set ORM_lessons = new java.util.HashSet();

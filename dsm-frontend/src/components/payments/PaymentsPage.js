@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Container, Header, Table, Icon, Grid, Dropdown, Loader, Dimmer, Pagination, List} from 'semantic-ui-react';
+import {Container, Header, Table, Icon, Grid, Dropdown, Loader, Dimmer, Pagination, List, Label} from 'semantic-ui-react';
 import {fetchApi} from "../../services/api";
 import moment from 'moment';
 import _ from "lodash";
@@ -46,16 +46,6 @@ class PaymentsPage extends Component {
             this.successFetchInformation, this.errorHandler
         );
 
-        /*setTimeout(()=>{
-
-            fetchApi(
-                'get','/student/registers?id=1', //TODO Find userID
-                {},  {},
-                this.successFetchRegisters, this.errorHandler
-            );
-
-        }, 2000);*/
-
 
         await fetchApi(
             'get','/student/registers?id=1', //TODO Find userID
@@ -63,28 +53,12 @@ class PaymentsPage extends Component {
             this.successFetchRegisters, this.errorHandler
         );
 
-        /*
-        setTimeout(()=>{
-
-            fetchApi(
-                'get','/lessons/student?id=1', //TODO Find userID
-                {},  {},
-                this.successFetchLessons, this.errorHandler
-            );
-
-        }, 2000);*/
-
-
         await fetchApi(
             'get','/lessons/student?id=1', //TODO Find userID
             {},  {},
             this.successFetchLessons, this.errorHandler
         );
 
-        /*
-        setTimeout(()=>{
-            this.setState({isLoading: false});
-        }, 1000); */
     }
 
     /**
@@ -108,26 +82,22 @@ class PaymentsPage extends Component {
     successFetchRegisters = (response) => {
         const data = response.data;
 
-        //Verify sucess on other way
-        if (data.success) {
-            //key -> registers.id
+        //key -> registers.id
+        let categoriesRegister = data.registers.map(register => (register.category));
 
-            let categoriesRegister = data.registers.map(register => (register.category));
+        let categories = categoriesRegister.map( category => {
+            return {
+                key: category.id,
+                value: "Categoria " + category.name,
+                text: "Categoria " + category.name,
+            }
+        });
 
-            let categories = categoriesRegister.map( category => {
-                return {
-                    key: category.id,
-                    value: "Categoria " + category.name,
-                    text: "Categoria " + category.name,
-                }
-            });
+        this.setState({
+            allRegisters: data.registers,
+            allCategories: categories,
+        });
 
-            this.setState({
-                allRegisters: data.registers,
-                allCategories: categories,
-            });
-
-        }
     };
 
 
@@ -188,7 +158,9 @@ class PaymentsPage extends Component {
             let registerChoosed = this.state.allRegisters.filter(register => (register.category.id === categoryId));
 
             let dateSubscription = registerChoosed[0].initialDate;
-            let dateLimit = moment(dateSubscription).add(2,'years').format('YYYY-MM-DD');
+
+            let date = dateSubscription.split("/");
+            let dateLimit = moment(date[2]+'-'+date[1]+'-'+date[0]).add(2,'years').format('DD/MM/YYYY');
             let theoreticalLessons = registerChoosed[0].category.theoreticalLessons;
             let practicalLessons = registerChoosed[0].category.practicalLessons;
             let totalPrice = registerChoosed[0].category.price;
@@ -315,7 +287,7 @@ class PaymentsPage extends Component {
                 </Dimmer>
                 <Grid columns={2} stackable>
                     <Grid.Column width={8} >
-                        <Container textAlign={'center'}>
+                        <Container textAlign={'left'}>
                             <Header as='h2' icon textAlign='center'>
                                 <Icon name='user circle' size='massive'/>
                                 <Header.Content>{this.state.nameUser}</Header.Content>
@@ -330,15 +302,31 @@ class PaymentsPage extends Component {
                                 onChange={this.handleChange}
                             />
                             </Header>
-
                             <Header as='h3' textAlign={'left'}>
-                                Inscrição a: {this.state.dateSubscription}
+                                Inscrição a: <Label color={'black'}
+                                                    size={'large'}> {this.state.dateSubscription} </Label>
                             </Header>
-                            <Header as='h3' textAlign={'left'}>Validade até: {this.state.dateLimit}</Header>
-                            <Header as='h3' textAlign={'left'}>Aulas teóricas realizadas: {this.state.numberTheoreticalRealized} / {this.state.totalTheoreticalLessons}</Header>
-                            <Header as='h3' textAlign={'left'}>Aulas práticas realizadas: {this.state.numberPracticalRealized} / {this.state.totalPracticalLessons}</Header>
-                            <Header as='h3' textAlign={'left'}>Instrutor atual: {this.state.nameInstructor}</Header>
-                            <Header as='h3' textAlign={'left'}>Registo de exames:
+                            <Header as='h3' >Validade até: <Label color={'black'}
+                                                                  size={'large'}> {this.state.dateLimit} </Label>
+
+                            </Header>
+                            <Header as='h3' >Aulas teóricas realizadas:
+                                <Label color={'black'}
+                                       size={'large'}>
+                                    {this.state.numberTheoreticalRealized} / {this.state.totalTheoreticalLessons}
+                                </Label>
+                            </Header>
+                            <Header as='h3' >Aulas práticas realizadas:
+                                <Label color={'black'}
+                                       size={'large'}>
+                                    {this.state.numberPracticalRealized} / {this.state.totalPracticalLessons}
+                                </Label>
+                            </Header>
+                            <Header as='h3' >Instrutor atual: <Label color={'black'}
+                                                                     size={'large'}>
+                                                                {this.state.nameInstructor} </Label>
+                            </Header>
+                            <Header as='h3' >Registo de exames:
                                 <List bulleted>
                                     {exams}
                                 </List>
@@ -390,6 +378,24 @@ class PaymentsPage extends Component {
                                 </Table.Row>
                             </Table.Footer>
                         </Table>
+
+                        <Dropdown simple text='Dropdown'>
+                            <Dropdown.Menu>
+                                <Dropdown.Item>List Item</Dropdown.Item>
+                                <Dropdown.Item>List Item</Dropdown.Item>
+                                <Dropdown.Divider />
+                                <Dropdown.Header>Header Item</Dropdown.Header>
+                                <Dropdown.Item>
+                                    <i className='dropdown icon' />
+                                    <span className='text'>Submenu</span>
+                                    <Dropdown.Menu>
+                                        <Dropdown.Item>List Item</Dropdown.Item>
+                                        <Dropdown.Item>List Item</Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown.Item>
+                                <Dropdown.Item>List Item</Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
                     </Grid.Column>
                 </Grid>
             </Container>

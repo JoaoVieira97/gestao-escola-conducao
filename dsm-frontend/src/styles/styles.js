@@ -17,3 +17,11 @@ export const headerStyle = {
     borderBottom: '2px solid rgba(34,36,38,.15)',
     marginBottom: '10px'
 };
+
+export const categoryStyle = {
+    backgroundColor: '#ffffff',
+    //minHeight: "50px",
+    borderBottom: '2px solid rgba(34,36,38,.15)',
+    marginBottom: '10px',
+    marginTop : '-12px'
+};

@@ -13,6 +13,7 @@
  */
 package dsm;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties({"ormid"})
@@ -54,7 +55,8 @@ public class Register {
 	private dsm.Instructor instructor;
 	
 	private dsm.Category category;
-	
+
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
 	private java.util.Date initialDate;
 	
 	private java.util.Set ORM_payments = new java.util.HashSet();

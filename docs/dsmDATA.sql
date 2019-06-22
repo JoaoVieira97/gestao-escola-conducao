@@ -151,7 +151,8 @@ INSERT INTO TheoreticalLesson (LessonID)
     VALUES (7), (9);
 
 INSERT INTO Lesson_Category (LessonID, CategoryID)
-    VALUES (5, 6),
+    VALUES (1, 6),
+           (5, 6),
            (6, 6),
            (7, 6),
            (8, 3),
