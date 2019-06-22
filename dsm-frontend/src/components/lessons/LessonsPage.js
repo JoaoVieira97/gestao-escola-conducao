@@ -78,41 +78,30 @@ class LessonsPage extends Component {
         let categoryId = categoryChoosed ? categoryChoosed.id : -1 ;
         let practicalsCategoryChoosed = [];
 
-        console.log("olaaaaaaaa");
-
         if(categoryId !==-1){
-            console.log(categoryId);
              data.lessons.map( practLesson => {
 
                  let categories = practLesson.categories.collection;
 
                  for (let i = 0; i < categories.length; i++) {
-                     console.log(categories[i]);
 
                      if (categories[i].id === categoryId) {
-                         console.log(categories[i].id, '===', categoryId);
                          practicalsCategoryChoosed.push({
                              id: practLesson.id,
                              description: practLesson.description,
                              startTime: practLesson.startTime,
                              duration: practLesson.duration,
                          });
-                         console.log("aaaiii", practicalsCategoryChoosed[0]);
                      }
                  }
              });
         }
-
-        console.log("olaaaaaaaa", practicalsCategoryChoosed);
 
         await this.setState({
             allNextPracticalLessons: response.data.lessons,
             showPracticalLessons: practicalsCategoryChoosed,
             isLoading: false,
         });
-
-        console.log(this.state.showPracticalLessons);
-
     };
 
     /**
