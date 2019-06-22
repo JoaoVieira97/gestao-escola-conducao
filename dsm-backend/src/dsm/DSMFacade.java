@@ -118,6 +118,14 @@ public class DSMFacade {
     }
 
     /**
+     * Set specific student personalAnnouncement as viewed
+     */
+    public static boolean viewedPersonalAnnouncement(int announcementID){
+
+        return studentBean.viewedPersonalAnnouncement(announcementID);
+    }
+
+    /**
      * Get the list of next practical lessons of a specific student.
      */
     public static List<Lesson> getStudentNextPracticalLessons(int studentId){

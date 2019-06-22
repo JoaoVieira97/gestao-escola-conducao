@@ -14,6 +14,8 @@ public interface StudentBeanLocal {
 
     List<PersonalAnnouncement> getStudentPersonalAnnouncements(int studentID);
 
+    boolean viewedPersonalAnnouncement(int announcementID);
+
     List<Exam> getStudentExams(int studentID);
 
     List<Exam> getStudentNextExams(int studentID);

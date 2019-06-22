@@ -50,7 +50,10 @@ public class StudentBean implements StudentBeanLocal {
 
             Student student = (Student) StudentDAO.getStudentByORMID(session, studentID);
             if (student != null) {
-                return Arrays.asList(student.announcements.toArray());
+                List<PersonalAnnouncement> announcements = Arrays.asList(student.announcements.toArray());
+                return announcements.stream()
+                                    .filter(a -> !a.getViewed())
+                                    .collect(Collectors.toList());
             }
 
         } catch (PersistentException e) {
@@ -59,6 +62,23 @@ public class StudentBean implements StudentBeanLocal {
 
         return null;
 
+    }
+
+    @Override
+    public boolean viewedPersonalAnnouncement(int announcementID){
+
+        try {
+            PersonalAnnouncement pa = PersonalAnnouncementDAO.getPersonalAnnouncementByORMID(announcementID);
+            if (pa != null){
+                pa.setViewed(true);
+                PersonalAnnouncementDAO.save(pa);
+                return true;
+            }
+        } catch (PersistentException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
     @Override

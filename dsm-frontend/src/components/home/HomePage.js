@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Container, Card, Feed, Icon, Loader, Dimmer, List, Header} from 'semantic-ui-react';
+import {Container, Card, Feed, Icon, Loader, Dimmer, List, Header, Button, Popup} from 'semantic-ui-react';
 import {fetchApi} from "../../services/api";
 
 class HomePage extends Component {
@@ -15,7 +15,8 @@ class HomePage extends Component {
             next_exams: [],
             message_pa: 'Sem novos avisos para mostrar.',
             message_ga: 'Sem avisos para mostrar.',
-            message_e: 'Sem eventos para mostrar.'
+            message_e: 'Sem eventos para mostrar.',
+            mark_as_viewed: ''
         };
     }
 
@@ -139,6 +140,36 @@ class HomePage extends Component {
 
     };
 
+    async viewedAnnouncement(pa){
+
+        this.setState({
+            mark_as_viewed: pa.id
+        })
+        console.log('ya')
+
+        await fetchApi(
+            'get','/student/viewed_personal_announcement?id=' + pa.id,
+            {},  {},
+            this.successHandlerViewed, this.errorHandlerViewed
+        )
+
+    }
+
+    successHandlerViewed = async (response) => {
+
+        console.log(response)
+        this.setState({
+            personal_announcements: this.state.personal_announcements.filter((pa) => pa.id !== this.state.mark_as_viewed),
+        })
+
+    };
+
+    errorHandlerE = async (error) => {
+
+    	console.log(error)
+
+    };
+
     render() {
 
         const next_events = this.state.next_practical_lessons.concat(this.state.next_exams) 
@@ -184,6 +215,17 @@ class HomePage extends Component {
                                         <Feed style={{marginTop: "-3px"}}>
                                             {pa.description}
                                         </Feed>
+                                    </Feed.Content>
+                                    <Feed.Content>
+                                        <Popup content="Marcar anúncio como visto" trigger={
+                                            <Button
+                                                icon
+                                                floated='right'
+                                                onClick={() => {this.viewedAnnouncement(pa)}}
+                                            >
+                                                <Icon name='eye' />
+                                            </Button>
+                                        }/>
                                     </Feed.Content>
                                 </Feed.Event>
                             )) :
