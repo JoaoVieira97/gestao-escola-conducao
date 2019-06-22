@@ -5,10 +5,7 @@ import org.orm.PersistentException;
 import org.orm.PersistentSession;
 
 import javax.ejb.Stateless;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -93,6 +90,7 @@ public class StudentBean implements StudentBeanLocal {
                 List<PersonalAnnouncement> announcements = Arrays.asList(student.announcements.toArray());
                 return announcements.stream()
                                     .filter(a -> !a.getViewed())
+                                    .sorted(Comparator.comparing(Announcement::getTimestamp).reversed())
                                     .collect(Collectors.toList());
             }
 

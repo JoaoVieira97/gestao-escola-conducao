@@ -31,7 +31,7 @@ class HomePage extends Component {
         await fetchApi(
             'get','/user/announcements',
             {},  {},
-            this.successHandlerA, this.errorHandlerPA
+            this.successHandlerA, this.errorHandlerA
         )
 
         await fetchApi(
@@ -115,7 +115,7 @@ class HomePage extends Component {
      * Handle the error retrieving general announcements.
      * @param error
      */
-    errorHandlerPA = async (error) => {
+    errorHandlerA = async (error) => {
 
     	console.log('error retrieving general announcements')
         console.log(error)
@@ -145,19 +145,19 @@ class HomePage extends Component {
         this.setState({
             mark_as_viewed: pa.id
         })
-        console.log('ya')
 
         await fetchApi(
-            'get','/student/viewed_personal_announcement?id=' + pa.id,
-            {},  {},
+            'post','/student/viewed_personal_announcement',
+            {
+            	id: pa.id
+            },  {},
             this.successHandlerViewed, this.errorHandlerViewed
         )
 
     }
 
     successHandlerViewed = async (response) => {
-
-        console.log(response)
+    	
         this.setState({
             personal_announcements: this.state.personal_announcements.filter((pa) => pa.id !== this.state.mark_as_viewed),
         })
@@ -177,18 +177,6 @@ class HomePage extends Component {
             return new Date(e1.startTime) - new Date(e2.startTime);
         });
 
-        const p_announcements = this.state.personal_announcements
-        p_announcements.sort(function(pa1, pa2) {
-            return new Date(pa2.timestamp) - new Date(pa1.timestamp);
-        });
-
-        const g_announcements = this.state.general_announcements
-        g_announcements.sort(function(ga1, ga2) {
-            return new Date(ga2.timestamp) - new Date(ga1.timestamp);
-        });
-
-        //console.log(next_events)
-
         const personalAnnouncements = (
             <div className={"ui fluid card grey"}>
                 <Card.Content>
@@ -201,8 +189,8 @@ class HomePage extends Component {
                 </Card.Content>
                 <Card.Content>
                     <Feed>
-                        {(p_announcements.length > 0) ?
-                            p_announcements.map(pa => (
+                        {(this.state.personal_announcements.length > 0) ?
+                            this.state.personal_announcements.map(pa => (
                                 <Feed.Event key={pa.id}>
                                     <Feed.Label>
                                         <Icon name='tasks'/>
@@ -248,8 +236,8 @@ class HomePage extends Component {
                 </Card.Content>
                 <Card.Content>
                     <Feed>
-                        {(g_announcements.length > 0) ?
-                            g_announcements.map(a => (
+                        {(this.state.general_announcements.length > 0) ?
+                            this.state.general_announcements.map(a => (
                                 <Feed.Event key={a.id}>
                                     <Feed.Label>
                                         <Icon name='tasks'/>

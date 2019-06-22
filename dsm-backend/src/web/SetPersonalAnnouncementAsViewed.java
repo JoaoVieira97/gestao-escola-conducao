@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
 
 @WebServlet(name = "SetPersonalAnnouncementAsViewed", urlPatterns = {"/api/student/viewed_personal_announcement"})
 public class SetPersonalAnnouncementAsViewed extends HttpServlet {
@@ -25,8 +26,18 @@ public class SetPersonalAnnouncementAsViewed extends HttpServlet {
         // check access token
         if(Utils.accessTokenValidation(request)) {
 
-            String announcementId = request.getParameter("id");
-            int id = Integer.valueOf(announcementId);
+            // get post data
+            // ------------------------------------------------------------
+            String data;
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = request.getReader().readLine()) != null) {
+                sb.append(line);
+            }
+            data = sb.toString();
+
+            Map<String, Object> JSON = mapper.readValue(data, Map.class);
+            int id = (Integer) JSON.get("id");
 
             // mark announcement as viewed
             boolean viewed = DSMFacade.viewedPersonalAnnouncement(id);

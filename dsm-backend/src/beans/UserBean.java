@@ -5,6 +5,7 @@ import org.orm.PersistentException;
 import org.orm.PersistentSession;
 
 import javax.ejb.Stateless;
+import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -115,6 +116,7 @@ public class UserBean implements UserBeanLocal {
             List<Announcement> general_announcements =
                     all_announcements.stream()
                                      .filter(a -> !(a instanceof PersonalAnnouncement))
+                                     .sorted(Comparator.comparing(Announcement::getTimestamp).reversed())
                                      .collect(Collectors.toList());
 
             return general_announcements;
