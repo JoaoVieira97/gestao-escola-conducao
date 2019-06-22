@@ -3,9 +3,9 @@ package beans;
 import dsm.*;
 import org.orm.PersistentException;
 import org.orm.PersistentSession;
-import utils.Utils;
 
 import javax.ejb.Stateless;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -14,10 +14,12 @@ import java.util.stream.Collectors;
 @Stateless(name = "StudentBean")
 public class StudentBean implements StudentBeanLocal {
 
-    private final static PersistentSession session = Utils.getSession();
-
+    /**
+     * Get all students order by id.
+     * @return
+     */
     @Override
-    public List<Student> getStudents() {
+    public List<Student> getStudents(PersistentSession session) {
 
         try {
             return (List<Student>) StudentDAO.queryStudent(session,"id>0", "id");
@@ -28,13 +30,18 @@ public class StudentBean implements StudentBeanLocal {
         return null;
     }
 
+    /**
+     * Get student registers.
+     * @param studentID
+     * @return
+     */
     @Override
-    public List<Register> getStudentRegisters(int studentID) {
+    public List<Register> getStudentRegisters(PersistentSession session, int studentID) {
 
         try {
-
             Student student = StudentDAO.getStudentByORMID(session, studentID);
-            return Arrays.asList(student.registers.toArray());
+            //return Arrays.asList(student.registers.toArray());
+            return new ArrayList<Register>(student.registers.getCollection());
 
         } catch (PersistentException e) {
             e.printStackTrace();
@@ -43,12 +50,17 @@ public class StudentBean implements StudentBeanLocal {
         return null;
     }
 
+    /**
+     * Get student personal announcements.
+     * @param studentID
+     * @return
+     */
     @Override
-    public List<PersonalAnnouncement> getStudentPersonalAnnouncements(int studentID) {
+    public List<PersonalAnnouncement> getStudentPersonalAnnouncements(PersistentSession session, int studentID) {
 
         try {
 
-            Student student = (Student) StudentDAO.getStudentByORMID(session, studentID);
+            Student student = StudentDAO.getStudentByORMID(session, studentID);
             if (student != null) {
                 List<PersonalAnnouncement> announcements = Arrays.asList(student.announcements.toArray());
                 return announcements.stream()
@@ -64,10 +76,16 @@ public class StudentBean implements StudentBeanLocal {
 
     }
 
+    /**
+     * Set personal announcement as viewed.
+     * @param announcementID
+     * @return
+     */
     @Override
-    public boolean viewedPersonalAnnouncement(int announcementID){
+    public boolean setPersonalAnnouncementAsViewed(PersistentSession session, int announcementID){
 
         try {
+
             PersonalAnnouncement pa = PersonalAnnouncementDAO.getPersonalAnnouncementByORMID(announcementID);
             if (pa != null){
                 pa.setViewed(true);
@@ -81,12 +99,19 @@ public class StudentBean implements StudentBeanLocal {
         return false;
     }
 
+    /**
+     * Get student exams.
+     * @param studentID
+     * @return
+     */
     @Override
-    public List<Exam> getStudentExams(int studentID) {
+    public List<Exam> getStudentExams(PersistentSession session, int studentID) {
 
         try {
+
             Student student =  StudentDAO.getStudentByORMID(session, studentID);
-            if (student != null) return Arrays.asList(student.exams.toArray());
+            if (student != null) //return Arrays.asList(student.exams.toArray());
+                return new ArrayList<>(student.exams.getCollection());
 
         } catch (PersistentException e) {
             e.printStackTrace();
@@ -95,10 +120,15 @@ public class StudentBean implements StudentBeanLocal {
         return null;
     }
 
+    /**
+     * Get student exams after today.
+     * @param studentID
+     * @return
+     */
     @Override
-    public List<Exam> getStudentNextExams(int studentID) {
+    public List<Exam> getStudentNextExams(PersistentSession session, int studentID) {
 
-        List<Exam> exams = this.getStudentExams(studentID);
+        List<Exam> exams = this.getStudentExams(session, studentID);
         List<Exam> next_exams = null;
 
         if(exams!=null) {
@@ -109,5 +139,4 @@ public class StudentBean implements StudentBeanLocal {
 
         return next_exams;
     }
-
 }

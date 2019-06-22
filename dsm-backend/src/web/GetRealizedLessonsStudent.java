@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dsm.DSMFacade;
 import dsm.PracticalLesson;
 import dsm.TheoreticalLesson;
+import org.orm.PersistentSession;
+import utils.Utils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -31,9 +33,11 @@ public class GetRealizedLessonsStudent extends HttpServlet {
         String studentId = request.getParameter("id");
         int id = Integer.valueOf(studentId);
 
+        PersistentSession session = Utils.getSession(request);
+
         // get lessons data
-        List<PracticalLesson> practicalLessons = DSMFacade.getRealizedPracticalLessonsStudent(id);
-        List<TheoreticalLesson> theoreticalLessons = DSMFacade.getRealizedTheoreticalLessonsStudent(id);
+        List<PracticalLesson> practicalLessons = DSMFacade.getRealizedPracticalLessonsStudent(session, id);
+        List<TheoreticalLesson> theoreticalLessons = DSMFacade.getRealizedTheoreticalLessonsStudent(session, id);
 
         ObjectMapper mapper = new ObjectMapper();
 

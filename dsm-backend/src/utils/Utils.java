@@ -1,7 +1,6 @@
 package utils;
 
 import dsm.DSMPersistentManager;
-import org.orm.PersistentException;
 import org.orm.PersistentSession;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,10 +8,13 @@ import javax.servlet.http.HttpSession;
 import java.security.MessageDigest;
 
 import java.util.UUID;
+import java.util.logging.Logger;
 
 public class Utils {
 
     private final static String API_TOKEN = "qnHuUp4iXL6dmzymkcOa6iGLYAwsnURP";
+    private final static Logger log = Logger.getLogger(Utils.class.getName());
+
 
     /**
      * Request access token validation.
@@ -20,7 +22,12 @@ public class Utils {
     public static boolean accessTokenValidation(HttpServletRequest request) {
 
         String accessToken = request.getHeader("Authorization");
-        return accessToken.equals(API_TOKEN);
+
+        if (accessToken != null) {
+            return accessToken.equals(API_TOKEN);
+        }
+
+        return false;
     }
 
     /**
@@ -67,21 +74,6 @@ public class Utils {
 
     /**
      * Get a new session if needed.
-     * @return PersistentSession
-     */
-    public static PersistentSession getSession() {
-
-        try {
-            return DSMPersistentManager.instance().getSession();
-        } catch (PersistentException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    /**
-     * Get a new session if needed.
      * @param request
      * @return PersistentSession
      */
@@ -95,12 +87,12 @@ public class Utils {
 
             if(hsession!=null) {
 
-                System.out.println("Reusing persistent session");
+                log.info("Reusing persistent session!");
                 session = (PersistentSession) hsession;
 
             } else {
 
-                System.out.println("Creating new persistent session");
+                log.info("Creating new persistent session!");
                 session = DSMPersistentManager.instance().getSession();
                 request.getSession().setAttribute("hsession", session);
             }

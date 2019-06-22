@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dsm.Announcement;
 import dsm.DSMFacade;
+import org.orm.PersistentSession;
 import utils.Utils;
 
 import javax.servlet.ServletException;
@@ -31,8 +32,10 @@ public class GetAnnouncements extends HttpServlet {
         // check access token
         if(Utils.accessTokenValidation(request)) {
 
+            PersistentSession session = Utils.getSession(request);
+
             // get personal announcements
-            List<Announcement> announcements = DSMFacade.getAnnouncements();
+            List<Announcement> announcements = DSMFacade.getAnnouncements(session);
 
             if(announcements!= null) {
                 ArrayNode announcementsJSON = mapper.valueToTree(announcements);
@@ -41,7 +44,7 @@ public class GetAnnouncements extends HttpServlet {
             }
             else{
                 responseNode.put("error", "Can't retrieve general announcements");
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.setStatus(HttpServletResponse.SC_OK);
             }
 
         }

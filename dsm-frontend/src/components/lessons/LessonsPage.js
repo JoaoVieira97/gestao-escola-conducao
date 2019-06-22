@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Header, Icon, Menu, Container, Card, Grid, List, Loader, Dimmer} from 'semantic-ui-react';
+import {Header, Icon, Menu, Card, Grid, List} from 'semantic-ui-react';
 import {categoryStyle} from "../../styles/styles";
 import {fetchApi} from "../../services/api";
 
@@ -79,7 +79,7 @@ class LessonsPage extends Component {
         let practicalsCategoryChoosed = [];
 
         if(categoryId !==-1){
-             data.lessons.map( practLesson => {
+             data.lessons.forEach(practLesson => {
 
                  let categories = practLesson.categories.collection;
 

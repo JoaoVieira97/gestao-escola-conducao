@@ -3,6 +3,7 @@ package web;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dsm.DSMFacade;
+import org.orm.PersistentSession;
 import utils.Utils;
 
 import javax.servlet.ServletException;
@@ -24,11 +25,13 @@ public class SetPersonalAnnouncementAsViewed extends HttpServlet {
         // check access token
         if(Utils.accessTokenValidation(request)) {
 
+            PersistentSession session = Utils.getSession(request);
+
             String announcementId = request.getParameter("id");
             int id = Integer.valueOf(announcementId);
 
             // mark announcement as viewed
-            boolean viewed = DSMFacade.viewedPersonalAnnouncement(id);
+            boolean viewed = DSMFacade.viewedPersonalAnnouncement(session, id);
             if(viewed) {
                 responseNode.put("success", viewed);
                 response.setStatus(HttpServletResponse.SC_OK);

@@ -3,6 +3,8 @@ package web;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dsm.Student;
 import dsm.DSMFacade;
+import org.orm.PersistentSession;
+import utils.Utils;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletResponse;
@@ -32,7 +34,9 @@ public class GetStudents extends javax.servlet.http.HttpServlet {
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response)
             throws javax.servlet.ServletException, IOException {
 
-        List<Student> students = DSMFacade.getStudents();
+        PersistentSession session = Utils.getSession(request);
+
+        List<Student> students = DSMFacade.getStudents(session);
         ObjectMapper mapper = new ObjectMapper();
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         mapper.setDateFormat(df);

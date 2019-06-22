@@ -3,6 +3,7 @@ package web;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dsm.DSMFacade;
+import org.orm.PersistentSession;
 import utils.Utils;
 
 import javax.servlet.ServletException;
@@ -27,6 +28,8 @@ public class Authentication extends HttpServlet {
         // check access token
         if(Utils.accessTokenValidation(request)) {
 
+            PersistentSession session = Utils.getSession(request);
+
             // get post data
             // ------------------------------------------------------------
             String data;
@@ -44,7 +47,7 @@ public class Authentication extends HttpServlet {
 
             // login and response
             // ------------------------------------------------------------
-            String userType = DSMFacade.login(email, Utils.hash(password));
+            String userType = DSMFacade.login(session, email, Utils.hash(password));
             if(userType != null) {
                 responseNode.put("userType", userType);
                 responseNode.put("userToken", Utils.generateRandomToken());

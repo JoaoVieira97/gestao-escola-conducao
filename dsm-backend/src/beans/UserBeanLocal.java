@@ -1,6 +1,7 @@
 package beans;
 
 import dsm.Announcement;
+import org.orm.PersistentSession;
 
 import javax.ejb.Local;
 import java.util.List;
@@ -8,11 +9,9 @@ import java.util.List;
 @Local
 public interface UserBeanLocal {
 
-    String login(String email, String password);
-
-    String getName(int userId);
-    String getEmail(int userId);
-    String getPassword();
-    List<Announcement> getAnnouncements();
+    String login(PersistentSession session, String email, String password);
+    String getName(PersistentSession session, int userId);
+    String getEmail(PersistentSession session, int userId);
+    List<Announcement> getAnnouncements(PersistentSession session);
 
 }

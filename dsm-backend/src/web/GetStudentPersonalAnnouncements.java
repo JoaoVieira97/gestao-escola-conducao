@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dsm.DSMFacade;
 import dsm.PersonalAnnouncement;
+import org.orm.PersistentSession;
 import utils.Utils;
 
 import javax.servlet.ServletException;
@@ -14,9 +15,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Logger;
 
 @WebServlet(name = "GetStudentPersonalAnnouncements", urlPatterns = {"/api/student/personal_announcements"})
 public class GetStudentPersonalAnnouncements extends HttpServlet {
+
+    private final static Logger log = Logger.getLogger(GetStudentPersonalAnnouncements.class.getName());
+
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -28,14 +33,18 @@ public class GetStudentPersonalAnnouncements extends HttpServlet {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode responseNode = mapper.createObjectNode();
 
+        //log.info(request.getSession().toString());
+
         // check access token
         if(Utils.accessTokenValidation(request)) {
+
+            PersistentSession session = Utils.getSession(request);
 
             String studentId = request.getParameter("id");
             int id = Integer.valueOf(studentId);
 
             // get personal announcements
-            List<PersonalAnnouncement> announcements = DSMFacade.getStudentPersonalAnnouncements(id);
+            List<PersonalAnnouncement> announcements = DSMFacade.getStudentPersonalAnnouncements(session, id);
 
             if(announcements!= null) {
                 ArrayNode announcementsJSON = mapper.valueToTree(announcements);

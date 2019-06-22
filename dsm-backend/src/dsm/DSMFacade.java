@@ -9,6 +9,7 @@ import utils.Utils;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DSMFacade {
@@ -71,122 +72,122 @@ public class DSMFacade {
     /**
      * Authentication a user.
      */
-    public static String login(String email, String password) {
+    public static String login(PersistentSession session, String email, String password) {
 
-        return userBean.login(email, password);
+        return userBean.login(session, email, password);
     }
 
 
     /**
      * Get Name of a user.
      */
-    public static String getName(int userId) {
+    public static String getName(PersistentSession session, int userId) {
 
-        return userBean.getName(userId);
+        return userBean.getName(session, userId);
     }
 
     /**
      * Get Email of a user.
      */
-    public static String getEmail(int userId) {
+    public static String getEmail(PersistentSession session, int userId) {
 
-        return userBean.getEmail(userId);
+        return userBean.getEmail(session, userId);
     }
 
     /**
      * Get the list of all students.
      */
-    public static List<Student> getStudents() {
+    public static List<Student> getStudents(PersistentSession session) {
 
-        return studentBean.getStudents();
+        return studentBean.getStudents(session);
     }
 
     /**
      * Get the list of all lessons.
      */
-    public static List<Lesson> getLessons() {
+    public static List<Lesson> getLessons(PersistentSession session) {
 
-        return lessonBean.getLessons();
+        //return lessonBean.getLessons();
+        return new ArrayList<>();
     }
 
     /**
      * Get the list of personal announcements of a specific student.
      */
-    public static List<PersonalAnnouncement> getStudentPersonalAnnouncements(int studentId){
+    public static List<PersonalAnnouncement> getStudentPersonalAnnouncements(PersistentSession session, int studentId){
 
-        return studentBean.getStudentPersonalAnnouncements(studentId);
+        return studentBean.getStudentPersonalAnnouncements(session, studentId);
     }
 
     /**
      * Set specific student personalAnnouncement as viewed
      */
-    public static boolean viewedPersonalAnnouncement(int announcementID){
+    public static boolean viewedPersonalAnnouncement(PersistentSession session, int announcementID){
 
-        return studentBean.viewedPersonalAnnouncement(announcementID);
+        return studentBean.setPersonalAnnouncementAsViewed(session, announcementID);
     }
 
     /**
      * Get the list of next practical lessons of a specific student.
      */
-    public static List<Lesson> getStudentNextPracticalLessons(int studentId){
+    public static List<Lesson> getStudentNextPracticalLessons(PersistentSession session, int studentId){
 
-        return lessonBean.getStudentNextPracticalLessons(studentId);
+        return lessonBean.getStudentNextPracticalLessons(session, studentId);
     }
 
     /**
      * Get the list of exams of a specific student.
      */
-    public static List<Exam> getStudentExams(int studentId){
+    public static List<Exam> getStudentExams(PersistentSession session, int studentId){
 
-        return studentBean.getStudentExams(studentId);
+        return studentBean.getStudentExams(session, studentId);
     }
 
     /**
      * Get the list of next exams of a specific student.
      */
-    public static List<Exam> getStudentNextExams(int studentId){
+    public static List<Exam> getStudentNextExams(PersistentSession session, int studentId){
 
-        return studentBean.getStudentNextExams(studentId);
+        return studentBean.getStudentNextExams(session, studentId);
     }
 
     /**
      * Get the list of general announcements
      */
-    public static List<Announcement> getAnnouncements(){
+    public static List<Announcement> getAnnouncements(PersistentSession session){
 
-        return userBean.getAnnouncements();
+        return userBean.getAnnouncements(session);
     }
 
     /**
      * Get the list of all registers of a specific student.
      */
-    public static List<Register> getStudentRegisters(int studentId) {
+    public static List<Register> getStudentRegisters(PersistentSession session, int studentId) {
 
-        return studentBean.getStudentRegisters(studentId);
+        return studentBean.getStudentRegisters(session, studentId);
     }
 
     /**
      * Get the list of all realized lessons of a specific student.
      */
-    public static List<Lesson> getRealizedLessonsStudent(int studentId) {
+    public static List<Lesson> getRealizedLessonsStudent(PersistentSession session, int studentId) {
 
-        return lessonBean.getRealizedLessonsStudent(studentId);
+        return lessonBean.getRealizedLessonsStudent(session, studentId);
     }
 
     /**
      * Get the list of all realized lessons of a specific student.
      */
-    public static List<PracticalLesson> getRealizedPracticalLessonsStudent(int studentId) {
+    public static List<PracticalLesson> getRealizedPracticalLessonsStudent(PersistentSession session, int studentId) {
 
-        return lessonBean.getRealizedPracticalLessonsStudent(studentId);
+        return lessonBean.getRealizedPracticalLessonsStudent(session, studentId);
     }
 
     /**
      * Get the list of all realized lessons of a specific student.
      */
-    public static List<TheoreticalLesson> getRealizedTheoreticalLessonsStudent(int studentId) {
+    public static List<TheoreticalLesson> getRealizedTheoreticalLessonsStudent(PersistentSession session, int studentId) {
 
-        return lessonBean.getRealizedTheoreticalLessonsStudent(studentId);
+        return lessonBean.getRealizedTheoreticalLessonsStudent(session, studentId);
     }
-
 }

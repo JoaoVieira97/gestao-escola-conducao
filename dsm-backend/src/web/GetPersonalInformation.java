@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dsm.DSMFacade;
 import dsm.Exam;
+import org.orm.PersistentSession;
 import utils.Utils;
 
 import javax.servlet.ServletException;
@@ -29,13 +30,15 @@ public class GetPersonalInformation extends HttpServlet {
         // check access token
         if(Utils.accessTokenValidation(request)) {
 
+            PersistentSession session = Utils.getSession(request);
+
             String studentId = request.getParameter("id");
             int id = Integer.valueOf(studentId);
 
             // get user data
-            String name = DSMFacade.getName(id);
-            String email = DSMFacade.getEmail(id);
-            List<Exam> exams = DSMFacade.getStudentExams(id);
+            String name = DSMFacade.getName(session, id);
+            String email = DSMFacade.getEmail(session, id);
+            List<Exam> exams = DSMFacade.getStudentExams(session, id);
 
             //ArrayNode examsJSON = mapper.valueToTree(exams);
 

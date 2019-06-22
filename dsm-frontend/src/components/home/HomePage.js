@@ -31,7 +31,7 @@ class HomePage extends Component {
         await fetchApi(
             'get','/user/announcements',
             {},  {},
-            this.successHandlerA, this.errorHandlerA
+            this.successHandlerA, this.errorHandlerPA
         )
 
         await fetchApi(

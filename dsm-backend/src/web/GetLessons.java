@@ -3,6 +3,9 @@ package web;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dsm.DSMFacade;
 import dsm.Lesson;
+import org.orm.PersistentSession;
+import utils.Utils;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -32,8 +35,10 @@ public class GetLessons extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        PersistentSession session = Utils.getSession(request);
+
         // get lessons data
-        List<Lesson> lessons = DSMFacade.getLessons();
+        List<Lesson> lessons = DSMFacade.getLessons(session);
         ObjectMapper mapper = new ObjectMapper();
         String sJSON = mapper.writeValueAsString(lessons);
         sJSON = "{\"success\":true,\"lessons\":" + sJSON + "}";

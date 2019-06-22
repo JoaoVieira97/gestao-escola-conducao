@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import dsm.DSMFacade;
 import dsm.Exam;
 import dsm.Register;
+import org.orm.PersistentSession;
 import utils.Utils;
 
 import javax.servlet.ServletException;
@@ -37,11 +38,13 @@ public class GetStudentRegister extends HttpServlet {
         // check access token
         if(Utils.accessTokenValidation(request)) {
 
+            PersistentSession session = Utils.getSession(request);
+
             String studentId = request.getParameter("id");
             int id = Integer.valueOf(studentId);
 
             // get student registers
-            List<Register> registers = DSMFacade.getStudentRegisters(id);
+            List<Register> registers = DSMFacade.getStudentRegisters(session, id);
 
             if(registers!= null) {
                 ArrayNode registersJSON = mapper.valueToTree(registers);

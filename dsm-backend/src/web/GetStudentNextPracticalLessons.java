@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dsm.DSMFacade;
 import dsm.Lesson;
+import org.orm.PersistentSession;
 import utils.Utils;
 
 import javax.servlet.ServletException;
@@ -31,20 +32,23 @@ public class GetStudentNextPracticalLessons extends HttpServlet {
         // check access token
         if(Utils.accessTokenValidation(request)) {
 
+            PersistentSession session = Utils.getSession(request);
+
             String studentId = request.getParameter("id");
             int id = Integer.valueOf(studentId);
 
             // get next practical lessons
-            List<Lesson> lessons = DSMFacade.getStudentNextPracticalLessons(id);
+            List<Lesson> lessons = DSMFacade.getStudentNextPracticalLessons(session, id);
 
-            if(lessons!= null) {
+            if(lessons != null) {
                 ArrayNode lessonsJSON = mapper.valueToTree(lessons);
                 responseNode.putArray("lessons").addAll(lessonsJSON);
                 response.setStatus(HttpServletResponse.SC_OK);
             }
             else{
                 responseNode.put("error", "Wrong id");
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                //response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.setStatus(HttpServletResponse.SC_OK);
             }
 
         }

@@ -3,7 +3,6 @@ package beans;
 import dsm.*;
 import org.orm.PersistentException;
 import org.orm.PersistentSession;
-import utils.Utils;
 
 import javax.ejb.Stateless;
 import java.util.List;
@@ -12,14 +11,18 @@ import java.util.stream.Collectors;
 @Stateless(name = "UserBean")
 public class UserBean implements UserBeanLocal {
 
-    private final static PersistentSession session = Utils.getSession();
-
+    /**
+     * User authentication.
+     * @param email
+     * @param password
+     * @return
+     */
     @Override
-    public String login(String email, String password) {
+    public String login(PersistentSession session, String email, String password) {
 
         try {
-            User user = UserDAO.loadUserByQuery(
-                    session,
+
+            User user = UserDAO.loadUserByQuery(session,
                 "email='"+email+"' AND password='"+password+"'",
                 "ID"
             );
@@ -33,10 +36,16 @@ public class UserBean implements UserBeanLocal {
         return null;
     }
 
+    /**
+     * Get user name by is user id.
+     * @param userId
+     * @return
+     */
     @Override
-    public String getName(int userId) {
+    public String getName(PersistentSession session, int userId) {
 
         try {
+
             User user = UserDAO.getUserByORMID(session, userId);
             if (user != null) return user.getName();
 
@@ -46,10 +55,16 @@ public class UserBean implements UserBeanLocal {
         return null;
     }
 
+    /**
+     * Get user email by is user id.
+     * @param userId
+     * @return
+     */
     @Override
-    public String getEmail(int userId) {
+    public String getEmail(PersistentSession session, int userId) {
 
         try {
+
             User user = UserDAO.getUserByORMID(session, userId);
             if (user != null) return user.getEmail();
 
@@ -59,15 +74,15 @@ public class UserBean implements UserBeanLocal {
         return null;
     }
 
+    /**
+     * Get school announcements.
+     * @return
+     */
     @Override
-    public String getPassword() {
-        return null;
-    }
-
-    @Override
-    public List<Announcement> getAnnouncements(){
+    public List<Announcement> getAnnouncements(PersistentSession session){
 
         try {
+
             List<Announcement> all_announcements = (List<Announcement>) AnnouncementDAO.queryAnnouncement(session, "id>0", "timestamp desc");
             List<Announcement> general_announcements =
                     all_announcements.stream()
@@ -81,5 +96,4 @@ public class UserBean implements UserBeanLocal {
 
         return null;
     }
-
 }
