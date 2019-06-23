@@ -237,7 +237,7 @@ class HomePage extends Component {
                             size='mini'
                             floated='right'
                             labelPosition='right'
-                            onClick={() => this.props.history.push('/announcements')}
+                            onClick={() => this.props.history.push('/home/announcements')}
                         >
                             Ver mais
                             <Icon name='plus' />
@@ -312,7 +312,7 @@ class HomePage extends Component {
                 <Dimmer inverted active={this.state.isLoading}>
                     <Loader>A carregar</Loader>
                 </Dimmer>
-                <div className="ui stackable two column centered grid">
+                <div className="ui stackable two column centered grid" style={{marginBottom: "65px"}}>
                     <div className="column">
                         {personalAnnouncements}
                         {generalAnnouncements}					

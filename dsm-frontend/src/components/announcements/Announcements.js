@@ -1,5 +1,16 @@
 import React, {Component} from 'react';
-import {Container, Breadcrumb, Card, Feed, Icon, Loader, Dimmer, Header, Grid} from 'semantic-ui-react';
+import {
+    Container, 
+    Breadcrumb, 
+    Card, 
+    Feed, 
+    Icon, 
+    Loader, 
+    Dimmer, 
+    Header, 
+    Grid,
+    Pagination
+} from 'semantic-ui-react';
 import {fetchApi} from "../../services/api";
 
 class Announcements extends Component {
@@ -10,7 +21,9 @@ class Announcements extends Component {
         this.state = {
             isLoading: true,
             general_announcements: [],
-            message_ga: 'Sem avisos para mostrar.'
+            page_announcements: [],
+            message_ga: 'Sem avisos para mostrar.',
+            page: 1
         };
     }
 
@@ -30,10 +43,22 @@ class Announcements extends Component {
      */
     successHandlerA = async (response) => {
 
-        await this.setState({
-            general_announcements: response.data.announcements,
+        const chunks = []
+
+        while (response.data.announcements.length > 0){
+            chunks.push(response.data.announcements.splice(0, 7));
+        }
+        
+        this.setState({
+            general_announcements: chunks,
             isLoading: false
         });
+
+        if (chunks.length > 0){
+            this.setState({
+                page_announcements: chunks[0]
+            })
+        }
     
     };
 
@@ -51,6 +76,17 @@ class Announcements extends Component {
         });
 
     };
+
+    onChangePage(event, data) {
+        const {activePage} = data;
+
+        if (activePage !== this.state.page) {
+            this.setState({
+                page: activePage,
+                page_announcements: this.state.general_announcements[activePage - 1]
+            });
+        }
+    }
 
     render(){
 
@@ -89,8 +125,8 @@ class Announcements extends Component {
                             </Card.Content>
                             <Card.Content>
                                 <Feed>
-                                    {(this.state.general_announcements.length > 0) ?
-                                        this.state.general_announcements.map(a => (
+                                    {(this.state.page_announcements.length > 0) ?
+                                        this.state.page_announcements.map(a => (
                                             <Feed.Event key={a.id}>
                                                 <Feed.Label>
                                                     <Icon name='tasks'/>
@@ -111,6 +147,17 @@ class Announcements extends Component {
                                 </Feed>
                             </Card.Content>
                         </div>
+                        <Pagination
+                            floated='right'
+                            style={{marginTop: "-10px"}}
+                            firstItem={null}
+                            lastItem={null}
+                            boundaryRange={0}
+                            defaultActivePage={1}
+                            ellipsisItem={null}
+                            totalPages={this.state.general_announcements.length}
+                            onPageChange={this.onChangePage.bind(this)}
+                        />
                     </Grid.Column>
                 </Grid>
 
