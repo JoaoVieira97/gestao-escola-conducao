@@ -51,7 +51,7 @@ const Root = ({ store }) => {
                     <PrivateRoute exact path="/lessons" component={LessonsPage} />
                     <PrivateRoute exact path="/payments" component={PaymentsPage} />
                     <PrivateRoute exact path="/students" component={AllStudents} />
-                    <PrivateRoute exact path="/announcements" component={Announcements} />
+                    <PrivateRoute exact path="/home/announcements" component={Announcements} />
                     <Route exact path="/contacts" render={ props => <ErrorPage {...props} />} />
                     <Redirect from="/" exact to="/home" />
                     <Route path="/" render={ props => <ErrorPage {...props} />} />
