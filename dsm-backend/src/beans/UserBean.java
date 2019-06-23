@@ -71,7 +71,7 @@ public class UserBean implements UserBeanLocal {
 
             session = getSession();
 
-            User user = UserDAO.getUserByORMID(session, userId);
+            User user = UserDAO.getUserByORMID( userId);
             if (user != null) return user.getName();
 
         } catch (PersistentException e) {
@@ -92,7 +92,7 @@ public class UserBean implements UserBeanLocal {
 
             session = getSession();
 
-            User user = UserDAO.getUserByORMID(session, userId);
+            User user = UserDAO.getUserByORMID( userId);
             if (user != null) return user.getEmail();
 
         } catch (PersistentException e) {
@@ -112,7 +112,7 @@ public class UserBean implements UserBeanLocal {
 
             session = getSession();
 
-            List<Announcement> all_announcements = (List<Announcement>) AnnouncementDAO.queryAnnouncement(session, "id>0", "timestamp desc");
+            List<Announcement> all_announcements = (List<Announcement>) AnnouncementDAO.queryAnnouncement( "id>0", "timestamp desc");
             List<Announcement> general_announcements =
                     all_announcements.stream()
                                      .filter(a -> !(a instanceof PersonalAnnouncement))
@@ -138,7 +138,7 @@ public class UserBean implements UserBeanLocal {
 
             session = getSession();
 
-            List<Announcement> all_announcements = (List<Announcement>) AnnouncementDAO.queryAnnouncement(session, "id>0", "timestamp desc");
+            List<Announcement> all_announcements = (List<Announcement>) AnnouncementDAO.queryAnnouncement( "id>0", "timestamp desc");
             List<Announcement> recent_general_announcements =
                     all_announcements.stream()
                             .filter(a -> !(a instanceof PersonalAnnouncement))

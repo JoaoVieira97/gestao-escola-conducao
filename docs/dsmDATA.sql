@@ -150,6 +150,15 @@ INSERT INTO PracticalLesson (IsStudentPresent, LessonID)
 INSERT INTO TheoreticalLesson (LessonID)
     VALUES (7), (9);
 
+INSERT INTO Theme_TheoreticalLesson (ThemeID, TheoreticalLessonLessonID)
+    VALUES (1, 7),
+            (2, 7),
+            (3, 7),
+            (4, 7),
+            (5, 9),
+            (6, 9),
+            (7, 9);    
+
 INSERT INTO Lesson_Category (LessonID, CategoryID)
     VALUES (1, 6),
            (5, 6),

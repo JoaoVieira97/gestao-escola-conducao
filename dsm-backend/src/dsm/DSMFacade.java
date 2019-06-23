@@ -74,7 +74,7 @@ public class DSMFacade {
      * Get and access to LessonBean features.
      * @return LessonBeanLocal
      */
-    private static RedisBeanLocal lookupRedisBeanLocal() {
+   private static RedisBeanLocal lookupRedisBeanLocal() {
         try {
 
             Context c = new InitialContext();
@@ -157,6 +157,22 @@ public class DSMFacade {
     public static List<Lesson> getStudentNextPracticalLessons(int studentId){
 
         return lessonBean.getStudentNextPracticalLessons(studentId);
+    }
+
+    /**
+     * Get the list of next theoretical lessons of a specific student.
+     */
+    public static List<TheoreticalLesson> getStudentNextTheoreticalLessons(int studentId){
+
+        return lessonBean.getStudentNextTheoreticalLessons(studentId);
+    }
+
+    /**
+     * Get the list of realized themes of a specific student.
+     */
+    public static List<Theme> getRealizedThemes(int studentId, int categoryID){
+
+        return lessonBean.getRealizedThemes(studentId, categoryID);
     }
 
     /**

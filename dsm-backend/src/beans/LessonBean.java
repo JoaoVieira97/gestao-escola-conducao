@@ -6,6 +6,7 @@ import org.orm.PersistentSession;
 
 import javax.ejb.Stateless;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -44,7 +45,7 @@ public class LessonBean implements LessonBeanLocal{
 
             session = getSession();
 
-            Student student = StudentDAO.getStudentByORMID(session, studentId);
+            Student student = StudentDAO.getStudentByORMID( studentId);
             if(student != null) // return Arrays.asList(student.lessons.toArray());
                 return new ArrayList<Lesson>(student.lessons.getCollection());
 
@@ -66,10 +67,12 @@ public class LessonBean implements LessonBeanLocal{
         List<Lesson> lessons = this.getLessonsStudent(studentId);
         List<Lesson> res = new ArrayList<>();
 
-        for(Lesson lesson : lessons)
-            if(lesson.getState().equals("realized")) res.add(lesson);
+        if(lessons!=null)
+            res = lessons.stream()
+                    .filter(l -> l.getState().equals("realized"))
+                    .collect(Collectors.toList());
 
-        return lessons;
+        return res;
     }
 
     /**
@@ -80,23 +83,18 @@ public class LessonBean implements LessonBeanLocal{
     @Override
     public List<PracticalLesson> getRealizedPracticalLessonsStudent(int studentId) {
 
-        try {
+        List<Lesson> lessons = this.getRealizedLessonsStudent(studentId);
+        List<PracticalLesson> practicalLessons = new ArrayList<>();
 
-            List<Lesson> lessons = this.getRealizedLessonsStudent(studentId);
-            List<PracticalLesson> practicalLessons = new ArrayList<>();
-
-            for (Lesson lesson : lessons) {
-                PracticalLesson practicalLesson = PracticalLessonDAO.getPracticalLessonByORMID(session, lesson.getID());
-                if(practicalLesson!=null && practicalLesson.getIsStudentPresent()) practicalLessons.add(practicalLesson);
-            }
-
-           return practicalLessons;
-
-        } catch (PersistentException e) {
-            e.printStackTrace();
+        if(lessons!=null){
+            practicalLessons = lessons.stream()
+                                        .filter(l -> l instanceof PracticalLesson &&
+                                                    ((PracticalLesson) l).getIsStudentPresent())
+                                        .map(l -> (PracticalLesson) l)
+                                        .collect(Collectors.toList());
         }
 
-        return null;
+        return practicalLessons;
     }
 
     /**
@@ -107,23 +105,38 @@ public class LessonBean implements LessonBeanLocal{
     @Override
     public List<TheoreticalLesson> getRealizedTheoreticalLessonsStudent(int studentId) {
 
-        try {
+        List<Lesson> lessons = this.getRealizedLessonsStudent(studentId);
+        List<TheoreticalLesson> theoreticalLessons = new ArrayList<>();
 
-            List<Lesson> lessons = this.getRealizedLessonsStudent(studentId);
-            List<TheoreticalLesson> theoreticalLessons = new ArrayList<>();
-
-            for (Lesson lesson : lessons) {
-                TheoreticalLesson theoreticalLesson = TheoreticalLessonDAO.getTheoreticalLessonByORMID(session, lesson.getID());
-                if(theoreticalLesson!=null) theoreticalLessons.add(theoreticalLesson);
-            }
-
-            return theoreticalLessons;
-
-        } catch (PersistentException e) {
-            e.printStackTrace();
+        if(lessons!=null){
+            theoreticalLessons = lessons.stream()
+                    .filter(l -> l instanceof TheoreticalLesson)
+                    .map(l -> (TheoreticalLesson) l)
+                    .collect(Collectors.toList());
         }
 
-        return null;
+        return theoreticalLessons;
+    }
+
+    /**
+     * Get realized themes of theoretical lessons of a specific category
+     * @param studentId
+     * @return
+     */
+    @Override
+    public List<Theme> getRealizedThemes(int studentId, int categoryID) {
+
+        List<TheoreticalLesson> lessons = this.getRealizedTheoreticalLessonsStudent(studentId);
+        List<Theme> themes = new ArrayList<>();
+
+        for(TheoreticalLesson l : lessons)
+            for(Category category : Arrays.asList(l.categories.toArray()))
+                if(category.getID() == categoryID){
+                    for(Theme theme : Arrays.asList(l.themes.toArray()))
+                        themes.add(theme);
+                }
+
+        return themes;
     }
 
     /**
@@ -144,5 +157,26 @@ public class LessonBean implements LessonBeanLocal{
         }
 
         return pratical_lessons;
+    }
+
+    /**
+     * Get future theoretical lessons.
+     * @param studentID
+     * @return
+     */
+    @Override
+    public List<TheoreticalLesson> getStudentNextTheoreticalLessons(int studentID) {
+
+        List<TheoreticalLesson> theoreticalLessons = new ArrayList<>();
+        List<Lesson> lessons = this.getLessonsStudent(studentID);
+
+        if (lessons!= null){
+            theoreticalLessons = lessons.stream()
+                    .filter(l -> l instanceof TheoreticalLesson && l.getState().equals("opened"))
+                    .map(l -> (TheoreticalLesson) l)
+                    .collect(Collectors.toList());
+        }
+
+        return theoreticalLessons;
     }
 }

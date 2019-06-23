@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 @Singleton(name = "RedisBean")
 public class RedisBean implements RedisBeanLocal {
 
+
     private static final String hostname = "127.0.0.1";
     private static final int port = 6379;
     private static final int ttl = 31556926;

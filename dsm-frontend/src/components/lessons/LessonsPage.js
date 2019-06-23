@@ -1,5 +1,17 @@
 import React, {Component} from 'react';
-import {Header, Icon, Menu, Card, Grid, List, Loader, Dimmer, Message} from 'semantic-ui-react';
+import {
+    Header,
+    Icon,
+    Menu,
+    Card,
+    Grid,
+    List,
+    Loader,
+    Dimmer,
+    Message,
+    Button,
+    Table,
+} from 'semantic-ui-react';
 import {categoryStyle} from "../../styles/styles";
 import {fetchApi} from "../../services/api";
 
@@ -17,6 +29,12 @@ class LessonsPage extends Component {
             messageRegisters:'Sem registos efetuados',
             //messageRegistersError: false,
             _activeItem: '',
+            _activeItemId: -1,
+
+            themesRealized: [],
+
+            tableRealizedTheoLessons: false,
+            tableNextTheoLessons: false,
 
             isLoading : true,
         };
@@ -53,6 +71,7 @@ class LessonsPage extends Component {
             allRegisters: data.registers,
             allCategories: categories,
             _activeItem: categories[0].name,
+            _activeItemId: categories[0].id,
         });
 
         fetchApi(
@@ -149,6 +168,8 @@ class LessonsPage extends Component {
     handleItemClick = (event, data) => {
 
         this.setState({
+            tableRealizedTheoLessons: false,
+            tableNextTheoLessons: false,
             _activeItem: data.name,
             isLoading: true,
         });
@@ -177,9 +198,42 @@ class LessonsPage extends Component {
         }
 
         this.setState({
+            _activeItemId: categoryId,
             showPracticalLessons: practicalsCategoryChoosed,
             isLoading: false,
         });
+    };
+
+    handleRealizedTheoreticalLessons = () => {
+
+        if(!this.state.tableRealizedTheoLessons){
+
+            this.setState({
+                isLoading: true,
+            });
+
+            fetchApi(
+                'get','/student/realized_themes?id=1&category='+this.state._activeItemId, //TODO Find userID
+                {},  {},
+                this.successFetchRealizedThemes, this.errorFetchRegisters
+            );
+        }
+    };
+
+    successFetchRealizedThemes = (response) => {
+
+        const themes = response.data.themes;
+
+        this.setState({
+            themesRealized: themes,
+            tableRealizedTheoLessons: true,
+            tableNextTheoLessons: false,
+            isLoading: false,
+        });
+    };
+
+    handleNextTheoreticalLessons = () => {
+
     };
 
 
@@ -206,10 +260,11 @@ class LessonsPage extends Component {
             return new Date(e1.startTime) - new Date(e2.startTime);
         });
 
-        const nextLessons = (
+        const nextPracticalLessons = (
             <div className={"ui fluid card grey"}>
                 <Card.Content>
                     <Card.Header>
+                        <Button floated='right'> MARCAR AULA </Button>
                         <Icon.Group style={{marginRight: "8px"}}>
                             <Icon color='grey' name='calendar' />
                         </Icon.Group>
@@ -241,6 +296,89 @@ class LessonsPage extends Component {
             </div>
         );
 
+        const theoLessons = (
+            <div className={"ui fluid card grey"}>
+                <Card.Content>
+                    <Card.Header>
+                        <Icon.Group style={{marginRight: "8px"}}>
+                            <Icon color='grey' name='calendar' />
+                        </Icon.Group>
+                        Aulas Teóricas
+                    </Card.Header>
+                </Card.Content>
+                <Card.Content>
+                    <List animated divided relaxed={'very'} verticalAlign='middle'>
+                        <List.Item >
+                            <Icon size='large' name='clipboard check' />
+                            <List.Content>
+                                <List.Header>Aulas Realizadas: 1/28 </List.Header>
+                            </List.Content>
+                        </List.Item>
+                        <List.Item onClick={this.handleRealizedTheoreticalLessons}>
+                            <List.Content floated='right'>
+                                <Icon color='grey' size='large' name='angle right'/>
+                            </List.Content>
+                            <Icon size='large' name='tasks' />
+                            <List.Content >
+                                <List.Header>Consultar Aulas Realizadas </List.Header>
+                                <List.Description style={{marginTop: "3px"}}>
+                                    Consultar temas em que esteve presente.
+                                </List.Description>
+                            </List.Content>
+                        </List.Item>
+                        <List.Item onClick={this.handleNextTheoreticalLessons}>
+                            <List.Content floated='right'>
+                                <Icon color='grey' size='large' name='angle right'/>
+                            </List.Content>
+                            <Icon size='large' name='calendar outline' />
+                            <List.Content >
+                                <List.Header>Consultar Próximas Aulas </List.Header>
+                                <List.Description style={{marginTop: "3px"}}>
+                                    Consultar data e temas das próximas aulas.
+                                </List.Description>
+                            </List.Content>
+                        </List.Item>
+                    </List>
+                </Card.Content>
+            </div>
+        );
+
+
+        const themes = (
+            this.state.themesRealized.map(theme => (
+                    <Table.Row key={theme.id}>
+                        <Table.Cell>23/06/2019 11h00min</Table.Cell>
+                        <Table.Cell>{theme.name} </Table.Cell>
+                    </Table.Row>
+                )
+            ));
+
+        const tableThemesRealized = (
+            <div style={{marginRight:'10px'}}>
+                <Table textAlign={'center'} inverted sortable celled striped stackable>
+                    <Table.Header>
+                        <Table.Row textAlign={'center'}>
+                            <Table.HeaderCell
+                                //collapsing
+                                //sorted={_column === 'date' ? _direction : null}
+                                //onClick={this.handleSort('date')}
+                            >Data da Aula
+                            </Table.HeaderCell>
+                            <Table.HeaderCell
+                                //collapsing
+                            >Tema
+                            </Table.HeaderCell>
+                        </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
+                        {themes}
+                    </Table.Body>
+                </Table>
+            </div>
+            );
+
+
+
         let renderCategories = allCategories.length > 0 ?
             (
                 <div>
@@ -251,7 +389,18 @@ class LessonsPage extends Component {
                     </div>
                     <Grid columns={2} stackable>
                         <Grid.Column width={8} >
-                            {nextLessons}
+                            {nextPracticalLessons}
+                            {theoLessons}
+                        </Grid.Column>
+                        <Grid.Column width={8} >
+                            {
+                                this.state.tableRealizedTheoLessons ?
+                                    tableThemesRealized :
+                                    <div>
+
+                                    </div>
+
+                            }
                         </Grid.Column>
                     </Grid>
                 </div>

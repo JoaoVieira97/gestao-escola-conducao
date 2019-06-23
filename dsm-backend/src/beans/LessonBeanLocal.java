@@ -3,6 +3,7 @@ package beans;
 
 import dsm.Lesson;
 import dsm.PracticalLesson;
+import dsm.Theme;
 import dsm.TheoreticalLesson;
 import org.orm.PersistentSession;
 
@@ -16,5 +17,10 @@ public interface LessonBeanLocal {
     List<Lesson> getRealizedLessonsStudent(int studentId);
     List<PracticalLesson> getRealizedPracticalLessonsStudent(int studentId);
     List<TheoreticalLesson> getRealizedTheoreticalLessonsStudent(int studentId);
+
+    List<Theme> getRealizedThemes(int studentId, int categoryID);
+
     List<Lesson> getStudentNextPracticalLessons(int studentID);
+
+    List<TheoreticalLesson> getStudentNextTheoreticalLessons(int studentID);
 }
