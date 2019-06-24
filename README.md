@@ -101,4 +101,14 @@ sh RunCreateDSMDatabaseSchema.sh
   docker run -p 6379:6379 redis:5.0.4
   ```
 
+- To test if redis is working:
+
+  ```bash
+  # with no password
+  redis-cli -h 127.0.0.1 -p 6379
+
+  # with password
+  redis-cli -h 127.0.0.1 -p 6379 -a 'dsm2019EA!'
+  ```
+
 - Kill it by doing `CTRL-C`
