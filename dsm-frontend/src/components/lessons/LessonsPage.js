@@ -271,6 +271,24 @@ class LessonsPage extends Component {
 
     };
 
+    successFetchRealizedThemes = (response) => {
+
+        const themes = response.data.lessons;
+
+        console.log(themes);
+
+        this.setState({
+            themesRealized: themes,
+            isLoading: false,
+        });
+    };
+
+    errorFetchRealizedThemes = (error) => {
+
+        console.log(error);
+    };
+
+
     handleItemClick = (event, data) => {
 
         this.setState({
@@ -333,20 +351,6 @@ class LessonsPage extends Component {
         }
     };
 
-    successFetchRealizedThemes = (response) => {
-
-        const themes = response.data.themes;
-
-        this.setState({
-            themesRealized: themes,
-            isLoading: false,
-        });
-    };
-
-    errorFetchRealizedThemes = (error) => {
-
-        console.log(error);
-    };
 
     handleNextTheoreticalLessons = () => {
 
@@ -388,18 +392,23 @@ class LessonsPage extends Component {
                         let showThemes = [];
 
                         themes.forEach( theme => {
+                            let themeRealized = false;
 
-                            let themeRealized = this.state.themesRealized.find(function(element) {
-                                return element.id === theme.id;
-                            });
+                            for(let j=0 ; j< this.state.themesRealized.length && !themeRealized ; j++){
 
-                            let learned = themeRealized ? true : false;
-                            if(themeRealized) learned = true;
+                                const lesson = this.state.themesRealized[0];
+                                let aux = lesson.themes.collection.find(function (themeAux) {
+
+                                    return themeAux.id === theme.id;
+                                });
+
+                                if(aux) themeRealized=true;
+                            }
 
                             showThemes.push({
                                 id: theme.id,
                                 name: theme.name,
-                                learned: learned,
+                                learned: themeRealized,
                             });
                         });
 
@@ -545,16 +554,29 @@ class LessonsPage extends Component {
 
 
         const themes = (
-            this.state.themesRealized.map(theme => (
-                    <Table.Row key={theme.id}>
-                        <Table.Cell>23/06/2019 11h00min</Table.Cell>
-                        <Table.Cell>{theme.name} </Table.Cell>
-                    </Table.Row>
+            this.state.themesRealized.map(lesson => {
+                return (
+                    <Table.Body key={lesson.id}>
+                        <Table.Row key={lesson.id + " " + lesson.themes.collection[0].id}>
+                            <Table.Cell rowSpan={lesson.themes.collection.length}>
+                                {(lesson.startTime.split(" "))[0] + " " +
+                                (lesson.startTime.split(" "))[1].replace(":","h")+"min"}
+                            </Table.Cell>
+                            <Table.Cell> {lesson.themes.collection[0].name} </Table.Cell>
+                        </Table.Row>
+                        {
+                            lesson.themes.collection.slice(1,lesson.themes.collection.length).map( theme =>
+                                <Table.Row key={lesson.id + " " + theme.id}>
+                                    <Table.Cell>{theme.name} </Table.Cell>
+                                </Table.Row>
+                            )
+                        }
+                    </Table.Body>
                 )
-            ));
+            }));
 
         const tableThemesRealized = (
-            <div style={{marginRight:'10px'}}>
+            <div>
                 <Table textAlign={'center'} inverted sortable celled striped stackable structured>
                     <Table.Header>
                         <Table.Row textAlign={'center'}>
@@ -570,45 +592,45 @@ class LessonsPage extends Component {
                             </Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
-                    <Table.Body>
-                        {themes}
-                    </Table.Body>
+                    {themes}
                 </Table>
             </div>
             );
 
-
-/*
-        const themesNextLessons = (
-            this.state.themesRealized.map(theme => (
-                    <Table.Row key={theme.id}>
-                        <Table.Cell>23/06/2019 11h00min</Table.Cell>
-                        <Table.Cell>{theme.name} </Table.Cell>
-                    </Table.Row>
-                )
-            ));
-            */
-
         const nextTheoLessons = (
             this.state.nextTheoreticalLessons.map(theoLesson => (
-                theoLesson.themes.map( theme => (
-                    <Table.Row key={theoLesson.id + " " + theme.id}>
-                        <Table.Cell>
+                <Table.Body key={theoLesson.id}>
+                    <Table.Row key={theoLesson.id + " " + theoLesson.themes[0].id}>
+                        <Table.Cell rowSpan={theoLesson.themes.length}>
                             {(theoLesson.startTime.split(" "))[0] + " " +
                             (theoLesson.startTime.split(" "))[1].replace(":","h")+"min"}
                         </Table.Cell>
-                        <Table.Cell>{theme.name}</Table.Cell>
+                        <Table.Cell>{theoLesson.themes[0].name}</Table.Cell>
                         <Table.Cell>
                             {
-                                theme.learned ?  <Icon color='green' name='checkmark' size='large' /> :
+                                theoLesson.themes[0].learned ?  <Icon color='green' name='checkmark' size='large' /> :
                                     <Icon color='red' name='times' size='large' />
                             }
                         </Table.Cell>
                     </Table.Row>
-                    )))));
+                    {
+                        theoLesson.themes.slice(1,theoLesson.themes.length).map( theme =>
+                            <Table.Row key={theoLesson.id + " " + theme.id}>
+                                <Table.Cell>{theme.name} </Table.Cell>
+                                <Table.Cell>
+                                    {
+                                        theme.learned ?  <Icon color='green' name='checkmark' size='large' /> :
+                                            <Icon color='red' name='times' size='large' />
+                                    }
+                                </Table.Cell>
+                            </Table.Row>
+                        )
+                    }
+                </Table.Body>
+            )));
 
         const tableNextTheoreticalLessons = (
-            <div style={{marginRight:'10px'}}>
+            <div>
                 <Table textAlign={'center'} inverted sortable celled striped stackable>
                     <Table.Header>
                         <Table.Row textAlign={'center'}>
@@ -628,9 +650,7 @@ class LessonsPage extends Component {
                             </Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
-                    <Table.Body>
-                        {nextTheoLessons}
-                    </Table.Body>
+                    {nextTheoLessons}
                 </Table>
             </div>
         );

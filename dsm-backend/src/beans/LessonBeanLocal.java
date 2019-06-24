@@ -18,7 +18,7 @@ public interface LessonBeanLocal {
     List<PracticalLesson> getRealizedPracticalLessonsStudent(int studentId);
     List<TheoreticalLesson> getRealizedTheoreticalLessonsStudent(int studentId);
 
-    List<Theme> getRealizedThemes(int studentId, int categoryID);
+    List<TheoreticalLesson> getRealizedThemes(int studentId, int categoryID);
 
     List<Lesson> getStudentNextPracticalLessons(int studentID);
 

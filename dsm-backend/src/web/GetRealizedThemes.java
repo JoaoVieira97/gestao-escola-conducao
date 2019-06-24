@@ -36,12 +36,12 @@ public class GetRealizedThemes extends HttpServlet {
             String categoryId = request.getParameter("category");
             int catId = Integer.valueOf(categoryId);
 
-            // get realized themes of a student
-            List<Theme> themes = DSMFacade.getRealizedThemes(id,catId);
+            // get realized themes of a student (são lessons pois tem a data associada)
+            List<TheoreticalLesson> themes = DSMFacade.getRealizedThemes(id,catId);
 
             if(themes!= null) {
                 ArrayNode themesJSON = mapper.valueToTree(themes);
-                responseNode.putArray("themes").addAll(themesJSON);
+                responseNode.putArray("lessons").addAll(themesJSON);
                 response.setStatus(HttpServletResponse.SC_OK);
             }
             else{

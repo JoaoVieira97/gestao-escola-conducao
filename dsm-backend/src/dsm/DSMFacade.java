@@ -184,7 +184,7 @@ public class DSMFacade {
     /**
      * Get the list of realized themes of a specific student.
      */
-    public static List<Theme> getRealizedThemes(int studentId, int categoryID){
+    public static List<TheoreticalLesson> getRealizedThemes(int studentId, int categoryID){
 
         return lessonBean.getRealizedThemes(studentId, categoryID);
     }

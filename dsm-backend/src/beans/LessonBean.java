@@ -119,24 +119,23 @@ public class LessonBean implements LessonBeanLocal{
     }
 
     /**
-     * Get realized themes of theoretical lessons of a specific category
+     * Get realized themes and date of theoretical lessons of a specific category
      * @param studentId
      * @return
      */
     @Override
-    public List<Theme> getRealizedThemes(int studentId, int categoryID) {
+    public List<TheoreticalLesson> getRealizedThemes(int studentId, int categoryID) {
 
         List<TheoreticalLesson> lessons = this.getRealizedTheoreticalLessonsStudent(studentId);
-        List<Theme> themes = new ArrayList<>();
+        List<TheoreticalLesson> res = new ArrayList<>();
 
         for(TheoreticalLesson l : lessons)
             for(Category category : Arrays.asList(l.categories.toArray()))
                 if(category.getID() == categoryID){
-                    for(Theme theme : Arrays.asList(l.themes.toArray()))
-                        themes.add(theme);
+                    res.add(l);
                 }
 
-        return themes;
+        return res;
     }
 
     /**
