@@ -1,8 +1,11 @@
 package web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import dsm.DSMFacade;
 import dsm.PracticalLesson;
+import dsm.Register;
 import dsm.TheoreticalLesson;
 import org.orm.PersistentSession;
 import utils.Utils;
@@ -30,21 +33,42 @@ public class GetRealizedLessonsStudent extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String studentId = request.getParameter("id");
-        int id = Integer.valueOf(studentId);
-
-        // get lessons data
-        List<PracticalLesson> practicalLessons = DSMFacade.getRealizedPracticalLessonsStudent(id);
-        List<TheoreticalLesson> theoreticalLessons = DSMFacade.getRealizedTheoreticalLessonsStudent(id);
-
         ObjectMapper mapper = new ObjectMapper();
+        ObjectNode responseNode = mapper.createObjectNode();
 
-        //TODO Remove students array from lessons
-        String sJSONP = mapper.writeValueAsString(practicalLessons);
-        String sJSONT = mapper.writeValueAsString(theoreticalLessons);
-        String sJSON = "{\"success\":true,\"practicalLessons\":" + sJSONP + ",\"theoreticalLessons\":" + sJSONT +"}";
+        // check access token
+        if(Utils.accessTokenValidation(request)) {
+
+            String studentId = request.getParameter("id");
+            int id = Integer.valueOf(studentId);
+
+            // get lessons data
+            List<PracticalLesson> practicalLessons = DSMFacade.getRealizedPracticalLessonsStudent(id);
+            List<TheoreticalLesson> theoreticalLessons = DSMFacade.getRealizedTheoreticalLessonsStudent(id);
+
+            if(practicalLessons!= null && theoreticalLessons!= null) {
+                ArrayNode practJSON = mapper.valueToTree(practicalLessons);
+                responseNode.putArray("practicalLessons").addAll(practJSON);
+
+                ArrayNode theoJSON = mapper.valueToTree(theoreticalLessons);
+                responseNode.putArray("theoreticalLessons").addAll(theoJSON);
+
+                response.setStatus(HttpServletResponse.SC_OK);
+            }
+            else{
+                responseNode.put("error", "Wrong id");
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            }
+
+        }
+        else {
+            responseNode.put("error", "Invalid API access token.");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        }
 
         response.setContentType("application/json;charset=UTF-8");
-        response.getWriter().write(sJSON);
+        response.getWriter().write(
+                mapper.writerWithDefaultPrettyPrinter().writeValueAsString(responseNode)
+        );
     }
 }

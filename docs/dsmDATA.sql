@@ -130,14 +130,15 @@ INSERT INTO Lesson (ID, InstructorUserID, StartTime, Duration, State)
            (6, 4, '2019-06-21 17:00:00', 60, 'realized'),
            (7, 4, '2019-06-22 10:00:00', 60, 'realized'),
            (8, 5, '2019-08-05 17:00:00', 60, 'realized'),
-           (9, 5, '2019-08-10 10:00:00', 60, 'realized');
+           (9, 5, '2019-08-10 10:00:00', 60, 'realized'),
+           (10, 4, '2019-06-28 10:00:00', 60, 'opened');
 
 INSERT INTO Student_Lesson (StudentUserID, LessonID)
 	VALUES (1, 1), (2, 2),
            (3, 3), (3, 4),
            (1, 5), (1, 6),
            (1, 7), (1, 8),
-           (1, 9);
+           (1, 9), (1,10);
 
 INSERT INTO PracticalLesson (IsStudentPresent, LessonID)
 	VALUES (false, 1),
@@ -148,7 +149,7 @@ INSERT INTO PracticalLesson (IsStudentPresent, LessonID)
            (false, 6),
            (true, 8);
 INSERT INTO TheoreticalLesson (LessonID)
-    VALUES (7), (9);
+    VALUES (7), (9), (10);
 
 INSERT INTO Theme_TheoreticalLesson (ThemeID, TheoreticalLessonLessonID)
     VALUES (1, 7),
@@ -157,7 +158,11 @@ INSERT INTO Theme_TheoreticalLesson (ThemeID, TheoreticalLessonLessonID)
             (4, 7),
             (5, 9),
             (6, 9),
-            (7, 9);    
+            (7, 9),
+            (8, 10),
+            (4, 10),
+            (2, 10),
+            (6, 10);    
 
 INSERT INTO Lesson_Category (LessonID, CategoryID)
     VALUES (1, 6),
@@ -165,7 +170,8 @@ INSERT INTO Lesson_Category (LessonID, CategoryID)
            (6, 6),
            (7, 6),
            (8, 3),
-           (9, 3);               
+           (9, 3),
+           (10, 6);               
 
 INSERT INTO Exam (ID, StudentUserID, StartTime, Description)
 	VALUES (1, 1, "2019-07-01 14:30:00", 'Exame Teórico - Categoria B'),

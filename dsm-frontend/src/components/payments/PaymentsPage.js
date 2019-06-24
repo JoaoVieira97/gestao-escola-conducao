@@ -1,8 +1,22 @@
 import React, {Component} from 'react';
-import {Container, Header, Table, Icon, Grid, Dropdown, Loader, Dimmer, Pagination, List, Label} from 'semantic-ui-react';
+import {
+    Container,
+    Header,
+    Table,
+    Icon,
+    Grid,
+    Dropdown,
+    Loader,
+    Dimmer,
+    Pagination,
+    List,
+    Label,
+    Card, Message
+} from 'semantic-ui-react';
 import {fetchApi} from "../../services/api";
 import moment from 'moment';
 import _ from "lodash";
+
 
 
 class PaymentsPage extends Component {
@@ -31,6 +45,8 @@ class PaymentsPage extends Component {
             actualPaid: 0,
             totalPrice: 0,
 
+            messageCategoryNotSelected: true,
+
             _column: null,
             _direction: null,
             _limit: 5,
@@ -38,22 +54,22 @@ class PaymentsPage extends Component {
         }
     };
 
-    async componentDidMount() {
+    componentDidMount() {
 
-        await fetchApi(
+        fetchApi(
             'get','/student/information?id=1', //TODO Find userID
             {},  {},
             this.successFetchInformation, this.errorHandler
         );
 
 
-        await fetchApi(
+        fetchApi(
             'get','/student/registers?id=1', //TODO Find userID
             {},  {},
             this.successFetchRegisters, this.errorHandler
         );
 
-        await fetchApi(
+        fetchApi(
             'get','/lessons/student?id=1', //TODO Find userID
             {},  {},
             this.successFetchLessons, this.errorHandler
@@ -108,13 +124,10 @@ class PaymentsPage extends Component {
     successFetchLessons = (response) => {
         const data = response.data;
 
-        //Verify sucess on other way
-        if (data.success) {
-            this.setState({
-                theoreticalRealized : data.theoreticalLessons,
-                practicalRealized : data.practicalLessons,
-            });
-        }
+        this.setState({
+            theoreticalRealized : data.theoreticalLessons,
+            practicalRealized : data.practicalLessons,
+        });
 
         //stop loading
         setTimeout(()=>{
@@ -206,6 +219,7 @@ class PaymentsPage extends Component {
                 payments: payments,
                 actualPaid: actualPaid,
                 totalPrice: totalPrice,
+                messageCategoryNotSelected: false,
             });
         }
         else{
@@ -221,6 +235,7 @@ class PaymentsPage extends Component {
                 payments: [],
                 actualPaid: 0,
                 totalPrice: 0,
+                messageCategoryNotSelected: true,
             });
 
         }
@@ -254,6 +269,11 @@ class PaymentsPage extends Component {
         }
     };
 
+    handleDismiss = () => {
+        this.setState({ messageCategoryNotSelected: false })
+
+    };
+
     render() {
 
         const { payments, _column, _direction , _limit, _page } = this.state;
@@ -273,11 +293,87 @@ class PaymentsPage extends Component {
         const exams = (
             this.state.exams.length>0 ? this.state.exams.map( exam =>
                     <List.Item key={exam.id}>
-                        {exam.description + ' em ' +
-                            (exam.startTime.split(" "))[0] +
-                            ' às ' + (exam.startTime.split(" "))[1]}
+                        <Icon size='large' name='clipboard' />
+                        <List.Content>
+                            <List.Header>{exam.description}</List.Header>
+                            <List.Description style={{marginTop: "3px"}}>
+                                <b>Data:</b> {" "+ (exam.startTime.split(" "))[0]}
+                            </List.Description>
+                            <List.Description style={{marginTop: "3px"}}>
+                                <b> Início: </b> {" "+ (exam.startTime.split(" "))[1].replace(':',"h")+'min'}
+                            </List.Description>
+                        </List.Content>
                     </List.Item>
-                 ) : ' Não há registo de exames.'
+                 ) :
+                <List.Item>
+                    <List.Header>Não há registo de exames.</List.Header>
+                </List.Item>
+        );
+
+        const cardExams = (
+            <div className={"ui fluid card grey"}>
+                <Card.Content>
+                    <Card.Header>
+                        <Icon.Group style={{marginRight: "8px"}}>
+                            <Icon color='grey' name='calendar' />
+                        </Icon.Group>
+                        Registo de Exames
+                    </Card.Header>
+                </Card.Content>
+                <Card.Content>
+                    <List animated divided relaxed={'very'} verticalAlign='middle'>
+                        {exams}
+                    </List>
+                </Card.Content>
+            </div>
+        );
+
+
+        const tablePayments = (
+            <Table  sortable celled inverted fluid="true" striped stackable verticalAlign='bottom'>
+                <Table.Header>
+                    <Table.Row>
+                        <Table.HeaderCell
+                            collapsing
+                            sorted={_column === 'date' ? _direction : null}
+                            onClick={this.handleSort('date')}>Data do Pagamento
+                        </Table.HeaderCell>
+                        <Table.HeaderCell> Descrição </Table.HeaderCell>
+                        <Table.HeaderCell
+                            sorted={_column === 'value' ? _direction : null}
+                            onClick={this.handleSort('value')}>Valor
+                        </Table.HeaderCell>
+                    </Table.Row>
+                </Table.Header>
+
+                <Table.Body>
+                    {paymentsR}
+                </Table.Body>
+
+                <Table.Footer>
+                    <Table.Row>
+                        <Table.HeaderCell colSpan='4'>
+                            <Header as='h3' textAlign={'right'} inverted color='grey'>Montante Pago: {this.state.actualPaid}€
+                                / {this.state.totalPrice}€</Header>
+                        </Table.HeaderCell>
+                    </Table.Row>
+                    <Table.Row>
+                        <Table.HeaderCell colSpan='4'>
+                            <Pagination
+                                firstItem={null}
+                                lastItem={null}
+                                pointing
+                                secondary
+                                inverted
+                                floated='right'
+                                totalPages={Math.ceil(this.state.payments.length / this.state._limit)}
+                                activePage={this.state._page}
+                                onPageChange={this.onChangePage.bind(this)}
+                            />
+                        </Table.HeaderCell>
+                    </Table.Row>
+                </Table.Footer>
+            </Table>
         );
 
         return (
@@ -292,110 +388,98 @@ class PaymentsPage extends Component {
                                 <Icon name='user circle' size='massive'/>
                                 <Header.Content>{this.state.nameUser}</Header.Content>
                             </Header>
-                            <Header as='h3' textAlign='left'>
-                                Categoria: <Dropdown
-                                placeholder="Selecione uma categoria"
-                                selection
-                                clearable
-                                options={this.state.allCategories}
-                                //defaultValue={this.state.categoryChoosed.value}
-                                onChange={this.handleChange}
-                            />
-                            </Header>
-                            <Header as='h3' textAlign={'left'}>
-                                Inscrição a: <Label color={'black'}
-                                                    size={'large'}> {this.state.dateSubscription} </Label>
-                            </Header>
-                            <Header as='h3' >Validade até: <Label color={'black'}
-                                                                  size={'large'}> {this.state.dateLimit} </Label>
+                            <div style={{ width: '100%',
+                                marginTop: 10,
+                                marginBottom: 10,
+                                padding: 15,
+                                borderRadius: 7,
+                                backgroundColor: '#fff',
+                                // shadow
+                                shadowColor: "#000",
+                                shadowOffset: {
+                                    width: 0,
+                                    height: 1,
+                                },
+                                shadowOpacity: 0.22,
+                                shadowRadius: 2.22,
+                                elevation: 3}}
+                            >
+                                <Header as='h3' textAlign='left'>
+                                    Categoria: <Dropdown
+                                    placeholder="Selecione uma categoria"
+                                    selection
+                                    clearable
+                                    options={this.state.allCategories}
+                                    //defaultValue={this.state.categoryChoosed.value}
+                                    onChange={this.handleChange}
 
-                            </Header>
-                            <Header as='h3' >Aulas teóricas realizadas:
-                                <Label color={'black'}
-                                       size={'large'}>
-                                    {this.state.numberTheoreticalRealized} / {this.state.totalTheoreticalLessons}
-                                </Label>
-                            </Header>
-                            <Header as='h3' >Aulas práticas realizadas:
-                                <Label color={'black'}
-                                       size={'large'}>
-                                    {this.state.numberPracticalRealized} / {this.state.totalPracticalLessons}
-                                </Label>
-                            </Header>
-                            <Header as='h3' >Instrutor atual: <Label color={'black'}
-                                                                     size={'large'}>
-                                                                {this.state.nameInstructor} </Label>
-                            </Header>
-                            <Header as='h3' >Registo de exames:
-                                <List bulleted>
-                                    {exams}
-                                </List>
-                            </Header>
+                                />
+                                </Header>
+                            </div>
+                            <div style={{ width: '100%',
+                                            marginTop: 10,
+                                            marginBottom: 10,
+                                            padding: 15,
+                                            borderRadius: 7,
+                                            backgroundColor: '#fff',
+                                            // shadow
+                                             shadowColor: "#000",
+                                            shadowOffset: {
+                                                width: 0,
+                                                height: 1,
+                                            },
+                                            shadowOpacity: 0.22,
+                                            shadowRadius: 2.22,
+                                            elevation: 3}}
+                            >
+                                <Header as='h3' textAlign={'left'}>
+                                    Inscrição a: <Label color={'black'}
+                                                        size={'large'}> {this.state.dateSubscription} </Label>
+                                </Header>
+                                <Header as='h3' >Validade até: <Label color={'black'}
+                                                                      size={'large'}> {this.state.dateLimit} </Label>
+
+                                </Header>
+                                <Header as='h3' >Aulas teóricas realizadas:
+                                    <Label color={'black'}
+                                           size={'large'}>
+                                        {this.state.numberTheoreticalRealized} / {this.state.totalTheoreticalLessons}
+                                    </Label>
+                                </Header>
+                                <Header as='h3' >Aulas práticas realizadas:
+                                    <Label color={'black'}
+                                           size={'large'}>
+                                        {this.state.numberPracticalRealized} / {this.state.totalPracticalLessons}
+                                    </Label>
+                                </Header>
+                                <Header as='h3' >Instrutor atual: <Label color={'black'}
+                                                                         size={'large'}>
+                                                                    {this.state.nameInstructor} </Label>
+                                </Header>
+                            </div>
+
+                            {cardExams}
+
                         </Container>
                     </Grid.Column>
-                    <Grid.Column width={8} style={{marginTop:50}}>
-                        <Table sortable celled inverted fluid="true" striped stackable verticalAlign='bottom'>
-                            <Table.Header>
-                                <Table.Row>
-                                    <Table.HeaderCell
-                                        collapsing
-                                        sorted={_column === 'date' ? _direction : null}
-                                        onClick={this.handleSort('date')}>Data do Pagamento
-                                    </Table.HeaderCell>
-                                    <Table.HeaderCell> Descrição </Table.HeaderCell>
-                                    <Table.HeaderCell
-                                        sorted={_column === 'value' ? _direction : null}
-                                        onClick={this.handleSort('value')}>Valor
-                                    </Table.HeaderCell>
-                                </Table.Row>
-                            </Table.Header>
-
-                            <Table.Body>
-                                {paymentsR}
-                            </Table.Body>
-
-                            <Table.Footer>
-                                <Table.Row>
-                                    <Table.HeaderCell colSpan='4'>
-                                        <Header as='h3' textAlign={'right'} inverted color='grey'>Montante Pago: {this.state.actualPaid}€
-                                            / {this.state.totalPrice}€</Header>
-                                    </Table.HeaderCell>
-                                </Table.Row>
-                                <Table.Row>
-                                    <Table.HeaderCell colSpan='4'>
-                                        <Pagination
-                                            firstItem={null}
-                                            lastItem={null}
-                                            pointing
-                                            secondary
-                                            inverted
-                                            floated='right'
-                                            totalPages={Math.ceil(this.state.payments.length / this.state._limit)}
-                                            activePage={this.state._page}
-                                            onPageChange={this.onChangePage.bind(this)}
-                                        />
-                                    </Table.HeaderCell>
-                                </Table.Row>
-                            </Table.Footer>
-                        </Table>
-
-                        <Dropdown simple text='Dropdown'>
-                            <Dropdown.Menu>
-                                <Dropdown.Item>List Item</Dropdown.Item>
-                                <Dropdown.Item>List Item</Dropdown.Item>
-                                <Dropdown.Divider />
-                                <Dropdown.Header>Header Item</Dropdown.Header>
-                                <Dropdown.Item>
-                                    <i className='dropdown icon' />
-                                    <span className='text'>Submenu</span>
-                                    <Dropdown.Menu>
-                                        <Dropdown.Item>List Item</Dropdown.Item>
-                                        <Dropdown.Item>List Item</Dropdown.Item>
-                                    </Dropdown.Menu>
-                                </Dropdown.Item>
-                                <Dropdown.Item>List Item</Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
+                    <Grid.Column width={8} style={{marginTop:'120px'}}>
+                        {
+                            this.state.messageCategoryNotSelected ?
+                                <div>
+                                    <Message
+                                        onDismiss={this.handleDismiss}
+                                        size={'large'}
+                                        error
+                                        header={'Categoria não selecionada'}
+                                        content={'Tem de selecionar uma categoria para verificar os respetivos pagamentos.'}
+                                    />
+                                    {tablePayments}
+                                </div>
+                                :
+                                <div>
+                                    {tablePayments}
+                                </div>
+                        }
                     </Grid.Column>
                 </Grid>
             </Container>
