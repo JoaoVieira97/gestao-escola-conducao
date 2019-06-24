@@ -1,0 +1,40 @@
+---
+- name: Create DSM database user with all privileges
+  mysql_user:
+    name: '{{ dsm_user }}'
+    password: '{{ dsm_password }}'
+    host: '{{ item }}'
+    priv: '*.*:ALL,GRANT'
+    state: present
+  with_items:
+    - 'localhost'
+    - '{{ dsm_network }}'
+
+- name: Create DSM database
+  mysql_db:
+    name: '{{ dsm_database_name }}'
+    state: present
+
+- name: Copy the DSM schema file
+  template:
+    src: DSM.ddl
+    dest: ~/DSM.ddl
+    mode: 0644
+
+- name: Copy the DSM data file
+  template:
+    src: DATA.sql
+    dest: ~/DATA.sql
+    mode: 0644
+
+- name: Create DSM schema
+  mysql_db:
+    name: '{{ dsm_database_name }}'
+    state: import
+    target: ~/DSM.ddl
+
+- name: Import DSM data
+  mysql_db:
+    name: '{{ dsm_database_name }}'
+    state: import
+    target: ~/DATA.sql

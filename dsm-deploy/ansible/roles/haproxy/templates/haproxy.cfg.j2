@@ -1,0 +1,40 @@
+# sudo haproxy -f /etc/haproxy/haproxy.cfg -c
+
+global
+  user haproxy
+  group haproxy
+  daemon
+  maxconn {{ maxconn }}
+
+defaults
+  timeout connect 5000ms
+  timeout client 50000ms
+  timeout server 50000ms
+  option forwardfor
+  option http-server-close
+
+listen stats
+  bind *:9000
+  mode http
+  stats enable
+  stats hide-version
+  stats realm Haproxy\ Statistics
+  stats uri /stats
+  stats auth root:root
+
+# FRONTEND
+# ---------------------------------------------------------------
+frontend dsmFrontend
+  bind {{ bind_address }}:80
+  mode http
+  default_backend dsmBackend
+
+
+# BACKEND
+# ---------------------------------------------------------------
+backend dsmBackend
+  mode http
+  balance roundrobin
+{% for app_server in app_servers_addresses %}
+  server app_server-{{ '%d' | format(loop.index) }} {{ hostvars[app_server]['ansible_default_ipv4']['address'] }}:{{ app_servers_listen_port }} check fall 2 rise 1
+{% endfor %}

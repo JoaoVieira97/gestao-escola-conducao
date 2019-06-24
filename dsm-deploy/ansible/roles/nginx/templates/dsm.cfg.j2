@@ -1,0 +1,14 @@
+server {
+  listen {{ listen_port }} default_server;
+  listen [::]:80 default_server;
+  
+  root /var/www/dsm/build;
+
+  server_name {{ server_name }};
+
+  index index.html index.htm;
+
+  location / {
+    try_files $uri /index.html;
+  }
+}

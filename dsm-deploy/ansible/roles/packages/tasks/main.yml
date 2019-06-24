@@ -1,0 +1,16 @@
+---
+- name: Update server packages
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+    upgrade: yes
+
+- name: Install a list of packages
+  apt:
+    name: '{{ packages }}'
+  vars:
+    packages:
+      - tmux
+      - nmap
+      - ufw
+      - python3
