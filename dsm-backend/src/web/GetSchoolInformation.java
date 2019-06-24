@@ -1,11 +1,12 @@
 package web;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dsm.DSMFacade;
 import dsm.Exam;
-import org.orm.PersistentSession;
+import dsm.SchoolInfo;
 import utils.Utils;
 
 import javax.servlet.ServletException;
@@ -16,8 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "GetPersonalInformation", urlPatterns = {"/api/student/information"})
-public class GetPersonalInformation extends HttpServlet {
+@WebServlet(name = "GetSchoolInformation", urlPatterns = {"/api/user/school_information"})
+public class GetSchoolInformation extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
@@ -30,21 +31,15 @@ public class GetPersonalInformation extends HttpServlet {
         // check access token
         if(Utils.accessTokenValidation(request)) {
 
-            String studentId = request.getParameter("id");
-            int id = Integer.valueOf(studentId);
+            String schoolId = request.getParameter("schoolId");
+            int id = Integer.valueOf(schoolId);
 
-            // get user data
-            String name = DSMFacade.getName(id);
-            String email = DSMFacade.getEmail(id);
-            List<Exam> exams = DSMFacade.getStudentExams(id);
+            // get school data
+            SchoolInfo schoolInfo = DSMFacade.getSchoolInformation(id);
 
-            //ArrayNode examsJSON = mapper.valueToTree(exams);
-
-            if(name!= null) {
-                responseNode.put("name",name);
-                responseNode.put("email",email);
-                ArrayNode examsJSON = mapper.valueToTree(exams);
-                responseNode.putArray("exams").addAll(examsJSON);
+            if(schoolInfo!= null) {
+                JsonNode infoJson = mapper.convertValue(schoolInfo,JsonNode.class);
+                responseNode.put("schoolInfo",infoJson);
                 response.setStatus(HttpServletResponse.SC_OK);
             }
             else{
@@ -62,6 +57,5 @@ public class GetPersonalInformation extends HttpServlet {
         response.getWriter().write(
                 mapper.writerWithDefaultPrettyPrinter().writeValueAsString(responseNode)
         );
-
     }
 }

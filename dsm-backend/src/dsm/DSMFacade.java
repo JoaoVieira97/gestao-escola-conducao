@@ -133,6 +133,14 @@ public class DSMFacade {
     }
 
     /**
+     * Get School info.
+     */
+    public static SchoolInfo getSchoolInformation(int schoolId) {
+
+        return userBean.getSchoolInformation(schoolId);
+    }
+
+    /**
      * Get the list of all students.
      */
     public static List<Student> getStudents() {
@@ -251,6 +259,14 @@ public class DSMFacade {
     public static List<TheoreticalLesson> getRealizedTheoreticalLessonsStudent(int studentId) {
 
         return lessonBean.getRealizedTheoreticalLessonsStudent(studentId);
+    }
+
+    /**
+     * Cancel a lesson
+     */
+    public static boolean cancelLesson(int lessonId) {
+
+        return lessonBean.cancelLessonStudent(lessonId);
     }
 
     /**
