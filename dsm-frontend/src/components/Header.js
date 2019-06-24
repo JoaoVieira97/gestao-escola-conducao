@@ -32,6 +32,10 @@ const StudentItemsWeb = (handleLogout) => {
                 <i className="users icon" />
                 <p>ALUNOS</p>
             </NavLink>
+            <NavLink className="ui item" to="/register_general_announcement" >
+                <i className="bell icon" />
+                <p>REGISTAR AVISO</p>
+            </NavLink>
             <div className="right menu">
                 <div className="item">
                     <Button className="ui button" animated onClick={() => handleLogout()}>
@@ -63,6 +67,9 @@ const StudentItemsMobile = (handleLogout, hideMenu) => {
             </NavLink>
             <NavLink className="ui item" to="/students" onClick={() => hideMenu()}>
                 <p>ALUNOS</p>
+            </NavLink>
+            <NavLink className="ui item" to="/register_general_announcement" onClick={() => hideMenu()}>
+                <p>REGISTAR AVISO</p>
             </NavLink>
             <div className="right menu">
                 <div className="item">

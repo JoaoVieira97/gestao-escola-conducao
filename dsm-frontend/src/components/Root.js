@@ -23,6 +23,7 @@ import PaymentsPage from './payments/PaymentsPage';
 import ErrorPage from './ErrorPage';
 import AllStudents from './students/AllStudents';
 import Announcements from './announcements/Announcements';
+import RegisterGeneralAnnouncement from './announcements/RegisterGeneralAnnouncement';
 
 
 
@@ -51,6 +52,7 @@ const Root = ({ store }) => {
                     <PrivateRoute exact path="/lessons" component={LessonsPage} />
                     <PrivateRoute exact path="/payments" component={PaymentsPage} />
                     <PrivateRoute exact path="/students" component={AllStudents} />
+                    <PrivateRoute exact path="/register_general_announcement" component={RegisterGeneralAnnouncement} />
                     <PrivateRoute exact path="/home/announcements" component={Announcements} />
                     <Route exact path="/contacts" render={ props => <ErrorPage {...props} />} />
                     <Redirect from="/" exact to="/home" />

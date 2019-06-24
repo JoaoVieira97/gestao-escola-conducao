@@ -1,9 +1,6 @@
 package dsm;
 
-import beans.LessonBeanLocal;
-import beans.RedisBeanLocal;
-import beans.StudentBeanLocal;
-import beans.UserBeanLocal;
+import beans.*;
 import org.orm.PersistentSession;
 import utils.Utils;
 
@@ -18,6 +15,7 @@ public class DSMFacade {
     private static UserBeanLocal userBean = lookupUserBeanLocal();
     private static StudentBeanLocal studentBean = lookupStudentBeanLocal();
     private static LessonBeanLocal lessonBean = lookupLessonBeanLocal();
+    private static SecretaryBeanLocal secretaryBean = lookupSecretaryBeanLocal();
     private static RedisBeanLocal redisBean = lookupRedisBeanLocal();
 
     /**
@@ -63,6 +61,22 @@ public class DSMFacade {
 
             Context c = new InitialContext();
             return (LessonBeanLocal) c.lookup("java:global/dsm_backend_war_exploded/LessonBean!beans.LessonBeanLocal");
+
+        } catch (NamingException ne) {
+            ne.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * Get and access to SecretaryBean features.
+     * @return SecretaryBeanLocal
+     */
+    private static SecretaryBeanLocal lookupSecretaryBeanLocal() {
+        try {
+
+            Context c = new InitialContext();
+            return (SecretaryBeanLocal) c.lookup("java:global/dsm_backend_war_exploded/SecretaryBean!beans.SecretaryBeanLocal");
 
         } catch (NamingException ne) {
             ne.printStackTrace();
@@ -238,4 +252,13 @@ public class DSMFacade {
 
         return lessonBean.getRealizedTheoreticalLessonsStudent(studentId);
     }
+
+    /**
+     * Registar general announcement
+     */
+    public static boolean registerGeneralAnnouncement(String title, String description){
+
+        return secretaryBean.registerGeneralAnnouncement(title, description);
+    }
+
 }

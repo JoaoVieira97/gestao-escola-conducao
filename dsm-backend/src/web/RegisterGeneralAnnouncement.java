@@ -3,7 +3,6 @@ package web;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dsm.DSMFacade;
-import org.orm.PersistentSession;
 import utils.Utils;
 
 import javax.servlet.ServletException;
@@ -14,8 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
 
-@WebServlet(name = "SetPersonalAnnouncementAsViewed", urlPatterns = {"/api/student/viewed_personal_announcement"})
-public class SetPersonalAnnouncementAsViewed extends HttpServlet {
+@WebServlet(name = "RegisterGeneralAnnouncement", urlPatterns = {"/api/secretary/register_general_announcement"})
+public class RegisterGeneralAnnouncement extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -37,12 +36,13 @@ public class SetPersonalAnnouncementAsViewed extends HttpServlet {
             data = sb.toString();
 
             Map<String, Object> JSON = mapper.readValue(data, Map.class);
-            int id = (Integer) JSON.get("id");
+            String title = (String) JSON.get("title");
+            String description = (String) JSON.get("description");
 
-            // mark announcement as viewed
-            boolean viewed = DSMFacade.viewedPersonalAnnouncement(id);
-            if(viewed) {
-                responseNode.put("success", viewed);
+            // register announcement
+            boolean registered = DSMFacade.registerGeneralAnnouncement(title, description);
+            if(registered) {
+                responseNode.put("success", registered);
                 response.setStatus(HttpServletResponse.SC_OK);
             }
             else {
