@@ -254,11 +254,19 @@ public class DSMFacade {
     }
 
     /**
-     * Registar general announcement
+     * Register general announcement
      */
     public static boolean registerGeneralAnnouncement(String title, String description){
 
         return secretaryBean.registerGeneralAnnouncement(title, description);
+    }
+
+    /**
+     * Register new student
+     */
+    public static boolean registerStudent(String name, String email, String password, String address, String birth, String nif, String cc){
+
+        return secretaryBean.registerStudent(name, email, password, address, birth, nif, cc);
     }
 
 }

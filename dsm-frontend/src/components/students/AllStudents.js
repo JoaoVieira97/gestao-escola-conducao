@@ -188,6 +188,7 @@ class AllStudents extends Component {
                             <Button icon labelPosition='left'
                                     size='small' color='grey'
                                     style={{marginTop: '10px', marginLeft: '5px'}}
+                                    onClick={() => this.props.history.push('/register_student')}
                             >
                                 <Icon name='user' />
                                 <p>Adicionar</p>

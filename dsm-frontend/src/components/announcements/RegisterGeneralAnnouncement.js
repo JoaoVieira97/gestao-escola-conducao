@@ -48,6 +48,11 @@ class RegisterGeneralAnnouncement extends Component {
                 },  {},
                 this.successHandler, this.errorHandler
             );
+        } else {
+            this.setState({
+                message: '',
+                error: 'Preencha todos os campos!'
+            })
         }
     };
 
@@ -103,6 +108,7 @@ class RegisterGeneralAnnouncement extends Component {
                         <Segment>
                             <Form>
                                 <Form.Field
+                                    className={(this.state.error && this.state.titulo === '') ? "error field" : "field"}
                                     control={Input}
                                     label='Título do aviso'
                                     placeholder='Título'
@@ -110,6 +116,7 @@ class RegisterGeneralAnnouncement extends Component {
                                     onChange={this.handleInputChange}
                                 />
                                 <Form.Field
+                                    className={(this.state.error && this.state.descricao === '') ? "error field" : "field"}
                                     control={Input}
                                     label='Descrição do aviso'
                                     placeholder='Descrição'
@@ -117,11 +124,11 @@ class RegisterGeneralAnnouncement extends Component {
                                     onChange={this.handleInputChange}
                                 />
                                 <Button 
-                                        type="submit"
-                                        className="ui button"
-                                        onClick={this.handleSubmit.bind(this)}
-                                    >
-                                        PUBLICAR
+                                    type="submit"
+                                    className="ui button"
+                                    onClick={this.handleSubmit.bind(this)}
+                                >
+                                    PUBLICAR
                                 </Button>
                                 <Header
                                 	style={{marginTop: "8px"}}

@@ -6,6 +6,7 @@ import org.orm.PersistentSession;
 
 import javax.ejb.Stateless;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.logging.Logger;
 
 @Stateless(name = "SecretaryBean")
@@ -53,6 +54,48 @@ public class SecretaryBean implements SecretaryBeanLocal{
             return true;
 
         } catch (PersistentException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    /**
+     * Register student
+     * @param name
+     * @param email
+     * @param password
+     * @param address
+     * @param birth
+     * @param nif
+     * @þaram cc
+     * @return
+     */
+    @Override
+    public boolean registerStudent(String name, String email, String password, String address, String birth, String nif, String cc){
+
+        try {
+
+            session = getSession();
+
+            long aux_nif = Long.parseLong(nif);
+            java.util.Date aux_birth = new SimpleDateFormat("yyyy-MM-dd").parse(birth);
+
+            Student s = new Student();
+
+            s.setName(name);
+            s.setEmail(email);
+            s.setPassword(password);
+            s.setAddress(address);
+            s.setBirth(aux_birth);
+            s.setNif(aux_nif);
+            s.setCc(cc);
+            s.setRole("ROLE_STUDENT");
+
+            StudentDAO.save(s);
+            return true;
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
