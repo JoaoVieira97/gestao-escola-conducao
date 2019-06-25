@@ -42,7 +42,7 @@ public class StudentBean implements StudentBeanLocal {
 
             session = getSession();
 
-            return (List<Student>) StudentDAO.queryStudent("id>0", "id");
+            return (List<Student>) StudentDAO.queryStudent(session,"id>0", "id");
         } catch (PersistentException e) {
             e.printStackTrace();
         }
@@ -62,7 +62,7 @@ public class StudentBean implements StudentBeanLocal {
 
             session = getSession();
 
-            Student student = StudentDAO.getStudentByORMID( studentID);
+            Student student = StudentDAO.getStudentByORMID(session, studentID);
             //return Arrays.asList(student.registers.toArray());
             return new ArrayList<Register>(student.registers.getCollection());
 
@@ -85,7 +85,7 @@ public class StudentBean implements StudentBeanLocal {
 
             session = getSession();
 
-            Student student = StudentDAO.getStudentByORMID( studentID);
+            Student student = StudentDAO.getStudentByORMID(session, studentID);
             if (student != null) {
                 List<PersonalAnnouncement> announcements = Arrays.asList(student.announcements.toArray());
                 return announcements.stream()
@@ -114,7 +114,7 @@ public class StudentBean implements StudentBeanLocal {
 
             session = getSession();
 
-            PersonalAnnouncement pa = PersonalAnnouncementDAO.getPersonalAnnouncementByORMID( announcementID);
+            PersonalAnnouncement pa = PersonalAnnouncementDAO.getPersonalAnnouncementByORMID(session, announcementID);
             if (pa != null){
                 pa.setViewed(true);
 
@@ -140,7 +140,7 @@ public class StudentBean implements StudentBeanLocal {
 
             session = getSession();
 
-            Student student =  StudentDAO.getStudentByORMID( studentID);
+            Student student =  StudentDAO.getStudentByORMID(session, studentID);
             if (student != null) //return Arrays.asList(student.exams.toArray());
                 return new ArrayList<>(student.exams.getCollection());
 

@@ -45,7 +45,7 @@ public class LessonBean implements LessonBeanLocal{
 
             session = getSession();
 
-            Student student = StudentDAO.getStudentByORMID( studentId);
+            Student student = StudentDAO.getStudentByORMID(session, studentId);
             if(student != null) // return Arrays.asList(student.lessons.toArray());
                 return new ArrayList<Lesson>(student.lessons.getCollection());
 
@@ -191,10 +191,10 @@ public class LessonBean implements LessonBeanLocal{
         try {
             session = getSession();
 
-            Lesson lesson = LessonDAO.getLessonByORMID(lessonId);
+            Lesson lesson = LessonDAO.getLessonByORMID(session, lessonId);
 
             if(lesson != null)
-                return LessonDAO.deleteAndDissociate(lesson);
+                return LessonDAO.deleteAndDissociate(lesson, session);
 
         } catch (PersistentException e) {
             e.printStackTrace();
