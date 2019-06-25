@@ -1,7 +1,5 @@
 USE dsm;
 
-SET time_zone = '+00:00';
-
 # ------------------------------------------------------------------------------------------------------------------------------------------------
 # SCHOOL DATA
 # ------------------------------------------------------------------------------------------------------------------------------------------------
@@ -106,7 +104,14 @@ INSERT INTO Announcement (ID, Title, Description, Timestamp)
 			(7, 'Aula teórica', 'A aula teórica de amanhã realiza-se excepcionalmente às 11h00.', "2019-06-08 15:30:00"), 
 			(8, 'Exame teórico', 'O seu exame teórico está marcado para o dia 1 de Julho pelas 14h30.', "2019-06-09 15:40:00"),
             (9, 'Exame teórico', 'O seu exame teórico está marcado para o dia 2 de Julho pelas 15h30.', "2019-06-10 17:00:00"),
-            (10, 'Exame teórico', 'O seu exame teórico está marcado para o dia 3 de Julho pelas 16h30.', "2019-06-11 18:00:00");
+            (10, 'Exame teórico', 'O seu exame teórico está marcado para o dia 3 de Julho pelas 16h30.', "2019-06-11 18:00:00"),
+            (11, 'Anúncio geral 1', 'Descrição de teste', "2019-06-01 17:45:00"),
+            (12, 'Anúncio geral 2', 'Descrição de teste', "2019-06-07 10:35:00"),
+            (13, 'Anúncio geral 3', 'Descrição de teste', "2019-06-17 12:30:00"),
+            (14, 'Anúncio geral 4', 'Descrição de teste', "2019-06-03 18:05:00"),
+            (15, 'Anúncio geral 5', 'Descrição de teste', "2019-06-05 20:45:00"),
+            (16, 'Anúncio geral 6', 'Descrição de teste', "2019-06-01 11:10:00"),
+            (17, 'Anúncio geral 7', 'Descrição de teste', "2019-06-06 11:45:00");
 
 INSERT INTO PersonalAnnouncement (AnnouncementID, StudentUserID, Viewed)
 	VALUES	(3, 1, false),
