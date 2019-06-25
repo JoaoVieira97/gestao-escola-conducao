@@ -23,4 +23,6 @@ public interface LessonBeanLocal {
     List<Lesson> getStudentNextPracticalLessons(int studentID);
 
     List<TheoreticalLesson> getStudentNextTheoreticalLessons(int studentID);
+
+    boolean cancelLessonStudent(int lessonId);
 }

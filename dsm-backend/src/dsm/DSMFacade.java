@@ -106,8 +106,6 @@ public class DSMFacade {
         redisBean.setUserToken(token, email);
     }
 
-
-
     /**
      * Authentication a user.
      */
@@ -130,6 +128,14 @@ public class DSMFacade {
     public static String getEmail(int userId) {
 
         return userBean.getEmail(userId);
+    }
+
+    /**
+     * Get School info.
+     */
+    public static SchoolInfo getSchoolInformation(int schoolId) {
+
+        return userBean.getSchoolInformation(schoolId);
     }
 
     /**
@@ -251,6 +257,14 @@ public class DSMFacade {
     public static List<TheoreticalLesson> getRealizedTheoreticalLessonsStudent(int studentId) {
 
         return lessonBean.getRealizedTheoreticalLessonsStudent(studentId);
+    }
+
+    /**
+     * Cancel a lesson
+     */
+    public static boolean cancelLesson(int lessonId) {
+
+        return lessonBean.cancelLessonStudent(lessonId);
     }
 
     /**

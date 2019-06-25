@@ -178,4 +178,28 @@ public class LessonBean implements LessonBeanLocal{
 
         return theoreticalLessons;
     }
+
+    /**
+     * Get future theoretical lessons.
+     * @param lessonId
+     * @return
+     */
+    @Override
+    public boolean cancelLessonStudent(int lessonId) {
+
+
+        try {
+            session = getSession();
+
+            Lesson lesson = LessonDAO.getLessonByORMID(lessonId);
+
+            if(lesson != null)
+                return LessonDAO.deleteAndDissociate(lesson);
+
+        } catch (PersistentException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
 }

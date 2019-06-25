@@ -1,11 +1,8 @@
 package web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dsm.DSMFacade;
-import dsm.Exam;
-import org.orm.PersistentSession;
 import utils.Utils;
 
 import javax.servlet.ServletException;
@@ -14,15 +11,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
+import java.util.Map;
 
-@WebServlet(name = "GetPersonalInformation", urlPatterns = {"/api/student/information"})
-public class GetPersonalInformation extends HttpServlet {
+@WebServlet(name = "CancelLesson", urlPatterns = {"/api/lesson/cancel_lesson"})
+public class CancelLesson extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-    }
-
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode responseNode = mapper.createObjectNode();
@@ -30,28 +23,31 @@ public class GetPersonalInformation extends HttpServlet {
         // check access token
         if(Utils.accessTokenValidation(request)) {
 
-            String studentId = request.getParameter("id");
-            int id = Integer.valueOf(studentId);
+            // get post data
+            // ------------------------------------------------------------
+            String data;
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = request.getReader().readLine()) != null) {
+                sb.append(line);
+            }
+            data = sb.toString();
 
-            // get user data
-            String name = DSMFacade.getName(id);
-            String email = DSMFacade.getEmail(id);
-            List<Exam> exams = DSMFacade.getStudentExams(id);
+            Map<String, Object> JSON = mapper.readValue(data, Map.class);
 
-            //ArrayNode examsJSON = mapper.valueToTree(exams);
+            int lessonId = (Integer) JSON.get("lessonId");
 
-            if(name!= null) {
-                responseNode.put("name",name);
-                responseNode.put("email",email);
-                ArrayNode examsJSON = mapper.valueToTree(exams);
-                responseNode.putArray("exams").addAll(examsJSON);
+            // mark announcement as viewed
+            boolean deleted = DSMFacade.cancelLesson(lessonId);
+
+            if(deleted) {
+                responseNode.put("success", deleted);
                 response.setStatus(HttpServletResponse.SC_OK);
             }
-            else{
-                responseNode.put("error", "Wrong id");
+            else {
+                responseNode.put("error", "Error");
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             }
-
         }
         else {
             responseNode.put("error", "Invalid API access token.");
@@ -62,6 +58,10 @@ public class GetPersonalInformation extends HttpServlet {
         response.getWriter().write(
                 mapper.writerWithDefaultPrettyPrinter().writeValueAsString(responseNode)
         );
+
+    }
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
 }

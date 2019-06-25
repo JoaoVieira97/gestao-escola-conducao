@@ -102,6 +102,28 @@ public class UserBean implements UserBeanLocal {
     }
 
     /**
+     * Get school information (maxTimeToCancel, ...) by his school id.
+     * @param schoolId
+     * @return
+     */
+    @Override
+    public SchoolInfo getSchoolInformation(int schoolId) {
+
+        try {
+
+            session = getSession();
+
+            SchoolInfo schoolInfo = SchoolInfoDAO.getSchoolInfoByORMID(schoolId);
+            if (schoolInfo != null) return schoolInfo;
+
+        } catch (PersistentException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    /**
      * Get school announcements.
      * @return
      */

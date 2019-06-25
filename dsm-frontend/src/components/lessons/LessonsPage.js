@@ -10,10 +10,11 @@ import {
     Dimmer,
     Message,
     Button,
-    Table, Container,
+    Table, Container, Modal,
 } from 'semantic-ui-react';
 import {categoryStyle} from "../../styles/styles";
 import {fetchApi} from "../../services/api";
+import moment from 'moment';
 
 class LessonsPage extends Component {
 
@@ -24,11 +25,10 @@ class LessonsPage extends Component {
             allRegisters: [],
             allCategories: [],
             allNextPracticalLessons:[],
-
             showPracticalLessons:[],
+
             messageLesson: 'Sem aulas marcadas.',
             messageRegisters:'Sem registos efetuados',
-            //messageRegistersError: false,
 
             nextTheoreticalLessons:[],
             themesRealized: [],
@@ -47,6 +47,11 @@ class LessonsPage extends Component {
             tableNextTheoLessons: false,
             messageNextTheoLessons: false,
 
+            schoolStartTime: undefined,
+            schoolEndTime: undefined,
+
+            maxTimeToCancel: undefined,
+            modalCancelOpen: false,
 
             _activeItem: '',
             _activeItemId: -1,
@@ -57,6 +62,13 @@ class LessonsPage extends Component {
     componentDidMount() {
 
         fetchApi(
+            'get','/user/school_information?schoolId=1', //TODO Find userID
+            {},  {},
+            this.successFetchSchoolInformation, this.errorFetchSchoolInformation
+        );
+
+
+        fetchApi(
             'get','/lessons/student?id=1', //TODO Find userID
             {},  {},
             this.successFetchLessons, this.errorFetchLessons
@@ -65,13 +77,35 @@ class LessonsPage extends Component {
     }
 
     /**
+     * Handle the response fetch school information.
+     * @param response
+     */
+    successFetchSchoolInformation = (response) => {
+        const data = response.data.schoolInfo;
+
+        this.setState({
+            maxTimeToCancel: data.maxTimeToCancel,
+            schoolStartTime: data.startTime,
+            schoolEndTime: data.endTime,
+        })
+    };
+
+    /**
+     * Handle the response fetch school information.
+     * @param response
+     */
+    errorFetchSchoolInformation = (error) => {
+
+        console.log(error);
+    };
+
+    /**
      * Handle the response fetch registers.
      * @param response
      */
     successFetchLessons = (response) => {
         const data = response.data;
 
-        //SERVLET FINISH!!
         this.setState({
             theoreticalRealized : data.theoreticalLessons,
             practicalRealized : data.practicalLessons,
@@ -83,7 +117,6 @@ class LessonsPage extends Component {
             this.successFetchRegisters, this.errorFetchRegisters
         );
     };
-
 
 
     /**
@@ -165,6 +198,20 @@ class LessonsPage extends Component {
         const data = response.data;
 
         let categoryId = this.state._activeItemId;
+
+        //TODO Fetch SchoolINFO
+
+        let limit = this.state.maxTimeToCancel.split(":");
+        let amount,  unit;
+
+        if( (amount = parseInt(limit[0],10)) > 0) unit = 'hours';
+        else {
+            amount = parseInt(limit[1],10);
+            unit= 'minutes';
+        }
+        
+        let dateLimitCancel = moment().add(amount,unit).format();
+
         let practicalsCategoryChoosed = [];
 
         if(categoryId !==-1){
@@ -175,10 +222,18 @@ class LessonsPage extends Component {
                  for (let i = 0; i < categories.length; i++) {
 
                      if (categories[i].id === categoryId) {
+                         const practDateSplit = practLesson.startTime.split(/[/ ]/);
+
+                         let isoPractDate = practDateSplit[2] + "-" + practDateSplit[1] + "-" +
+                                            practDateSplit[0] + "T" + practDateSplit[3];
+
+                         let canCancel = moment(isoPractDate).isAfter(dateLimitCancel);
+
                          practicalsCategoryChoosed.push({
                              id: practLesson.id,
                              startTime: practLesson.startTime,
                              duration: practLesson.duration,
+                             canCancel: canCancel,
                          });
                      }
                  }
@@ -234,7 +289,6 @@ class LessonsPage extends Component {
         console.log('error retrieving registers');
         console.log(error);
         this.setState({
-            //messageRegistersError: true,
             messageRegisters: 'Não foi possível obter os seus registos.',
             isLoading: false,
         })
@@ -274,8 +328,6 @@ class LessonsPage extends Component {
     successFetchRealizedThemes = (response) => {
 
         const themes = response.data.lessons;
-
-        console.log(themes);
 
         this.setState({
             themesRealized: themes,
@@ -372,7 +424,6 @@ class LessonsPage extends Component {
     successFetchNextTheoreticalLessons = (response) => {
 
         const data = response.data;
-        console.log(data);
 
         //category choosed
         let categoryId = this.state._activeItemId;
@@ -396,7 +447,7 @@ class LessonsPage extends Component {
 
                             for(let j=0 ; j< this.state.themesRealized.length && !themeRealized ; j++){
 
-                                const lesson = this.state.themesRealized[0];
+                                const lesson = this.state.themesRealized[j];
                                 let aux = lesson.themes.collection.find(function (themeAux) {
 
                                     return themeAux.id === theme.id;
@@ -411,7 +462,6 @@ class LessonsPage extends Component {
                                 learned: themeRealized,
                             });
                         });
-
 
                         theoreticalsCategoryChoosed.push({
                             id: theoLesson.id,
@@ -438,6 +488,51 @@ class LessonsPage extends Component {
 
     errorFetchNextTheoreticalLessons = (error) => {
 
+        console.log(error);
+    };
+
+
+    handleLessonCancel = (lessonId) => {
+
+        this.setState({
+            isLoading: true,
+            modalCancelOpen: false,
+        });
+
+        fetchApi(
+            'post','/lesson/cancel_lesson',
+            {
+                lessonId: lessonId,
+            },  {},
+            this.successHandlerCanceled, this.errorHandlerCanceled
+        );
+    };
+
+    successHandlerCanceled = (response) => {
+
+        if(response.data.success){
+
+            //refresh page -> fetch lessons
+            fetchApi(
+                'get','/lessons/student?id=1', //TODO Find userID
+                {},  {},
+                this.successFetchLessons, this.errorFetchLessons
+            );
+        }
+
+        else{
+
+            //TODO UMA MENSAGEM DE ERRO APARECER
+            console.log("ERRO AO CANCELAR AULA!!");
+        }
+
+
+
+    };
+
+    errorHandlerCanceled = (error) => {
+
+        //TODO UMA MENSAGEM DE ERRO APARECER
         console.log(error);
     };
 
@@ -480,10 +575,36 @@ class LessonsPage extends Component {
                         {(next_lessons.length > 0) ?
                             next_lessons.map(lesson => (
                                 <List.Item key={lesson.id} style={{marginBottom: "10px"}}>
-                                    <Button floated='right' icon labelPosition='right' inverted color='red'>
-                                        <Icon name='times circle outline'/>
-                                        Cancelar aula
-                                    </Button>
+
+                                    <Modal trigger={
+                                            lesson.canCancel &&
+                                            <Button floated='right' icon labelPosition='right'
+                                                    inverted color='red' onClick={ () => this.setState({modalCancelOpen:true})}>
+                                                <Icon name='times circle outline'/>
+                                                Cancelar aula
+                                            </Button>
+                                            }
+                                            size='small'
+                                            open={this.state.modalCancelOpen}
+                                            onClose={() => this.setState({modalCancelOpen:false})}
+                                    >
+                                        <Header icon='delete calendar' content='Cancelar Aula' />
+                                        <Modal.Content>
+                                            <p>
+                                                Tem a certeza que pretende cancelar esta aula?
+                                            </p>
+                                        </Modal.Content>
+                                        <Modal.Actions>
+                                            <Button  color='red' inverted
+                                                     onClick={ () => this.setState({modalCancelOpen:false})}>
+                                                <Icon name='remove' /> Não
+                                            </Button>
+                                            <Button color='green' inverted
+                                                    onClick={ () => this.handleLessonCancel(lesson.id) }>
+                                                <Icon name='checkmark' /> Sim
+                                            </Button>
+                                        </Modal.Actions>
+                                    </Modal>
                                     <Icon name='calendar outline' />
                                     <List.Content>
                                         <List.Header>Aula Prática</List.Header>
@@ -683,15 +804,14 @@ class LessonsPage extends Component {
                                                 header={'Registo de aulas teóricas'}
                                                 content={'Não compareceu a nenhuma aula teórica.'}
                                             /> :
-                                        this.state.messageNextTheoLessons ?
+                                        this.state.messageNextTheoLessons &&
                                             <Message
                                                 //onDismiss
                                                 size={'large'}
                                                 error
                                                 header={'Registo de aulas teóricas'}
                                                 content={'Não há registo de aulas teóricas futuras.'}
-                                            /> :
-                                            <div> </div>
+                                            />
 
                                 }
                             </Grid.Column>
