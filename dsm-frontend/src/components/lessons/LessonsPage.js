@@ -53,8 +53,8 @@ class LessonsPage extends Component {
             maxTimeToCancel: undefined,
             modalCancelOpen: false,
 
-            _activeItem: '',
-            _activeItemId: -1,
+            categoryChoosedName: '',
+            categoryChoosedId: -1,
             isLoading : true,
         };
     }
@@ -62,19 +62,17 @@ class LessonsPage extends Component {
     componentDidMount() {
 
         fetchApi(
-            'get','/user/school_information?schoolId=1', //TODO Find userID
+            'get','/user/school_information?schoolId=1',
             {},  {},
             this.successFetchSchoolInformation, this.errorFetchSchoolInformation
         );
-
-
-        fetchApi(
-            'get','/lessons/student?id=1', //TODO Find userID
-            {},  {},
-            this.successFetchLessons, this.errorFetchLessons
-        );
-
     }
+
+
+
+    /**
+        -------------------- SUCESS FETCHS ---------------------------
+     */
 
     /**
      * Handle the response fetch school information.
@@ -87,53 +85,53 @@ class LessonsPage extends Component {
             maxTimeToCancel: data.maxTimeToCancel,
             schoolStartTime: data.startTime,
             schoolEndTime: data.endTime,
-        })
+        });
+
+        fetchApi(
+            'get','/lessons/student?id=1',
+            {},  {},
+            this.successFetchLessons, this.errorFetchLessons
+        );
     };
 
     /**
-     * Handle the response fetch school information.
+     * Handle the response fetch lessons (practical and theroretical realized).
      * @param response
      */
-    errorFetchSchoolInformation = (error) => {
-
-        console.log(error);
-    };
-
-    /**
-     * Handle the response fetch registers.
-     * @param response
-     */
-    successFetchLessons = (response) => {
+    successFetchLessons = async (response) => {
         const data = response.data;
 
-        this.setState({
+        await this.setState({
             theoreticalRealized : data.theoreticalLessons,
             practicalRealized : data.practicalLessons,
         });
 
         fetchApi(
-            'get','/student/registers?id=1', //TODO Find userID
+            'get','/student/registers?id=1',
             {},  {},
             this.successFetchRegisters, this.errorFetchRegisters
         );
     };
 
-
     /**
      * Handle the response fetch registers.
      * @param response
      */
-    successFetchRegisters = (response) => {
+    successFetchRegisters = async (response) => {
         const data = response.data;
 
         //Obter a categoria de cada registo
         let categoriesRegister = data.registers.map(register => (register.category));
-
         let categories = categoriesRegister.map( category => {
             return {
                 id: category.id,
                 name: "Categoria " + category.name,
             }
+        });
+        categories.sort(function(c1, c2){
+            if(c1.name < c2.name) { return -1; }
+            if(c1.name > c2.name) { return 1; }
+            return 0;
         });
 
         //Category choosed -> A default é a primeira
@@ -170,7 +168,7 @@ class LessonsPage extends Component {
         //Obter o nº de teóricas realizadas, isto é, somar o length de cada array dentro do array theoreticalRealized
         let numberT = theoreticalRealized.reduce( (acc, array) => acc + array.length, 0);
 
-        this.setState({
+        await this.setState({
             allRegisters: data.registers,
             allCategories: categories,
             totalTheoreticalLessons: theoreticalLessons,
@@ -178,8 +176,8 @@ class LessonsPage extends Component {
             numberPracticalRealized: numberP,
             numberTheoreticalRealized: numberT,
 
-            _activeItem: categories[0].name,
-            _activeItemId: categoryId,
+            categoryChoosedName: categories[0].name,
+            categoryChoosedId: categoryId,
         });
 
         fetchApi(
@@ -193,13 +191,11 @@ class LessonsPage extends Component {
      * Handle the response of next practical lessons of a specific student.
      * @param response
      */
-    successFetchNextPracticalLessons = (response) => {
+    successFetchNextPracticalLessons = async (response) => {
 
         const data = response.data;
 
-        let categoryId = this.state._activeItemId;
-
-        //TODO Fetch SchoolINFO
+        let categoryId = this.state.categoryChoosedId;
 
         let limit = this.state.maxTimeToCancel.split(":");
         let amount,  unit;
@@ -209,46 +205,47 @@ class LessonsPage extends Component {
             amount = parseInt(limit[1],10);
             unit= 'minutes';
         }
-        
+
         let dateLimitCancel = moment().add(amount,unit).format();
 
         let practicalsCategoryChoosed = [];
 
         if(categoryId !==-1){
-             data.lessons.forEach(practLesson => {
+            data.lessons.forEach(practLesson => {
 
-                 let categories = practLesson.categories.collection;
+                let categories = practLesson.categories.collection;
 
-                 for (let i = 0; i < categories.length; i++) {
+                for (let i = 0; i < categories.length; i++) {
 
-                     if (categories[i].id === categoryId) {
-                         const practDateSplit = practLesson.startTime.split(/[/ ]/);
+                    if (categories[i].id === categoryId) {
+                        const practDateSplit = practLesson.startTime.split(/[/ ]/);
 
-                         let isoPractDate = practDateSplit[2] + "-" + practDateSplit[1] + "-" +
-                                            practDateSplit[0] + "T" + practDateSplit[3];
+                        let isoPractDate = practDateSplit[2] + "-" + practDateSplit[1] + "-" +
+                            practDateSplit[0] + "T" + practDateSplit[3];
 
-                         let canCancel = moment(isoPractDate).isAfter(dateLimitCancel);
+                        let canCancel = moment(isoPractDate).isAfter(dateLimitCancel);
 
-                         practicalsCategoryChoosed.push({
-                             id: practLesson.id,
-                             startTime: practLesson.startTime,
-                             duration: practLesson.duration,
-                             canCancel: canCancel,
-                         });
-                     }
-                 }
-             });
+                        practicalsCategoryChoosed.push({
+                            id: practLesson.id,
+                            startTime: practLesson.startTime,
+                            duration: practLesson.duration,
+                            canCancel: canCancel,
+                        });
+                    }
+                }
+            });
         }
 
-        this.setState({
+        await this.setState({
             allNextPracticalLessons: response.data.lessons,
             showPracticalLessons: practicalsCategoryChoosed,
         });
 
-        //FAZER AQUI, POIS JÁ TEM O ID DA CATEGORIA E FAZER SEMPRE QUE MUDAR A CATEGORIA SELECIONADA (handleItemClick)
+        //FAZER AQUI, POIS JÁ TEM O ID DA CATEGORIA E A FUNÇÃO DE DESENHAR A TABELA DE PRÓXIMAS AULAS TEÓRICAS DEPENDE DESTE FETCH
+        // FAZER SEMPRE QUE MUDAR A CATEGORIA SELECIONADA (handleCategoryClicked)
         //Este fetch é o ultimo e poe o isLoading = false
         fetchApi(
-            'get','/student/realized_themes?id=1&category='+this.state._activeItemId, //TODO Find userID
+            'get','/student/realized_themes?id=1&category='+this.state.categoryChoosedId,
             {},  {},
             this.successFetchRealizedThemes, this.errorFetchRealizedThemes
         );
@@ -256,32 +253,47 @@ class LessonsPage extends Component {
     };
 
     /**
-     * Handle the error.
+     * Handle the response of fetch realized themes.
+     * @param response
+     */
+    successFetchRealizedThemes = (response) => {
+
+        const themes = response.data.lessons;
+
+        this.setState({
+            themesRealized: themes,
+            isLoading: false,
+        });
+    };
+
+
+
+    /**
+     -------------------- ERROR FETCHS ---------------------------
+     */
+
+
+
+    /**
+     * Handle the error fetch school information.
+     * @param error
+     */
+    errorFetchSchoolInformation = (error) => {
+
+        console.log(error);
+    };
+
+    /**
+     * Handle the error fetch lessons.
      * @param error
      */
     errorFetchLessons = (error) => {
 
         console.log(error);
-
-        /*
-        // bad request
-        if(error.response.status === 400) {
-            this.setState({
-                loginError: true,
-                loginErrorMessage: 'As credenciais que introduziu estão erradas.'
-            });
-        }
-        // invalid API access token
-        else {
-            this.setState({
-                loginError: true,
-                loginErrorMessage: 'Ocorreu um erro ao estabelecer conexão com o servidor principal.'
-            });
-        }*/
     };
 
     /**
-     * Handle the error.
+     * Handle the error fetch registers.
      * @param error
      */
     errorFetchRegisters = (error) => {
@@ -292,26 +304,10 @@ class LessonsPage extends Component {
             messageRegisters: 'Não foi possível obter os seus registos.',
             isLoading: false,
         })
-
-        /*
-        // bad request
-        if(error.response.status === 400) {
-            this.setState({
-                loginError: true,
-                loginErrorMessage: 'As credenciais que introduziu estão erradas.'
-            });
-        }
-        // invalid API access token
-        else {
-            this.setState({
-                loginError: true,
-                loginErrorMessage: 'Ocorreu um erro ao estabelecer conexão com o servidor principal.'
-            });
-        }*/
     };
 
     /**
-     * Handle the error retrieving next student events.
+     * Handle the error retrieving next practical lessons.
      * @param error
      */
     errorFetchNextPracticalLessons = (error) => {
@@ -325,31 +321,36 @@ class LessonsPage extends Component {
 
     };
 
-    successFetchRealizedThemes = (response) => {
-
-        const themes = response.data.lessons;
-
-        this.setState({
-            themesRealized: themes,
-            isLoading: false,
-        });
-    };
-
+    /**
+     * Handle the error fetch realized themes.
+     * @param error
+     */
     errorFetchRealizedThemes = (error) => {
 
         console.log(error);
     };
 
 
-    handleItemClick = (event, data) => {
 
-        this.setState({
+    /**
+     -------------------- HANDLE ACTIONS (AND FETCHES) ---------------------------
+     */
+
+
+    /**
+     * When user change category choosed.
+     * @param event
+     * @param data
+     */
+    handleCategoryClicked = async (event, data) => {
+
+        await this.setState({
             isLoading: true,
             tableRealizedTheoLessons: false,
             tableNextTheoLessons: false,
             messageRealizedTheoLessons: false,
             messageNextTheoLessons: false,
-            _activeItem: data.name,
+            categoryChoosedName: data.name,
         });
 
         let categoryChoosed = this.state.allCategories.filter(category => (category.name === data.name));
@@ -376,18 +377,22 @@ class LessonsPage extends Component {
         }
 
         this.setState({
-            _activeItemId: categoryId,
+            categoryChoosedId: categoryId,
             showPracticalLessons: practicalsCategoryChoosed,
         });
 
         fetchApi(
-            'get','/student/realized_themes?id=1&category='+categoryId, //TODO Find userID
+            'get','/student/realized_themes?id=1&category='+categoryId,
             {},  {},
             this.successFetchRealizedThemes, this.errorFetchRealizedThemes
         );
 
     };
 
+
+    /**
+     * When user select consult realized theoretical lessons.
+     */
     handleRealizedTheoreticalLessons = () => {
 
         if(!this.state.tableRealizedTheoLessons){
@@ -403,7 +408,9 @@ class LessonsPage extends Component {
         }
     };
 
-
+    /**
+     * When user select consult next theoretical lessons.
+     */
     handleNextTheoreticalLessons = () => {
 
         if(!this.state.tableNextTheoLessons){
@@ -413,7 +420,7 @@ class LessonsPage extends Component {
             });
 
             fetchApi(
-                'get','/student/next_theoretical_lessons?id=1', //TODO Find userID
+                'get','/student/next_theoretical_lessons?id=1',
                 {},  {},
                 this.successFetchNextTheoreticalLessons, this.errorFetchNextTheoreticalLessons
             );
@@ -421,12 +428,17 @@ class LessonsPage extends Component {
 
     };
 
+
+    /**
+     * Handle the success of the handle next theoretical lessons.
+     * @param response
+     */
     successFetchNextTheoreticalLessons = (response) => {
 
         const data = response.data;
 
         //category choosed
-        let categoryId = this.state._activeItemId;
+        let categoryId = this.state.categoryChoosedId;
 
         let theoreticalsCategoryChoosed = [];
 
@@ -486,12 +498,19 @@ class LessonsPage extends Component {
 
     };
 
+    /**
+     * Handle the error of the handle next theoretical lessons.
+     * @param error
+     */
     errorFetchNextTheoreticalLessons = (error) => {
 
         console.log(error);
     };
 
 
+    /**
+     * When user select cancel practical lesson.
+     */
     handleLessonCancel = (lessonId) => {
 
         this.setState({
@@ -508,36 +527,40 @@ class LessonsPage extends Component {
         );
     };
 
+    /**
+     * Handle the success of the handle lesson cancel.
+     * @param response
+     */
     successHandlerCanceled = (response) => {
 
         if(response.data.success){
-
             //refresh page -> fetch lessons
             fetchApi(
-                'get','/lessons/student?id=1', //TODO Find userID
+                'get','/lessons/student?id=1',
                 {},  {},
                 this.successFetchLessons, this.errorFetchLessons
             );
         }
-
         else{
-
             //TODO UMA MENSAGEM DE ERRO APARECER
             console.log("ERRO AO CANCELAR AULA!!");
         }
-
-
-
     };
 
+    /**
+     * Handle the error of the handle lesson cancel.
+     * @param error
+     */
     errorHandlerCanceled = (error) => {
 
         //TODO UMA MENSAGEM DE ERRO APARECER
         console.log(error);
     };
 
+
+
     render() {
-        const { _activeItem, allCategories } = this.state;
+        const { categoryChoosedName, allCategories } = this.state;
 
         let categories;
         categories = (
@@ -546,8 +569,8 @@ class LessonsPage extends Component {
                     <Menu.Item
                         key={category.id}
                         name={category.name}
-                        active={_activeItem === category.name}
-                        onClick={this.handleItemClick}
+                        active={categoryChoosedName === category.name}
+                        onClick={this.handleCategoryClicked}
                     >
                     </Menu.Item>
                 )
@@ -644,7 +667,7 @@ class LessonsPage extends Component {
                                     {" " + this.state.numberTheoreticalRealized} / {this.state.totalTheoreticalLessons}  </List.Header>
                             </List.Content>
                         </List.Item>
-                        <List.Item onClick={this.handleRealizedTheoreticalLessons}>
+                        <List.Item style={{cursor: 'pointer'}} onClick={this.handleRealizedTheoreticalLessons}>
                             <List.Content floated='right'>
                                 <Icon color='grey' size='large' name='angle right'/>
                             </List.Content>
@@ -656,7 +679,7 @@ class LessonsPage extends Component {
                                 </List.Description>
                             </List.Content>
                         </List.Item>
-                        <List.Item onClick={this.handleNextTheoreticalLessons}>
+                        <List.Item  style={{cursor: 'pointer'}} onClick={this.handleNextTheoreticalLessons}>
                             <List.Content floated='right'>
                                 <Icon color='grey' size='large' name='angle right'/>
                             </List.Content>
