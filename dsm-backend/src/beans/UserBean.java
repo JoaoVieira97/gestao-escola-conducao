@@ -4,24 +4,36 @@ import dsm.*;
 import org.orm.PersistentException;
 import org.orm.PersistentSession;
 
+import javax.ejb.Local;
 import javax.ejb.Stateless;
 import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+@Local(UserBeanLocal.class)
 @Stateless(name = "UserBean")
 public class UserBean implements UserBeanLocal {
 
+    /**
+     * ORM Persistent Session
+     */
+    private PersistentSession session;
+
+    /**
+     * Logger for System Output
+     */
     private final static Logger log = Logger.getLogger(UserBean.class.getName());
 
-    private static PersistentSession session = null;
-
+    /**
+     * Get persistent session if needed
+     * @return PersistentSession
+     */
     private PersistentSession getSession() {
-        if (session == null) {
+        if (this.session == null) {
             try {
                 log.info("Creating new persistent session!");
-                session = DSMPersistentManager.instance().getSession();
+                this.session = DSMPersistentManager.instance().getSession();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -29,7 +41,7 @@ public class UserBean implements UserBeanLocal {
         else
             log.info("Reusing persistent session!");
 
-        return session;
+        return this.session;
     }
 
     /**
@@ -43,7 +55,7 @@ public class UserBean implements UserBeanLocal {
 
         try {
 
-            session = getSession();
+            PersistentSession session = this.getSession();
 
             User user = UserDAO.loadUserByQuery(session,
                 "email='"+email+"' AND password='"+password+"'",
@@ -69,7 +81,7 @@ public class UserBean implements UserBeanLocal {
 
         try {
 
-            session = getSession();
+            PersistentSession session = this.getSession();
 
             User user = UserDAO.getUserByORMID(session, userId);
             if (user != null) return user.getName();
@@ -90,7 +102,7 @@ public class UserBean implements UserBeanLocal {
 
         try {
 
-            session = getSession();
+            PersistentSession session = this.getSession();
 
             User user = UserDAO.getUserByORMID(session, userId);
             if (user != null) return user.getEmail();
@@ -111,7 +123,7 @@ public class UserBean implements UserBeanLocal {
 
         try {
 
-            session = getSession();
+            PersistentSession session = this.getSession();
 
             SchoolInfo schoolInfo = SchoolInfoDAO.getSchoolInfoByORMID(session, schoolId);
             if (schoolInfo != null) return schoolInfo;
@@ -132,7 +144,7 @@ public class UserBean implements UserBeanLocal {
 
         try {
 
-            session = getSession();
+            PersistentSession session = this.getSession();
 
             List<Announcement> all_announcements = (List<Announcement>) AnnouncementDAO.queryAnnouncement(session, "id>0", "timestamp desc");
             List<Announcement> general_announcements =
@@ -158,7 +170,7 @@ public class UserBean implements UserBeanLocal {
 
         try {
 
-            session = getSession();
+            PersistentSession session = this.getSession();
 
             List<Announcement> all_announcements = (List<Announcement>) AnnouncementDAO.queryAnnouncement(session, "id>0", "timestamp desc");
             List<Announcement> recent_general_announcements =

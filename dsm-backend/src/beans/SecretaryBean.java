@@ -4,23 +4,35 @@ import dsm.*;
 import org.orm.PersistentException;
 import org.orm.PersistentSession;
 
+import javax.ejb.Local;
 import javax.ejb.Stateless;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.logging.Logger;
 
+@Local(SecretaryBeanLocal.class)
 @Stateless(name = "SecretaryBean")
 public class SecretaryBean implements SecretaryBeanLocal{
 
+    /**
+     * ORM Persistent Session
+     */
+    private PersistentSession session;
+
+    /**
+     * Logger for System Output
+     */
     private final static Logger log = Logger.getLogger(LessonBean.class.getName());
 
-    private static PersistentSession session = null;
-
+    /**
+     * Get persistent session if needed
+     * @return PersistentSession
+     */
     private PersistentSession getSession() {
-        if (session == null) {
+        if (this.session == null) {
             try {
                 log.info("Creating new persistent session!");
-                session = DSMPersistentManager.instance().getSession();
+                this.session = DSMPersistentManager.instance().getSession();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -28,7 +40,7 @@ public class SecretaryBean implements SecretaryBeanLocal{
         else
             log.info("Reusing persistent session!");
 
-        return session;
+        return this.session;
     }
 
     /**
@@ -41,8 +53,6 @@ public class SecretaryBean implements SecretaryBeanLocal{
     public boolean registerGeneralAnnouncement(String title, String description){
 
         try {
-
-            session = getSession();
 
             Announcement a = new Announcement();
 
@@ -75,8 +85,6 @@ public class SecretaryBean implements SecretaryBeanLocal{
     public boolean registerStudent(String name, String email, String password, String address, String birth, String nif, String cc){
 
         try {
-
-            session = getSession();
 
             long aux_nif = Long.parseLong(nif);
             java.util.Date aux_birth = new SimpleDateFormat("yyyy-MM-dd").parse(birth);
