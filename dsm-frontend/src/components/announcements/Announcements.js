@@ -100,7 +100,7 @@ class Announcements extends Component {
                 <Grid centered style={{marginBottom: "65px"}}>
                     <Grid.Column width={16}>
 
-                        <Breadcrumb>
+                        <Breadcrumb size='large'>
                             <Breadcrumb.Section
                                 style={{color: 'grey'}}
                                 onClick={() => this.props.history.push('/home')}

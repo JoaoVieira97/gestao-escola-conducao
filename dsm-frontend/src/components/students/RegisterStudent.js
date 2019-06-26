@@ -8,7 +8,8 @@ import {
     Grid,
     Input,
     Popup,
-    Breadcrumb
+    Breadcrumb,
+    Message
 } from 'semantic-ui-react';
 import { fetchApi } from '../../services/api/index';
 
@@ -47,20 +48,35 @@ class RegisterStudent extends Component {
 
         const { nome, email, password, data_nascimento, nif, cc, morada } = this.state;
         if(nome !== '' && email !== '' && password !== '' && data_nascimento !== '' && nif !== '' && cc !== '' && morada !== '') {
-            
-            fetchApi(
-                'post','/secretary/register_student',
-                {
-                    name: nome,
-                    email: email,
-                    password: password,
-                    birth: data_nascimento,
-                    nif: nif,
-                    cc: cc,
-                    address: morada
-                },  {},
-                this.successHandler, this.errorHandler
-            );
+
+            if (!nif.match(/^[0-9]{9}$/g)){
+                this.setState({
+                    message: '',
+                    error: 'Preencha corretamente o valor do NIF!'
+                })
+            }
+            else if (!cc.match(/^[0-9]{8}[A-Z0-9]{4}$/g)){
+                this.setState({
+                    message: '',
+                    error: 'Preencha corretamente o valor do CC!'
+                })
+            }
+            else {
+                
+                fetchApi(
+                    'post','/secretary/register_student',
+                    {
+                        name: nome,
+                        email: email,
+                        password: password,
+                        birth: data_nascimento,
+                        nif: nif,
+                        cc: cc,
+                        address: morada
+                    },  {},
+                    this.successHandler, this.errorHandler
+                );
+            }
 
         } else {
             this.setState({
@@ -115,7 +131,7 @@ class RegisterStudent extends Component {
                     
                     <Grid.Column width={16}>
 
-                        <Breadcrumb>
+                        <Breadcrumb size='large'>
                             <Breadcrumb.Section
                                 style={{color: 'grey'}}
                                 onClick={() => this.props.history.push('/students')}
@@ -188,7 +204,7 @@ class RegisterStudent extends Component {
                                 <Form.Group widths='equal'>
                                     <div className={(this.state.error && this.state.nif === '') ? "error field" : "field"}>
                                         <div className="label left icon">
-                                            <Popup content='Número de Identificação Fiscal' trigger={<i className="help icon" />}/>
+                                            <Popup content='Número de Identificação Fiscal' trigger={<i className="question circle blue icon" />}/>
                                             <label>NIF</label>
                                         </div>
                                         <div className="ui input">
@@ -202,7 +218,7 @@ class RegisterStudent extends Component {
                                     </div>
                                     <div className={(this.state.error && this.state.cc === '') ? "error field" : "field"}>
                                         <div className="label left icon">
-                                            <Popup content='Cartão de Cidadão' trigger={<i className="help icon" />}/>
+                                            <Popup content='Cartão de Cidadão' trigger={<i className="question circle blue icon" />}/>
                                             <label>CC</label>
                                         </div>
                                         <div className="ui input">
@@ -222,21 +238,14 @@ class RegisterStudent extends Component {
                                     >
                                         REGISTAR
                                 </Button>
-                                <Header
-                                	style={{marginTop: "8px"}}
-                                	//className='centered'
-                                	as='h4'
-                                	color='red'
-                                >
-                                	{this.state.error}
-                                </Header>
-                                <Header
-                                	style={{marginTop: "8px"}}
-                                	as='h4'
-                                	color='green'
-                                >
-                                	{this.state.message}
-                                </Header>
+                                <Message positive hidden={!this.state.message}>
+                                    <Message.Header>Sucesso</Message.Header>
+                                    <p>{this.state.message}</p>
+                                </Message>
+                                <Message negative hidden={!this.state.error}>
+                                    <Message.Header>Erro</Message.Header>
+                                    <p>{this.state.error}</p>
+                                </Message>
                             </Form>
                         </Segment>
                     </Grid.Column>

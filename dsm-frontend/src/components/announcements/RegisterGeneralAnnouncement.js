@@ -6,7 +6,8 @@ import {
     Form,
     Input,
     Button,
-    Segment
+    Segment,
+    Message
 } from 'semantic-ui-react';
 import {fetchApi} from "../../services/api";
 
@@ -35,12 +36,12 @@ class RegisterGeneralAnnouncement extends Component {
 
     };
 
-    handleSubmit = () => {
+    handleSubmit = async () => {
 
         const { titulo, descricao } = this.state;
         if(titulo !== '' && descricao !== '') {
             
-            fetchApi(
+            await fetchApi(
                 'post','/secretary/register_general_announcement',
                 {
                     title: titulo,
@@ -115,9 +116,8 @@ class RegisterGeneralAnnouncement extends Component {
                                     name={"titulo"}
                                     onChange={this.handleInputChange}
                                 />
-                                <Form.Field
+                                <Form.TextArea
                                     className={(this.state.error && this.state.descricao === '') ? "error field" : "field"}
-                                    control={Input}
                                     label='Descrição do aviso'
                                     placeholder='Descrição'
                                     name={"descricao"}
@@ -130,21 +130,14 @@ class RegisterGeneralAnnouncement extends Component {
                                 >
                                     PUBLICAR
                                 </Button>
-                                <Header
-                                	style={{marginTop: "8px"}}
-                                	//className='centered'
-                                	as='h4'
-                                	color='red'
-                                >
-                                	{this.state.error}
-                                </Header>
-                                <Header
-                                	style={{marginTop: "8px"}}
-                                	as='h4'
-                                	color='green'
-                                >
-                                	{this.state.message}
-                                </Header>
+                                <Message positive hidden={!this.state.message}>
+                                    <Message.Header>Sucesso</Message.Header>
+                                    <p>{this.state.message}</p>
+                                </Message>
+                                <Message negative hidden={!this.state.error}>
+                                    <Message.Header>Erro</Message.Header>
+                                    <p>{this.state.error}</p>
+                                </Message>
                             </Form>
                         </Segment>
                     </Grid.Column>

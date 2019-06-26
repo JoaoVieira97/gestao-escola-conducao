@@ -23,7 +23,7 @@ class HomePage extends Component {
     componentDidMount() {
         
         fetchApi(
-            'get','/student/personal_announcements?id=3',
+            'get','/student/personal_announcements',
             {},  {},
             this.successHandlerPA, this.errorHandlerPA
         );
@@ -35,13 +35,13 @@ class HomePage extends Component {
         );
 
         fetchApi(
-            'get','/student/next_practical_lessons?id=3',
+            'get','/student/next_practical_lessons',
             {},  {},
             this.successHandlerPL, this.errorHandlerE
         );
 
         fetchApi(
-            'get','/student/next_exams?id=3',
+            'get','/student/next_exams',
             {},  {},
             this.successHandlerE, this.errorHandlerE
         );
