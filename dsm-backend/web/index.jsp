@@ -57,13 +57,8 @@
     <div class="cover">
       <h1>Driving School Management (DSM) is running!</h1>
       <div style="margin-top: 40px">
-        <h3><a href="/dsm_backend_war_exploded/api/students">/api/students</a></h3>
-        <h3><a href="/dsm_backend_war_exploded/api/student/registers?id=1">/api/student/registers?id=1</a></h3>
-        <h3><a href="/dsm_backend_war_exploded/api/lessons">/api/lessons</a></h3>
-        <h3><a href="/dsm_backend_war_exploded/api/authentication">/api/authentication</a></h3>
-        <h3><a href="/dsm_backend_war_exploded/api/lessons/student?id=1">/api/lessons/student?id=1</a></h3>
-        <h3><a href="/dsm_backend_war_exploded/api/student/information?id=1">/api/student/information?id=1</a></h3>
-        <h3><a href="/dsm_backend_war_exploded/api/student/next_exams?id=3">/api/student/next_exams?id=3</a></h3>
+        <h3>API TOKEN</h3>
+        <h3 style="color: #ff4b5d">qnHuUp4iXL6dmzymkcOa6iGLYAwsnURP</h3>
       </div>
     </div>
   </body>
