@@ -1,7 +1,9 @@
 package beans;
 
+import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
@@ -14,6 +16,7 @@ public class RedisBean implements RedisBeanLocal {
 
     private static final String hostname = "127.0.0.1";
     private static final int port = 6379;
+    private static final String password = "dsm2019EA";
     private static final int ttl = 31556926;
 
     private static final Logger log = Logger.getLogger(RedisBean.class.getName());
@@ -21,19 +24,18 @@ public class RedisBean implements RedisBeanLocal {
     // Pool of connections to Redis
     private JedisPool jedisPool = new JedisPool(hostname, port);
 
-
     /**
      * Set user token with specific time to live.
      * @param token Generated token
-     * @param email User email
+     * @param id User id
      */
     @Override
-    public void setUserToken(String token, String email) {
+    public void setUserToken(String token, int id) {
 
         // Opens and close it-self
         try (Jedis jedis = this.jedisPool.getResource()) {
-            jedis.setex(token, ttl, email);
-            log.info("Set " + token + " to " + email);
+
+            jedis.setex(token, ttl, String.valueOf(id));
         }
     }
 
@@ -46,6 +48,7 @@ public class RedisBean implements RedisBeanLocal {
 
         // Opens and close it-self
         try (Jedis jedis = this.jedisPool.getResource()) {
+
             jedis.del(token);
             log.info("Remove token " + token);
         }
@@ -54,17 +57,19 @@ public class RedisBean implements RedisBeanLocal {
     /**
      * Get the user email by a given token.
      * @param token User token
-     * @return User email
+     * @return User id
      */
     @Override
-    public String getUserEmailByToken(String token) {
+    public int getUserIDByToken(String token) {
 
         // Opens and close it-self
         try (Jedis jedis = this.jedisPool.getResource()) {
+
             if (jedis.exists(token)) {
-                return jedis.get(token);
+                return Integer.parseInt(jedis.get(token));
             }
-            return null;
+
+            return -1;
         }
     }
 
@@ -78,6 +83,7 @@ public class RedisBean implements RedisBeanLocal {
 
         // Opens and close it-self
         try (Jedis jedis = this.jedisPool.getResource()) {
+
             return jedis.exists(token);
         }
     }

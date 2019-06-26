@@ -1,20 +1,36 @@
 package utils;
 
-import dsm.DSMPersistentManager;
-import org.orm.PersistentSession;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.security.MessageDigest;
 
+import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Logger;
 
 public class Utils {
 
+    public final static String INVALID_API_TOKEN = "Invalid API token";
+    public final static String INVALID_USER_TOKEN = "Invalid USER token";
+    public final static String ERROR_FETCHING_DATA = "Cannot fetch data";
+
+
     private final static String API_TOKEN = "qnHuUp4iXL6dmzymkcOa6iGLYAwsnURP";
     private final static Logger log = Logger.getLogger(Utils.class.getName());
 
+    /**
+     * Generate a random user token.
+     * @return random token
+     */
+    public static String generateRandomToken() {
+
+        String token = UUID.randomUUID().toString().replace("-", "");
+        log.warning("DSM - GENERATED a new TOKEN: " + token);
+
+        return token;
+    }
 
     /**
      * Request access token validation.
@@ -22,12 +38,24 @@ public class Utils {
     public static boolean accessTokenValidation(HttpServletRequest request) {
 
         String accessToken = request.getHeader("Authorization");
+        log.warning("DSM - AUTHENTICATION with API TOKEN: " + accessToken);
 
         if (accessToken != null) {
             return accessToken.equals(API_TOKEN);
         }
 
         return false;
+    }
+
+    /**
+     * Get request access token.
+     */
+    public static String getAuthenticationToken(HttpServletRequest request) {
+
+        String accessToken = request.getHeader("Authorization");
+        log.warning("DSM - REQUEST with USER TOKEN: " + accessToken);
+
+        return accessToken;
     }
 
     /**
@@ -47,59 +75,20 @@ public class Utils {
         return res;
     }
 
-    /**
-     * Generate a random user token.
-     * @return random token
-     */
-    public static String generateRandomToken() {
-
-        return UUID.randomUUID().toString().replace("-", "");
-    }
 
     /**
-     * Get a new session if needed.
-     * @param session
-     * @return PersistentSession
+     * Read POST data from request.
      */
-    public static PersistentSession getSession(PersistentSession session) {
-        if (session == null) {
-            try {
-                session = DSMPersistentManager.instance().getSession();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+    public static Map<String, Object> getPostData(ObjectMapper mapper, HttpServletRequest request) throws IOException {
+
+        String data;
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = request.getReader().readLine()) != null) {
+            sb.append(line);
         }
-        return session;
-    }
+        data = sb.toString();
 
-    /**
-     * Get a new session if needed.
-     * @param request
-     * @return PersistentSession
-     */
-    public static PersistentSession getSession(HttpServletRequest request) {
-
-        HttpSession httpSession = request.getSession();
-        PersistentSession session = null;
-
-        try {
-            Object hsession = httpSession.getAttribute("hsession");
-
-            if(hsession!=null) {
-
-                log.info("Reusing persistent session!");
-                session = (PersistentSession) hsession;
-
-            } else {
-
-                log.info("Creating new persistent session!");
-                session = DSMPersistentManager.instance().getSession();
-                request.getSession().setAttribute("hsession", session);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return session;
+        return mapper.readValue(data, Map.class);
     }
 }

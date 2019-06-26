@@ -30,35 +30,41 @@ public class GetStudentPersonalAnnouncements extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+        request.setCharacterEncoding("UTF-8");
+
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode responseNode = mapper.createObjectNode();
 
-        //log.info(request.getSession().toString());
+        // Get user token and validate it
+        String accessToken = Utils.getAuthenticationToken(request);
+        if(accessToken != null && DSMFacade.isTokenValid(accessToken)) {
 
-        // check access token
-        if(Utils.accessTokenValidation(request)) {
+            int id = DSMFacade.getUserIDByToken(accessToken);
+            if(id != -1) {
 
-            String studentId = request.getParameter("id");
-            int id = Integer.valueOf(studentId);
+                List<PersonalAnnouncement> announcements = DSMFacade.getStudentPersonalAnnouncements(id);
+                if(announcements!= null) {
 
-            // get personal announcements
-            List<PersonalAnnouncement> announcements = DSMFacade.getStudentPersonalAnnouncements(id);
-
-            if(announcements!= null) {
-                ArrayNode announcementsJSON = mapper.valueToTree(announcements);
-                responseNode.putArray("announcements").addAll(announcementsJSON);
-                response.setStatus(HttpServletResponse.SC_OK);
+                    ArrayNode announcementsJSON = mapper.valueToTree(announcements);
+                    responseNode.putArray("announcements").addAll(announcementsJSON);
+                    response.setStatus(HttpServletResponse.SC_OK);
+                }
+                else {
+                    responseNode.put("error", Utils.ERROR_FETCHING_DATA);
+                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                }
             }
-            else{
-                responseNode.put("error", "Wrong id");
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            else {
+                responseNode.put("error", Utils.INVALID_USER_TOKEN);
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             }
-
         }
         else {
-            responseNode.put("error", "Invalid API access token.");
+            responseNode.put("error", Utils.INVALID_USER_TOKEN);
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
+
+
 
         response.setContentType("application/json;charset=UTF-8");
         response.getWriter().write(

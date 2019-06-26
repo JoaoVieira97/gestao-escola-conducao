@@ -3,6 +3,7 @@ package web;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dsm.DSMFacade;
+import dsm.User;
 import utils.Utils;
 
 import javax.servlet.ServletException;
@@ -30,29 +31,24 @@ public class Authentication extends HttpServlet {
 
             // get post data
             // ------------------------------------------------------------
-            String data;
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = request.getReader().readLine()) != null) {
-                sb.append(line);
-            }
-            data = sb.toString();
+            Map<String, Object> JSON = Utils.getPostData(mapper, request);
 
-            Map<String, Object> JSON = mapper.readValue(data, Map.class);
+            // parsing data
+            // ------------------------------------------------------------
             String email = (String) JSON.get("email");
             String password = (String) JSON.get("password");
 
 
             // login and response
             // ------------------------------------------------------------
-            String userType = DSMFacade.login(email, Utils.hash(password));
-            if(userType != null) {
+            User user = DSMFacade.login(email, Utils.hash(password));
+            if(user != null) {
 
                 String randomToken = Utils.generateRandomToken();
 
-                //DSMFacade.setUserToken(randomToken, email);
+                DSMFacade.setUserToken(randomToken, user.getID());
 
-                responseNode.put("userType", userType);
+                responseNode.put("userType", user.getRole());
                 responseNode.put("userToken", randomToken);
                 response.setStatus(HttpServletResponse.SC_OK);
             }
@@ -62,7 +58,7 @@ public class Authentication extends HttpServlet {
             }
         }
         else {
-            responseNode.put("error", "Invalid API access token.");
+            responseNode.put("error", Utils.INVALID_API_TOKEN);
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
 

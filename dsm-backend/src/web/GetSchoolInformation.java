@@ -19,37 +19,37 @@ import java.util.List;
 
 @WebServlet(name = "GetSchoolInformation", urlPatterns = {"/api/user/school_information"})
 public class GetSchoolInformation extends HttpServlet {
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+        request.setCharacterEncoding("UTF-8");
+
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode responseNode = mapper.createObjectNode();
 
-        // check access token
-        if(Utils.accessTokenValidation(request)) {
+        // Get user token and validate it
+        String accessToken = Utils.getAuthenticationToken(request);
+        if(accessToken != null && DSMFacade.isTokenValid(accessToken)) {
 
-            String schoolId = request.getParameter("schoolId");
-            int id = Integer.valueOf(schoolId);
-
-            // get school data
-            SchoolInfo schoolInfo = DSMFacade.getSchoolInformation(id);
-
+            SchoolInfo schoolInfo = DSMFacade.getSchoolInformation(1);
             if(schoolInfo!= null) {
+
                 JsonNode infoJson = mapper.convertValue(schoolInfo,JsonNode.class);
                 responseNode.put("schoolInfo",infoJson);
+
                 response.setStatus(HttpServletResponse.SC_OK);
             }
-            else{
-                responseNode.put("error", "Wrong id");
+            else {
+                responseNode.put("error", Utils.ERROR_FETCHING_DATA);
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             }
-
         }
         else {
-            responseNode.put("error", "Invalid API access token.");
+            responseNode.put("error", Utils.INVALID_USER_TOKEN);
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
 

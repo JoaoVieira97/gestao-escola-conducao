@@ -28,10 +28,14 @@ public class GetAnnouncements extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+        request.setCharacterEncoding("UTF-8");
+
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode responseNode = mapper.createObjectNode();
 
-        if(Utils.accessTokenValidation(request)) {
+        // Get user token and validate it
+        String accessToken = Utils.getAuthenticationToken(request);
+        if(accessToken != null && DSMFacade.isTokenValid(accessToken)) {
 
             String filter = request.getParameter("filter");
 
@@ -47,20 +51,20 @@ public class GetAnnouncements extends HttpServlet {
                 announcements = DSMFacade.getRecentAnnouncements();
             }
 
-            if(announcements!= null) {
+            if(announcements != null) {
                 ArrayNode announcementsJSON = mapper.valueToTree(announcements);
                 responseNode.putArray("announcements").addAll(announcementsJSON);
                 response.setStatus(HttpServletResponse.SC_OK);
             }
 
             else{
-                responseNode.put("error", "Can't retrieve announcements");
+                responseNode.put("error", Utils.ERROR_FETCHING_DATA);
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             }
         }
 
         else {
-            responseNode.put("error", "Invalid API access token.");
+            responseNode.put("error", Utils.INVALID_USER_TOKEN);
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
 

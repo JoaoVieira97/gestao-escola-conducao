@@ -17,7 +17,7 @@ public class StudentBean implements StudentBeanLocal {
     /**
      * ORM Persistent Session
      */
-    private PersistentSession session;
+    private static PersistentSession session;
 
     /**
      * Logger for System Output
@@ -29,10 +29,10 @@ public class StudentBean implements StudentBeanLocal {
      * @return PersistentSession
      */
     private PersistentSession getSession() {
-        if (this.session == null) {
+        if (session == null) {
             try {
                 log.info("Creating new persistent session!");
-                this.session = DSMPersistentManager.instance().getSession();
+                session = DSMPersistentManager.instance().getSession();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -40,7 +40,7 @@ public class StudentBean implements StudentBeanLocal {
         else
             log.info("Reusing persistent session!");
 
-        return this.session;
+        return session;
     }
 
     /**
@@ -51,10 +51,7 @@ public class StudentBean implements StudentBeanLocal {
     public List<Student> getStudents() {
 
         try {
-
-            PersistentSession session = this.getSession();
-
-            return (List<Student>) StudentDAO.queryStudent(session,"id>0", "id");
+            return (List<Student>) StudentDAO.queryStudent("id>0", "id");
         } catch (PersistentException e) {
             e.printStackTrace();
         }
@@ -72,10 +69,7 @@ public class StudentBean implements StudentBeanLocal {
 
         try {
 
-            PersistentSession session = this.getSession();
-
-            Student student = StudentDAO.getStudentByORMID(session, studentID);
-            //return Arrays.asList(student.registers.toArray());
+            Student student = StudentDAO.getStudentByORMID(studentID);
             return new ArrayList<Register>(student.registers.getCollection());
 
         } catch (PersistentException e) {
@@ -95,15 +89,12 @@ public class StudentBean implements StudentBeanLocal {
 
         try {
 
-            PersistentSession session = this.getSession();
-
-            Student student = StudentDAO.getStudentByORMID(session, studentID);
+            Student student = StudentDAO.getStudentByORMID(studentID);
             if (student != null) {
-
-                //List<PersonalAnnouncement> announcements = Arrays.asList(student.announcements.toArray());
                 List<PersonalAnnouncement> announcements = new ArrayList<PersonalAnnouncement>(
                         student.announcements.getCollection()
                 );
+
                 return announcements.stream()
                                     .filter(a -> !a.getViewed())
                                     .sorted(Comparator.comparing(Announcement::getTimestamp).reversed())
@@ -128,16 +119,11 @@ public class StudentBean implements StudentBeanLocal {
 
         try {
 
-            PersistentSession session = this.getSession();
-
-            //PersonalAnnouncement pa = (PersonalAnnouncement) AnnouncementDAO.getAnnouncementByORMID(session,announcementID);
-            PersonalAnnouncement pa = PersonalAnnouncementDAO.getPersonalAnnouncementByORMID(session, announcementID);
+            PersonalAnnouncement pa = PersonalAnnouncementDAO.getPersonalAnnouncementByORMID(announcementID);
             if (pa != null){
                 pa.setViewed(true);
 
-                //AnnouncementDAO.save(pa);
-                session.merge(pa);
-                //PersonalAnnouncementDAO.save(pa);
+                PersonalAnnouncementDAO.save(pa);
                 return true;
             }
         } catch (PersistentException e) {
@@ -156,11 +142,8 @@ public class StudentBean implements StudentBeanLocal {
     public List<Exam> getStudentExams(int studentID) {
 
         try {
-
-            PersistentSession session = this.getSession();
-
-            Student student =  StudentDAO.getStudentByORMID(session, studentID);
-            if (student != null) //return Arrays.asList(student.exams.toArray());
+            Student student =  StudentDAO.getStudentByORMID(studentID);
+            if (student != null)
                 return new ArrayList<>(student.exams.getCollection());
 
         } catch (PersistentException e) {

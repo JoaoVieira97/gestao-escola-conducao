@@ -24,56 +24,45 @@ public class RegisterGeneralAnnouncement extends HttpServlet {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode responseNode = mapper.createObjectNode();
 
-        // check access token
-        if(Utils.accessTokenValidation(request)) {
+        // Get user token and validate it
+        String accessToken = Utils.getAuthenticationToken(request);
+        if(accessToken != null && DSMFacade.isTokenValid(accessToken)) {
 
             // get post data
             // ------------------------------------------------------------
-            String data;
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = request.getReader().readLine()) != null) {
-                sb.append(line);
-            }
-            data = sb.toString();
+            Map<String, Object> JSON = Utils.getPostData(mapper, request);
 
-            Map<String, Object> JSON = mapper.readValue(data, Map.class);
+            // parsing data
+            // ------------------------------------------------------------
             String title = (String) JSON.get("title");
             String description = (String) JSON.get("description");
 
             // register announcement
             boolean registered = DSMFacade.registerGeneralAnnouncement(title, description);
             if(registered) {
+
                 responseNode.put("success", registered);
                 response.setStatus(HttpServletResponse.SC_OK);
             }
             else {
-                responseNode.put("error", "Error");
+                responseNode.put("error", Utils.ERROR_FETCHING_DATA);
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             }
         }
         else {
-            responseNode.put("error", "Invalid API access token.");
+            responseNode.put("error", Utils.INVALID_USER_TOKEN);
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
+
 
         response.setContentType("application/json;charset=UTF-8");
         response.getWriter().write(
                 mapper.writerWithDefaultPrettyPrinter().writeValueAsString(responseNode)
         );
-
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String[] url = request.getRequestURI().split("/");
-        String target = url[url.length-1];
-
-        response.setContentType("text/html;charset=UTF-8");
-        response.sendError(
-                HttpServletResponse.SC_NOT_FOUND,
-                "The requested page [" + target + "] was not found."
-        );
 
     }
 }

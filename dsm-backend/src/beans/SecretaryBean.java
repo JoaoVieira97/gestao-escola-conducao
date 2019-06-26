@@ -17,7 +17,7 @@ public class SecretaryBean implements SecretaryBeanLocal{
     /**
      * ORM Persistent Session
      */
-    private PersistentSession session;
+    private static PersistentSession session;
 
     /**
      * Logger for System Output
@@ -29,10 +29,10 @@ public class SecretaryBean implements SecretaryBeanLocal{
      * @return PersistentSession
      */
     private PersistentSession getSession() {
-        if (this.session == null) {
+        if (session == null) {
             try {
                 log.info("Creating new persistent session!");
-                this.session = DSMPersistentManager.instance().getSession();
+                session = DSMPersistentManager.instance().getSession();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -40,7 +40,7 @@ public class SecretaryBean implements SecretaryBeanLocal{
         else
             log.info("Reusing persistent session!");
 
-        return this.session;
+        return session;
     }
 
     /**

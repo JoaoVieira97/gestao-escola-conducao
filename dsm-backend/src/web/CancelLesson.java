@@ -17,40 +17,37 @@ import java.util.Map;
 public class CancelLesson extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+        request.setCharacterEncoding("UTF-8");
+
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode responseNode = mapper.createObjectNode();
 
-        // check access token
-        if(Utils.accessTokenValidation(request)) {
+        // Get user token and validate it
+        String accessToken = Utils.getAuthenticationToken(request);
+        if(accessToken != null && DSMFacade.isTokenValid(accessToken)) {
 
             // get post data
             // ------------------------------------------------------------
-            String data;
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = request.getReader().readLine()) != null) {
-                sb.append(line);
-            }
-            data = sb.toString();
+            Map<String, Object> JSON = Utils.getPostData(mapper, request);
 
-            Map<String, Object> JSON = mapper.readValue(data, Map.class);
-
+            // parsing data
+            // ------------------------------------------------------------
             int lessonId = (Integer) JSON.get("lessonId");
 
-            // mark announcement as viewed
+            // cancel lesson
             boolean deleted = DSMFacade.cancelLesson(lessonId);
-
             if(deleted) {
+
                 responseNode.put("success", deleted);
                 response.setStatus(HttpServletResponse.SC_OK);
             }
             else {
-                responseNode.put("error", "Error");
+                responseNode.put("error", Utils.ERROR_FETCHING_DATA);
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             }
         }
         else {
-            responseNode.put("error", "Invalid API access token.");
+            responseNode.put("error", Utils.INVALID_USER_TOKEN);
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
 

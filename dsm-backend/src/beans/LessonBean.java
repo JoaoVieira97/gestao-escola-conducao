@@ -19,7 +19,7 @@ public class LessonBean implements LessonBeanLocal{
     /**
      * ORM Persistent Session
      */
-    private PersistentSession session;
+    private static PersistentSession session;
 
     /**
      * Logger for System Output
@@ -31,10 +31,10 @@ public class LessonBean implements LessonBeanLocal{
      * @return PersistentSession
      */
     private PersistentSession getSession() {
-        if (this.session == null) {
+        if (session == null) {
             try {
                 log.info("Creating new persistent session!");
-                this.session = DSMPersistentManager.instance().getSession();
+                session = DSMPersistentManager.instance().getSession();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -42,7 +42,7 @@ public class LessonBean implements LessonBeanLocal{
         else
             log.info("Reusing persistent session!");
 
-        return this.session;
+        return session;
     }
 
     /**
@@ -55,10 +55,8 @@ public class LessonBean implements LessonBeanLocal{
 
         try {
 
-            PersistentSession session = this.getSession();
-
-            Student student = StudentDAO.getStudentByORMID(session, studentId);
-            if(student != null) // return Arrays.asList(student.lessons.toArray());
+            Student student = StudentDAO.getStudentByORMID(studentId);
+            if(student != null)
                 return new ArrayList<Lesson>(student.lessons.getCollection());
 
         } catch (PersistentException e) {
@@ -200,12 +198,10 @@ public class LessonBean implements LessonBeanLocal{
     public boolean cancelLessonStudent(int lessonId) {
 
         try {
-            PersistentSession session = this.getSession();
-
-            Lesson lesson = LessonDAO.getLessonByORMID(session, lessonId);
+            Lesson lesson = LessonDAO.getLessonByORMID(lessonId);
 
             if(lesson != null)
-                return LessonDAO.deleteAndDissociate(lesson, session);
+                return LessonDAO.deleteAndDissociate(lesson);
 
         } catch (PersistentException e) {
             e.printStackTrace();

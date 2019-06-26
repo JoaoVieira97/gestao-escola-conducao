@@ -18,7 +18,7 @@ public class UserBean implements UserBeanLocal {
     /**
      * ORM Persistent Session
      */
-    private PersistentSession session;
+    private static PersistentSession session;
 
     /**
      * Logger for System Output
@@ -30,10 +30,10 @@ public class UserBean implements UserBeanLocal {
      * @return PersistentSession
      */
     private PersistentSession getSession() {
-        if (this.session == null) {
+        if (session == null) {
             try {
                 log.info("Creating new persistent session!");
-                this.session = DSMPersistentManager.instance().getSession();
+                session = DSMPersistentManager.instance().getSession();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -41,7 +41,7 @@ public class UserBean implements UserBeanLocal {
         else
             log.info("Reusing persistent session!");
 
-        return this.session;
+        return session;
     }
 
     /**
@@ -51,19 +51,13 @@ public class UserBean implements UserBeanLocal {
      * @return
      */
     @Override
-    public String login(String email, String password) {
+    public User login(String email, String password) {
 
         try {
-
-            PersistentSession session = this.getSession();
-
-            User user = UserDAO.loadUserByQuery(session,
+            return UserDAO.loadUserByQuery(
                 "email='"+email+"' AND password='"+password+"'",
                 "ID"
             );
-
-            if (user != null)
-                return user.getRole();
 
         } catch (PersistentException e) {
             e.printStackTrace();
@@ -81,9 +75,7 @@ public class UserBean implements UserBeanLocal {
 
         try {
 
-            PersistentSession session = this.getSession();
-
-            User user = UserDAO.getUserByORMID(session, userId);
+            User user = UserDAO.getUserByORMID(userId);
             if (user != null) return user.getName();
 
         } catch (PersistentException e) {
@@ -101,10 +93,7 @@ public class UserBean implements UserBeanLocal {
     public String getEmail(int userId) {
 
         try {
-
-            PersistentSession session = this.getSession();
-
-            User user = UserDAO.getUserByORMID(session, userId);
+            User user = UserDAO.getUserByORMID(userId);
             if (user != null) return user.getEmail();
 
         } catch (PersistentException e) {
@@ -123,9 +112,7 @@ public class UserBean implements UserBeanLocal {
 
         try {
 
-            PersistentSession session = this.getSession();
-
-            SchoolInfo schoolInfo = SchoolInfoDAO.getSchoolInfoByORMID(session, schoolId);
+            SchoolInfo schoolInfo = SchoolInfoDAO.getSchoolInfoByORMID(schoolId);
             if (schoolInfo != null) return schoolInfo;
 
         } catch (PersistentException e) {
@@ -143,10 +130,7 @@ public class UserBean implements UserBeanLocal {
     public List<Announcement> getAnnouncements(){
 
         try {
-
-            PersistentSession session = this.getSession();
-
-            List<Announcement> all_announcements = (List<Announcement>) AnnouncementDAO.queryAnnouncement(session, "id>0", "timestamp desc");
+            List<Announcement> all_announcements = (List<Announcement>) AnnouncementDAO.queryAnnouncement("id>0", "timestamp desc");
             List<Announcement> general_announcements =
                     all_announcements.stream()
                                      .filter(a -> !(a instanceof PersonalAnnouncement))
@@ -170,9 +154,7 @@ public class UserBean implements UserBeanLocal {
 
         try {
 
-            PersistentSession session = this.getSession();
-
-            List<Announcement> all_announcements = (List<Announcement>) AnnouncementDAO.queryAnnouncement(session, "id>0", "timestamp desc");
+            List<Announcement> all_announcements = (List<Announcement>) AnnouncementDAO.queryAnnouncement("id>0", "timestamp desc");
             List<Announcement> recent_general_announcements =
                     all_announcements.stream()
                             .filter(a -> !(a instanceof PersonalAnnouncement))

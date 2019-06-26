@@ -20,6 +20,7 @@ public class DSMFacade {
 
     /**
      * Get and access to StudentBean features.
+     *
      * @return LessonBeanLocal
      */
     private static UserBeanLocal lookupUserBeanLocal() {
@@ -37,6 +38,7 @@ public class DSMFacade {
 
     /**
      * Get and access to StudentBean features.
+     *
      * @return LessonBeanLocal
      */
     private static StudentBeanLocal lookupStudentBeanLocal() {
@@ -54,6 +56,7 @@ public class DSMFacade {
 
     /**
      * Get and access to LessonBean features.
+     *
      * @return LessonBeanLocal
      */
     private static LessonBeanLocal lookupLessonBeanLocal() {
@@ -70,6 +73,7 @@ public class DSMFacade {
 
     /**
      * Get and access to SecretaryBean features.
+     *
      * @return SecretaryBeanLocal
      */
     private static SecretaryBeanLocal lookupSecretaryBeanLocal() {
@@ -86,9 +90,10 @@ public class DSMFacade {
 
     /**
      * Get and access to LessonBean features.
+     *
      * @return LessonBeanLocal
      */
-   private static RedisBeanLocal lookupRedisBeanLocal() {
+    private static RedisBeanLocal lookupRedisBeanLocal() {
         try {
 
             Context c = new InitialContext();
@@ -101,21 +106,43 @@ public class DSMFacade {
     }
 
 
-    public static void setUserToken(String token, String email) {
 
-        redisBean.setUserToken(token, email);
+    //
+    // REDIS CODE
+    // ------------------------------------------------------------
+    public static void setUserToken(String token, int id) {
+
+        redisBean.setUserToken(token, id);
     }
 
+    public static void removeUserToken(String token) {
+
+        redisBean.removeUserToken(token);
+    }
+
+    public static int getUserIDByToken(String token) {
+
+        return redisBean.getUserIDByToken(token);
+    }
+
+    public static boolean isTokenValid(String token) {
+
+        return redisBean.isTokenValid(token);
+    }
+    // ------------------------------------------------------------
+
+
+
     /**
-     * Authentication a user.
+     * Authentication an user.
      */
-    public static String login(String email, String password) {
+    public static User login(String email, String password) {
 
         return userBean.login(email, password);
     }
 
     /**
-     * Get Name of a user.
+     * Get Name of an user.
      */
     public static String getName(int userId) {
 
@@ -123,7 +150,7 @@ public class DSMFacade {
     }
 
     /**
-     * Get Email of a user.
+     * Get Email of an user.
      */
     public static String getEmail(int userId) {
 
@@ -158,7 +185,7 @@ public class DSMFacade {
     /**
      * Get the list of personal announcements of a specific student.
      */
-    public static List<PersonalAnnouncement> getStudentPersonalAnnouncements(int studentId){
+    public static List<PersonalAnnouncement> getStudentPersonalAnnouncements(int studentId) {
 
         return studentBean.getStudentPersonalAnnouncements(studentId);
     }
@@ -166,7 +193,7 @@ public class DSMFacade {
     /**
      * Set specific student personalAnnouncement as viewed
      */
-    public static boolean viewedPersonalAnnouncement(int announcementID){
+    public static boolean viewedPersonalAnnouncement(int announcementID) {
 
         return studentBean.setPersonalAnnouncementAsViewed(announcementID);
     }
@@ -174,7 +201,7 @@ public class DSMFacade {
     /**
      * Get the list of next practical lessons of a specific student.
      */
-    public static List<Lesson> getStudentNextPracticalLessons(int studentId){
+    public static List<Lesson> getStudentNextPracticalLessons(int studentId) {
 
         return lessonBean.getStudentNextPracticalLessons(studentId);
     }
@@ -182,7 +209,7 @@ public class DSMFacade {
     /**
      * Get the list of next theoretical lessons of a specific student.
      */
-    public static List<TheoreticalLesson> getStudentNextTheoreticalLessons(int studentId){
+    public static List<TheoreticalLesson> getStudentNextTheoreticalLessons(int studentId) {
 
         return lessonBean.getStudentNextTheoreticalLessons(studentId);
     }
@@ -190,7 +217,7 @@ public class DSMFacade {
     /**
      * Get the list of realized themes of a specific student.
      */
-    public static List<TheoreticalLesson> getRealizedThemes(int studentId, int categoryID){
+    public static List<TheoreticalLesson> getRealizedThemes(int studentId, int categoryID) {
 
         return lessonBean.getRealizedThemes(studentId, categoryID);
     }
@@ -198,7 +225,7 @@ public class DSMFacade {
     /**
      * Get the list of exams of a specific student.
      */
-    public static List<Exam> getStudentExams(int studentId){
+    public static List<Exam> getStudentExams(int studentId) {
 
         return studentBean.getStudentExams(studentId);
     }
@@ -206,7 +233,7 @@ public class DSMFacade {
     /**
      * Get the list of next exams of a specific student.
      */
-    public static List<Exam> getStudentNextExams(int studentId){
+    public static List<Exam> getStudentNextExams(int studentId) {
 
         return studentBean.getStudentNextExams(studentId);
     }
@@ -214,7 +241,7 @@ public class DSMFacade {
     /**
      * Get the list of general announcements
      */
-    public static List<Announcement> getAnnouncements(){
+    public static List<Announcement> getAnnouncements() {
 
         return userBean.getAnnouncements();
     }
@@ -222,7 +249,7 @@ public class DSMFacade {
     /**
      * Get the list of most recent general announcements
      */
-    public static List<Announcement> getRecentAnnouncements(){
+    public static List<Announcement> getRecentAnnouncements() {
 
         return userBean.getRecentAnnouncements();
     }
@@ -270,7 +297,7 @@ public class DSMFacade {
     /**
      * Register general announcement
      */
-    public static boolean registerGeneralAnnouncement(String title, String description){
+    public static boolean registerGeneralAnnouncement(String title, String description) {
 
         return secretaryBean.registerGeneralAnnouncement(title, description);
     }
@@ -278,7 +305,7 @@ public class DSMFacade {
     /**
      * Register new student
      */
-    public static boolean registerStudent(String name, String email, String password, String address, String birth, String nif, String cc){
+    public static boolean registerStudent(String name, String email, String password, String address, String birth, String nif, String cc) {
 
         return secretaryBean.registerStudent(name, email, password, address, birth, nif, cc);
     }

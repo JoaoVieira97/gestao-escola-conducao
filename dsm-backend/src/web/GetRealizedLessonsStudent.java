@@ -20,6 +20,7 @@ import java.util.List;
 
 @WebServlet(name = "GetRealizedLessonsStudent", urlPatterns = {"/api/lessons/student"})
 public class GetRealizedLessonsStudent extends HttpServlet {
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String[] url = request.getRequestURI().split("/");
         String target = url[url.length-1];
@@ -33,36 +34,43 @@ public class GetRealizedLessonsStudent extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+        request.setCharacterEncoding("UTF-8");
+
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode responseNode = mapper.createObjectNode();
 
-        // check access token
-        if(Utils.accessTokenValidation(request)) {
+        // Get user token and validate it
+        String accessToken = Utils.getAuthenticationToken(request);
+        if(accessToken != null && DSMFacade.isTokenValid(accessToken)) {
 
-            String studentId = request.getParameter("id");
-            int id = Integer.valueOf(studentId);
+            int id = DSMFacade.getUserIDByToken(accessToken);
+            if(id != -1) {
 
-            // get lessons data
-            List<PracticalLesson> practicalLessons = DSMFacade.getRealizedPracticalLessonsStudent(id);
-            List<TheoreticalLesson> theoreticalLessons = DSMFacade.getRealizedTheoreticalLessonsStudent(id);
+                // get lessons data
+                List<PracticalLesson> practicalLessons = DSMFacade.getRealizedPracticalLessonsStudent(id);
+                List<TheoreticalLesson> theoreticalLessons = DSMFacade.getRealizedTheoreticalLessonsStudent(id);
 
-            if(practicalLessons!= null && theoreticalLessons!= null) {
-                ArrayNode practJSON = mapper.valueToTree(practicalLessons);
-                responseNode.putArray("practicalLessons").addAll(practJSON);
+                if(practicalLessons!= null && theoreticalLessons!= null) {
+                    ArrayNode practJSON = mapper.valueToTree(practicalLessons);
+                    responseNode.putArray("practicalLessons").addAll(practJSON);
 
-                ArrayNode theoJSON = mapper.valueToTree(theoreticalLessons);
-                responseNode.putArray("theoreticalLessons").addAll(theoJSON);
+                    ArrayNode theoJSON = mapper.valueToTree(theoreticalLessons);
+                    responseNode.putArray("theoreticalLessons").addAll(theoJSON);
 
-                response.setStatus(HttpServletResponse.SC_OK);
+                    response.setStatus(HttpServletResponse.SC_OK);
+                }
+                else {
+                    responseNode.put("error", Utils.ERROR_FETCHING_DATA);
+                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                }
             }
-            else{
-                responseNode.put("error", "Wrong id");
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            else {
+                responseNode.put("error", Utils.INVALID_USER_TOKEN);
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             }
-
         }
         else {
-            responseNode.put("error", "Invalid API access token.");
+            responseNode.put("error", Utils.INVALID_USER_TOKEN);
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
 

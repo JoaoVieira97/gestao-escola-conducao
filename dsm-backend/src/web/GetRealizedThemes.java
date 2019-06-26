@@ -24,36 +24,48 @@ public class GetRealizedThemes extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+        request.setCharacterEncoding("UTF-8");
+
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode responseNode = mapper.createObjectNode();
 
-        // check access token
-        if(Utils.accessTokenValidation(request)) {
+        // Get user token and validate it
+        String accessToken = Utils.getAuthenticationToken(request);
+        if(accessToken != null && DSMFacade.isTokenValid(accessToken)) {
 
-            String studentId = request.getParameter("id");
-            int id = Integer.valueOf(studentId);
+            int id = DSMFacade.getUserIDByToken(accessToken);
+            if(id != -1) {
 
-            String categoryId = request.getParameter("category");
-            int catId = Integer.valueOf(categoryId);
+                String categoryId = request.getParameter("category");
+                if(categoryId != null) {
 
-            // get realized themes of a student (são lessons pois tem a data associada)
-            List<TheoreticalLesson> themes = DSMFacade.getRealizedThemes(id,catId);
+                    int catId = Integer.valueOf(categoryId);
 
-            if(themes!= null) {
-                ArrayNode themesJSON = mapper.valueToTree(themes);
-                responseNode.putArray("lessons").addAll(themesJSON);
-                response.setStatus(HttpServletResponse.SC_OK);
+                    // get realized themes of a student (são lessons pois tem a data associada)
+                    // TODO: q é isto?
+                    List<TheoreticalLesson> themes = DSMFacade.getRealizedThemes(id,catId);
+
+                    if(themes!= null) {
+                        ArrayNode themesJSON = mapper.valueToTree(themes);
+                        responseNode.putArray("lessons").addAll(themesJSON);
+                        response.setStatus(HttpServletResponse.SC_OK);
+                    }
+                }
+                else {
+                    responseNode.put("error", Utils.ERROR_FETCHING_DATA);
+                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                }
             }
-            else{
-                responseNode.put("error", "Wrong id");
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            else {
+                responseNode.put("error", Utils.INVALID_USER_TOKEN);
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             }
-
         }
         else {
-            responseNode.put("error", "Invalid API access token.");
+            responseNode.put("error", Utils.INVALID_USER_TOKEN);
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
+
 
         response.setContentType("application/json;charset=UTF-8");
         response.getWriter().write(

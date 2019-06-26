@@ -1,6 +1,9 @@
 package web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import dsm.Lesson;
 import dsm.Student;
 import dsm.DSMFacade;
 import org.orm.PersistentSession;
@@ -20,29 +23,44 @@ public class GetStudents extends javax.servlet.http.HttpServlet {
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response)
             throws javax.servlet.ServletException, IOException {
 
-        String[] url = request.getRequestURI().split("/");
-        String target = url[url.length-1];
-
-        response.setContentType("text/html;charset=UTF-8");
-        response.sendError(
-                HttpServletResponse.SC_NOT_FOUND,
-                "The requested page [" + target + "] was not found."
-        );
     }
 
     @Override
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response)
             throws javax.servlet.ServletException, IOException {
 
+        request.setCharacterEncoding("UTF-8");
 
-        List<Student> students = DSMFacade.getStudents();
         ObjectMapper mapper = new ObjectMapper();
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        mapper.setDateFormat(df);
-        String sJSON = mapper.writeValueAsString(students);
-        sJSON = "{\"success\":true,\"students\":" + sJSON + "}";
-        response.setContentType("application/json;charset=UTF-8");
-        response.getWriter().write(sJSON);
+        ObjectNode responseNode = mapper.createObjectNode();
 
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        mapper.setDateFormat(df);
+
+        // Get user token and validate it
+        String accessToken = Utils.getAuthenticationToken(request);
+        if(accessToken != null && DSMFacade.isTokenValid(accessToken)) {
+
+            List<Student> students = DSMFacade.getStudents();
+            if(students != null) {
+
+                ArrayNode announcementsJSON = mapper.valueToTree(students);
+                responseNode.putArray("students").addAll(announcementsJSON);
+                response.setStatus(HttpServletResponse.SC_OK);
+            }
+            else{
+                responseNode.put("error", Utils.ERROR_FETCHING_DATA);
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            }
+        }
+        else {
+            responseNode.put("error", Utils.INVALID_USER_TOKEN);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        }
+
+        response.setContentType("application/json;charset=UTF-8");
+        response.getWriter().write(
+                mapper.writerWithDefaultPrettyPrinter().writeValueAsString(responseNode)
+        );
     }
 }
