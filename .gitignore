@@ -306,3 +306,5 @@ dsm-backend/out
 docs/vpp/*.bak*
 docs/redis/.*
 out/
+
+__pycache__
