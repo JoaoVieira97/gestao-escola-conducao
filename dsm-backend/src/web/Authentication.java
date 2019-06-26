@@ -54,7 +54,7 @@ public class Authentication extends HttpServlet {
             }
             else {
                 responseNode.put("error", "Wrong credentials");
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             }
         }
         else {
