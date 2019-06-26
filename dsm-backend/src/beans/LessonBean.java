@@ -4,6 +4,7 @@ import dsm.*;
 import org.orm.PersistentException;
 import org.orm.PersistentSession;
 
+import javax.ejb.Local;
 import javax.ejb.Stateless;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,18 +12,29 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+@Local(LessonBeanLocal.class)
 @Stateless(name = "LessonBean")
 public class LessonBean implements LessonBeanLocal{
 
+    /**
+     * ORM Persistent Session
+     */
+    private PersistentSession session;
+
+    /**
+     * Logger for System Output
+     */
     private final static Logger log = Logger.getLogger(LessonBean.class.getName());
 
-    private static PersistentSession session = null;
-
+    /**
+     * Get persistent session if needed
+     * @return PersistentSession
+     */
     private PersistentSession getSession() {
-        if (session == null) {
+        if (this.session == null) {
             try {
                 log.info("Creating new persistent session!");
-                session = DSMPersistentManager.instance().getSession();
+                this.session = DSMPersistentManager.instance().getSession();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -30,7 +42,7 @@ public class LessonBean implements LessonBeanLocal{
         else
             log.info("Reusing persistent session!");
 
-        return session;
+        return this.session;
     }
 
     /**
@@ -43,7 +55,7 @@ public class LessonBean implements LessonBeanLocal{
 
         try {
 
-            session = getSession();
+            PersistentSession session = this.getSession();
 
             Student student = StudentDAO.getStudentByORMID(session, studentId);
             if(student != null) // return Arrays.asList(student.lessons.toArray());
@@ -187,9 +199,8 @@ public class LessonBean implements LessonBeanLocal{
     @Override
     public boolean cancelLessonStudent(int lessonId) {
 
-
         try {
-            session = getSession();
+            PersistentSession session = this.getSession();
 
             Lesson lesson = LessonDAO.getLessonByORMID(session, lessonId);
 
