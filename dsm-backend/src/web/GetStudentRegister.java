@@ -41,7 +41,13 @@ public class GetStudentRegister extends HttpServlet {
         String accessToken = Utils.getAuthenticationToken(request);
         if(accessToken != null && DSMFacade.isTokenValid(accessToken)) {
 
-            int id = DSMFacade.getUserIDByToken(accessToken);
+            int id;
+            String studentID = request.getParameter("studentID");
+            if (studentID != null){
+                id = Integer.parseInt(studentID);
+            } else{
+                id = DSMFacade.getUserIDByToken(accessToken);
+            }
             if(id != -1) {
 
                 List<Register> registers = DSMFacade.getStudentRegisters(id);

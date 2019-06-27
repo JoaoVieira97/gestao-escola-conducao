@@ -128,14 +128,26 @@ public class SecretaryBean implements SecretaryBeanLocal{
                 Exam e = new Exam();
 
                 e.setDescription(description);
-
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
                 Date parsedDate = dateFormat.parse(startTime);
                 Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
-
                 e.setStartTime(timestamp);
 
                 student.exams.add(e);
+
+                PersonalAnnouncement pa = new PersonalAnnouncement();
+
+                pa.setTitle("Exame marcado");
+                SimpleDateFormat output = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                if (description.contains("teórico")){
+                    pa.setDescription("O seu exame teórico foi marcado para " + output.format(parsedDate) + ".");
+                } else {
+                    pa.setDescription("O seu exame prático foi marcado para " + output.format(parsedDate) + ".");
+                }
+                pa.setViewed(false);
+                pa.setTimestamp(new Timestamp(System.currentTimeMillis()));
+                student.announcements.add(pa);
+
                 StudentDAO.save(student);
 
                 return true;

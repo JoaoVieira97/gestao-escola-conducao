@@ -7,7 +7,9 @@ import {
     Header,
     Grid,
     Input,
-    Message
+    Message,
+    Dimmer,
+    Loader
 } from 'semantic-ui-react';
 import { fetchApi } from '../../services/api/index';
 import Routes from "../../services/Routes";
@@ -21,17 +23,70 @@ class RegisterExam extends Component {
         this.state = {
             aluno: undefined,
             data: '',
-            descricao: '',
+            exame: '',
+            categoria: '',
+            
+            exames: [
+                { key: 't', text: 'Exame Teórico', value: 'Exame Teórico' },
+                { key: 'p', text: 'Exame Prático', value: 'Exame Prático' }
+            ],
+            categorias: [],
+
             message: '',
-            error: ''
+            error: '',
+            isLoading: true
         }
     }
 
     componentDidMount(){
+
         this.setState({
             aluno: this.props.location.state.aluno
         })
+
+        fetchApi(
+            'get','/student/registers?studentID=' + this.props.location.state.aluno.id, //TODO Find userID
+            {},  {},
+            this.successFetchRegisters, this.errorHandler
+        );
     }
+
+    /**
+     * Handle the response fetch registers.
+     * @param response
+     */
+    successFetchRegisters = (response) => {
+        
+        const data = response.data;
+        const categorias = []
+
+        data.registers.forEach(function(register) {
+          categorias.push({
+            key: register.category.id,
+            text: 'Categoria ' + register.category.name,
+            value: 'Categoria ' + register.category.name,
+          })
+        });
+
+        this.setState({
+            categorias: categorias,
+            isLoading: false
+        })
+
+    };
+
+    /**
+     * Handle the error.
+     * @param error
+     */
+    errorHandler = (error) => {
+
+        console.log(error);
+        this.setState({
+            isLoading: false
+        })
+
+    };
 
     handleInputChange = (event) => {
 
@@ -46,15 +101,15 @@ class RegisterExam extends Component {
 
     handleSubmit = () => {
 
-        const { descricao, data } = this.state;
-        if(descricao !== '' && data !== '' ) {
+        const { exame, categoria, data } = this.state;
+        if(exame !== '' && categoria !== '' && data !== '' ) {
             
             fetchApi(
                 'post','/secretary/register_student_exam',
                 {
                     studentID: this.state.aluno.id,
                     startTime: this.state.data.replace('T', ' '),
-                    description: this.state.descricao
+                    description: exame + ' - ' + categoria
                 },  {},
                 this.successHandler, this.errorHandler
             );
@@ -83,7 +138,7 @@ class RegisterExam extends Component {
 
 
         sleep(3000).then(() => {
-            this.props.history.push(Routes.REGISTER_STUDENT_EXAM);
+            this.props.history.push(Routes.HOME);
         });
         
     };
@@ -103,11 +158,29 @@ class RegisterExam extends Component {
         
     };
 
+    handleSelectExameChange = (event, data) => {
+        this.setState({
+            exame: data.value
+        })
+    }
+
+    handleSelectCategoriaChange = (event, data) => {
+        this.setState({
+            categoria: data.value
+        })
+    }
+
     render() {
+
+        console.log('exame: ' + this.state.exame)
+        console.log('categoria: ' + this.state.categoria)
 
         return (
             <Container>
 
+                <Dimmer inverted active={this.state.isLoading}>
+                    <Loader>A carregar</Loader>
+                </Dimmer>
                 <Grid centered style={{marginBottom: "65px"}}>
                     <Grid.Column width={10}>
                         <Header 
@@ -119,13 +192,23 @@ class RegisterExam extends Component {
                         </Header>
                         <Segment>
                             <Form>
-                                <Form.Field
-                                    className={(this.state.error && this.state.descricao === '') ? "error field" : "field"}
-                                    control={Input}
-                                    label='Descrição'
-                                    placeholder='Descrição'
-                                    name={"descricao"}
-                                    onChange={this.handleInputChange}
+                                <Form.Select
+                                    className={(this.state.error && this.state.data === '') ? "error field" : "field"}
+                                    fluid 
+                                    label='Tipo de exame'
+                                    options={this.state.exames}
+                                    placeholder='Tipo de exame'
+                                    name={"exame"}
+                                    onChange={this.handleSelectExameChange}
+                                />
+                                <Form.Select
+                                    className={(this.state.error && this.state.data === '') ? "error field" : "field"}
+                                    fluid 
+                                    label='Categoria'
+                                    options={this.state.categorias}
+                                    placeholder='Categoria'
+                                    name={"categoria"}
+                                    onChange={this.handleSelectCategoriaChange}
                                 />
                                 <Form.Field
                                     className={(this.state.error && this.state.data === '') ? "error field" : "field"}
