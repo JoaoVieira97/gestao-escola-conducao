@@ -57,12 +57,6 @@ const StudentItemsMobile = (handleLogout, hideMenu) => {
             <NavLink className="ui item" to="/contacts" onClick={() => hideMenu()}>
                 <p>CONTACTOS</p>
             </NavLink>
-            <NavLink className="ui item" to="/students" onClick={() => hideMenu()}>
-                <p>ALUNOS</p>
-            </NavLink>
-            <NavLink className="ui item" to="/register_general_announcement" onClick={() => hideMenu()}>
-                <p>REGISTAR AVISO</p>
-            </NavLink>
             <div className="right menu">
                 <div className="item">
                     <Button className="ui button" onClick={() => {handleLogout(); hideMenu();}}>
