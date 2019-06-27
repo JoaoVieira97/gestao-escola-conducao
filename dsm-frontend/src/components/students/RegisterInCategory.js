@@ -1,19 +1,9 @@
 import React, {Component} from 'react';
 import {
     Container,
-    Button,
-    Icon,
-    Table,
-    Statistic,
-    Pagination,
-    Segment,
-    Divider,
-    Dropdown,
-    Form,
-    Modal,
     Header
 } from 'semantic-ui-react';
-import { fetchApi } from '../../services/api/index';
+//import { fetchApi } from '../../services/api/index';
 
 
 class RegisterInCategory extends Component {

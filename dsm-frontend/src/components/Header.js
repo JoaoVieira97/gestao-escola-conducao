@@ -28,14 +28,6 @@ const StudentItemsWeb = (handleLogout) => {
                 <i className="address book icon" />
                 <p>CONTACTOS</p>
             </NavLink>
-            <NavLink className="ui item" to="/students" >
-                <i className="users icon" />
-                <p>ALUNOS</p>
-            </NavLink>
-            <NavLink className="ui item" to="/register_general_announcement" >
-                <i className="bell icon" />
-                <p>REGISTAR AVISO</p>
-            </NavLink>
             <div className="right menu">
                 <div className="item">
                     <Button className="ui button" animated onClick={() => handleLogout()}>
@@ -82,6 +74,103 @@ const StudentItemsMobile = (handleLogout, hideMenu) => {
     );
 };
 
+const SecretaryItemsWeb = (handleLogout) => {
+    return (
+        <React.Fragment>
+            <NavLink className="ui item" to="/home" >
+                <i className="users icon" />
+                <p>ALUNOS</p>
+            </NavLink>
+            <NavLink className="ui item" to="/register_general_announcement" >
+                <i className="bell icon" />
+                <p>REGISTAR AVISO</p>
+            </NavLink>
+            <NavLink className="ui item" to="/contacts" >
+                <i className="address book icon" />
+                <p>CONTACTOS</p>
+            </NavLink>
+            <div className="right menu">
+                <div className="item">
+                    <Button className="ui button" animated onClick={() => handleLogout()}>
+                        <Button.Content visible>LOGOUT</Button.Content>
+                        <Button.Content hidden>
+                            <Icon name='close' />
+                        </Button.Content>
+                    </Button>
+                </div>
+            </div>
+        </React.Fragment>
+    );
+};
+
+const SecretaryItemsMobile = (handleLogout, hideMenu) => {
+    return (
+        <React.Fragment>
+            <NavLink className="ui item" to="/home" onClick={() => hideMenu()}>
+                <p>ALUNOS</p>
+            </NavLink>
+            <NavLink className="ui item" to="/register_general_announcement" onClick={() => hideMenu()}>
+                <p>REGISTAR AVISO</p>
+            </NavLink>
+            <NavLink className="ui item" to="/contacts" onClick={() => hideMenu()}>
+                <p>CONTACTOS</p>
+            </NavLink>
+            <div className="right menu">
+                <div className="item">
+                    <Button className="ui button" onClick={() => {handleLogout(); hideMenu();}}>
+                        LOGOUT
+                    </Button>
+                </div>
+            </div>
+        </React.Fragment>
+    );
+};
+
+const InstructorItemsWeb = (handleLogout) => {
+    return (
+        <React.Fragment>
+            <NavLink className="ui item" to="/home" >
+                <i className="users icon" />
+                <p>ALUNOS</p>
+            </NavLink>
+            <NavLink className="ui item" to="/contacts" >
+                <i className="address book icon" />
+                <p>CONTACTOS</p>
+            </NavLink>
+            <div className="right menu">
+                <div className="item">
+                    <Button className="ui button" animated onClick={() => handleLogout()}>
+                        <Button.Content visible>LOGOUT</Button.Content>
+                        <Button.Content hidden>
+                            <Icon name='close' />
+                        </Button.Content>
+                    </Button>
+                </div>
+            </div>
+        </React.Fragment>
+    );
+};
+
+const InstructorItemsMobile = (handleLogout, hideMenu) => {
+    return (
+        <React.Fragment>
+            <NavLink className="ui item" to="/home" onClick={() => hideMenu()}>
+                <p>ALUNOS</p>
+            </NavLink>
+            <NavLink className="ui item" to="/contacts" onClick={() => hideMenu()}>
+                <p>CONTACTOS</p>
+            </NavLink>
+            <div className="right menu">
+                <div className="item">
+                    <Button className="ui button" onClick={() => {handleLogout(); hideMenu();}}>
+                        LOGOUT
+                    </Button>
+                </div>
+            </div>
+        </React.Fragment>
+    );
+};
+
 const DefaultItems = (
     <React.Fragment>
         <NavLink activeClassName="active" className="ui item" to="/home" >INÍCIO</NavLink>
@@ -113,15 +202,28 @@ class Header extends React.Component {
 
         const { visible } = this.state;
 
+        let webMenu = DefaultItems
+        let mobileMenu = DefaultItems
+
+        if (this.props.userType === 'student'){
+            webMenu = StudentItemsWeb(this.handleLogout.bind(this))
+            mobileMenu = StudentItemsMobile(this.handleLogout.bind(this), this.handleHideClick.bind(this))
+        } else if (this.props.userType === 'secretary'){
+            webMenu = SecretaryItemsWeb(this.handleLogout.bind(this))
+            mobileMenu = SecretaryItemsMobile(this.handleLogout.bind(this), this.handleHideClick.bind(this))
+        } else if (this.props.userType === 'instructor'){
+            webMenu = InstructorItemsWeb(this.handleLogout.bind(this))
+            mobileMenu = InstructorItemsMobile(this.handleLogout.bind(this), this.handleHideClick.bind(this))
+        }
+
         return (
             <React.Fragment>
                 {/* WEB */}
                 <Responsive minWidth={993}>
                     <div className="ui fluid secondary pointing menu" style={headerStyle}>
                         <Container>
-                            {this.props.userType === 'student' ?
-                                StudentItemsWeb(this.handleLogout.bind(this)) :
-                                DefaultItems
+                            {
+                                webMenu
                             }
                         </Container>
                     </div>
@@ -152,9 +254,8 @@ class Header extends React.Component {
                             icon={'close' }
                             onClick={this.handleHideClick}
                         />
-                        {this.props.userType === 'student' ?
-                            StudentItemsMobile(this.handleLogout.bind(this), this.handleHideClick.bind(this)) :
-                            DefaultItems
+                        {
+                            mobileMenu
                         }
                     </Sidebar>
                 </Responsive>

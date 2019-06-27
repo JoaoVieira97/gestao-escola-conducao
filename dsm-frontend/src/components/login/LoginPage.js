@@ -51,7 +51,7 @@ class LoginPage extends Component {
      * @param response
      */
     successHandler = (response) => {
-
+        console.log(response)
         Authentication.login(response.data, this.state.rememberMe);
 
         this.props.history.push('/home');

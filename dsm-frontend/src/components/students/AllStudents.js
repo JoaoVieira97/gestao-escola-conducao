@@ -159,56 +159,51 @@ class AllStudents extends Component {
         ];
 
         const studentsRows = _.map(students, item => (
-            <Modal 
-                trigger={<Table.Row
-                    key={item.id}
-                >
-                    <Table.Cell>{item.id}</Table.Cell>
-                    <Table.Cell>{item.name}</Table.Cell>
-                    <Table.Cell>{item.email}</Table.Cell>
-                    <Table.Cell collapsing>
-                        <Button
-                        >
-                            Gerir
-                        </Button>
-                    </Table.Cell>
-                </Table.Row>} 
-                closeIcon
-                size='small'
-            >
-                <Header icon='user' content={item.name} />
-                <Modal.Content>
-                    <Button
-                        icon
-                        labelPosition='left'
-                        color='grey'
-                        style={{marginRight: '55px'}}
-                        onClick={() => this.props.history.push('/students/register_category', {aluno: item})}
+            <Table.Row key={item.id}>
+                <Table.Cell>{item.id}</Table.Cell>
+                <Table.Cell>{item.name}</Table.Cell>
+                <Table.Cell>{item.email}</Table.Cell>
+                <Table.Cell collapsing>
+                    <Modal 
+                        trigger={<Button>Gerir</Button>} 
+                        closeIcon
+                        size='small'
                     >
-                        <Icon name='file alternate outline yellow'/>
-                        <p>Registar em categoria</p>
-                    </Button>
-                    <Button
-                        icon
-                        labelPosition='left'
-                        color='grey'
-                        style={{marginRight: '55px'}}
-                        onClick={() => this.props.history.push('/students/register_payment', {aluno: item})}
-                    >
-                        <Icon name='euro sign yellow'/>
-                        <p>Registar fatura</p>
-                    </Button>
-                    <Button
-                        icon
-                        labelPosition='left'
-                        color='grey'
-                        onClick={() => this.props.history.push('/students/register_exam', {aluno: item})}
-                    >
-                        <Icon name='clipboard outline yellow'/>
-                        <p>Registar exame</p>
-                    </Button>
-                </Modal.Content>
-            </Modal>
+                        <Header icon='user' content={item.name} />
+                        <Modal.Content>
+                            <Button
+                                icon
+                                labelPosition='left'
+                                color='grey'
+                                style={{marginRight: '55px'}}
+                                onClick={() => this.props.history.push('/students/register_category', {aluno: item})}
+                            >
+                                <Icon name='file alternate outline' color='yellow'/>
+                                <p>Registar em categoria</p>
+                            </Button>
+                            <Button
+                                icon
+                                labelPosition='left'
+                                color='grey'
+                                style={{marginRight: '55px'}}
+                                onClick={() => this.props.history.push('/students/register_payment', {aluno: item})}
+                            >
+                                <Icon name='euro sign' color='yellow'/>
+                                <p>Registar fatura</p>
+                            </Button>
+                            <Button
+                                icon
+                                labelPosition='left'
+                                color='grey'
+                                onClick={() => this.props.history.push('/students/register_exam', {aluno: item})}
+                            >
+                                <Icon name='clipboard outline' color='yellow'/>
+                                <p>Registar exame</p>
+                            </Button>
+                        </Modal.Content>
+                    </Modal>
+                </Table.Cell>
+            </Table.Row>
         ));
 
         return (

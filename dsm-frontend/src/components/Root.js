@@ -71,6 +71,35 @@ const Root = ({ store }) => {
                 <Footer />
             </BrowserRouter>
         ),
+        secretary: (
+            <BrowserRouter>
+                <Header userType={'secretary'} />
+                <Switch>
+                    <PrivateRoute exact path="/home" component={AllStudents} />
+                    <PrivateRoute exact path="/students/register_student" component={RegisterStudent} />
+                    <PrivateRoute exact path="/students/register_category" component={RegisterInCategory} />
+                    <PrivateRoute exact path="/students/register_exam" component={RegisterExam} />
+                    <PrivateRoute exact path="/students/register_payment" component={RegisterPayment} />
+                    <PrivateRoute exact path="/register_general_announcement" component={RegisterGeneralAnnouncement} />
+                    <Route exact path="/contacts" render={ props => <ErrorPage {...props} />} />
+                    <Redirect from="/" exact to="/home" />
+                    <Route path="/" render={ props => <ErrorPage {...props} />} />
+                </Switch>
+                <Footer />
+            </BrowserRouter>
+        ),
+        instructor: (
+            <BrowserRouter>
+                <Header userType={'instructor'} />
+                <Switch>
+                    <PrivateRoute exact path="/home" component={AllStudents} />
+                    <Route exact path="/contacts" render={ props => <ErrorPage {...props} />} />
+                    <Redirect from="/" exact to="/home" />
+                    <Route path="/" render={ props => <ErrorPage {...props} />} />
+                </Switch>
+                <Footer />
+            </BrowserRouter>
+        ),
         default: (
             <BrowserRouter>
                 <Header userType={'default'} />
@@ -92,8 +121,12 @@ const Root = ({ store }) => {
             content = routesByUser.student;
             break;
 
+        case 'ROLE_SECRETARY':
+            content = routesByUser.secretary;
+            break;
+            
         case 'ROLE_INSTRUCTOR':
-            content = routesByUser.student;
+            content = routesByUser.instructor;
             break;
 
         default:
