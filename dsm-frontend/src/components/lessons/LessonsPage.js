@@ -88,7 +88,7 @@ class LessonsPage extends Component {
         });
 
         fetchApi(
-            'get','/lessons/student?id=1',
+            'get','/lessons/student',
             {},  {},
             this.successFetchLessons, this.errorFetchLessons
         );
@@ -107,7 +107,7 @@ class LessonsPage extends Component {
         });
 
         fetchApi(
-            'get','/student/registers?id=1',
+            'get','/student/registers',
             {},  {},
             this.successFetchRegisters, this.errorFetchRegisters
         );
@@ -181,7 +181,7 @@ class LessonsPage extends Component {
         });
 
         fetchApi(
-            'get','/student/next_practical_lessons?id=1',
+            'get','/student/next_practical_lessons',
             {},  {},
             this.successFetchNextPracticalLessons, this.errorFetchNextPracticalLessons
         );
@@ -236,6 +236,10 @@ class LessonsPage extends Component {
             });
         }
 
+        practicalsCategoryChoosed.sort(function(l1, l2) {
+            return new Date(l1.startTime) - new Date(l2.startTime);
+        });
+
         await this.setState({
             allNextPracticalLessons: response.data.lessons,
             showPracticalLessons: practicalsCategoryChoosed,
@@ -245,7 +249,7 @@ class LessonsPage extends Component {
         // FAZER SEMPRE QUE MUDAR A CATEGORIA SELECIONADA (handleCategoryClicked)
         //Este fetch é o ultimo e poe o isLoading = false
         fetchApi(
-            'get','/student/realized_themes?id=1&category='+this.state.categoryChoosedId,
+            'get','/student/realized_themes?category='+this.state.categoryChoosedId,
             {},  {},
             this.successFetchRealizedThemes, this.errorFetchRealizedThemes
         );
@@ -258,7 +262,22 @@ class LessonsPage extends Component {
      */
     successFetchRealizedThemes = (response) => {
 
-        const themes = response.data.lessons;
+        let themes = response.data.lessons;
+
+        //ordenar as aulas por ordem alfabética dos temas
+
+        themes.sort(function(l1, l2) {
+            return new Date(l1.startTime) - new Date(l2.startTime);
+        });
+
+        themes.forEach( lesson => {
+
+            lesson.themes.collection.sort(function(t1, t2){
+                if(t1.name < t2.name) { return -1; }
+                if(t1.name > t2.name) { return 1; }
+                return 0;
+            });
+        });
 
         this.setState({
             themesRealized: themes,
@@ -353,6 +372,17 @@ class LessonsPage extends Component {
             categoryChoosedName: data.name,
         });
 
+        let limit = this.state.maxTimeToCancel.split(":");
+        let amount,  unit;
+
+        if( (amount = parseInt(limit[0],10)) > 0) unit = 'hours';
+        else {
+            amount = parseInt(limit[1],10);
+            unit= 'minutes';
+        }
+
+        let dateLimitCancel = moment().add(amount,unit).format();
+
         let categoryChoosed = this.state.allCategories.filter(category => (category.name === data.name));
         let categoryId = categoryChoosed ? categoryChoosed[0].id : -1 ;
 
@@ -366,23 +396,36 @@ class LessonsPage extends Component {
                 for (let i = 0; i < categories.length; i++) {
 
                     if (categories[i].id === categoryId) {
+
+                        const practDateSplit = practLesson.startTime.split(/[/ ]/);
+
+                        let isoPractDate = practDateSplit[2] + "-" + practDateSplit[1] + "-" +
+                            practDateSplit[0] + "T" + practDateSplit[3];
+
+                        let canCancel = moment(isoPractDate).isAfter(dateLimitCancel);
+
                         practicalsCategoryChoosed.push({
                             id: practLesson.id,
                             startTime: practLesson.startTime,
                             duration: practLesson.duration,
+                            canCancel: canCancel,
                         });
                     }
                 }
             });
         }
 
-        this.setState({
+        practicalsCategoryChoosed.sort(function(l1, l2) {
+            return new Date(l1.startTime) - new Date(l2.startTime);
+        });
+
+        await this.setState({
             categoryChoosedId: categoryId,
             showPracticalLessons: practicalsCategoryChoosed,
         });
 
         fetchApi(
-            'get','/student/realized_themes?id=1&category='+categoryId,
+            'get','/student/realized_themes?category='+categoryId,
             {},  {},
             this.successFetchRealizedThemes, this.errorFetchRealizedThemes
         );
@@ -420,7 +463,7 @@ class LessonsPage extends Component {
             });
 
             fetchApi(
-                'get','/student/next_theoretical_lessons?id=1',
+                'get','/student/next_theoretical_lessons',
                 {},  {},
                 this.successFetchNextTheoreticalLessons, this.errorFetchNextTheoreticalLessons
             );
@@ -486,6 +529,18 @@ class LessonsPage extends Component {
             });
         }
 
+        theoreticalsCategoryChoosed.sort(function(l1, l2) {
+            return new Date(l1.startTime) - new Date(l2.startTime);
+        });
+
+        theoreticalsCategoryChoosed.forEach( lesson => {
+            lesson.themes.sort(function(t1, t2){
+                if(t1.name < t2.name) { return -1; }
+                if(t1.name > t2.name) { return 1; }
+                return 0;
+            });
+        });
+
         this.setState({
             nextTheoreticalLessons: theoreticalsCategoryChoosed,
             tableRealizedTheoLessons: false,
@@ -536,7 +591,7 @@ class LessonsPage extends Component {
         if(response.data.success){
             //refresh page -> fetch lessons
             fetchApi(
-                'get','/lessons/student?id=1',
+                'get','/lessons/student',
                 {},  {},
                 this.successFetchLessons, this.errorFetchLessons
             );
@@ -560,7 +615,7 @@ class LessonsPage extends Component {
 
 
     render() {
-        const { categoryChoosedName, allCategories } = this.state;
+        const { categoryChoosedName, allCategories, showPracticalLessons } = this.state;
 
         let categories;
         categories = (
@@ -577,16 +632,18 @@ class LessonsPage extends Component {
             })
         );
 
-        const next_lessons = this.state.showPracticalLessons;
-        next_lessons.sort(function(e1, e2) {
-            return new Date(e1.startTime) - new Date(e2.startTime);
-        });
-
         const nextPracticalLessons = (
             <div className={"ui fluid card grey"}>
                 <Card.Content>
                     <Card.Header>
-                        <Button floated='right' color={'black'}> MARCAR AULA </Button>
+                        <Button floated='right'
+                                color={'black'}
+                                onClick={() => this.props.history.push({
+                                    pathname: '/lessons/mark_lesson',
+                                    data: this.state.categoryChoosedName,
+                                })}
+                        > MARCAR AULA
+                        </Button>
                         <Icon.Group style={{marginRight: "8px"}}>
                             <Icon color='grey' name='calendar' />
                         </Icon.Group>
@@ -595,8 +652,8 @@ class LessonsPage extends Component {
                 </Card.Content>
                 <Card.Content>
                     <List divided>
-                        {(next_lessons.length > 0) ?
-                            next_lessons.map(lesson => (
+                        {(showPracticalLessons.length > 0) ?
+                            showPracticalLessons.map(lesson => (
                                 <List.Item key={lesson.id} style={{marginBottom: "10px"}}>
 
                                     <Modal trigger={
@@ -835,7 +892,6 @@ class LessonsPage extends Component {
                                                 header={'Registo de aulas teóricas'}
                                                 content={'Não há registo de aulas teóricas futuras.'}
                                             />
-
                                 }
                             </Grid.Column>
                         </Grid>
