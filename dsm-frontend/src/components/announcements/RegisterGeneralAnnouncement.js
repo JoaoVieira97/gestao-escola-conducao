@@ -18,8 +18,8 @@ class RegisterGeneralAnnouncement extends Component {
         super(props);
 
         this.state = {
-            titulo: '',
-            descricao: '',
+            title: '',
+            description: '',
             message: '',
             error: ''
         };
@@ -39,14 +39,14 @@ class RegisterGeneralAnnouncement extends Component {
 
     handleSubmit = async () => {
 
-        const { titulo, descricao } = this.state;
-        if(titulo !== '' && descricao !== '') {
+        const { title, description } = this.state;
+        if(title !== '' && description !== '') {
             
             fetchApi(
                 'post','/secretary/register_general_announcement',
                 {
-                    title: titulo,
-                    description: descricao
+                    title: title,
+                    description: description
                 },  {},
                 this.successHandler, this.errorHandler
             );
@@ -110,18 +110,18 @@ class RegisterGeneralAnnouncement extends Component {
                         <Segment>
                             <Form>
                                 <Form.Field
-                                    className={(this.state.error && this.state.titulo === '') ? "error field" : "field"}
+                                    className={(this.state.error && this.state.title === '') ? "error field" : "field"}
                                     control={Input}
                                     label='Título do aviso'
                                     placeholder='Título'
-                                    name={"titulo"}
+                                    name={"title"}
                                     onChange={this.handleInputChange}
                                 />
                                 <Form.TextArea
-                                    className={(this.state.error && this.state.descricao === '') ? "error field" : "field"}
+                                    className={(this.state.error && this.state.description === '') ? "error field" : "field"}
                                     label='Descrição do aviso'
                                     placeholder='Descrição'
-                                    name={"descricao"}
+                                    name={"description"}
                                     onChange={this.handleInputChange}
                                 />
                                 <Button 

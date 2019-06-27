@@ -33,7 +33,13 @@ public class GetPersonalInformation extends HttpServlet {
         String accessToken = Utils.getAuthenticationToken(request);
         if(accessToken != null && DSMFacade.isTokenValid(accessToken)) {
 
-            int id = DSMFacade.getUserIDByToken(accessToken);
+            int id;
+            String studentID = request.getParameter("studentID");
+            if (studentID != null){
+                id = Integer.parseInt(studentID);
+            } else{
+                id = DSMFacade.getUserIDByToken(accessToken);
+            }
             if(id != -1) {
 
                 // TODO: buscar apenas uma vez os dois primeiros dados pelos menos

@@ -90,7 +90,7 @@ class LoginPage extends Component {
                     <img
                         src={require("../../images/logo.png")}
                         className="ui medium centered image"
-                        style={{marginBottom: "20px"}}
+                        style={{marginBottom: "20px", marginTop: "60px"}}
                         alt={"logo"}
                     />
                     <div className="ui stacked segment left aligned">
