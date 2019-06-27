@@ -9,7 +9,9 @@ import {
     Segment,
     Divider,
     Dropdown,
-    Form
+    Form,
+    Modal,
+    Header
 } from 'semantic-ui-react';
 import _ from 'lodash';
 import { fetchApi } from '../../services/api/index';
@@ -157,11 +159,56 @@ class AllStudents extends Component {
         ];
 
         const studentsRows = _.map(students, item => (
-            <Table.Row key={item.id}>
-                <Table.Cell>{item.id}</Table.Cell>
-                <Table.Cell>{item.name}</Table.Cell>
-                <Table.Cell>{item.email}</Table.Cell>
-            </Table.Row>
+            <Modal 
+                trigger={<Table.Row
+                    key={item.id}
+                >
+                    <Table.Cell>{item.id}</Table.Cell>
+                    <Table.Cell>{item.name}</Table.Cell>
+                    <Table.Cell>{item.email}</Table.Cell>
+                    <Table.Cell collapsing>
+                        <Button
+                        >
+                            Gerir
+                        </Button>
+                    </Table.Cell>
+                </Table.Row>} 
+                closeIcon
+                size='small'
+            >
+                <Header icon='user' content={item.name} />
+                <Modal.Content>
+                    <Button
+                        icon
+                        labelPosition='left'
+                        color='grey'
+                        style={{marginRight: '55px'}}
+                        onClick={() => this.props.history.push('/students/register_category', {aluno: item})}
+                    >
+                        <Icon name='file alternate outline yellow'/>
+                        <p>Registar em categoria</p>
+                    </Button>
+                    <Button
+                        icon
+                        labelPosition='left'
+                        color='grey'
+                        style={{marginRight: '55px'}}
+                        onClick={() => this.props.history.push('/students/register_payment', {aluno: item})}
+                    >
+                        <Icon name='euro sign yellow'/>
+                        <p>Registar fatura</p>
+                    </Button>
+                    <Button
+                        icon
+                        labelPosition='left'
+                        color='grey'
+                        onClick={() => this.props.history.push('/students/register_exam', {aluno: item})}
+                    >
+                        <Icon name='clipboard outline yellow'/>
+                        <p>Registar exame</p>
+                    </Button>
+                </Modal.Content>
+            </Modal>
         ));
 
         return (
@@ -188,7 +235,7 @@ class AllStudents extends Component {
                             <Button icon labelPosition='left'
                                     size='small' color='grey'
                                     style={{marginTop: '10px', marginLeft: '5px'}}
-                                    onClick={() => this.props.history.push('/home/register_student')}
+                                    onClick={() => this.props.history.push('/students/register_student')}
                             >
                                 <Icon name='user' />
                                 <p>Adicionar</p>
@@ -228,6 +275,8 @@ class AllStudents extends Component {
                                     sorted={_column === 'email' ? _direction : null}
                                     onClick={this.handleSort('email')}>Email
                                 </Table.HeaderCell>
+                                <Table.HeaderCell>
+                                </Table.HeaderCell>
                             </Table.Row>
                         </Table.Header>
                         <Table.Body>
@@ -235,7 +284,7 @@ class AllStudents extends Component {
                         </Table.Body>
                         <Table.Footer>
                             <Table.Row>
-                                <Table.HeaderCell colSpan='3'>
+                                <Table.HeaderCell colSpan='4'>
                                     <Pagination
                                         firstItem={null}
                                         lastItem={null}

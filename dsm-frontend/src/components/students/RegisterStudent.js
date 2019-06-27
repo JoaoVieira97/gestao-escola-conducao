@@ -38,7 +38,6 @@ class RegisterStudent extends Component {
         const value = input.value;
 
         this.setState({
-            loginError: false,
             [input.name]: value
         });
 

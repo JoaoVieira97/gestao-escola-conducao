@@ -8,6 +8,8 @@ import javax.ejb.Local;
 import javax.ejb.Stateless;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Logger;
 
 @Local(SecretaryBeanLocal.class)
@@ -103,6 +105,42 @@ public class SecretaryBean implements SecretaryBeanLocal{
             StudentDAO.save(s);
             return true;
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    /**
+     * Register student exame
+     * @param studentID
+     * @param description
+     * @param startTime
+     * @return
+     */
+    @Override
+    public boolean registerStudentExam(int studentID, String description, String startTime){
+        try {
+            Student student =  StudentDAO.getStudentByORMID(studentID);
+            if (student != null){
+
+                Exam e = new Exam();
+
+                e.setDescription(description);
+
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+                Date parsedDate = dateFormat.parse(startTime);
+                Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
+
+                e.setStartTime(timestamp);
+
+                student.exams.add(e);
+                StudentDAO.save(student);
+
+                return true;
+
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

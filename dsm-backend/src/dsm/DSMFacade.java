@@ -310,4 +310,12 @@ public class DSMFacade {
         return secretaryBean.registerStudent(name, email, password, address, birth, nif, cc);
     }
 
+    /**
+     * Register new student exam
+     */
+    public static boolean registerStudentExam(int studentID, String description, String startTime) {
+
+        return secretaryBean.registerStudentExam(studentID, description, startTime);
+    }
+
 }

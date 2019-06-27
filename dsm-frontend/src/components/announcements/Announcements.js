@@ -105,10 +105,10 @@ class Announcements extends Component {
                                 style={{color: 'grey'}}
                                 onClick={() => this.props.history.push('/home')}
                             >
-                                Ínicio
+                                Início
                             </Breadcrumb.Section>
                             <Breadcrumb.Divider icon='right angle' />
-                            <Breadcrumb.Section active>Anúncios gerais</Breadcrumb.Section>
+                            <Breadcrumb.Section active>Avisos gerais</Breadcrumb.Section>
                         </Breadcrumb>
 
                     </Grid.Column>
