@@ -32,6 +32,7 @@ import RegisterInCategory from './students/RegisterInCategory';
 import RegisterExam from './students/RegisterExam';
 import RegisterPayment from './students/RegisterPayment';
 import MarkLesson from "./lessons/MarkLesson";
+import InstructorHome from "./instructor/InstructorHome";
 
 
 
@@ -89,8 +90,10 @@ const Root = ({ store }) => {
             <BrowserRouter>
                 <Header userType={'instructor'} />
                 <Switch>
-                    <PrivateRoute exact path={Routes.HOME} component={AllStudents} />
+                    <PrivateRoute exact path={Routes.HOME} component={InstructorHome} />
+                    <PrivateRoute exact path={Routes.STUDENTS} component={AllStudents} />
                     <Route exact path={Routes.CONTACTS} render={ props => <ErrorPage {...props} />} />
+                    <Redirect from="/home" exact to={Routes.STUDENTS} />
                     <Redirect from="/" exact to={Routes.HOME} />
                     <Route path="/" render={ props => <ErrorPage {...props} />} />
                 </Switch>

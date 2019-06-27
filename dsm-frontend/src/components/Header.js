@@ -131,12 +131,16 @@ const InstructorItemsWeb = (handleLogout) => {
     return (
         <React.Fragment>
             <NavLink className="ui item" to={Routes.HOME} >
-                <i className="users icon" />
-                <p>ALUNOS</p>
+                <i className="home icon" />
+                <p>INÍCIO</p>
             </NavLink>
-            <NavLink className="ui item" to={Routes.CONTACTS} >
-                <i className="address book icon" />
-                <p>CONTACTOS</p>
+            <NavLink className="ui item" to={Routes.STUDENTS} >
+                <i className="users icon" />
+                <p>OS MEUS ALUNOS</p>
+            </NavLink>
+            <NavLink className="ui item" to={Routes.LESSONS} >
+                <i className="calendar alternate icon" />
+                <p>AS MINHAS AULAS</p>
             </NavLink>
             <div className="right menu">
                 <div className="item">
@@ -228,7 +232,7 @@ class Header extends React.Component {
         return (
             <React.Fragment>
                 {/* WEB */}
-                <Responsive minWidth={993}>
+                <Responsive minWidth={768}>
                     <div className="ui fluid secondary pointing menu" style={headerStyle}>
                         <Container>
                             {
@@ -238,7 +242,7 @@ class Header extends React.Component {
                     </div>
                 </Responsive>
                 {/* MOBILE */}
-                <Responsive maxWidth={992}>
+                <Responsive maxWidth={767}>
                     <Menu secondary style={headerStyle}>
                         <Menu.Item
                             style={{paddingLeft: '15px', paddingTop:' 15px'}}
