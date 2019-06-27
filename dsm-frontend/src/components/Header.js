@@ -9,22 +9,27 @@ import {
 import Authentication from '../services/session/Authentication';
 import {headerStyle} from "../styles/styles";
 
+// DSM ROUTES
+import Routes from '../services/Routes';
+
+
+
 const StudentItemsWeb = (handleLogout) => {
     return (
         <React.Fragment>
-            <NavLink activeClassName="active" className="ui item" to="/home" >
+            <NavLink activeClassName="active" className="ui item" to={Routes.HOME} >
                 <i className="home icon" />
                 <p>INÍCIO</p>
             </NavLink>
-            <NavLink className="ui item" to="/lessons">
+            <NavLink className="ui item" to={Routes.LESSONS}>
                 <i className="calendar alternate icon" />
                 <p>AULAS</p>
             </NavLink>
-            <NavLink className="ui item" to="/payments">
+            <NavLink className="ui item" to={Routes.PAYMENTS}>
                 <i className="euro icon" />
                 <p>PAGAMENTOS</p>
             </NavLink>
-            <NavLink className="ui item" to="/contacts" >
+            <NavLink className="ui item" to={Routes.CONTACTS}>
                 <i className="address book icon" />
                 <p>CONTACTOS</p>
             </NavLink>
@@ -45,16 +50,16 @@ const StudentItemsWeb = (handleLogout) => {
 const StudentItemsMobile = (handleLogout, hideMenu) => {
     return (
         <React.Fragment>
-            <NavLink className="ui item" to="/home" onClick={() => hideMenu()}>
+            <NavLink className="ui item" to={Routes.HOME} onClick={() => hideMenu()}>
                 <p>INÍCIO</p>
             </NavLink>
-            <NavLink className="ui item" to="/lessons" onClick={() => hideMenu()}>
+            <NavLink className="ui item" to={Routes.LESSONS} onClick={() => hideMenu()}>
                 <p>AULAS</p>
             </NavLink>
-            <NavLink className="ui item" to="/payments" onClick={() => hideMenu()}>
+            <NavLink className="ui item"  to={Routes.PAYMENTS} onClick={() => hideMenu()}>
                 <p>PAGAMENTOS</p>
             </NavLink>
-            <NavLink className="ui item" to="/contacts" onClick={() => hideMenu()}>
+            <NavLink className="ui item" to={Routes.CONTACTS} onClick={() => hideMenu()}>
                 <p>CONTACTOS</p>
             </NavLink>
             <div className="right menu">
@@ -71,15 +76,15 @@ const StudentItemsMobile = (handleLogout, hideMenu) => {
 const SecretaryItemsWeb = (handleLogout) => {
     return (
         <React.Fragment>
-            <NavLink className="ui item" to="/home" >
+            <NavLink className="ui item" to={Routes.HOME} >
                 <i className="users icon" />
                 <p>ALUNOS</p>
             </NavLink>
-            <NavLink className="ui item" to="/register_general_announcement" >
+            <NavLink className="ui item" to={Routes.REGISTER_GENERAL_ANNOUNCEMENT}>
                 <i className="bell icon" />
                 <p>REGISTAR AVISO</p>
             </NavLink>
-            <NavLink className="ui item" to="/contacts" >
+            <NavLink className="ui item" to={Routes.CONTACTS} >
                 <i className="address book icon" />
                 <p>CONTACTOS</p>
             </NavLink>
@@ -100,13 +105,13 @@ const SecretaryItemsWeb = (handleLogout) => {
 const SecretaryItemsMobile = (handleLogout, hideMenu) => {
     return (
         <React.Fragment>
-            <NavLink className="ui item" to="/home" onClick={() => hideMenu()}>
+            <NavLink className="ui item" to={Routes.HOME} onClick={() => hideMenu()}>
                 <p>ALUNOS</p>
             </NavLink>
-            <NavLink className="ui item" to="/register_general_announcement" onClick={() => hideMenu()}>
+            <NavLink className="ui item" to={Routes.REGISTER_GENERAL_ANNOUNCEMENT} onClick={() => hideMenu()}>
                 <p>REGISTAR AVISO</p>
             </NavLink>
-            <NavLink className="ui item" to="/contacts" onClick={() => hideMenu()}>
+            <NavLink className="ui item" to={Routes.CONTACTS} onClick={() => hideMenu()}>
                 <p>CONTACTOS</p>
             </NavLink>
             <div className="right menu">
@@ -123,11 +128,11 @@ const SecretaryItemsMobile = (handleLogout, hideMenu) => {
 const InstructorItemsWeb = (handleLogout) => {
     return (
         <React.Fragment>
-            <NavLink className="ui item" to="/home" >
+            <NavLink className="ui item" to={Routes.HOME} >
                 <i className="users icon" />
                 <p>ALUNOS</p>
             </NavLink>
-            <NavLink className="ui item" to="/contacts" >
+            <NavLink className="ui item" to={Routes.CONTACTS} >
                 <i className="address book icon" />
                 <p>CONTACTOS</p>
             </NavLink>
@@ -148,10 +153,10 @@ const InstructorItemsWeb = (handleLogout) => {
 const InstructorItemsMobile = (handleLogout, hideMenu) => {
     return (
         <React.Fragment>
-            <NavLink className="ui item" to="/home" onClick={() => hideMenu()}>
+            <NavLink className="ui item" to={Routes.HOME} onClick={() => hideMenu()}>
                 <p>ALUNOS</p>
             </NavLink>
-            <NavLink className="ui item" to="/contacts" onClick={() => hideMenu()}>
+            <NavLink className="ui item" to={Routes.CONTACTS} onClick={() => hideMenu()}>
                 <p>CONTACTOS</p>
             </NavLink>
             <div className="right menu">
@@ -167,9 +172,9 @@ const InstructorItemsMobile = (handleLogout, hideMenu) => {
 
 const DefaultItems = (
     <React.Fragment>
-        <NavLink activeClassName="active" className="ui item" to="/home" >INÍCIO</NavLink>
-        <NavLink className="ui item" to="/categories" >CATEGORIAS</NavLink>
-        <NavLink className="ui item" to="/contacts" >CONTACTOS</NavLink>
+        <NavLink activeClassName="active" className="ui item" to={Routes.HOME} >INÍCIO</NavLink>
+        <NavLink className="ui item" to={Routes.CATEGORIES} >CATEGORIAS</NavLink>
+        <NavLink className="ui item" to={Routes.CONTACTS} >CONTACTOS</NavLink>
     </React.Fragment>
 );
 
@@ -196,8 +201,8 @@ class Header extends React.Component {
 
         const { visible } = this.state;
 
-        let webMenu = DefaultItems
-        let mobileMenu = DefaultItems
+        let webMenu = DefaultItems;
+        let mobileMenu = DefaultItems;
 
         if (this.props.userType === 'student'){
             webMenu = StudentItemsWeb(this.handleLogout.bind(this))

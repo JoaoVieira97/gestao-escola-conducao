@@ -16,6 +16,7 @@ import {
 import _ from 'lodash';
 import { fetchApi } from '../../services/api/index';
 import {StudentFilter} from "./StudentFilter";
+import Routes from "../../services/Routes";
 
 
 
@@ -186,7 +187,7 @@ class AllStudents extends Component {
                                 labelPosition='left'
                                 color='grey'
                                 style={{marginRight: '55px'}}
-                                onClick={() => this.props.history.push('/students/register_payment', {aluno: item})}
+                                onClick={() => this.props.history.push(Routes.REGISTER_STUDENT, {aluno: item})}
                             >
                                 <Icon name='euro sign' color='yellow'/>
                                 <p>Registar fatura</p>
@@ -230,7 +231,7 @@ class AllStudents extends Component {
                             <Button icon labelPosition='left'
                                     size='small' color='grey'
                                     style={{marginTop: '10px', marginLeft: '5px'}}
-                                    onClick={() => this.props.history.push('/students/register_student')}
+                                    onClick={() => this.props.history.push(Routes.REGISTER_STUDENT)}
                             >
                                 <Icon name='user' />
                                 <p>Adicionar</p>

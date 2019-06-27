@@ -7,6 +7,9 @@ import {Provider as StoreProvider} from 'react-redux';
 // REACT ROUTER
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 
+// DSM ROUTES
+import Routes from '../services/Routes';
+
 // CSS
 import 'semantic-ui-css/semantic.min.css'
 
@@ -39,7 +42,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
             Authentication.isAuthenticated() ? (
                 <Component {...props} />
             ) : (
-                <Redirect to={{ pathname: "/login", state: { from: props.location } }} />
+                <Redirect to={{ pathname: Routes.LOGIN, state: { from: props.location } }} />
             )
         }
     />
@@ -53,19 +56,13 @@ const Root = ({ store }) => {
             <BrowserRouter>
                 <Header userType={'student'} />
                 <Switch>
-                    <PrivateRoute exact path="/home" component={HomePage} />
-                    <PrivateRoute exact path="/lessons" component={LessonsPage} />
-                    <PrivateRoute exact path="/payments" component={PaymentsPage} />
-                    <PrivateRoute exact path="/students" component={AllStudents} />
-                    <PrivateRoute exact path="/students/register_student" component={RegisterStudent} />
-                    <PrivateRoute exact path="/students/register_category" component={RegisterInCategory} />
-                    <PrivateRoute exact path="/students/register_exam" component={RegisterExam} />
-                    <PrivateRoute exact path="/students/register_payment" component={RegisterPayment} />
-                    <PrivateRoute exact path="/register_general_announcement" component={RegisterGeneralAnnouncement} />
-                    <PrivateRoute exact path="/home/announcements" component={Announcements} />
-                    <PrivateRoute exact path="/lessons/mark_lesson" component={MarkLesson} />
-                    <Route exact path="/contacts" render={ props => <ErrorPage {...props} />} />
-                    <Redirect from="/" exact to="/home" />
+                    <PrivateRoute exact path={Routes.HOME} component={HomePage} />
+                    <PrivateRoute exact path={Routes.LESSONS} component={LessonsPage} />
+                    <PrivateRoute exact path={Routes.PAYMENTS} component={PaymentsPage} />
+                    <PrivateRoute exact path={Routes.HOME_ANNOUNCEMENTS} component={Announcements} />
+                    <PrivateRoute exact path={Routes.NEW_LESSON} component={MarkLesson} />
+                    <Route exact path={Routes.CONTACTS} render={ props => <ErrorPage {...props} />} />
+                    <Redirect from="/" exact to={Routes.HOME} />
                     <Route path="/" render={ props => <ErrorPage {...props} />} />
                 </Switch>
                 <Footer />
@@ -75,14 +72,14 @@ const Root = ({ store }) => {
             <BrowserRouter>
                 <Header userType={'secretary'} />
                 <Switch>
-                    <PrivateRoute exact path="/home" component={AllStudents} />
-                    <PrivateRoute exact path="/students/register_student" component={RegisterStudent} />
-                    <PrivateRoute exact path="/students/register_category" component={RegisterInCategory} />
-                    <PrivateRoute exact path="/students/register_exam" component={RegisterExam} />
-                    <PrivateRoute exact path="/students/register_payment" component={RegisterPayment} />
-                    <PrivateRoute exact path="/register_general_announcement" component={RegisterGeneralAnnouncement} />
-                    <Route exact path="/contacts" render={ props => <ErrorPage {...props} />} />
-                    <Redirect from="/" exact to="/home" />
+                    <PrivateRoute exact path={Routes.HOME} component={AllStudents} />
+                    <PrivateRoute exact path={Routes.REGISTER_STUDENT} component={RegisterStudent} />
+                    <PrivateRoute exact path={Routes.REGISTER_STUDENT_CATEGORY} component={RegisterInCategory} />
+                    <PrivateRoute exact path={Routes.REGISTER_STUDENT_EXAM} component={RegisterExam} />
+                    <PrivateRoute exact path={Routes.REGISTER_STUDENT_PAYMENT} component={RegisterPayment} />
+                    <PrivateRoute exact path={Routes.REGISTER_GENERAL_ANNOUNCEMENT} component={RegisterGeneralAnnouncement} />
+                    <Route exact path={Routes.CONTACTS} render={ props => <ErrorPage {...props} />} />
+                    <Redirect from="/" exact to={Routes.HOME} />
                     <Route path="/" render={ props => <ErrorPage {...props} />} />
                 </Switch>
                 <Footer />
@@ -92,9 +89,9 @@ const Root = ({ store }) => {
             <BrowserRouter>
                 <Header userType={'instructor'} />
                 <Switch>
-                    <PrivateRoute exact path="/home" component={AllStudents} />
-                    <Route exact path="/contacts" render={ props => <ErrorPage {...props} />} />
-                    <Redirect from="/" exact to="/home" />
+                    <PrivateRoute exact path={Routes.HOME} component={AllStudents} />
+                    <Route exact path={Routes.CONTACTS} render={ props => <ErrorPage {...props} />} />
+                    <Redirect from="/" exact to={Routes.HOME} />
                     <Route path="/" render={ props => <ErrorPage {...props} />} />
                 </Switch>
                 <Footer />
@@ -104,10 +101,10 @@ const Root = ({ store }) => {
             <BrowserRouter>
                 <Header userType={'default'} />
                 <Switch>
-                    <Route exact path="/home" render={ props => <LoginPage {...props} />} />
-                    <Route exact path="/categories" render={ props => <ErrorPage {...props} />} />
-                    <Route exact path="/contacts" render={ props => <ErrorPage {...props} />} />
-                    <Redirect from="/" to="/home" />
+                    <Route exact path={Routes.HOME} render={ props => <LoginPage {...props} />} />
+                    <Route exact path={Routes.CATEGORIES} render={ props => <ErrorPage {...props} />} />
+                    <Route exact path={Routes.CONTACTS} render={ props => <ErrorPage {...props} />} />
+                    <Redirect from="/" to={Routes.HOME} />
                 </Switch>
                 <Footer />
             </BrowserRouter>
