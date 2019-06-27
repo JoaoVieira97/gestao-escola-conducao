@@ -8,6 +8,8 @@ import {
 } from 'semantic-ui-react';
 import Authentication from '../services/session/Authentication';
 import {headerStyle} from "../styles/styles";
+import {fetchApi} from "../services/api";
+
 
 // DSM ROUTES
 import Routes from '../services/Routes';
@@ -190,6 +192,14 @@ class Header extends React.Component {
 
     handleLogout = async () => {
 
+        fetchApi(
+            'post','/logout',
+            {},
+            {},
+            (res) => {console.log(res)},
+            (err) => {console.log(err)}
+        );
+
         await Authentication.logout();
         window.location.reload();
     };
@@ -205,13 +215,13 @@ class Header extends React.Component {
         let mobileMenu = DefaultItems;
 
         if (this.props.userType === 'student'){
-            webMenu = StudentItemsWeb(this.handleLogout.bind(this))
+            webMenu = StudentItemsWeb(this.handleLogout.bind(this));
             mobileMenu = StudentItemsMobile(this.handleLogout.bind(this), this.handleHideClick.bind(this))
         } else if (this.props.userType === 'secretary'){
-            webMenu = SecretaryItemsWeb(this.handleLogout.bind(this))
+            webMenu = SecretaryItemsWeb(this.handleLogout.bind(this));
             mobileMenu = SecretaryItemsMobile(this.handleLogout.bind(this), this.handleHideClick.bind(this))
         } else if (this.props.userType === 'instructor'){
-            webMenu = InstructorItemsWeb(this.handleLogout.bind(this))
+            webMenu = InstructorItemsWeb(this.handleLogout.bind(this));
             mobileMenu = InstructorItemsMobile(this.handleLogout.bind(this), this.handleHideClick.bind(this))
         }
 
