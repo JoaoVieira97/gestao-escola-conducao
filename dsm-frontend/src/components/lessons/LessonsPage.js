@@ -15,6 +15,7 @@ import {
 import {categoryStyle} from "../../styles/styles";
 import {fetchApi} from "../../services/api";
 import moment from 'moment';
+import Routes from "../../services/Routes";
 
 class LessonsPage extends Component {
 
@@ -639,7 +640,7 @@ class LessonsPage extends Component {
                         <Button floated='right'
                                 color={'black'}
                                 onClick={() => this.props.history.push({
-                                    pathname: '/lessons/mark_lesson',
+                                    pathname: Routes.NEW_LESSON,
                                     data: this.state.categoryChoosedName,
                                 })}
                         > MARCAR AULA

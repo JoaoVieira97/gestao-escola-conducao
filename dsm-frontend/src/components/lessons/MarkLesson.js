@@ -7,6 +7,7 @@ import {
     Step,
     Icon, Breadcrumb, Grid,
 } from 'semantic-ui-react';
+import Routes from "../../services/Routes";
 
 
 class MarkLesson extends Component {
@@ -35,7 +36,7 @@ class MarkLesson extends Component {
                         <Breadcrumb size='large'>
                             <Breadcrumb.Section
                                 style={{color: 'grey'}}
-                                onClick={() => this.props.history.push('/lessons')}
+                                onClick={() => this.props.history.push(Routes.LESSONS)}
                             >
                                 Aulas
                             </Breadcrumb.Section>

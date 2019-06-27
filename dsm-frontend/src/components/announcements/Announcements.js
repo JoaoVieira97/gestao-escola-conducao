@@ -12,6 +12,7 @@ import {
     Pagination
 } from 'semantic-ui-react';
 import {fetchApi} from "../../services/api";
+import Routes from "../../services/Routes";
 
 class Announcements extends Component {
 
@@ -103,7 +104,7 @@ class Announcements extends Component {
                         <Breadcrumb size='large'>
                             <Breadcrumb.Section
                                 style={{color: 'grey'}}
-                                onClick={() => this.props.history.push('/home')}
+                                onClick={() => this.props.history.push(Routes.HOME)}
                             >
                                 Início
                             </Breadcrumb.Section>

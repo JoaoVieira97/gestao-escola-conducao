@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import {Container} from "semantic-ui-react";
+import Routes from "../services/Routes";
 
 class ErrorPage extends Component {
 
     redirectToTarget = () => {
-        this.props.history.push('/home')
+        this.props.history.push(Routes.HOME)
     };
 
     render() {

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import {Button, Form, Message} from 'semantic-ui-react'
 import {fetchApi} from "../../services/api";
 import Authentication from "../../services/session/Authentication";
+import Routes from "../../services/Routes";
 
 class LoginPage extends Component {
 
@@ -54,7 +55,7 @@ class LoginPage extends Component {
         console.log(response)
         Authentication.login(response.data, this.state.rememberMe);
 
-        this.props.history.push('/home');
+        this.props.history.push(Routes.HOME);
         window.location.reload();
     };
 

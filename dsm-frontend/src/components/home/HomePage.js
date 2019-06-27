@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Container, Card, Feed, Icon, Loader, Dimmer, List, Header, Button, Popup} from 'semantic-ui-react';
 import {fetchApi} from "../../services/api";
+import Routes from "../../services/Routes";
 
 class HomePage extends Component {
 
@@ -237,7 +238,7 @@ class HomePage extends Component {
                             size='mini'
                             floated='right'
                             labelPosition='right'
-                            onClick={() => this.props.history.push('/home/announcements')}
+                            onClick={() => this.props.history.push(Routes.HOME_ANNOUNCEMENTS)}
                         >
                             Ver mais
                             <Icon name='plus' />

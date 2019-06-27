@@ -12,6 +12,8 @@ import {
     Message
 } from 'semantic-ui-react';
 import { fetchApi } from '../../services/api/index';
+import Routes from "../../services/Routes";
+
 
 class RegisterStudent extends Component {
 
@@ -101,7 +103,7 @@ class RegisterStudent extends Component {
 
 
         sleep(3000).then(() => {
-            this.props.history.push('/students');
+            this.props.history.push(Routes.STUDENTS);
         });
         
     };
@@ -133,7 +135,7 @@ class RegisterStudent extends Component {
                         <Breadcrumb size='large'>
                             <Breadcrumb.Section
                                 style={{color: 'grey'}}
-                                onClick={() => this.props.history.push('/students')}
+                                onClick={() => this.props.history.push(Routes.HOME)}
                             >
                                 Alunos
                             </Breadcrumb.Section>

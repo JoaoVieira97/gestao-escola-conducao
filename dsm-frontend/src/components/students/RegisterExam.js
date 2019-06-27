@@ -10,6 +10,7 @@ import {
     Message
 } from 'semantic-ui-react';
 import { fetchApi } from '../../services/api/index';
+import Routes from "../../services/Routes";
 
 
 class RegisterExam extends Component {
@@ -82,7 +83,7 @@ class RegisterExam extends Component {
 
 
         sleep(3000).then(() => {
-            this.props.history.push('/students');
+            this.props.history.push(Routes.REGISTER_STUDENT_EXAM);
         });
         
     };

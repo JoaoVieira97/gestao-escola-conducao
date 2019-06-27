@@ -10,6 +10,7 @@ import {
     Message
 } from 'semantic-ui-react';
 import {fetchApi} from "../../services/api";
+import Routes from "../../services/Routes";
 
 class RegisterGeneralAnnouncement extends Component {
 
@@ -72,7 +73,7 @@ class RegisterGeneralAnnouncement extends Component {
 
 
     	sleep(3000).then(() => {
-            this.props.history.push('/home');
+            this.props.history.push(Routes.HOME);
         });
         
     };
