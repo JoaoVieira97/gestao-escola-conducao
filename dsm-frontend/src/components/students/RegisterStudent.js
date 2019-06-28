@@ -21,13 +21,13 @@ class RegisterStudent extends Component {
         super(props);
 
         this.state = {
-            nome: '',
+            name: '',
             email: '',
             password: '',
-            data_nascimento: '',
+            birth: '',
             nif: '',
             cc: '',
-            morada: '',
+            address: '',
             message: '',
             error: ''
         }
@@ -47,8 +47,8 @@ class RegisterStudent extends Component {
 
     handleSubmit = () => {
 
-        const { nome, email, password, data_nascimento, nif, cc, morada } = this.state;
-        if(nome !== '' && email !== '' && password !== '' && data_nascimento !== '' && nif !== '' && cc !== '' && morada !== '') {
+        const { name, email, password, birth, nif, cc, address } = this.state;
+        if(name !== '' && email !== '' && password !== '' && birth !== '' && nif !== '' && cc !== '' && address !== '') {
 
             if (!nif.match(/^[0-9]{9}$/g)){
                 this.setState({
@@ -67,13 +67,13 @@ class RegisterStudent extends Component {
                 fetchApi(
                     'post','/secretary/register_student',
                     {
-                        name: nome,
+                        name: name,
                         email: email,
                         password: password,
-                        birth: data_nascimento,
+                        birth: birth,
                         nif: nif,
                         cc: cc,
-                        address: morada
+                        address: address
                     },  {},
                     this.successHandler, this.errorHandler
                 );
@@ -103,7 +103,7 @@ class RegisterStudent extends Component {
 
 
         sleep(3000).then(() => {
-            this.props.history.push(Routes.STUDENTS);
+            this.props.history.push(Routes.HOME);
         });
         
     };
@@ -156,21 +156,21 @@ class RegisterStudent extends Component {
                             <Form>
                                 <Form.Group>
                                     <Form.Field
-                                        className={(this.state.error && this.state.nome === '') ? "error field" : "field"}
+                                        className={(this.state.error && this.state.name === '') ? "error field" : "field"}
                                         width={11}
                                         control={Input}
                                         label='Nome'
                                         placeholder='Nome'
-                                        name={"nome"}
+                                        name={"name"}
                                         onChange={this.handleInputChange}
                                     />
                                     <Form.Field
-                                        className={(this.state.error && this.state.data_nascimento === '') ? "error field" : "field"}
+                                        className={(this.state.error && this.state.birth === '') ? "error field" : "field"}
                                         width={5}
                                         control={Input}
                                         label='Data de nascimento'
                                         placeholder='Data de nascimento'
-                                        name={"data_nascimento"}
+                                        name={"birth"}
                                         type="date"
                                         onChange={this.handleInputChange}
                                     />
@@ -195,11 +195,11 @@ class RegisterStudent extends Component {
                                     />
                                 </Form.Group>
                                 <Form.Field
-                                    className={(this.state.error && this.state.morada === '') ? "error field" : "field"}
+                                    className={(this.state.error && this.state.address === '') ? "error field" : "field"}
                                     control={Input}
                                     label='Morada'
                                     placeholder='Morada'
-                                    name={"morada"}
+                                    name={"address"}
                                     onChange={this.handleInputChange}
                                 />
                                 <Form.Group widths='equal'>

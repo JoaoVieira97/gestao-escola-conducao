@@ -9,7 +9,11 @@ import {
     Input,
     Message,
     Dimmer,
-    Loader
+    Loader,
+    Breadcrumb,
+    List,
+    Card,
+    Icon
 } from 'semantic-ui-react';
 import { fetchApi } from '../../services/api/index';
 import Routes from "../../services/Routes";
@@ -21,16 +25,17 @@ class RegisterExam extends Component {
         super(props);
 
         this.state = {
-            aluno: undefined,
-            data: '',
-            exame: '',
-            categoria: '',
+            student: {},
+            date: '',
+            exam: '',
+            category: '',
+            exams: [],
             
-            exames: [
+            exams_options: [
                 { key: 't', text: 'Exame Teórico', value: 'Exame Teórico' },
                 { key: 'p', text: 'Exame Prático', value: 'Exame Prático' }
             ],
-            categorias: [],
+            categories: [],
 
             message: '',
             error: '',
@@ -38,17 +43,24 @@ class RegisterExam extends Component {
         }
     }
 
-    componentDidMount(){
+    async componentDidMount(){
 
-        this.setState({
-            aluno: this.props.location.state.aluno
+        await this.setState({
+            student: this.props.location.state.student
         })
 
         fetchApi(
-            'get','/student/registers?studentID=' + this.props.location.state.aluno.id, //TODO Find userID
+            'get','/student/information?studentID=' + this.props.location.state.student.id,
+            {},  {},
+            this.successFetchInformation, this.errorHandler
+        );
+
+        fetchApi(
+            'get','/student/registers?studentID=' + this.props.location.state.student.id,
             {},  {},
             this.successFetchRegisters, this.errorHandler
         );
+
     }
 
     /**
@@ -58,10 +70,10 @@ class RegisterExam extends Component {
     successFetchRegisters = (response) => {
         
         const data = response.data;
-        const categorias = []
+        const categories = []
 
         data.registers.forEach(function(register) {
-          categorias.push({
+          categories.push({
             key: register.category.id,
             text: 'Categoria ' + register.category.name,
             value: 'Categoria ' + register.category.name,
@@ -69,9 +81,22 @@ class RegisterExam extends Component {
         });
 
         this.setState({
-            categorias: categorias,
+            categories: categories,
             isLoading: false
         })
+
+    };
+
+    /**
+     * Handle the response fetch registers.
+     * @param response
+     */
+    successFetchInformation = (response) => {
+        const data = response.data;
+
+        this.setState({
+            exams: data.exams,
+        });
 
     };
 
@@ -101,15 +126,15 @@ class RegisterExam extends Component {
 
     handleSubmit = () => {
 
-        const { exame, categoria, data } = this.state;
-        if(exame !== '' && categoria !== '' && data !== '' ) {
+        const { exam, category, date } = this.state;
+        if(exam !== '' && category !== '' && date !== '' ) {
             
             fetchApi(
                 'post','/secretary/register_student_exam',
                 {
-                    studentID: this.state.aluno.id,
-                    startTime: this.state.data.replace('T', ' '),
-                    description: exame + ' - ' + categoria
+                    studentID: this.state.student.id,
+                    startTime: this.state.date.replace('T', ' '),
+                    description: exam + ' - ' + category
                 },  {},
                 this.successHandler, this.errorHandler
             );
@@ -128,8 +153,6 @@ class RegisterExam extends Component {
      * @param response
      */
     successHandler = (response) => {
-
-        //console.log(response)
 
         this.setState({
             message: 'Exame registado com sucesso',
@@ -160,20 +183,55 @@ class RegisterExam extends Component {
 
     handleSelectExameChange = (event, data) => {
         this.setState({
-            exame: data.value
+            exam: data.value
         })
     }
 
     handleSelectCategoriaChange = (event, data) => {
         this.setState({
-            categoria: data.value
+            category: data.value
         })
     }
 
     render() {
 
-        console.log('exame: ' + this.state.exame)
-        console.log('categoria: ' + this.state.categoria)
+        const exams = (
+            this.state.exams.length>0 ? this.state.exams.map( exam =>
+                    <List.Item key={exam.id}>
+                        <Icon size='large' name='clipboard' />
+                        <List.Content>
+                            <List.Header>{exam.description}</List.Header>
+                            <List.Description style={{marginTop: "3px"}}>
+                                <b>Data:</b> {" "+ (exam.startTime.split(" "))[0]}
+                            </List.Description>
+                            <List.Description style={{marginTop: "3px"}}>
+                                <b> Início: </b> {" "+ (exam.startTime.split(" "))[1].replace(':',"h")+'min'}
+                            </List.Description>
+                        </List.Content>
+                    </List.Item>
+                 ) :
+                <List.Item>
+                    <List.Header>Não há registo de exames.</List.Header>
+                </List.Item>
+        );
+
+        const cardExams = (
+            <div className={"ui fluid card grey"}>
+                <Card.Content>
+                    <Card.Header>
+                        <Icon.Group style={{marginRight: "8px"}}>
+                            <Icon color='grey' name='calendar' />
+                        </Icon.Group>
+                        Exames de {this.state.student.name}
+                    </Card.Header>
+                </Card.Content>
+                <Card.Content>
+                    <List animated divided relaxed={'very'} verticalAlign='middle'>
+                        {exams}
+                    </List>
+                </Card.Content>
+            </div>
+        );
 
         return (
             <Container>
@@ -182,40 +240,53 @@ class RegisterExam extends Component {
                     <Loader>A carregar</Loader>
                 </Dimmer>
                 <Grid centered style={{marginBottom: "65px"}}>
-                    <Grid.Column width={10}>
-                        <Header 
-                            className='centered' 
-                            as='h1'
-                            style={{marginTop: "30px"}}
-                        >
-                            Registar exame
-                        </Header>
+                    <Grid.Column width={16}>
+
+                        <Breadcrumb size='large'>
+                            <Breadcrumb.Section
+                                style={{color: 'grey'}}
+                                onClick={() => this.props.history.push(Routes.HOME)}
+                            >
+                                Alunos
+                            </Breadcrumb.Section>
+                            <Breadcrumb.Divider icon='right angle' />
+                            <Breadcrumb.Section active>Registar exame</Breadcrumb.Section>
+                        </Breadcrumb>
+
+                    </Grid.Column>
+                    <Grid.Column width={8} style={{marginTop: "30px"}}>
                         <Segment>
+                            <Header 
+                                className='centered' 
+                                as='h1'
+                            >
+                                Registar exame
+                            </Header>
                             <Form>
                                 <Form.Select
-                                    className={(this.state.error && this.state.data === '') ? "error field" : "field"}
+                                    className={(this.state.error && this.state.exam === '') ? "error field" : "field"}
                                     fluid 
                                     label='Tipo de exame'
-                                    options={this.state.exames}
+                                    options={this.state.exams_options}
                                     placeholder='Tipo de exame'
-                                    name={"exame"}
+                                    name={"exam"}
                                     onChange={this.handleSelectExameChange}
                                 />
                                 <Form.Select
-                                    className={(this.state.error && this.state.data === '') ? "error field" : "field"}
+                                    className={(this.state.error && this.state.category === '') ? "error field" : "field"}
                                     fluid 
                                     label='Categoria'
-                                    options={this.state.categorias}
+                                    options={this.state.categories}
                                     placeholder='Categoria'
-                                    name={"categoria"}
+                                    name={"category"}
                                     onChange={this.handleSelectCategoriaChange}
                                 />
                                 <Form.Field
-                                    className={(this.state.error && this.state.data === '') ? "error field" : "field"}
+                                    className={(this.state.error && this.state.date === '') ? "error field" : "field"}
                                     control={Input}
                                     label='Data do exame'
                                     placeholder='Data do exame'
-                                    name={"data"}
+                                    name={"date"}
                                     type="datetime-local"
                                     onChange={this.handleInputChange}
                                 />
@@ -236,6 +307,11 @@ class RegisterExam extends Component {
                                 </Message>
                             </Form>
                         </Segment>
+                    </Grid.Column>
+                    <Grid.Column width={8} style={{marginTop: "30px"}}>
+                        {
+                            cardExams
+                        }
                     </Grid.Column>
                 </Grid>
 

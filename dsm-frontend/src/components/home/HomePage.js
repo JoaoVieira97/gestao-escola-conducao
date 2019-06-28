@@ -175,7 +175,17 @@ class HomePage extends Component {
 
         const next_events = this.state.next_practical_lessons.concat(this.state.next_exams) 
         next_events.sort(function(e1, e2) {
-            return new Date(e1.startTime) - new Date(e2.startTime);
+            let date1 = e1.startTime
+            let aux1 = date1.split(" ")[0]
+            let aux_date1 = aux1.split("/")
+            let e1_date = aux_date1[2] + '-' + aux_date1[1] + '-' + aux_date1[0] + 'T' + date1.split(" ")[1]
+
+            let date2 = e2.startTime
+            let aux2 = date2.split(" ")[0]
+            let aux_date2 = aux2.split("/")
+            let e2_date = aux_date2[2] + '-' + aux_date2[1] + '-' + aux_date2[0] + 'T' + date2.split(" ")[1]
+
+            return new Date(e1_date) - new Date(e2_date);
         });
 
         const personalAnnouncements = (

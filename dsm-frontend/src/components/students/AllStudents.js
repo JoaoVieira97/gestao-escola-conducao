@@ -177,7 +177,7 @@ class AllStudents extends Component {
                                 labelPosition='left'
                                 color='grey'
                                 style={{marginRight: '55px'}}
-                                onClick={() => this.props.history.push(Routes.REGISTER_STUDENT_CATEGORY, {aluno: item})}
+                                onClick={() => this.props.history.push(Routes.REGISTER_STUDENT_CATEGORY, {student: item})}
                             >
                                 <Icon name='file alternate outline' color='yellow'/>
                                 <p>Registar em categoria</p>
@@ -187,7 +187,7 @@ class AllStudents extends Component {
                                 labelPosition='left'
                                 color='grey'
                                 style={{marginRight: '55px'}}
-                                onClick={() => this.props.history.push(Routes.REGISTER_STUDENT_PAYMENT, {aluno: item})}
+                                onClick={() => this.props.history.push(Routes.REGISTER_STUDENT_PAYMENT, {student: item})}
                             >
                                 <Icon name='euro sign' color='yellow'/>
                                 <p>Registar fatura</p>
@@ -196,7 +196,7 @@ class AllStudents extends Component {
                                 icon
                                 labelPosition='left'
                                 color='grey'
-                                onClick={() => this.props.history.push(Routes.REGISTER_STUDENT_EXAM, {aluno: item})}
+                                onClick={() => this.props.history.push(Routes.REGISTER_STUDENT_EXAM, {student: item})}
                             >
                                 <Icon name='clipboard outline' color='yellow'/>
                                 <p>Registar exame</p>
