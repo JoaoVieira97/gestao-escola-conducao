@@ -262,4 +262,45 @@ public class SecretaryBean implements SecretaryBeanLocal{
 
         return false;
     }
+
+    /**
+     * Register student
+     * @param studentID
+     * @param name
+     * @param email
+     * @param password
+     * @param address
+     * @param birth
+     * @param nif
+     * @þaram cc
+     * @return
+     */
+    @Override
+    public boolean updateStudent(int studentID, String name, String email, String password, String address, String birth, String nif, String cc){
+
+        try {
+
+            long aux_nif = Long.parseLong(nif);
+            java.util.Date aux_birth = new SimpleDateFormat("yyyy-MM-dd").parse(birth);
+
+            Student s = StudentDAO.getStudentByORMID(studentID);
+
+            s.setName(name);
+            s.setEmail(email);
+            if (!password.equals("")) s.setPassword(Utils.hash(password));
+            s.setAddress(address);
+            s.setBirth(aux_birth);
+            s.setNif(aux_nif);
+            s.setCc(cc);
+
+            StudentDAO.save(s);
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
 }

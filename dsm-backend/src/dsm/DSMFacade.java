@@ -349,4 +349,12 @@ public class DSMFacade {
 
         return secretaryBean.registerStudentInCategory(studentID, categoryID, instructorID);
     }
+
+    /**
+     * update student data
+     */
+    public static boolean updateStudent(int studentID, String name, String email, String password, String address, String birth, String nif, String cc){
+
+        return secretaryBean.updateStudent(studentID, name, email, password, address, birth, nif, cc);
+    }
 }

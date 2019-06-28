@@ -176,7 +176,6 @@ class AllStudents extends Component {
                                 icon
                                 labelPosition='left'
                                 color='grey'
-                                style={{marginRight: '120px'}}
                                 onClick={() => this.props.history.push(Routes.REGISTER_STUDENT_CATEGORY, {student: item})}
                             >
                                 <Icon name='file alternate outline' color='yellow'/>
@@ -186,7 +185,6 @@ class AllStudents extends Component {
                                 icon
                                 labelPosition='left'
                                 color='grey'
-                                style={{marginRight: '120px'}}
                                 onClick={() => this.props.history.push(Routes.REGISTER_STUDENT_PAYMENT, {student: item})}
                             >
                                 <Icon name='euro sign' color='yellow'/>
@@ -200,6 +198,15 @@ class AllStudents extends Component {
                             >
                                 <Icon name='clipboard outline' color='yellow'/>
                                 <p>Exames</p>
+                            </Button>
+                            <Button
+                                icon
+                                labelPosition='left'
+                                color='grey'
+                                onClick={() => this.props.history.push(Routes.STUDENT_PROFILE, {student: item})}
+                            >
+                                <Icon name='user outline' color='yellow'/>
+                                <p>Perfil</p>
                             </Button>
                         </Modal.Content>
                     </Modal>

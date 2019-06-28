@@ -17,6 +17,7 @@ export default {
     // SECRETARY
     STUDENTS: '/students',
     REGISTER_STUDENT: '/students/register',
+    STUDENT_PROFILE: '/students/student_profile',
     REGISTER_STUDENT_CATEGORY: '/students/register_category',
     REGISTER_STUDENT_EXAM: '/students/register_exam',
     REGISTER_STUDENT_PAYMENT: '/students/register_payment',
