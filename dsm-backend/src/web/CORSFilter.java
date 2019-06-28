@@ -27,7 +27,7 @@ public class CORSFilter implements Filter {
             HttpServletRequest request = (HttpServletRequest) req;
             HttpServletResponse response = (HttpServletResponse) resp;
 
-            response.addHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+            response.addHeader("Access-Control-Allow-Origin", "*");
             response.addHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
             response.addHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, Accept");
             response.addHeader("Access-Control-Allow-Credentials", "true");

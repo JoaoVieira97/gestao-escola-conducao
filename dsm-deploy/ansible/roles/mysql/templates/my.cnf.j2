@@ -1,11 +1,15 @@
 # {{ ansible_managed }}
 
 [client]
+default-character-set=utf8
 #password = your_password
 port = {{ mysql_port }}
 socket = {{ mysql_socket }}
 
 [mysqld]
+collation-server = utf8_unicode_ci
+init-connect='SET NAMES utf8'
+character-set-server = utf8
 port = {{ mysql_port }}
 bind-address = {{ mysql_bind_address }}
 datadir = {{ mysql_datadir }}
