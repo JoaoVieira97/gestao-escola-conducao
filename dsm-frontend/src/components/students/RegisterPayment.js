@@ -73,7 +73,6 @@ class RegisterPayment extends Component {
                 value: register.id
             })
         })
-        console.log(registers)
 
         this.setState({
             registers: registers,
@@ -151,7 +150,7 @@ class RegisterPayment extends Component {
     successHandlerP = (response) => {
 
         this.setState({
-            message: 'Exame registado com sucesso',
+            message: 'Pagamento registado com sucesso',
             error: ''
         });
 
@@ -230,7 +229,7 @@ class RegisterPayment extends Component {
                 <Dimmer inverted active={this.state.isLoading}>
                     <Loader>A carregar</Loader>
                 </Dimmer>
-                <Grid centered style={{marginBottom: "65px"}}>
+                <Grid className="ui stackable two column centered grid" style={{marginBottom: "65px"}}>
                     <Grid.Column width={16}>
 
                         <Breadcrumb size='large'>
@@ -241,7 +240,7 @@ class RegisterPayment extends Component {
                                 Alunos
                             </Breadcrumb.Section>
                             <Breadcrumb.Divider icon='right angle' />
-                            <Breadcrumb.Section active>Registar pagamento</Breadcrumb.Section>
+                            <Breadcrumb.Section active>Pagamentos de aluno</Breadcrumb.Section>
                         </Breadcrumb>
 
                     </Grid.Column>

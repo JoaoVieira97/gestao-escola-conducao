@@ -136,7 +136,7 @@ class RegisterExam extends Component {
                     startTime: this.state.date.replace('T', ' '),
                     description: exam + ' - ' + category
                 },  {},
-                this.successHandler, this.errorHandler
+                this.successHandler, this.errorHandlerE
             );
 
         } else {
@@ -170,7 +170,7 @@ class RegisterExam extends Component {
      * Handle the error.
      * @param error
      */
-    errorHandler = (error) => {
+    errorHandlerE = (error) => {
 
         console.log(error)
 
@@ -239,7 +239,7 @@ class RegisterExam extends Component {
                 <Dimmer inverted active={this.state.isLoading}>
                     <Loader>A carregar</Loader>
                 </Dimmer>
-                <Grid centered style={{marginBottom: "65px"}}>
+                <Grid className="ui stackable two column centered grid" style={{marginBottom: "65px"}}>
                     <Grid.Column width={16}>
 
                         <Breadcrumb size='large'>
@@ -250,7 +250,7 @@ class RegisterExam extends Component {
                                 Alunos
                             </Breadcrumb.Section>
                             <Breadcrumb.Divider icon='right angle' />
-                            <Breadcrumb.Section active>Registar exame</Breadcrumb.Section>
+                            <Breadcrumb.Section active>Exames de aluno</Breadcrumb.Section>
                         </Breadcrumb>
 
                     </Grid.Column>

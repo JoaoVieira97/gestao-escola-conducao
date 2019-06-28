@@ -318,9 +318,35 @@ public class DSMFacade {
         return secretaryBean.registerStudentExam(studentID, description, startTime);
     }
 
+    /**
+     * Register new student payment
+     */
     public static boolean registerStudentPayment(int registerID, String description, String value, int secretaryID) {
 
         return secretaryBean.registerStudentPayment(registerID, description, value, secretaryID);
     }
 
+    /**
+     * get all categories
+     */
+    public static List<Category> getCategories(){
+
+        return secretaryBean.getCategories();
+    }
+
+    /**
+     * get all instructors
+     */
+    public static List<Instructor> getInstructors(){
+
+        return secretaryBean.getInstructors();
+    }
+
+    /**
+     * register student in category
+     */
+    public static boolean registerStudentInCategory(int studentID, int categoryID, int instructorID){
+
+        return secretaryBean.registerStudentInCategory(studentID, categoryID, instructorID);
+    }
 }

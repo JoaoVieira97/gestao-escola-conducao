@@ -6,11 +6,14 @@ import org.orm.PersistentSession;
 
 import javax.ejb.Local;
 import javax.ejb.Stateless;
+import javax.persistence.criteria.CriteriaBuilder;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Logger;
+import utils.Utils;
 
 @Local(SecretaryBeanLocal.class)
 @Stateless(name = "SecretaryBean")
@@ -95,7 +98,7 @@ public class SecretaryBean implements SecretaryBeanLocal{
 
             s.setName(name);
             s.setEmail(email);
-            s.setPassword(password);
+            s.setPassword(Utils.hash(password));
             s.setAddress(address);
             s.setBirth(aux_birth);
             s.setNif(aux_nif);
@@ -196,6 +199,67 @@ public class SecretaryBean implements SecretaryBeanLocal{
         return false;
     }
 
+    /**
+     * Get all categories
+     * @return
+     */
+    @Override
+    public List<Category> getCategories() {
 
+        try {
+            return (List<Category>) CategoryDAO.queryCategory("id>0", "id");
+        } catch (PersistentException e) {
+            e.printStackTrace();
+        }
 
+        return null;
+    }
+
+    /**
+     * Get all instructors
+     * @return
+     */
+    @Override
+    public List<Instructor> getInstructors() {
+
+        try {
+            return (List<Instructor>) InstructorDAO.queryInstructor("id>0", "id");
+        } catch (PersistentException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    /**
+     * Register student in category
+     * @param studentID
+     * @param categoryID
+     * @param instructorID
+     * @return
+     */
+    @Override
+    public boolean registerStudentInCategory(int studentID, int categoryID, int instructorID) {
+        try {
+            Student student = StudentDAO.getStudentByORMID(studentID);
+            Category category = CategoryDAO.getCategoryByORMID(categoryID);
+            Instructor instructor = InstructorDAO.getInstructorByORMID(instructorID);
+
+            Register register = new Register();
+            register.setCategory(category);
+            register.setInstructor(instructor);
+            register.setInitialDate(new Date());
+
+            student.registers.add(register);
+
+            StudentDAO.save(student);
+
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
 }

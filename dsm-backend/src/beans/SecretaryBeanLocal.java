@@ -1,6 +1,10 @@
 package beans;
 
+import dsm.Category;
+import dsm.Instructor;
+
 import javax.ejb.Local;
+import java.util.List;
 
 @Local
 public interface SecretaryBeanLocal {
@@ -9,4 +13,8 @@ public interface SecretaryBeanLocal {
     boolean registerStudent(String name, String email, String password, String address, String birth, String nif, String cc);
     boolean registerStudentExam(int studentID, String description, String startTime);
     boolean registerStudentPayment(int registerID, String description, String value, int secretaryID);
+    List<Category> getCategories();
+    List<Instructor> getInstructors();
+    boolean registerStudentInCategory(int studentID, int categoryID, int instructorID);
+
 }
