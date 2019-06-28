@@ -18,6 +18,7 @@ import { fetchApi } from '../../services/api/index';
 import {StudentFilter} from "../students/StudentFilter";
 import Routes from "../../services/Routes";
 
+import GenericWeather from '../weather/GenericWeather';
 
 
 
@@ -27,16 +28,14 @@ export default class InstructorHome extends Component {
         super(props);
 
         this.state = {
-            isLoading: true
+            isLoading: false
         }
     }
 
     render() {
         return (
             <Container style={{marginTop: '30px'}}>
-                <Segment loading={this.state.isLoading}>
-
-                </Segment>
+                <GenericWeather />
             </Container>
         );
     }
