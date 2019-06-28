@@ -91,7 +91,7 @@ export default class GenericWeather extends Component {
 
     render() {
         return (
-            <Card>
+            <Card color='grey'>
                 <Dimmer active={this.state.isLoading} inverted>
                     <Loader inverted content='A carregar' />
                 </Dimmer>
