@@ -616,7 +616,8 @@ class LessonsPage extends Component {
 
 
     render() {
-        const { categoryChoosedName, allCategories, showPracticalLessons } = this.state;
+        const {  allCategories, showPracticalLessons,
+                categoryChoosedId, categoryChoosedName } = this.state;
 
         let categories;
         categories = (
@@ -641,7 +642,12 @@ class LessonsPage extends Component {
                                 color={'black'}
                                 onClick={() => this.props.history.push({
                                     pathname: Routes.NEW_LESSON,
-                                    data: this.state.categoryChoosedName,
+                                    state: {
+                                        categoryChoosed: {
+                                            id: categoryChoosedId,
+                                            name: categoryChoosedName,
+                                        }
+                                    }
                                 })}
                         > MARCAR AULA
                         </Button>
