@@ -144,15 +144,14 @@ class RegisterStudent extends Component {
                         </Breadcrumb>
 
                     </Grid.Column>
-                    <Grid.Column width={10}>
-                        <Header 
-                            className='centered' 
-                            as='h1'
-                            style={{marginTop: "30px"}}
-                        >
-                            Registar aluno
-                        </Header>
+                    <Grid.Column width={10} style={{marginTop: "30px"}}>
                         <Segment>
+                            <Header 
+                                className='centered' 
+                                as='h1'
+                            >
+                                Registar aluno
+                            </Header>
                             <Form>
                                 <Form.Group>
                                     <Form.Field

@@ -160,4 +160,42 @@ public class SecretaryBean implements SecretaryBeanLocal{
         return false;
     }
 
+    /**
+     * Register student payment
+     * @param registerID
+     * @param description
+     * @param value
+     * @param secretaryID
+     * @return
+     */
+    @Override
+    public boolean registerStudentPayment(int registerID, String description, String value, int secretaryID){
+
+        try {
+
+            Register register = RegisterDAO.getRegisterByORMID(registerID);
+            Secretary secretary = SecretaryDAO.getSecretaryByORMID(secretaryID);
+
+            Payment payment = new Payment();
+            payment.setDescription(description);
+            float aux_value = Float.parseFloat(value);
+            payment.setValue(aux_value);
+            payment.setSecretary(secretary);
+            payment.setTimestamp(new Timestamp(System.currentTimeMillis()));
+
+            register.payments.add(payment);
+
+            RegisterDAO.save(register);
+
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+
+
 }

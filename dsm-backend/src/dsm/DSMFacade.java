@@ -318,4 +318,9 @@ public class DSMFacade {
         return secretaryBean.registerStudentExam(studentID, description, startTime);
     }
 
+    public static boolean registerStudentPayment(int registerID, String description, String value, int secretaryID) {
+
+        return secretaryBean.registerStudentPayment(registerID, description, value, secretaryID);
+    }
+
 }

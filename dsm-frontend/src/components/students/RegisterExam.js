@@ -127,7 +127,7 @@ class RegisterExam extends Component {
     handleSubmit = () => {
 
         const { exam, category, date } = this.state;
-        if(exam !== '' && category !== '' && date !== '' ) {
+        if(exam !== '' && category !== '' && date !== '') {
             
             fetchApi(
                 'post','/secretary/register_student_exam',
@@ -181,13 +181,13 @@ class RegisterExam extends Component {
         
     };
 
-    handleSelectExameChange = (event, data) => {
+    handleSelectExamChange = (event, data) => {
         this.setState({
             exam: data.value
         })
     }
 
-    handleSelectCategoriaChange = (event, data) => {
+    handleSelectCategoryChange = (event, data) => {
         this.setState({
             category: data.value
         })
@@ -270,7 +270,7 @@ class RegisterExam extends Component {
                                     options={this.state.exams_options}
                                     placeholder='Tipo de exame'
                                     name={"exam"}
-                                    onChange={this.handleSelectExameChange}
+                                    onChange={this.handleSelectExamChange}
                                 />
                                 <Form.Select
                                     className={(this.state.error && this.state.category === '') ? "error field" : "field"}
@@ -279,7 +279,7 @@ class RegisterExam extends Component {
                                     options={this.state.categories}
                                     placeholder='Categoria'
                                     name={"category"}
-                                    onChange={this.handleSelectCategoriaChange}
+                                    onChange={this.handleSelectCategoryChange}
                                 />
                                 <Form.Field
                                     className={(this.state.error && this.state.date === '') ? "error field" : "field"}
@@ -290,7 +290,8 @@ class RegisterExam extends Component {
                                     type="datetime-local"
                                     onChange={this.handleInputChange}
                                 />
-                                <Button 
+                                <Button
+                                    disabled={this.state.exam === '' || this.state.category === '' || this.state.date === ''}
                                     type="submit"
                                     className="ui button"
                                     onClick={this.handleSubmit.bind(this)}

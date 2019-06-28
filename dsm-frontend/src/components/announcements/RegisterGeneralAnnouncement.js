@@ -99,15 +99,14 @@ class RegisterGeneralAnnouncement extends Component {
             <Container>
 
                 <Grid centered style={{marginBottom: "65px"}}>
-                    <Grid.Column width={10}>
-                        <Header 
-                            className='centered' 
-                            as='h1'
-                            style={{marginTop: "30px"}}
-                        >
-                            Registar aviso geral
-                        </Header>
+                    <Grid.Column width={10} style={{marginTop: "30px"}}>
                         <Segment>
+                            <Header 
+                                className='centered' 
+                                as='h1'
+                            >
+                                Registar aviso geral
+                            </Header>
                             <Form>
                                 <Form.Field
                                     className={(this.state.error && this.state.title === '') ? "error field" : "field"}
