@@ -1,0 +1,7 @@
+---
+# handlers file for WildFly
+- name: restart WildFly
+  systemd:
+    name: wildfly
+    state: restarted
+  when: wildfly_service_state != 'stopped'

@@ -1,0 +1,14 @@
+---
+- name: Copy WAR file to the remote server
+  copy:
+    src: dsm_backend_war_exploded_archive.war
+    dest: /tmp/dsm_backend_war_exploded.war
+    owner: wildfly
+    group: wildfly
+    mode: '0755'
+
+- jboss:
+    deploy_path: /opt/wildfly-17.0.0.Final/standalone/deployments
+    src: /tmp/dsm_backend_war_exploded.war
+    deployment: dsm_backend_war_exploded.war
+    state: present

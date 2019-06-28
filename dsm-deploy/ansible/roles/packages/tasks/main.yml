@@ -14,3 +14,4 @@
       - nmap
       - ufw
       - python3
+      - default-jdk

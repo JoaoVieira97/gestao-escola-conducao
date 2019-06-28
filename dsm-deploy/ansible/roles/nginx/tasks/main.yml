@@ -11,13 +11,13 @@
     mode: 0644
   notify: Restart Nginx
 
-# - name: Copy DSM static files to the remote server
-#   copy:
-#     src: dsm
-#     dest: /var/www
-#     owner: www-data
-#     group: www-data
-#     mode: '0660'
+- name: Copy DSM static files to the remote server
+  copy:
+    src: dsm
+    dest: /var/www
+    owner: www-data
+    group: www-data
+    mode: '0660'
 
 - name: Ensure that Nginx is started and enabled on boot
   service:

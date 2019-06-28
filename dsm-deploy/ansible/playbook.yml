@@ -1,5 +1,5 @@
 - name: Get all hosts information
-  hosts: redis # all
+  hosts: all
   gather_facts: yes
   tasks:
     - debug:
@@ -32,7 +32,7 @@
     - role: haproxy
       vars:
         maxconn: 1024
-        bind_address: '*' # "{{ hostvars[groups['nginx'][0]]['ansible_default_ipv4']['address'] }}"
+        bind_address: '*'
         app_servers_listen_port: 8080
         app_servers_addresses: "{{ groups['appServers'] }}"
 
@@ -64,4 +64,16 @@
       vars:
         redis_port: 6379
         redis_bind_interface: '0.0.0.0'
-        redis_requirepass: 'dsm2019EA!'
+
+- name: Installing App Servers
+  hosts: appServers
+  become: yes
+  roles:
+    - role: wildfly
+      vars:
+        wildfly_version: '17.0.0.Final'
+        wildfly_bind: 0.0.0.0
+        wildfly_management_users:
+          - { name: 'dsm-server', password: 'dsm2019EA!' }
+
+    - role: wildfly-dsm

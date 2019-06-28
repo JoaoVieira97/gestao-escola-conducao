@@ -1,0 +1,79 @@
+---
+
+- name: WildFly | Ensure WildFly group exists
+  group:
+    name: "{{ wildfly_group }}"
+
+- name: WildFly | Ensure WildFly user exists
+  user:
+    name: "{{ wildfly_user }}"
+    group: "{{ wildfly_group }}"
+    shell: "{{ wildfly_user_shell }}"
+    createhome: yes
+    home: "{{ wildfly_user_home }}"
+    uid: "{{ wildfly_user_uid }}"
+    state: present
+
+- name: WildFly | Check if service is running
+  command: systemctl status wildfly.service
+  ignore_errors: yes
+  changed_when: false
+  no_log: true
+  register: service_wildfly_status
+
+- name: WildFly | Check installed version
+  command: >
+    {{wildfly_home_path}}/bin/jboss-cli.sh -c --commands=":read-attribute(name=product-version)"
+    --user={{ wildfly_management_users.0.name }} --password={{wildfly_management_users.0.password}}
+  register: wildfly_check
+  changed_when: false
+  ignore_errors: true
+  no_log: true
+  when: service_wildfly_status | success
+
+- name: WildFly | Download WildFly binaries
+  get_url:
+    url: "{{ wildfly_url }}"
+    dest: "/tmp/{{ wildfly_package }}"
+  when: |
+      "Loaded: not-found" in service_wildfly_status.stdout or
+      "service could not be found" in service_wildfly_status.stderr or
+      (service_wildfly_status | success and
+        (wildfly_check | failed or
+        "\"result\" => \"{{ wildfly_version }}\"" not in wildfly_check.stdout))
+
+- name: WildFly | Extract wildfly in the install directory
+  unarchive:
+    copy: no
+    src: "/tmp/{{ wildfly_package }}"
+    dest: "{{ wildfly_install_path }}"
+    owner: "{{ wildfly_user }}"
+    group: "{{ wildfly_group }}"
+  when: |
+      "Loaded: not-found" in service_wildfly_status.stdout or
+      "service could not be found" in service_wildfly_status.stderr or
+      (service_wildfly_status | success and
+        (wildfly_check | failed or
+        "\"result\" => \"{{ wildfly_version }}\"" not in wildfly_check.stdout))
+
+- name: WildFly | Create Symlink to WildFly
+  file:
+    src: "{{ wildfly_install_path }}/{{ wildfly_package_name }}"
+    dest: "{{ wildfly_install_path }}/wildfly"
+    state: link
+    owner: "{{ wildfly_user }}"
+    group: "{{ wildfly_group }}"
+    force: True
+  when: |
+      "Loaded: not-found" in service_wildfly_status.stdout or
+      "service could not be found" in service_wildfly_status.stderr or
+      (service_wildfly_status | success and
+        (wildfly_check | failed or
+        "\"result\" => \"{{ wildfly_version }}\"" not in wildfly_check.stdout))
+
+- name: WildFly | Create log path
+  file:
+    path: "{{ wildfly_log_file_path }}"
+    state: directory
+    owner: "{{ wildfly_user }}"
+    group: "{{ wildfly_group }}"
