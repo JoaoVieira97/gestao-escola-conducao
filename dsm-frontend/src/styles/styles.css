@@ -1,0 +1,8 @@
+.tableHourAvailable {
+    background-color: #ffffff;
+    cursor: pointer;
+}
+
+.tableHourUnavailable {
+    background-color: #ff9cb2;
+}

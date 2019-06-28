@@ -27,6 +27,7 @@ class LessonsPage extends Component {
             allCategories: [],
             allNextPracticalLessons:[],
             showPracticalLessons:[],
+            instructor: undefined,
 
             messageLesson: 'Sem aulas marcadas.',
             messageRegisters:'Sem registos efetuados',
@@ -169,6 +170,8 @@ class LessonsPage extends Component {
         //Obter o nº de teóricas realizadas, isto é, somar o length de cada array dentro do array theoreticalRealized
         let numberT = theoreticalRealized.reduce( (acc, array) => acc + array.length, 0);
 
+        let instructor = registerChoosed[0].instructor;
+
         await this.setState({
             allRegisters: data.registers,
             allCategories: categories,
@@ -176,6 +179,7 @@ class LessonsPage extends Component {
             totalPracticalLessons: practicalLessons,
             numberPracticalRealized: numberP,
             numberTheoreticalRealized: numberT,
+            instructor: instructor,
 
             categoryChoosedName: categories[0].name,
             categoryChoosedId: categoryId,

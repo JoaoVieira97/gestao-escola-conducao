@@ -19,7 +19,12 @@ import Routes from "../../services/Routes";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
+
+
+import "../../styles/styles.css"
+
 const weekDays = ['Segunda', 'Terça' , 'Quarta', 'Quinta', 'Sexta', 'Sábado' , 'Domingo'];
+
 
 
 class MarkLesson extends Component {
@@ -29,10 +34,11 @@ class MarkLesson extends Component {
         super(props);
 
         this.state = {
-            isLoading: false,
+            isLoading: true,
             categoryChoosed: {},
             stepId: 1,
-            startDate: ''
+            startDate: new Date(),
+            weekDays: [],
 
         }
     };
@@ -40,17 +46,46 @@ class MarkLesson extends Component {
     async componentDidMount() {
         await this.setState({
             categoryChoosed: this.props.history.location.state.categoryChoosed,
-            startDate: new Date(),
+
         });
 
-        //console.log(this.state.startDate);
+        await this.defineWeekDays();
     }
+
+
+    defineWeekDays = () => {
+
+        //Segunda-> 0, Terça->1 , Quarta->2 , ....
+        let choosedWeekDay = this.state.startDate.getUTCDay();
+
+        let dateAux = new Date(this.state.startDate);
+
+        let i=0, weekDaysAux = [];
+
+        while (i < weekDays.length) {
+            let dayAux = i===0 ?  dateAux.getUTCDate() : dateAux.getUTCDate() + 1;
+            dateAux.setDate(dayAux);
+
+            let day = dateAux.getUTCDate();
+            let month = dateAux.getUTCMonth()+1;
+
+            weekDaysAux.push(weekDays[choosedWeekDay - 1] + " " + day + "/" + month);
+
+            choosedWeekDay = (choosedWeekDay % weekDays.length) + 1;
+            i++;
+        }
+
+        this.setState({
+            weekDays: weekDaysAux,
+            isLoading: false,
+        })
+    };
 
 
     /**
         Define how many slots the instructor have.
      */
-    slots(startTime, endTime){
+    slots = (startTime, endTime) => {
 
         let length = endTime - startTime;
         let res = [];
@@ -59,16 +94,24 @@ class MarkLesson extends Component {
             res.push(i + 'h - ' + (i + 1) + 'h');
 
         return res;
-    }
+    };
 
     handleClickStep = (idStep) => {
     };
 
+    handleClickCell = () => {
+        console.log("CELL CLICKED");
+    }
 
-    handleChange(date) {
-        this.setState({
-            startDate: date
+
+    async handleChange(date) {
+
+        await this.setState({
+            isLoading: true,
+            startDate: date,
         });
+
+        await this.defineWeekDays();
     }
 
     render() {
@@ -81,7 +124,7 @@ class MarkLesson extends Component {
                         <Table.Row textAlign={'center'}>
                             <Table.HeaderCell />
                             {
-                                weekDays.map( (day, i) => (
+                                this.state.weekDays.map( (day, i) => (
                                     <Table.HeaderCell key={i}>
                                         {day}
                                     </Table.HeaderCell>
@@ -95,10 +138,12 @@ class MarkLesson extends Component {
                                 <Table.Row key={index} >
                                     <Table.Cell key={index}> {hours} </Table.Cell>
                                     {
-                                        weekDays.map( (day, i) => (
-                                            <Table.Cell key={i} selectable style={{color:'#0cff43'}}>
-                                                <a href='new'/>
-                                            </Table.Cell>
+                                        this.state.weekDays.map( (day, i) => (
+                                            <Table.Cell key={i}
+                                                        className={"tableHourAvailable"}
+                                                        selectable={false}
+                                                        onClick={() => this.handleClickCell()}
+                                            />
                                         ))
                                     }
                                 </Table.Row>
@@ -126,7 +171,7 @@ class MarkLesson extends Component {
                                 Aulas
                             </Breadcrumb.Section>
                             <Breadcrumb.Divider icon='right angle' />
-                            <Breadcrumb.Section active>Marcar Aula - {this.state.categoryChoosed.name} </Breadcrumb.Section>
+                            <Breadcrumb.Section active>Marcar Aula </Breadcrumb.Section>
                             <Breadcrumb.Divider icon='right arrow' />
                             <Breadcrumb.Section active>Escolher semana</Breadcrumb.Section>
                         </Breadcrumb>
@@ -134,30 +179,32 @@ class MarkLesson extends Component {
                 </Grid>
                 <Container>
                     <Header as='h1'> Marcar aula </Header>
-                    <Form size='large' floated='left'>
-                        <Form.Field
-                            //className={(this.state.error && this.state.data === '') ? "error field" : "field"}
-                            //control={Input}
-                            //label='Data da aula'
-                            //placeholder='Data da aula'
-                            //name={"data"}
-                            //type="datetime-local"
-                            //onChange={this.handleInputChange}
-                            //control={DatePicker}
-                            //selected={this.state.startDate}
-                            //onChange={this.handleChange.bind(this)}
-                            //dateFormat="Pp"
-                        >
-                            <label>Data da aula</label>
-                            <DatePicker
-                                selected={ this.state.startDate }
-                                onChange={ this.handleChange.bind(this)}
-                                name="startDate"
-                                dateFormat="dd/MM/yyyy"
-                            />
-                        </Form.Field>
-                    </Form>
-                    {tableInstructorSchedule}
+                    <Container textAlign={'left'}>
+                        <Form size='large'>
+                            <Form.Field
+                                //className={(this.state.error && this.state.data === '') ? "error field" : "field"}
+                                //control={Input}
+                                //label='Data da aula'
+                                //placeholder='Data da aula'
+                                //name={"data"}
+                                //type="datetime-local"
+                                //onChange={this.handleInputChange}
+                                //control={DatePicker}
+                                //selected={this.state.startDate}
+                                //onChange={this.handleChange.bind(this)}
+                                //dateFormat="Pp"
+                            >
+                                <label>Data da aula</label>
+                                <DatePicker
+                                    selected={ this.state.startDate }
+                                    onChange={ this.handleChange.bind(this)}
+                                    name="startDate"
+                                    dateFormat="dd/MM/yyyy"
+                                />
+                            </Form.Field>
+                        </Form>
+                        {tableInstructorSchedule}
+                    </Container>
                 </Container>
                 <Container style={{marginTop:'25%'}}>
                     <Step.Group size='mini' stackable={'tablet'}>
