@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
 
-@WebServlet(name = "UpdateStudentData", urlPatterns = {"/api/secretary/update_student"})
-public class UpdateStudentData extends HttpServlet {
+@WebServlet(name = "RegisterPersonalAnnouncement", urlPatterns = {"/api/secretary/register_personal_announcement"})
+public class RegisterPersonalAnnouncement extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -35,18 +35,14 @@ public class UpdateStudentData extends HttpServlet {
             // parsing data
             // ------------------------------------------------------------
             int studentID = (Integer) JSON.get("studentID");
-            String name = (String) JSON.get("name");
-            String email = (String) JSON.get("email");
-            String address = (String) JSON.get("address");
-            String cc = (String) JSON.get("cc");
-            String nif = (String) JSON.get("nif");
-            String birth = (String) JSON.get("birth");
+            String title = (String) JSON.get("title");
+            String description = (String) JSON.get("description");
 
-            // register student
-            boolean updated = DSMFacade.updateStudent(studentID, name, email, address, birth, nif, cc);
-            if(updated) {
+            // register announcement
+            boolean registered = DSMFacade.registerPersonalAnnouncement(studentID, title, description);
+            if(registered) {
 
-                responseNode.put("success", updated);
+                responseNode.put("success", registered);
                 response.setStatus(HttpServletResponse.SC_OK);
             }
             else {
@@ -58,6 +54,7 @@ public class UpdateStudentData extends HttpServlet {
             responseNode.put("error", Utils.INVALID_USER_TOKEN);
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
+
 
         response.setContentType("application/json;charset=UTF-8");
         response.getWriter().write(

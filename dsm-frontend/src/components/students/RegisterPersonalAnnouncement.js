@@ -7,22 +7,36 @@ import {
     Input,
     Button,
     Segment,
-    Message
+    Message,
+    Dimmer,
+    Loader,
+    Breadcrumb
 } from 'semantic-ui-react';
 import {fetchApi} from "../../services/api";
 import Routes from "../../services/Routes";
 
-class RegisterGeneralAnnouncement extends Component {
+class RegisterPersonalAnnouncement extends Component {
 
     constructor(props){
         super(props);
 
         this.state = {
+            student: {},
+
             title: '',
             description: '',
             message: '',
-            error: ''
+            error: '',
+            isLoading: true
         };
+    }
+
+    async componentDidMount(){
+        
+        await this.setState({
+            student: this.props.location.state.student,
+            isLoading: false
+        })
     }
 
     handleInputChange = (event) => {
@@ -42,8 +56,9 @@ class RegisterGeneralAnnouncement extends Component {
         if(title !== '' && description !== '') {
             
             fetchApi(
-                'post','/secretary/register_general_announcement',
+                'post','/secretary/register_personal_announcement',
                 {
+                    studentID: this.state.student.id,
                     title: title,
                     description: description
                 },  {},
@@ -66,13 +81,13 @@ class RegisterGeneralAnnouncement extends Component {
     	//console.log(response)
 
     	this.setState({
-    		message: 'Aviso publicado com sucesso',
+    		message: 'Aviso enviado com sucesso',
     		error: ''
     	});
 
 
     	sleep(3000).then(() => {
-            this.props.history.push(Routes.HOME);
+            this.props.history.push(Routes.STUDENT_PROFILE, {student: this.state.student});
         });
         
     };
@@ -96,15 +111,38 @@ class RegisterGeneralAnnouncement extends Component {
 
         return(
             <Container>
+                <Dimmer inverted active={this.state.isLoading}>
+                    <Loader>A carregar</Loader>
+                </Dimmer>
+                <Grid className="ui stackable two column centered grid" style={{marginBottom: "65px"}}>
+                    <Grid.Column width={16}>
 
-                <Grid centered style={{marginBottom: "65px"}}>
+                        <Breadcrumb size='large'>
+                            <Breadcrumb.Section
+                                style={{color: 'grey'}}
+                                onClick={() => this.props.history.push(Routes.HOME)}
+                            >
+                                Alunos
+                            </Breadcrumb.Section>
+                            <Breadcrumb.Divider icon='right angle' />
+                            <Breadcrumb.Section
+                                style={{color: 'grey'}}
+                                onClick={() => this.props.history.push(Routes.STUDENT_PROFILE, {student: this.state.student})}
+                            >
+                                {this.state.student.name}
+                            </Breadcrumb.Section>
+                            <Breadcrumb.Divider icon='right angle' />
+                            <Breadcrumb.Section active>Enviar aviso</Breadcrumb.Section>
+                        </Breadcrumb>
+
+                    </Grid.Column>
                     <Grid.Column width={10} style={{marginTop: "30px"}}>
                         <Segment>
                             <Header 
                                 className='centered' 
-                                as='h1'
+                                as='h2'
                             >
-                                Registar aviso geral
+                                Enviar aviso a {this.state.student.name}
                             </Header>
                             <Form>
                                 <Form.Field
@@ -128,7 +166,7 @@ class RegisterGeneralAnnouncement extends Component {
                                     className="ui button"
                                     onClick={this.handleSubmit.bind(this)}
                                 >
-                                    PUBLICAR
+                                    ENVIAR
                                 </Button>
                                 <Message positive hidden={!this.state.message}>
                                     <Message.Header>Sucesso</Message.Header>
@@ -153,4 +191,4 @@ const sleep = (milliseconds) => {
     return new Promise(resolve => setTimeout(resolve, milliseconds))
 }
 
-export default RegisterGeneralAnnouncement;
+export default RegisterPersonalAnnouncement;

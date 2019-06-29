@@ -161,7 +161,7 @@ class RegisterExam extends Component {
 
 
         sleep(3000).then(() => {
-            this.props.history.push(Routes.HOME);
+            this.props.history.push(Routes.STUDENT_PROFILE, {student: this.state.student});
         });
         
     };
@@ -250,7 +250,14 @@ class RegisterExam extends Component {
                                 Alunos
                             </Breadcrumb.Section>
                             <Breadcrumb.Divider icon='right angle' />
-                            <Breadcrumb.Section active>Exames de aluno</Breadcrumb.Section>
+                            <Breadcrumb.Section
+                                style={{color: 'grey'}}
+                                onClick={() => this.props.history.push(Routes.STUDENT_PROFILE, {student: this.state.student})}
+                            >
+                                {this.state.student.name}
+                            </Breadcrumb.Section>
+                            <Breadcrumb.Divider icon='right angle' />
+                            <Breadcrumb.Section active>Exames</Breadcrumb.Section>
                         </Breadcrumb>
 
                     </Grid.Column>

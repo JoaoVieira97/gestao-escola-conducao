@@ -12,6 +12,7 @@ import {
     Popup,
     Button,
     Message,
+    Icon
 } from 'semantic-ui-react';
 import { fetchApi } from '../../services/api/index';
 import Routes from "../../services/Routes";
@@ -27,11 +28,11 @@ class StudentProfile extends Component {
             name: '',
             birth: '',
             email: '',
-            password: '',
             address: '',
             nif: '',
             cc: '',
-            edit: false
+            edit: false,
+            manage: false
         }
     }
 
@@ -66,16 +67,8 @@ class StudentProfile extends Component {
 
     handleSubmit = () => {
 
-        const { name, email, password, birth, nif, cc, address } = this.state;
+        const { name, email, birth, nif, cc, address } = this.state;
         if(name !== '' && email !== '' && birth !== '' && nif !== '' && cc !== '' && address !== '') {
-
-            console.log(name)
-            console.log(email)
-            console.log(password)
-            console.log(birth)
-            console.log(nif)
-            console.log(cc)
-            console.log(address)
 
             if (!nif.match(/^[0-9]{9}$/g)){
                 this.setState({
@@ -97,7 +90,6 @@ class StudentProfile extends Component {
                         studentID: this.state.student.id,
                         name: name,
                         email: email,
-                        password: password,
                         birth: birth,
                         nif: nif,
                         cc: cc,
@@ -170,7 +162,7 @@ class StudentProfile extends Component {
                                 Alunos
                             </Breadcrumb.Section>
                             <Breadcrumb.Divider icon='right angle' />
-                            <Breadcrumb.Section active>Perfil de {this.state.student.name}</Breadcrumb.Section>
+                            <Breadcrumb.Section active>{this.state.student.name}</Breadcrumb.Section>
                         </Breadcrumb>
 
                     </Grid.Column>
@@ -181,6 +173,54 @@ class StudentProfile extends Component {
                             color={(!this.state.edit) ? 'blue' : 'black'} 
                             onClick={() => this.setState({edit: !this.state.edit})}
                         />
+                        <Button 
+                            color={(!this.state.manage) ? 'orange' : 'black'}
+                            icon='student' 
+                            content='Gerir'
+                            onClick={() => this.setState({manage: !this.state.manage})}
+                        />
+                        <Segment 
+                            className="ui center aligned"
+                            color="orange" 
+                            hidden={!this.state.manage}
+                        >
+                            <Button
+                                style={{marginBottom: '3px'}}
+                                icon
+                                labelPosition='left'
+                                onClick={() => this.props.history.push(Routes.REGISTER_STUDENT_CATEGORY, {student: this.state.student})}
+                            >
+                                <Icon name='file alternate outline' color='orange'/>
+                                <p>Categorias</p>
+                            </Button>
+                            <Button
+                                style={{marginBottom: '3px'}}
+                                icon
+                                labelPosition='left'
+                                onClick={() => this.props.history.push(Routes.REGISTER_STUDENT_PAYMENT, {student: this.state.student})}
+                            >
+                                <Icon name='euro sign' color='orange'/>
+                                <p>Pagamentos</p>
+                            </Button>
+                            <Button
+                                style={{marginBottom: '3px'}}
+                                icon
+                                labelPosition='left'
+                                onClick={() => this.props.history.push(Routes.REGISTER_STUDENT_EXAM, {student: this.state.student})}
+                            >
+                                <Icon name='clipboard outline' color='orange'/>
+                                <p>Exames</p>
+                            </Button>
+                            <Button
+                                style={{marginBottom: '3px'}}
+                                icon
+                                labelPosition='left'
+                                onClick={() => this.props.history.push(Routes.REGISTER_STUDENT_ANNOUNCEMENT, {student: this.state.student})}
+                            >
+                                <Icon name='bell outline' color='orange'/>
+                                <p>Enviar aviso</p>
+                            </Button>
+                        </Segment>
                         <Segment>
                             <Header 
                                 className='centered' 
@@ -214,27 +254,16 @@ class StudentProfile extends Component {
                                         onChange={this.handleInputChange}
                                     />
                                 </Form.Group>
-                                <Form.Group widths='equal'>
-                                    <Form.Field
-                                        className={(this.state.error && this.state.email === '') ? "error field" : "field"}
-                                        control={Input}
-                                        label='E-mail'
-                                        placeholder='E-mail'
-                                        name={"email"}
-                                        defaultValue={this.state.email}
-                                        readOnly={!this.state.edit}
-                                        onChange={this.handleInputChange}
-                                    />
-                                    <Form.Field
-                                        control={Input}
-                                        label='Password'
-                                        placeholder='Password'
-                                        type="password"
-                                        name={"password"}
-                                        readOnly={!this.state.edit}
-                                        onChange={this.handleInputChange}
-                                    />
-                                </Form.Group>
+                                <Form.Field
+                                    className={(this.state.error && this.state.email === '') ? "error field" : "field"}
+                                    control={Input}
+                                    label='E-mail'
+                                    placeholder='E-mail'
+                                    name={"email"}
+                                    defaultValue={this.state.email}
+                                    readOnly={!this.state.edit}
+                                    onChange={this.handleInputChange}
+                                />
                                 <Form.Field
                                     className={(this.state.error && this.state.address === '') ? "error field" : "field"}
                                     control={Input}
@@ -259,7 +288,7 @@ class StudentProfile extends Component {
                                             <input
                                                 title="9 dígitos"
                                                 type="text"
-                                                maxlength="9"
+                                                maxLength="9"
                                                 placeholder="NIF"
                                                 pattern="[0-9]{9}"
                                                 name={"nif"}
@@ -281,7 +310,7 @@ class StudentProfile extends Component {
                                         <div className="ui input">
                                             <input
                                                 type="text"
-                                                maxlength="12"
+                                                maxLength="12"
                                                 title="8 dígitos mais 4 carateres (dígitos ou letras maiúsculas)"
                                                 placeholder="CC"
                                                 pattern="[0-9]{8}[A-Z0-9]{4}"

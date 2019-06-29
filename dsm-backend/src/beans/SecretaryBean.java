@@ -278,7 +278,6 @@ public class SecretaryBean implements SecretaryBeanLocal{
      * @param studentID
      * @param name
      * @param email
-     * @param password
      * @param address
      * @param birth
      * @param nif
@@ -286,7 +285,7 @@ public class SecretaryBean implements SecretaryBeanLocal{
      * @return
      */
     @Override
-    public boolean updateStudent(int studentID, String name, String email, String password, String address, String birth, String nif, String cc){
+    public boolean updateStudent(int studentID, String name, String email, String address, String birth, String nif, String cc){
 
         try {
 
@@ -297,7 +296,6 @@ public class SecretaryBean implements SecretaryBeanLocal{
 
             s.setName(name);
             s.setEmail(email);
-            if (!password.equals("")) s.setPassword(Utils.hash(password));
             s.setAddress(address);
             s.setBirth(aux_birth);
             s.setNif(aux_nif);
@@ -307,6 +305,37 @@ public class SecretaryBean implements SecretaryBeanLocal{
             return true;
 
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    /**
+     * Register general announcement
+     * @param studentID
+     * @param title
+     * @param description
+     * @return
+     */
+    @Override
+    public boolean registerPersonalAnnouncement(int studentID, String title, String description){
+
+        try {
+            Student student = StudentDAO.getStudentByORMID(studentID);
+            PersonalAnnouncement pa = new PersonalAnnouncement();
+
+            pa.setTitle(title);
+            pa.setDescription(description);
+            pa.setViewed(false);
+            pa.setTimestamp(new Timestamp(System.currentTimeMillis()));
+            student.announcements.add(pa);
+
+            StudentDAO.save(student);
+
+            return true;
+
+        } catch (PersistentException e) {
             e.printStackTrace();
         }
 

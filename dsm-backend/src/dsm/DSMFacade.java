@@ -403,14 +403,20 @@ public class DSMFacade {
     /**
      * update student data
      */
-    public static boolean updateStudent(int studentID, String name, String email, String password, String address, String birth, String nif, String cc){
+    public static boolean updateStudent(int studentID, String name, String email, String address, String birth, String nif, String cc){
 
-        return secretaryBean.updateStudent(studentID, name, email, password, address, birth, nif, cc);
+        return secretaryBean.updateStudent(studentID, name, email, address, birth, nif, cc);
     }
 
     // ------------------------------------------------------------
 
+    /**
+     * register personal announcement
+     */
+    public static boolean registerPersonalAnnouncement(int studentID, String title, String description){
 
+        return secretaryBean.registerPersonalAnnouncement(studentID, title, description);
+    }
 
     //
     // INSTRUCTOR BEAN
