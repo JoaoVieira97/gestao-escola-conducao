@@ -176,15 +176,12 @@ class StudentProfile extends Component {
 
                     </Grid.Column>
                     <Grid.Column width={10} style={{marginTop: "30px"}}>
-                        <Popup content='Editar dados' trigger={
-                            <Button 
-                                icon 
-                                color={(!this.state.edit) ? 'blue' : 'black'} 
-                                onClick={() => this.setState({edit: !this.state.edit})}
-                            >
-                                <Icon name='edit' />
-                            </Button>
-                        }/>
+                        <Button 
+                            icon='edit'
+                            content='Clique para editar'
+                            color={(!this.state.edit) ? 'blue' : 'black'} 
+                            onClick={() => this.setState({edit: !this.state.edit})}
+                        />
                         <Segment>
                             <Header 
                                 className='centered' 
@@ -230,7 +227,6 @@ class StudentProfile extends Component {
                                         onChange={this.handleInputChange}
                                     />
                                     <Form.Field
-                                        className={(this.state.error && this.state.password === '') ? "error field" : "field"}
                                         control={Input}
                                         label='Password'
                                         placeholder='Password'
@@ -253,11 +249,18 @@ class StudentProfile extends Component {
                                 <Form.Group widths='equal'>
                                     <div className={(this.state.error && this.state.nif === '') ? "error field" : "field"}>
                                         <div className="label left icon">
-                                            <Popup content='Número de Identificação Fiscal' trigger={<i className="question circle blue icon" />}/>
+                                            <Popup
+                                                header="Número de Identificação Fiscal" 
+                                                content="9 dígitos"
+                                                trigger={<i className="question circle blue icon" />}
+                                            />
                                             <label>NIF</label>
                                         </div>
                                         <div className="ui input">
                                             <input
+                                                title="9 dígitos"
+                                                type="text"
+                                                maxlength="9"
                                                 placeholder="NIF"
                                                 pattern="[0-9]{9}"
                                                 name={"nif"}
@@ -269,11 +272,18 @@ class StudentProfile extends Component {
                                     </div>
                                     <div className={(this.state.error && this.state.cc === '') ? "error field" : "field"}>
                                         <div className="label left icon">
-                                            <Popup content='Cartão de Cidadão' trigger={<i className="question circle blue icon" />}/>
+                                            <Popup
+                                                header="Cartão de Cidadão" 
+                                                content="8 dígitos mais 4 carateres (dígitos ou letras maiúsculas)" 
+                                                trigger={<i className="question circle blue icon" />}
+                                            />
                                             <label>CC</label>
                                         </div>
                                         <div className="ui input">
                                             <input
+                                                type="text"
+                                                maxlength="12"
+                                                title="8 dígitos mais 4 carateres (dígitos ou letras maiúsculas)"
                                                 placeholder="CC"
                                                 pattern="[0-9]{8}[A-Z0-9]{4}"
                                                 name={"cc"}

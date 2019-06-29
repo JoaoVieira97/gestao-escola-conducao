@@ -42,9 +42,11 @@ public class RegisterStudent extends HttpServlet {
             String cc = (String) JSON.get("cc");
             String nif = (String) JSON.get("nif");
             String birth = (String) JSON.get("birth");
+            int categoryID = (Integer) JSON.get("categoryID");
+            int instructorID = (Integer) JSON.get("instructorID");
 
             // register student
-            boolean registered = DSMFacade.registerStudent(name, email, password, address, birth, nif, cc);
+            boolean registered = DSMFacade.registerStudent(name, email, password, address, birth, nif, cc, categoryID, instructorID);
             if(registered) {
 
                 responseNode.put("success", registered);

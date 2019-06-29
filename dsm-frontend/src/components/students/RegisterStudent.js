@@ -9,7 +9,9 @@ import {
     Input,
     Popup,
     Breadcrumb,
-    Message
+    Message,
+    Dimmer,
+    Loader
 } from 'semantic-ui-react';
 import { fetchApi } from '../../services/api/index';
 import Routes from "../../services/Routes";
@@ -21,6 +23,12 @@ class RegisterStudent extends Component {
         super(props);
 
         this.state = {
+            categories_options: [],
+            instructors_options: [],
+
+            category: '',
+            instructor: '',
+
             name: '',
             email: '',
             password: '',
@@ -28,10 +36,68 @@ class RegisterStudent extends Component {
             nif: '',
             cc: '',
             address: '',
+
             message: '',
-            error: ''
+            error: '',
+            isLoading: true
         }
     
+    };
+
+    componentDidMount(){
+        fetchApi(
+            'get','/school/categories_and_instructors',
+            {},  {},
+            this.successFetchInfo, this.errorHandlerInfo
+        );
+    }
+
+    /**
+     * Handle the response fetch registers.
+     * @param response
+     */
+    successFetchInfo = (response) => {
+        
+        const data = response.data;
+
+        let categories_options = []
+        let instructors_options = []
+        
+        data.categories.forEach(function(category) {
+            categories_options.push({
+                key: category.id,
+                text: 'Categoria ' + category.name,
+                value: category.id
+            })
+        })
+
+        data.instructors.forEach(function(instructor) {
+            instructors_options.push({
+                key: instructor.id,
+                text: instructor.name,
+                value: instructor.id
+            })
+        })
+
+        this.setState({
+            categories_options: categories_options,
+            instructors_options: instructors_options,
+            isLoading: false
+        })
+
+    };
+
+    /**
+     * Handle the error.
+     * @param error
+     */
+    errorHandler = (error) => {
+
+        console.log(error);
+        this.setState({
+            isLoading: false
+        })
+
     };
 
     handleInputChange = (event) => {
@@ -45,10 +111,22 @@ class RegisterStudent extends Component {
 
     };
 
+    handleSelectCategoryChange = (event, data) => {
+        this.setState({
+            category: data.value
+        })
+    }
+
+    handleSelectInstructorChange = (event, data) => {
+        this.setState({
+            instructor: data.value
+        })
+    }
+
     handleSubmit = () => {
 
-        const { name, email, password, birth, nif, cc, address } = this.state;
-        if(name !== '' && email !== '' && password !== '' && birth !== '' && nif !== '' && cc !== '' && address !== '') {
+        const { name, email, password, birth, nif, cc, address, category, instructor } = this.state;
+        if(name !== '' && email !== '' && password !== '' && birth !== '' && nif !== '' && cc !== '' && address !== '' && category !== '' && instructor !== '') {
 
             if (!nif.match(/^[0-9]{9}$/g)){
                 this.setState({
@@ -73,7 +151,9 @@ class RegisterStudent extends Component {
                         birth: birth,
                         nif: nif,
                         cc: cc,
-                        address: address
+                        address: address,
+                        instructorID: instructor,
+                        categoryID: category
                     },  {},
                     this.successHandler, this.errorHandler
                 );
@@ -125,8 +205,14 @@ class RegisterStudent extends Component {
 
     render() {
 
+        console.log(this.state.instructor)
+        console.log(this.state.category)
+
         return (
             <Container>
+                <Dimmer inverted active={this.state.isLoading}>
+                    <Loader>A carregar</Loader>
+                </Dimmer>
 
                 <Grid centered style={{marginBottom: "65px"}}>
                     
@@ -204,11 +290,18 @@ class RegisterStudent extends Component {
                                 <Form.Group widths='equal'>
                                     <div className={(this.state.error && this.state.nif === '') ? "error field" : "field"}>
                                         <div className="label left icon">
-                                            <Popup content='Número de Identificação Fiscal' trigger={<i className="question circle blue icon" />}/>
+                                            <Popup
+                                                header="Número de Identificação Fiscal" 
+                                                content="9 dígitos"
+                                                trigger={<i className="question circle blue icon" />}
+                                            />
                                             <label>NIF</label>
                                         </div>
                                         <div className="ui input">
                                             <input
+                                                title="9 dígitos"
+                                                type="text"
+                                                maxlength="9"
                                                 name={"nif"}
                                                 placeholder="NIF"
                                                 pattern="[0-9]{9}"
@@ -218,11 +311,18 @@ class RegisterStudent extends Component {
                                     </div>
                                     <div className={(this.state.error && this.state.cc === '') ? "error field" : "field"}>
                                         <div className="label left icon">
-                                            <Popup content='Cartão de Cidadão' trigger={<i className="question circle blue icon" />}/>
+                                            <Popup
+                                                header="Cartão de Cidadão" 
+                                                content="8 dígitos mais 4 carateres (dígitos ou letras maiúsculas)" 
+                                                trigger={<i className="question circle blue icon" />}
+                                            />
                                             <label>CC</label>
                                         </div>
                                         <div className="ui input">
                                             <input
+                                                type="text"
+                                                maxlength="12"
+                                                title="8 dígitos mais 4 carateres (dígitos ou letras maiúsculas)"
                                                 name={"cc"}
                                                 placeholder="CC"
                                                 pattern="[0-9]{8}[A-Z0-9]{4}"
@@ -231,11 +331,32 @@ class RegisterStudent extends Component {
                                         </div>
                                     </div>
                                 </Form.Group>
-                                <Button 
-                                        type="submit"
-                                        className="ui button"
-                                        onClick={this.handleSubmit.bind(this)}
-                                    >
+                                <Form.Group widths='equal'>
+                                    <Form.Select
+                                        className={(this.state.error && this.state.category === '') ? "error field" : "field"}
+                                        fluid 
+                                        label='Categoria'
+                                        options={this.state.categories_options}
+                                        placeholder='Categoria'
+                                        name={"category"}
+                                        onChange={this.handleSelectCategoryChange}
+                                    />
+                                    <Form.Select
+                                        className={(this.state.error && this.state.instructor === '') ? "error field" : "field"}
+                                        fluid 
+                                        label='Instrutor'
+                                        options={this.state.instructors_options}
+                                        placeholder='Instrutor'
+                                        name={"instructor"}
+                                        onChange={this.handleSelectInstructorChange}
+                                    />
+                                </Form.Group>
+                                <Button
+                                    disabled={this.state.name === '' || this.state.email === '' || this.state.password === '' || this.state.birth === '' || this.state.nif === '' || this.state.cc === '' || this.state.address === '' || this.state.instructor === '' || this.state.category === ''}
+                                    type="submit"
+                                    className="ui button"
+                                    onClick={this.handleSubmit.bind(this)}
+                                >
                                         REGISTAR
                                 </Button>
                                 <Message positive hidden={!this.state.message}>

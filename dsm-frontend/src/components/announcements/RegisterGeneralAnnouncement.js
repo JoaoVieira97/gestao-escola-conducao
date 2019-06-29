@@ -123,7 +123,8 @@ class RegisterGeneralAnnouncement extends Component {
                                     name={"description"}
                                     onChange={this.handleInputChange}
                                 />
-                                <Button 
+                                <Button
+                                    disabled={this.state.title === '' || this.state.description === ''}
                                     type="submit"
                                     className="ui button"
                                     onClick={this.handleSubmit.bind(this)}

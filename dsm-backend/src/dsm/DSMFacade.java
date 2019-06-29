@@ -355,9 +355,9 @@ public class DSMFacade {
     /**
      * Register new student
      */
-    public static boolean registerStudent(String name, String email, String password, String address, String birth, String nif, String cc) {
+    public static boolean registerStudent(String name, String email, String password, String address, String birth, String nif, String cc, int categoryID, int instructorID) {
 
-        return secretaryBean.registerStudent(name, email, password, address, birth, nif, cc);
+        return secretaryBean.registerStudent(name, email, password, address, birth, nif, cc, categoryID, instructorID);
     }
 
     /**

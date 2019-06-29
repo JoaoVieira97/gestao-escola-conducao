@@ -87,7 +87,7 @@ public class SecretaryBean implements SecretaryBeanLocal{
      * @return
      */
     @Override
-    public boolean registerStudent(String name, String email, String password, String address, String birth, String nif, String cc){
+    public boolean registerStudent(String name, String email, String password, String address, String birth, String nif, String cc, int categoryID, int instructorID){
 
         try {
 
@@ -104,6 +104,16 @@ public class SecretaryBean implements SecretaryBeanLocal{
             s.setNif(aux_nif);
             s.setCc(cc);
             s.setRole("ROLE_STUDENT");
+
+            Category category = CategoryDAO.getCategoryByORMID(categoryID);
+            Instructor instructor = InstructorDAO.getInstructorByORMID(instructorID);
+
+            Register register = new Register();
+            register.setCategory(category);
+            register.setInstructor(instructor);
+            register.setInitialDate(new Date());
+
+            s.registers.add(register);
 
             StudentDAO.save(s);
             return true;
