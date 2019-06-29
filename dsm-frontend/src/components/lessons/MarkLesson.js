@@ -1,390 +1,171 @@
 import React, {Component} from 'react';
 
-
 import {
-    Header,
     Container,
-    Dimmer,
-    Loader,
     Step,
     Icon,
     Breadcrumb,
-    Grid,
-    Form,
-    Table, Label
+    Segment, Loader, Dimmer,
 } from 'semantic-ui-react';
-
+import moment from "moment";
 import Routes from "../../services/Routes";
-
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import moment from 'moment'
-
-
 import "../../styles/styles.css"
-import {fetchApi} from "../../services/api";
-
-const weekDays = [ 'Domingo', 'Segunda', 'Terça' , 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+import SelectDay from "./SelectDay";
+import SelectWeek from "./SelectWeek";
+import ConfirmNewLesson from "./ConfirmNewLesson";
 
 
 
 class MarkLesson extends Component {
 
-
     constructor(props) {
         super(props);
 
+        const todayRaw = new Date();
+        const endDate = moment(todayRaw).add(6, 'day').format('YYYY-MM-DD');
+
         this.state = {
+            //all
             isLoading: true,
-            categoryChoosed: {},
+            isLoadingText: 'A carregar...',
             stepId: 1,
-            startDate: new Date(),
-            weekDays: [],
-            instructor: {},
-            slots : [],
-            schedule: [],
+            instructor: {name: 'A carregar...'},
+            category: {name: 'A carregar...'},
 
+            // first step
+            startDate: todayRaw,
+            endDate: new Date(endDate),
+
+            // second step
+            selectedDay: todayRaw
         }
     };
 
-     async componentDidMount() {
+    componentDidMount() {
 
-        await this.setState({
-            categoryChoosed: this.props.history.location.state.categoryChoosed,
-            instructor : this.props.history.location.state.instructor,
-        });
+        if(this.props.history.location.state &&
+            this.props.history.location.state.categoryChoosed &&
+            this.props.history.location.state.instructor
+        ) {
+            this.setState({
+                instructor: this.props.history.location.state.instructor,
+                category: this.props.history.location.state.categoryChoosed,
+                isLoading: false
+            });
+        }
+        else {
 
-        //isLoading: false nesta função
-        await this.defineWeekDays();
-
-        //falta obter school information
-        await this.slots(8,18);
-
-        fetchApi(
-            'get','/lessons/' +
-            'reserved_lessons?instructorID='+this.state.instructor.id+'&categoryID='+this.state.categoryChoosed.id,
-            {},  {},
-            this.successFetchReservedLessons, this.errorFetchReservedLessons
-        );
+            this.props.history.push(Routes.LESSONS);
+        }
     }
 
-
-    successFetchReservedLessons = async(response) => {
-        console.log("SUCESSO");
-
-        const reservedLessons = response.data.practicalLessons;
-
-        //Não está bem!! porque também pode ser do próximo ano
-        let year = this.state.startDate.getFullYear();
-
-        let schedule = [];
-
-        this.state.slots.forEach( slot =>{
-            let aux = [];
-            let initHour = slot.split("h")[0];
-
-            this.state.weekDays.forEach( weekDay => {
-
-                let weekDaySplit = weekDay.split(" ");
-
-                let weekDate = moment(weekDaySplit[1] + "/" + year + " " + initHour + ":00", "DD/MM/YYYY HH:mm")
-                            .format("DD/MM/YYYY HH:mm");
-
-                let reserved = reservedLessons.find(function (lesson) {
-
-                    return lesson.startTime === weekDate;
-                });
-
-                let canReserve = true;
-                if(reserved) canReserve = false;
-
-                let dayId = weekDays.indexOf(weekDaySplit[0]);
-
-                aux.push({
-                    date: weekDate,
-                    canReserve: canReserve,
-                    dayId: dayId,
-                });
-
-            });
-
-            schedule.push(aux);
-        });
-
-        await this.setState({
-            schedule: schedule,
-        });
-
-
-        fetchApi(
-            'get','/instructor/working_days?instructorID='+this.state.instructor.id,
-            {},  {},
-            this.successFetchWorkingDays, this.errorFetchWorkingDays
-        );
-    };
-
-    successFetchWorkingDays = async (response) => {
-        const workingDays = response.data.workingDays;
-        console.log(workingDays);
-
-        const schedule = this.state.schedule;
-
-        let scheduleAux = [];
-
-        schedule.forEach( row => {
-            let aux = [];
-
-            row.forEach( day => {
-
-                let working = workingDays.find(function (workingDay) {
-
-                    return workingDay.id === (day.dayId + 1);
-                });
-
-                let canReserve = working ? true : false;
-
-                aux.push({
-                    date: day.date,
-                    canReserve : canReserve,
-                    dayId: day.dayId,
-                });
-            });
-
-            scheduleAux.push(aux);
-        });
-
-        await this.setState({
-            schedule: scheduleAux,
-            isLoading: false,
-        });
-    };
-
-    errorFetchWorkingDays = (error) => {
-        console.log("ERRO2");
-        console.log(error);
-    };
-
-    errorFetchReservedLessons = (error) => {
-        console.log("ERRO");
-        console.log(error);
-    };
-
     /**
-     * Define the week days to show in table to student mark lesson.
+     * When user press on day in first step.
+     * @param date
      */
-    defineWeekDays = () => {
+    onChangeDate = (date) => {
 
-        //Segunda-> 0, Terça->1 , Quarta->2 , ....
-        let choosedWeekDay = this.state.startDate.getDay();
-        let dateAux = new Date(this.state.startDate);
-
-        let i=0, weekDaysAux = [];
-
-        while (i < weekDays.length) {
-
-            let dayAux = i===0 ?  dateAux.getDate() : dateAux.getDate() + 1;
-            dateAux.setDate(dayAux);
-
-            let day = dateAux.getDate();
-            let month = dateAux.getMonth()+1;
-
-            weekDaysAux.push(weekDays[choosedWeekDay] + " " + day + "/" + month);
-
-            choosedWeekDay = (choosedWeekDay + 1) % weekDays.length;
-            i++;
-        }
-
+        const endDate = moment(date).add(6, 'day').format('YYYY-MM-DD');
         this.setState({
-            weekDays: weekDaysAux,
-        });
-    };
-
-    /**
-        Define how many slots the instructor have.
-     */
-    slots = (startTime, endTime) => {
-
-        let length = endTime - startTime;
-        let res = [];
-
-        for(let i=startTime ; i < (length + startTime) ; i++)
-            res.push(i + 'h - ' + (i + 1) + 'h');
-
-
-        this.setState({
-            slots : res,
-        });
-    };
-
-    handleClickStep = (idStep) => {
-    };
-
-    handleClickCell = (day) => {
-        this.props.history.push({
-            pathname: Routes.CONFIRM_NEW_LESSON,
-            state: {
-                categoryChoosed: this.state.categoryChoosed,
-                instructor: this.state.instructor,
-                date: day.date,
-            }
-        });
-    };
-
-
-    async handleChange(date) {
-
-        await this.setState({
-            isLoading: true,
             startDate: date,
+            endDate: new Date(endDate),
+            selectedDay: date
         });
-
-        await this.defineWeekDays();
-
-        await this.slots(8,18);
-
-        fetchApi(
-            'get','/lessons/' +
-            'reserved_lessons?instructorID='+this.state.instructor.id+'&categoryID='+this.state.categoryChoosed.id,
-            {},  {},
-            this.successFetchReservedLessons, this.errorFetchReservedLessons
-        );
-    }
+    };
 
     render() {
-        //let slots = this.slots(8,18);
 
-        const tableInstructorSchedule = (
-            <div>
-                <Table textAlign={'center'} sortable celled striped stackable>
-                    <Table.Header>
-                        <Table.Row textAlign={'center'}>
-                            <Table.HeaderCell />
-                            {
-                                this.state.weekDays.map( (day, i) => (
-                                    <Table.HeaderCell key={i}>
-                                        {day}
-                                    </Table.HeaderCell>
-                                ))
-                            }
-                        </Table.Row>
-                    </Table.Header>
-                    <Table.Body>
-                        {
-                            this.state.slots.map( (hours,index) => (
-                                <Table.Row key={index} >
-                                    <Table.Cell key={index}> {hours} </Table.Cell>
-                                    {
-                                        this.state.schedule[index] &&
-                                        this.state.schedule[index].map( (day, i) => (
-                                            day.canReserve ?
-                                            <Table.Cell key={i}
-                                                        className={"tableHourAvailable"}
-                                                        selectable
-                                                        onClick={() => this.handleClickCell(day)}
-                                            /> :
-                                            <Table.Cell key={i}
-                                                        className={"tableHourUnavailable"}
-                                            />
-
-                                        ))
-                                    }
-                                </Table.Row>
-
-                            ))
-                        }
-                    </Table.Body>
-                </Table>
-            </div>
-        );
+        const steps = [{
+            id: 1,
+            icon: 'calendar minus outline',
+            title: 'Escolher semana',
+            description: 'Escolha a semana pretendida para marcar a aula prática',
+            component: (
+                <SelectWeek
+                    key={'1'}
+                    startDate={this.state.startDate}
+                    endDate={this.state.endDate}
+                    onChange={this.onChangeDate.bind(this)}
+                    instructor={this.state.instructor}
+                    category={this.state.category}
+                    isDisabled={false}
+                    onConfirmWeek={() => this.setState(state => ({stepId: state.stepId + 1}))}
+                    onCancelWeek={() => this.props.history.push(Routes.LESSONS)}
+                />
+            )
+        }, {
+            id: 2,
+            icon: 'calendar alternate',
+            title: 'Escolher dia',
+            description: 'Escolha o dia pretendido para marcar a aula prática',
+            component: (
+                <SelectDay
+                    key={'2'}
+                    startDate={this.state.startDate}
+                    endDate={this.state.endDate}
+                    selectedDay={this.state.selectedDay}
+                    instructor={this.state.instructor}
+                    isDisabled={true}
+                    onConfirmDay={() => this.setState(state => ({stepId: state.stepId + 1}))}
+                    onCancelDay={() => this.setState(state => ({stepId: state.stepId - 1}))}
+                />
+            )
+        }, {
+            id: 3,
+            icon: 'calendar check',
+            title: 'Confirmar dia',
+            description: 'Confirme o dia da aula prática',
+            component: <ConfirmNewLesson />
+        }];
 
         return (
-            <Container textAlign='center' style={{marginBottom:100}}>
-                <Dimmer inverted active={this.state.isLoading}>
-                    <Loader>A carregar</Loader>
-                </Dimmer>
-                <Grid centered style={{marginBottom: "20px"}}>
-                    <Grid.Column width={16}>
+            <Container>
+                <React.Fragment>
+                    <Breadcrumb size='large'>
+                        <Breadcrumb.Section
+                            style={{color: 'grey'}}
+                            onClick={() => this.props.history.push(Routes.LESSONS)}
+                        >
+                            Aulas
+                        </Breadcrumb.Section>
+                        <Breadcrumb.Divider icon='right angle'/>
+                        <Breadcrumb.Section active>Marcar Aula </Breadcrumb.Section>
+                    </Breadcrumb>
+                </React.Fragment>
+                <Container textAlign={'center'}>
+                    <div style={{marginTop: 20}}>
+                        <Step.Group size={'small'} stackable={'tablet'} attached='top'>
+                            {
+                                steps.map(item =>
+                                    <Step
+                                        key={item.title}
+                                        active={item.id === this.state.stepId}
+                                        disabled={item.id > this.state.stepId}
+                                        onClick={() => this.setState({stepId: item.id})}
+                                    >
+                                        <Icon name={item.icon} />
+                                        <Step.Content>
+                                            <Step.Title>{item.title}</Step.Title>
+                                            <Step.Description>{item.description}</Step.Description>
+                                        </Step.Content>
+                                    </Step>
+                                )
+                            }
 
-                        <Breadcrumb size='large'>
-                            <Breadcrumb.Section
-                                style={{color: 'grey'}}
-                                onClick={() => this.props.history.push(Routes.LESSONS)}
-                            >
-                                Aulas
-                            </Breadcrumb.Section>
-                            <Breadcrumb.Divider icon='right angle' />
-                            <Breadcrumb.Section active>Marcar Aula </Breadcrumb.Section>
-                            <Breadcrumb.Divider icon='right arrow' />
-                            <Breadcrumb.Section active>Escolher semana</Breadcrumb.Section>
-                        </Breadcrumb>
-                    </Grid.Column>
-                </Grid>
-                <Container>
-                    <Header as='h1'> Marcar aula </Header>
-                    <Container textAlign={'left'}>
-                        <Form size='large'>
-                            <Form.Field
-                                //className={(this.state.error && this.state.data === '') ? "error field" : "field"}
-                                //control={Input}
-                                //label='Data da aula'
-                                //placeholder='Data da aula'
-                                //name={"data"}
-                                //type="datetime-local"
-                                //onChange={this.handleInputChange}
-                                //control={DatePicker}
-                                //selected={this.state.startDate}
-                                //onChange={this.handleChange.bind(this)}
-                                //dateFormat="Pp"
-                            >
-                                <label>Data da aula</label>
-                                <DatePicker
-                                    selected={ this.state.startDate }
-                                    onChange={ this.handleChange.bind(this)}
-                                    name="startDate"
-                                    dateFormat="dd/MM/yyyy"
-                                />
-                            </Form.Field>
-                        </Form>
-                        {tableInstructorSchedule}
-                        <Container textAlign={'center'} style={{marginTop: '5px',}}>
-                             <Label color={'grey'}
-                                    size={'large'}>
-                                 Não é possível escolher
-                             </Label>
-
-                            <Label style={{ marginLeft: '15px'}}
-                                   size={'large'}>
-                                É possível escolher
-                            </Label>
-                        </Container>
-                    </Container>
-                </Container>
-                <Container style={{marginTop:'25%'}}>
-                    <Step.Group size='mini' stackable={'tablet'}>
-                        <Step active onClick={() => this.handleClickStep(1)}>
-                            <Icon name='calendar outline' />
-                            <Step.Content>
-                                <Step.Title>Escolher semana</Step.Title>
-                                <Step.Description>Escolha a semana pretendida para marcar aula prática.</Step.Description>
-                            </Step.Content>
-                        </Step>
-
-                        <Step disabled onClick={() => this.handleClickStep(2)}>
-                            <Icon name='calendar alternate' />
-                            <Step.Content>
-                                <Step.Title>Escolher dia</Step.Title>
-                                <Step.Description>Escolha o dia pretendido para marcar aula prática.</Step.Description>
-                            </Step.Content>
-                        </Step>
-
-                        <Step disabled onClick={() => this.handleClickStep(3)}>
-                            <Icon name='calendar check' />
-                            <Step.Content>
-                                <Step.Title>Horários disponíveis</Step.Title>
-                                <Step.Description>Selecionar horário disponível para marcar aula prática.</Step.Description>
-                            </Step.Content>
-                        </Step>
-                    </Step.Group>
+                        </Step.Group>
+                        <Segment attached>
+                            <Dimmer active={this.state.isLoading}>
+                                <Loader>{this.state.isLoadingText}</Loader>
+                            </Dimmer>
+                            {
+                                steps.map(item => {
+                                    if (item.id === this.state.stepId)
+                                        return item.component;
+                                    return null;
+                                })
+                            }
+                        </Segment>
+                    </div>
                 </Container>
             </Container>
         );

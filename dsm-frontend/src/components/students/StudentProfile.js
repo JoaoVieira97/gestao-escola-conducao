@@ -12,7 +12,6 @@ import {
     Popup,
     Button,
     Message,
-    Icon
 } from 'semantic-ui-react';
 import { fetchApi } from '../../services/api/index';
 import Routes from "../../services/Routes";
