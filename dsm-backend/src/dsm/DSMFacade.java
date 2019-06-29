@@ -410,7 +410,13 @@ public class DSMFacade {
 
     // ------------------------------------------------------------
 
+    /**
+     * register personal announcement
+     */
+    public static boolean registerPersonalAnnouncement(int studentID, String title, String description){
 
+        return secretaryBean.registerPersonalAnnouncement(studentID, title, description);
+    }
 
     //
     // INSTRUCTOR BEAN

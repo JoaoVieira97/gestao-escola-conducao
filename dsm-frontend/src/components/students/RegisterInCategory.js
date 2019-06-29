@@ -188,7 +188,7 @@ class RegisterInCategory extends Component {
 
 
         sleep(3000).then(() => {
-            this.props.history.push(Routes.HOME);
+            this.props.history.push(Routes.STUDENT_PROFILE, {student: this.state.student});
         });
         
     };

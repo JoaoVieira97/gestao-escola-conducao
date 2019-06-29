@@ -311,4 +311,35 @@ public class SecretaryBean implements SecretaryBeanLocal{
         return false;
     }
 
+    /**
+     * Register general announcement
+     * @param studentID
+     * @param title
+     * @param description
+     * @return
+     */
+    @Override
+    public boolean registerPersonalAnnouncement(int studentID, String title, String description){
+
+        try {
+            Student student = StudentDAO.getStudentByORMID(studentID);
+            PersonalAnnouncement pa = new PersonalAnnouncement();
+
+            pa.setTitle(title);
+            pa.setDescription(description);
+            pa.setViewed(false);
+            pa.setTimestamp(new Timestamp(System.currentTimeMillis()));
+            student.announcements.add(pa);
+
+            StudentDAO.save(student);
+
+            return true;
+
+        } catch (PersistentException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
 }

@@ -18,10 +18,11 @@ export default {
     // SECRETARY
     STUDENTS: '/students',
     REGISTER_STUDENT: '/students/register',
-    STUDENT_PROFILE: '/students/student_profile',
-    REGISTER_STUDENT_CATEGORY: '/students/register_category',
-    REGISTER_STUDENT_EXAM: '/students/register_exam',
-    REGISTER_STUDENT_PAYMENT: '/students/register_payment',
+    STUDENT_PROFILE: '/students/student',
+    REGISTER_STUDENT_CATEGORY: '/students/student/categories',
+    REGISTER_STUDENT_EXAM: '/students/student/exams',
+    REGISTER_STUDENT_PAYMENT: '/students/student/payments',
+    REGISTER_STUDENT_ANNOUNCEMENT: '/students/student/announcement',
     REGISTER_GENERAL_ANNOUNCEMENT: '/register_general_announcement',
 
     // INSTRUCTOR

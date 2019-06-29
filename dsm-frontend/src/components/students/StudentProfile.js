@@ -211,6 +211,15 @@ class StudentProfile extends Component {
                                 <Icon name='clipboard outline' color='orange'/>
                                 <p>Exames</p>
                             </Button>
+                            <Button
+                                style={{marginBottom: '3px'}}
+                                icon
+                                labelPosition='left'
+                                onClick={() => this.props.history.push(Routes.REGISTER_STUDENT_ANNOUNCEMENT, {student: this.state.student})}
+                            >
+                                <Icon name='bell outline' color='orange'/>
+                                <p>Enviar aviso</p>
+                            </Button>
                         </Segment>
                         <Segment>
                             <Header 
@@ -279,7 +288,7 @@ class StudentProfile extends Component {
                                             <input
                                                 title="9 dígitos"
                                                 type="text"
-                                                maxlength="9"
+                                                maxLength="9"
                                                 placeholder="NIF"
                                                 pattern="[0-9]{9}"
                                                 name={"nif"}
@@ -301,7 +310,7 @@ class StudentProfile extends Component {
                                         <div className="ui input">
                                             <input
                                                 type="text"
-                                                maxlength="12"
+                                                maxLength="12"
                                                 title="8 dígitos mais 4 carateres (dígitos ou letras maiúsculas)"
                                                 placeholder="CC"
                                                 pattern="[0-9]{8}[A-Z0-9]{4}"
