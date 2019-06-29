@@ -1,6 +1,4 @@
 import React, {Component} from 'react';
-
-
 import {
     Container,
     Dimmer,
@@ -9,13 +7,7 @@ import {
     Card,
     List, Button,
 } from 'semantic-ui-react';
-
-import Routes from "../../services/Routes";
-
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
-import {fetchApi} from "../../services/api";
 
 
 class ConfirmNewLesson extends Component {
