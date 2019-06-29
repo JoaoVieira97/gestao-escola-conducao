@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {Button, Form, Message} from 'semantic-ui-react'
-import {fetchApi} from "../../services/api";
-import Authentication from "../../services/session/Authentication";
+import Authentication from "../../services/Authentication";
 import Routes from "../../services/Routes";
+import { setUserTokenAndType } from "../../redux/actions/user";
 
 class LoginPage extends Component {
 
@@ -11,6 +11,8 @@ class LoginPage extends Component {
         super(props);
 
         this.state = {
+            isLoading: false,
+
             email: "",
             password: "",
             rememberMe: true,
@@ -35,39 +37,66 @@ class LoginPage extends Component {
         const { email, password } = this.state;
         if(email !== '' && password !== '') {
 
-            fetchApi(
-                'post','/authentication',
-                {
-                    email: email,
-                    password: password
-                },  {},
-                this.successHandler, this.errorHandler
-            );
+            this.setState({isLoading: true}, () => {
+
+                Authentication.login(
+                    email,
+                    password,
+                    this.successHandler,
+                    this.errorHandler
+                )
+            });
         }
     };
 
 
     /**
-     * Handle the response.
+     * Handle the success response.
      * @param response
      */
     successHandler = (response) => {
-        console.log(response)
-        Authentication.login(response.data, this.state.rememberMe);
 
-        this.props.history.push(Routes.HOME);
-        window.location.reload();
+        if(response.status === 200 && response.data) {
+
+            const userToken = response.data.userToken;
+            const userType = response.data.userType;
+
+            // save on localStorage
+            if(this.state.rememberMe) {
+
+                localStorage.setItem('userToken', userToken);
+                localStorage.setItem('userType', userType);
+            }
+            // save on redux
+            else {
+                this.props.setUserTokenAndType(userToken, userType);
+            }
+
+            setTimeout(() =>{
+
+                this.setState({
+                    isLoading: false
+                }, () => {
+
+                    const { from } = this.props.location.state || {from: {pathname: Routes.HOME}};
+                    this.props.history.push(from);
+                    window.location.reload();
+                });
+
+            }, 500);
+        }
     };
 
     /**
-     * Handle the error.
+     * Handle the error response.
      * @param error
      */
     errorHandler = (error) => {
 
         // bad request
-        if(error.response.status === 400) {
+        if(error.response && error.response.status && error.response.status === 400) {
             this.setState({
+                isLoading: false,
                 loginError: true,
                 loginErrorMessage: 'As credenciais que introduziu estão erradas.'
             });
@@ -75,9 +104,11 @@ class LoginPage extends Component {
         // invalid API access token
         else {
             this.setState({
+                isLoading: false,
                 loginError: true,
                 loginErrorMessage: 'Ocorreu um erro ao estabelecer conexão com o servidor principal.'
             });
+            Authentication.clearData();
         }
     };
 
@@ -94,27 +125,7 @@ class LoginPage extends Component {
                         alt={"logo"}
                     />
                     <div className="ui stacked segment left aligned">
-                        <Form error={this.state.loginError}>
-                            {
-                                /*
-                                <Form.Input
-                                    type={"email"}
-                                    name={"email"}
-                                    label={'E-mail'}
-                                    placeholder={'Introduza o seu e-mail...'}
-                                    onChange={this.handleInputChange}
-                                    error={this.state.loginError}
-                                />
-                                <Form.Input
-                                    type={"password"}
-                                    name={"password"}
-                                    label={"Palavra-passe"}
-                                    placeholder={"Introduza a sua palavra-passe..."}
-                                    onChange={this.handleInputChange}
-                                    error={this.state.loginError}
-                                />
-                                 */
-                            }
+                        <Form error={this.state.loginError} onSubmit={this.handleLoginSubmit}>
                             <Message
                                 error
                                 header={'Erro ao iniciar sessão'}
@@ -144,7 +155,9 @@ class LoginPage extends Component {
                                     <i className="lock icon" />
                                 </div>
                             </div>
-                            <div className="field">
+                            {
+                                /*
+                                <div className="field">
                                 <div className="ui checkbox">
                                     <input
                                         type="checkbox"
@@ -156,13 +169,17 @@ class LoginPage extends Component {
                                     <label>Lembrar o meu acesso</label>
                                 </div>
                             </div>
-                            <Button
-                                type="submit"
-                                className="ui button"
-                                onClick={this.handleLoginSubmit.bind(this)}
-                            >
-                                ENTRAR
-                            </Button>
+                                 */
+                            }
+                            <div style={{marginTop: 30}}>
+                                <Button
+                                    type="submit"
+                                    className="ui button"
+                                    loading={this.state.isLoading}
+                                >
+                                    ENTRAR
+                                </Button>
+                            </div>
                         </Form>
                     </div>
                 </div>
@@ -174,6 +191,11 @@ class LoginPage extends Component {
 
 const mapStateToProps = state => ({});
 
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = dispatch => ({
+
+    setUserTokenAndType: (token, type) => {
+        dispatch(setUserTokenAndType(token, type))
+    }
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);
