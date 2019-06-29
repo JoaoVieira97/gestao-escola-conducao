@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dsm.DSMFacade;
 import dsm.Exam;
-import org.orm.PersistentSession;
 import utils.Utils;
 
 import javax.servlet.ServletException;
@@ -18,6 +17,8 @@ import java.util.List;
 
 @WebServlet(name = "GetPersonalInformation", urlPatterns = {"/api/student/information"})
 public class GetPersonalInformation extends HttpServlet {
+
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }

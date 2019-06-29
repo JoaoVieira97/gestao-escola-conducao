@@ -23,7 +23,7 @@ public class Exam {
 	
 	private int ID;
 
-	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy HH:mm")
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy HH:mm", timezone="Europe/Lisbon")
 	private java.sql.Timestamp startTime;
 	
 	private String description;

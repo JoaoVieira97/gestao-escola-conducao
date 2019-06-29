@@ -40,7 +40,7 @@ public class Payment {
 	
 	private double value;
 
-	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy", timezone="Europe/Lisbon")
 	private java.util.Date timestamp;
 	
 	private String description;

@@ -27,7 +27,7 @@ public class Announcement {
 	
 	private String description;
 
-	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy HH:mm")
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy HH:mm", timezone="Europe/Lisbon")
 	private java.sql.Timestamp timestamp;
 	
 	private void setID(int value) {

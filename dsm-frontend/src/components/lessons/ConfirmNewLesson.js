@@ -1,106 +1,108 @@
 import React, {Component} from 'react';
-import {
-    Container,
-    Dimmer,
-    Loader,
-    Icon,
-    Card,
-    List, Button,
-} from 'semantic-ui-react';
-import "react-datepicker/dist/react-datepicker.css";
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
+import {MarkLessonHeader} from "./MarkLessonHeader";
+import {Card, Container, Dimmer, Grid, Loader, Message, Header} from "semantic-ui-react";
+
 
 
 class ConfirmNewLesson extends Component {
-
 
     constructor(props) {
         super(props);
 
         this.state = {
-            isLoading: true,
-            categoryChoosed: {},
-            instructor: {},
-            date: '',
-            duration: 60,
-
-        }
-    };
-
-    async componentWillMount() {
-
-        await this.setState({
-            categoryChoosed: this.props.history.location.state.categoryChoosed,
-            instructor : this.props.history.location.state.instructor,
-            date: this.props.history.location.state.date,
             isLoading: false,
-        });
-
-        console.log(this.state.categoryChoosed);
-        console.log(this.state.instructor);
-        console.log(this.state.date);
-    }
-
-    handleConfirmNewLesson = () => {
-
-        //Ver se este dia ainda está disponível
-
-        //Se sim, insere e avisa sucesso
-
-        //Se não, avisa insucesso e retrocede
+            isLoadingText: 'A carregar...',
+        }
     };
 
     render() {
 
-        const newLesson = (
-            <div className={"ui fluid card grey"} style={{marginTop:'30px'}}>
-                <Card.Content>
-                    <Card.Header>
-                        <Icon.Group style={{marginRight: "8px"}}>
-                            <Icon color='grey' name='calendar' />
-                        </Icon.Group>
-                        Marcar Aula Prática
-                    </Card.Header>
-                </Card.Content>
-                <Card.Content>
-                    <List divided>
-                        <List.Item>
-                            <Icon name='calendar outline' />
-                            <List.Content>
-                                <List.Header>Aula Prática</List.Header>
-                                <List.Description style={{marginTop: "3px"}}>
-                                    <b>Categoria:</b> {" " + this.state.categoryChoosed.name}
-                                </List.Description>
-                                <List.Description style={{marginTop: "3px"}}>
-                                    <b>Instrutor:</b> {" " + this.state.instructor.name}
-                                </List.Description>
-                                <List.Description style={{marginTop: "3px"}}>
-                                    <b>Início:</b> {" "+ this.state.date.split(" ")[0]} às
-                                    {" " + this.state.date.split(" ")[1].replace(":","h")+"min"}
-                                </List.Description>
-                                <List.Description style={{marginTop: "3px"}}>
-                                    <b>Duração:</b> { this.state.duration+" min"}
-                                </List.Description>
-                            </List.Content>
-                        </List.Item>
-                    </List>
-                </Card.Content>
-            </div>
-
-        );
-
         return (
-            <Container style={{marginBottom:100}}>
-                <Dimmer inverted active={this.state.isLoading}>
-                    <Loader>A carregar</Loader>
+            <Container>
+                <Dimmer
+                    inverted
+                    active={this.state.isLoading}
+                >
+                    <Loader>{this.state.isLoadingText}</Loader>
                 </Dimmer>
-                {newLesson}
-                <Container>
-                    <Button floated={'right'} color='green' onClick={ () => this.handleConfirmNewLesson}> CONFIRMAR </Button>
-                    <Button floated={'right'} color='grey' style={{marginRight: '10px'}}> VOLTAR </Button>
-                </Container>
+                <MarkLessonHeader
+                    step={this.props.step}
+                    isDisabled={this.props.isDisabled}
+                    onConfirm={this.props.onSubmit}
+                    onCancel={this.props.onCancel}
+                />
+                <Message warning>
+                    <Message.Header>
+                        {'Antes de confirmar a marcação'}
+                    </Message.Header>
+                    <p>
+                        {
+                            'As aulas registadas serão armazenadas de forma permanente.' +
+                            ' Caso pretenda cancelar a aula, tem até 24h antes da' +
+                            ' realização da aula. Depois deste período deverá ' +
+                            ' comparecer à aula ou esta será marcada ' +
+                            ' como efetuada.'
+                        }
+                    </p>
+                </Message>
+                <Grid stackable centered columns={3}>
+                    <Grid.Column>
+                        <Card fluid raised>
+                            <Card.Content header={'Categoria'} />
+                            <Card.Content>
+                                <Header as='h1' color={'blue'}>
+                                    {
+                                        this.props.category.name.split(' ')[1]
+                                    }
+                                </Header>
+                            </Card.Content>
+                        </Card>
+                    </Grid.Column>
+                    <Grid.Column>
+                        <Card fluid raised>
+                            <Card.Content header={'Instrutor'} />
+                            <Card.Content>
+                                <Header as='h1' color={'blue'}>
+                                    {
+                                        this.props.instructor.name
+                                    }
+                                </Header>
+                            </Card.Content>
+                        </Card>
+                    </Grid.Column>
+                    <Grid.Column>
+                        <Card fluid raised>
+                            <Card.Content header={'Dia'} />
+                            <Card.Content>
+                                <Header as='h1' color={'blue'}>
+                                    {
+                                        this.props.selectedDay.split(' ')[0] +
+                                        ' às ' + this.props.selectedDay.split(' ')[1] + 'h'
+                                    }
+                                </Header>
+                            </Card.Content>
+                        </Card>
+                    </Grid.Column>
+                </Grid>
             </Container>
         );
     }
 }
 
-export default ConfirmNewLesson;
+ConfirmNewLesson.propTypes = {
+    step: PropTypes.string.isRequired,
+    isDisabled: PropTypes.bool.isRequired,
+    selectedDay: PropTypes.string.isRequired,
+    instructor: PropTypes.object.isRequired,
+    category: PropTypes.object.isRequired,
+    onSubmit: PropTypes.func.isRequired,
+    onCancel: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = state => ({});
+
+const mapDispatchToProps = dispatch => ({});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ConfirmNewLesson);

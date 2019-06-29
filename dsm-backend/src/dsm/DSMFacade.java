@@ -7,6 +7,7 @@ import utils.Utils;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -334,6 +335,14 @@ public class DSMFacade {
     public static  List<PracticalLesson> getReservedLessonsInstructor(int instructorID, long startTimestamp, long endTimeStap) {
 
         return lessonBean.getReservedLessonsInstructor(instructorID, startTimestamp, endTimeStap);
+    }
+
+    /**
+     * Create a new lesson.
+     */
+    public static boolean createNewLesson(int studentID, int instructorID, int categoryID, Timestamp timestamp) {
+
+        return lessonBean.createNewLesson(studentID, instructorID, categoryID, timestamp);
     }
 
     // ------------------------------------------------------------

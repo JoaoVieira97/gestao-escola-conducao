@@ -13,7 +13,8 @@ import "../../styles/styles.css"
 import SelectDay from "./SelectDay";
 import SelectWeek from "./SelectWeek";
 import ConfirmNewLesson from "./ConfirmNewLesson";
-
+import "react-datepicker/dist/react-datepicker.css";
+import {fetchApi} from "../../services/api";
 
 
 class MarkLesson extends Component {
@@ -41,7 +42,7 @@ class MarkLesson extends Component {
             isStepTwoDisabled: true,
 
             // second step
-            selectedDay: undefined
+            selectedDay: ''
         }
     };
 
@@ -76,6 +77,8 @@ class MarkLesson extends Component {
         this.setState({
             startDate: date,
             endDate: new Date(endDate),
+            selectedDay: '', // reset
+            isStepTwoDisabled: false, // reset
         });
     };
 
@@ -91,12 +94,43 @@ class MarkLesson extends Component {
         })
     };
 
+    /**
+     * When user selects another day.
+     */
     onRemoveDay = () => {
 
         this.setState({
-            selectedDay: undefined,
+            selectedDay: '',
             isStepTwoDisabled: true,
         })
+    };
+
+    /**
+     * When user submits this form.
+     */
+    onSubmit = () => {
+
+        console.log(this.state.selectedDay);
+
+        this.setState({isLoading: true});
+        fetchApi(
+            'post',
+            '/lesson/student/new',
+            {
+                startDate: this.state.selectedDay,
+                categoryID: this.state.category.id,
+                instructorID: this.state.instructor.id,
+            },
+            {},
+            this.successHandler, this.errorHandler
+        );
+    };
+    successHandler = (response) => {
+        console.log(response);
+        this.props.history.push(Routes.LESSONS);
+    };
+    errorHandler = (error) => {
+        console.log(error);
     };
 
     render() {
@@ -143,9 +177,20 @@ class MarkLesson extends Component {
         }, {
             id: 3,
             icon: 'calendar check',
-            title: 'Confirmar dia',
-            description: 'Confirme o dia da aula prática',
-            component: <ConfirmNewLesson />
+            title: 'Confirmar',
+            description: 'Confirme o diae horário da aula prática',
+            component: (
+                <ConfirmNewLesson
+                    key={'2'}
+                    step={'end'}
+                    selectedDay={this.state.selectedDay}
+                    instructor={this.state.instructor}
+                    category={this.state.category}
+                    isDisabled={false}
+                    onSubmit={this.onSubmit.bind(this)}
+                    onCancel={() => this.setState(state => ({stepId: state.stepId - 1}))}
+                />
+            )
         }];
 
         return (
@@ -170,8 +215,8 @@ class MarkLesson extends Component {
                                     <Step
                                         key={item.title}
                                         active={item.id === this.state.stepId}
-                                        disabled={item.id > this.state.stepId}
-                                        //onClick={() => this.setState({stepId: item.id})}
+                                        disabled={item.id !== this.state.stepId}
+                                        completed={item.id < this.state.stepId}
                                     >
                                         <Icon name={item.icon} />
                                         <Step.Content>
@@ -184,7 +229,7 @@ class MarkLesson extends Component {
 
                         </Step.Group>
                         <Segment attached>
-                            <Dimmer active={this.state.isLoading}>
+                            <Dimmer inverted active={this.state.isLoading}>
                                 <Loader>{this.state.isLoadingText}</Loader>
                             </Dimmer>
                             {

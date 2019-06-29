@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {MarkLessonHeader} from "./MarkLessonHeader";
-import {Container, Dimmer, Loader, Table} from "semantic-ui-react";
+import {Container, Dimmer, Icon, Loader, Table} from "semantic-ui-react";
 import {fetchApi} from "../../services/api";
 import Authentication from "../../services/Authentication";
 import moment from "moment";
@@ -90,7 +90,8 @@ class SelectDay extends Component {
             }
 
             hours[date + ' ' + hour] = {
-                disabled: false
+                disabled: false,
+                selected: false,
             };
         }
         return hours;
@@ -163,20 +164,23 @@ class SelectDay extends Component {
 
         if(response.status === 200 && response.data) {
 
+            console.log(response.data);
+
             let matrix = this.state.matrix;
             const practicalLessons = response.data.practicalLessons;
 
             for (let i = 0; i < matrix.length; i++) {
 
                 const dayHours = Object.keys(matrix[i].hours);
-                const aux = practicalLessons.find(item => dayHours.includes(item.startTime));
+                for (let j = 0; j < dayHours.length; j++) {
 
-                if(aux) {
-
-                    const lessonStartTime = aux.startTime;
-                    matrix[i].hours[lessonStartTime] = {
-                        disabled: true,
-                        ...aux
+                    const aux = practicalLessons.find(item => dayHours[j] === item.startTime);
+                    if(aux) {
+                        const lessonStartTime = aux.startTime;
+                        matrix[i].hours[lessonStartTime] = {
+                            disabled: true,
+                            ...aux
+                        }
                     }
                 }
             }
@@ -200,18 +204,59 @@ class SelectDay extends Component {
 
     checkIfUserAsSelected = () => {
 
-        if(this.props.selectedDay !== undefined) {
+        if(this.props.selectedDay !== '') {
             this.onSelectDay(this.props.selectedDay);
         }
     };
 
     onSelectDay = (day) => {
 
+        let auxMatrix = this.state.matrix;
+        for (let i = 0; i < auxMatrix.length; i++) {
+
+            if(day in auxMatrix[i].hours) {
 
 
-        if(this.props.selectedDay !== undefined) {
-            this.props.onRemoveDay();
-            this.props.onSelectDay(day);
+                if(auxMatrix[i].hours[day].id) {
+                    this.props.onRemoveDay();
+                    break;
+                }
+                else {
+
+                    if(this.props.selectedDay !== '') {
+
+                        // remove previous selected day
+                        auxMatrix = this.removePreviousSelectedDay(auxMatrix);
+                        auxMatrix[i].hours[day].selected = true;
+                        this.props.onRemoveDay();
+                        this.props.onSelectDay(day);
+                        break;
+                    }
+                    else if(this.props.selectedDay === day) {
+                        auxMatrix[i].hours[day].selected = false;
+                        this.props.onRemoveDay();
+                        break;
+                    }
+                    else {
+                        auxMatrix[i].hours[day].selected = true;
+                        this.props.onSelectDay(day);
+                        break;
+                    }
+                }
+            }
+        }
+
+        this.setState({matrix: auxMatrix});
+    };
+
+    removePreviousSelectedDay = (matrix) => {
+
+        for (let i = 0; i < matrix.length; i++) {
+
+            if(this.props.selectedDay in matrix[i].hours) {
+                matrix[i].hours[this.props.selectedDay].selected = false;
+                return matrix;
+            }
         }
     };
 
@@ -296,7 +341,20 @@ class SelectDay extends Component {
                                                     </Table.Cell>
                                                 )
                                             }
-
+                                            else if(hourObject.selected) {
+                                                return (
+                                                    <Table.Cell
+                                                        key={hourKey}
+                                                        positive
+                                                        selectable
+                                                        className={"tableHourAvailable"}
+                                                        onClick={() => this.onSelectDay(hourKey)}
+                                                    >
+                                                        <Icon name='checkmark' />
+                                                        Selecionado
+                                                    </Table.Cell>
+                                                )
+                                            }
 
                                             return (
                                                 <Table.Cell

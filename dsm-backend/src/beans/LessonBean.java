@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Local(LessonBeanLocal.class)
 @Stateless(name = "LessonBean")
@@ -242,5 +243,37 @@ public class LessonBean implements LessonBeanLocal{
         }
 
         return  null;
+    }
+
+    @Override
+    public boolean createNewLesson(int studentID, int instructorID, int categoryID, Timestamp timestamp) {
+
+        try {
+            Student student = StudentDAO.getStudentByORMID(studentID);
+            Instructor instructor = InstructorDAO.getInstructorByORMID(instructorID);
+            Category category = CategoryDAO.getCategoryByORMID(categoryID);
+
+            PracticalLesson lesson = new PracticalLesson();
+            lesson.categories.add(category);
+            lesson.students.add(student);
+            lesson.setDuration(60); // by default 1h
+            lesson.setStartTime(timestamp);
+            lesson.setState("reserved");
+            lesson.setIsStudentPresent(false); // by default false
+
+            instructor.lessons.add(lesson);
+
+            boolean success = PracticalLessonDAO.save(lesson);
+            if(success) {
+                InstructorDAO.save(instructor);
+                return true;
+            }
+
+        } catch (PersistentException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return false;
     }
 }

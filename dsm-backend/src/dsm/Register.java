@@ -56,7 +56,7 @@ public class Register {
 	
 	private dsm.Category category;
 
-	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy", timezone="Europe/Lisbon")
 	private java.util.Date initialDate;
 	
 	private java.util.Set ORM_payments = new java.util.HashSet();
