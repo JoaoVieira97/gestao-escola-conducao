@@ -9,9 +9,7 @@ import {
     Segment,
     Divider,
     Dropdown,
-    Form,
-    Modal,
-    Header
+    Form
 } from 'semantic-ui-react';
 import _ from 'lodash';
 import { fetchApi } from '../../services/api/index';
@@ -165,57 +163,17 @@ class AllStudents extends Component {
                 <Table.Cell>{item.name}</Table.Cell>
                 <Table.Cell>{item.email}</Table.Cell>
                 <Table.Cell collapsing>
-                    <Modal 
-                        trigger={<Button>Gerir</Button>} 
-                        closeIcon
-                        size='small'
+                    <Button 
+                        onClick={() => this.props.history.push(Routes.STUDENT_PROFILE, {student: item})}
                     >
-                        <Header icon='user' content={item.name} />
-                        <Modal.Content>
-                            <Button
-                                icon
-                                labelPosition='left'
-                                color='grey'
-                                onClick={() => this.props.history.push(Routes.REGISTER_STUDENT_CATEGORY, {student: item})}
-                            >
-                                <Icon name='file alternate outline' color='yellow'/>
-                                <p>Categorias</p>
-                            </Button>
-                            <Button
-                                icon
-                                labelPosition='left'
-                                color='grey'
-                                onClick={() => this.props.history.push(Routes.REGISTER_STUDENT_PAYMENT, {student: item})}
-                            >
-                                <Icon name='euro sign' color='yellow'/>
-                                <p>Pagamentos</p>
-                            </Button>
-                            <Button
-                                icon
-                                labelPosition='left'
-                                color='grey'
-                                onClick={() => this.props.history.push(Routes.REGISTER_STUDENT_EXAM, {student: item})}
-                            >
-                                <Icon name='clipboard outline' color='yellow'/>
-                                <p>Exames</p>
-                            </Button>
-                            <Button
-                                icon
-                                labelPosition='left'
-                                color='grey'
-                                onClick={() => this.props.history.push(Routes.STUDENT_PROFILE, {student: item})}
-                            >
-                                <Icon name='user outline' color='yellow'/>
-                                <p>Perfil</p>
-                            </Button>
-                        </Modal.Content>
-                    </Modal>
+                        Ver perfil
+                    </Button>
                 </Table.Cell>
             </Table.Row>
         ));
 
         return (
-            <Container style={{marginTop: '30px'}}>
+            <Container style={{marginTop: '30px', marginBottom: '70px'}}>
                 <Statistic.Group size={'tiny'} widths={'two'}>
                     <Statistic >
                         <Statistic.Value>

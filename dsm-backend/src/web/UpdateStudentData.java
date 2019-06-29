@@ -37,14 +37,13 @@ public class UpdateStudentData extends HttpServlet {
             int studentID = (Integer) JSON.get("studentID");
             String name = (String) JSON.get("name");
             String email = (String) JSON.get("email");
-            String password = (String) JSON.get("password");
             String address = (String) JSON.get("address");
             String cc = (String) JSON.get("cc");
             String nif = (String) JSON.get("nif");
             String birth = (String) JSON.get("birth");
 
             // register student
-            boolean updated = DSMFacade.updateStudent(studentID, name, email, password, address, birth, nif, cc);
+            boolean updated = DSMFacade.updateStudent(studentID, name, email, address, birth, nif, cc);
             if(updated) {
 
                 responseNode.put("success", updated);

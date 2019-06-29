@@ -24,6 +24,7 @@ class RegisterPayment extends Component {
         super(props);
 
         this.state = {
+            student: {},
             registers: [],
             categories_options: [],
             payments: [],
@@ -40,7 +41,12 @@ class RegisterPayment extends Component {
         }
     }
 
-    componentDidMount(){
+    async componentDidMount(){
+
+        await this.setState({
+            student: this.props.location.state.student
+        })
+        
         fetchApi(
             'get','/student/registers?studentID=' + this.props.location.state.student.id,
             {},  {},
@@ -240,8 +246,16 @@ class RegisterPayment extends Component {
                                 Alunos
                             </Breadcrumb.Section>
                             <Breadcrumb.Divider icon='right angle' />
-                            <Breadcrumb.Section active>Pagamentos de aluno</Breadcrumb.Section>
+                            <Breadcrumb.Section
+                                style={{color: 'grey'}}
+                                onClick={() => this.props.history.push(Routes.STUDENT_PROFILE, {student: this.state.student})}
+                            >
+                                {this.state.student.name}
+                            </Breadcrumb.Section>
+                            <Breadcrumb.Divider icon='right angle' />
+                            <Breadcrumb.Section active>Pagamentos</Breadcrumb.Section>
                         </Breadcrumb>
+
 
                     </Grid.Column>
                     <Grid.Column width={8} style={{marginTop: "30px"}}>

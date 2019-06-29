@@ -16,6 +16,6 @@ public interface SecretaryBeanLocal {
     List<Category> getCategories();
     List<Instructor> getInstructors();
     boolean registerStudentInCategory(int studentID, int categoryID, int instructorID);
-    boolean updateStudent(int studentID, String name, String email, String password, String address, String birth, String nif, String cc);
+    boolean updateStudent(int studentID, String name, String email, String address, String birth, String nif, String cc);
 
 }
