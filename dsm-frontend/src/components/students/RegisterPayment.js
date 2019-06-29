@@ -58,7 +58,7 @@ class RegisterPayment extends Component {
      * Handle the response fetch registers.
      * @param response
      */
-    successFetchRegisters = (response) => {
+    successFetchRegisters = async (response) => {
         
         const data = response.data;
         
@@ -85,6 +85,19 @@ class RegisterPayment extends Component {
             categories_options: categories_options,
             isLoading: false,
         })
+
+        if (categories_options.length > 0){
+            let register = registers.filter(reg => {
+                return reg.id === categories_options[0].value
+            })
+            let actualPaid = register[0].payments.reduce((acc, payment) => acc + payment.value, 0);
+
+            await this.setState({
+                register: register[0],
+                category: categories_options[0].value,
+                actualPaid: actualPaid
+            })
+        }
 
     };
 
@@ -311,6 +324,7 @@ class RegisterPayment extends Component {
                             fluid
                             selection
                             options={this.state.categories_options}
+                            value={this.state.category}
                             name={"category"}
                             onChange={this.handleSelectCategoryChange}
                         />
