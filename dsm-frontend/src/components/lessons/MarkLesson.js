@@ -18,12 +18,13 @@ import Routes from "../../services/Routes";
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
+import moment from 'moment'
 
 
 import "../../styles/styles.css"
+import {fetchApi} from "../../services/api";
 
-const weekDays = ['Segunda', 'Terça' , 'Quarta', 'Quinta', 'Sexta', 'Sábado' , 'Domingo'];
+const weekDays = [ 'Domingo', 'Segunda', 'Terça' , 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
 
 
 
@@ -39,46 +40,131 @@ class MarkLesson extends Component {
             stepId: 1,
             startDate: new Date(),
             weekDays: [],
+            instructor: {},
+            slots : [],
+            schedule: [],
 
         }
     };
 
-    async componentDidMount() {
+     async componentDidMount() {
         await this.setState({
             categoryChoosed: this.props.history.location.state.categoryChoosed,
-
+            instructor : this.props.history.location.state.instructor,
         });
 
+        //isLoading: false nesta função
         await this.defineWeekDays();
+
+        //falta obter school information
+        await this.slots(8,18);
+
+        fetchApi(
+            'get','/lessons/' +
+            'reserved_lessons?instructorID='+this.state.instructor.id+'&categoryID='+this.state.categoryChoosed.id,
+            {},  {},
+            this.successFetchReservedLessons, this.errorFetchReservedLessons
+        );
     }
 
 
+    successFetchReservedLessons = async(response) => {
+        console.log("SUCESSO");
+
+        const reservedLessons = response.data.practicalLessons;
+
+        //Não está bem!! porque também pode ser do próximo ano
+        let year = this.state.startDate.getFullYear();
+
+        let schedule = [];
+
+        this.state.slots.forEach( slot =>{
+            let aux = [];
+            let initHour = slot.split("h")[0];
+
+            this.state.weekDays.forEach( weekDay => {
+
+                let weekDaySplit = weekDay.split(" ");
+
+                let weekDate = moment(weekDaySplit[1] + "/" + year + " " + initHour + ":00", "DD/MM/YYYY HH:mm")
+                            .format("DD/MM/YYYY HH:mm");
+
+                let reserved = reservedLessons.find(function (lesson) {
+
+                    return lesson.startTime === weekDate;
+                });
+
+                let canReserve = true;
+                if(reserved) canReserve = false;
+
+                aux.push({
+                    date: weekDate,
+                    canReserve: canReserve,
+                });
+
+            });
+
+            schedule.push(aux);
+        });
+
+        await this.setState({
+            schedule: schedule,
+        });
+
+
+        fetchApi(
+            'get','/instructor/working_days?instructorID='+this.state.instructor.id,
+            {},  {},
+            this.successFetchWorkingDays, this.errorFetchWorkingDays
+        );
+    };
+
+    successFetchWorkingDays = (response) => {
+        console.log("SUCESSO2");
+        const workingDays = response.data;
+
+        console.log(workingDays);
+
+    };
+
+    errorFetchWorkingDays = (error) => {
+        console.log("ERRO2");
+        console.log(error);
+    };
+
+    errorFetchReservedLessons = (error) => {
+        console.log("ERRO");
+        console.log(error);
+    };
+
+    /**
+     * Define the week days to show in table to student mark lesson.
+     */
     defineWeekDays = () => {
 
         //Segunda-> 0, Terça->1 , Quarta->2 , ....
-        let choosedWeekDay = this.state.startDate.getUTCDay();
-
+        let choosedWeekDay = this.state.startDate.getDay();
         let dateAux = new Date(this.state.startDate);
 
         let i=0, weekDaysAux = [];
 
         while (i < weekDays.length) {
-            let dayAux = i===0 ?  dateAux.getUTCDate() : dateAux.getUTCDate() + 1;
+
+            let dayAux = i===0 ?  dateAux.getDate() : dateAux.getDate() + 1;
             dateAux.setDate(dayAux);
 
-            let day = dateAux.getUTCDate();
-            let month = dateAux.getUTCMonth()+1;
+            let day = dateAux.getDate();
+            let month = dateAux.getMonth()+1;
 
-            weekDaysAux.push(weekDays[choosedWeekDay - 1] + " " + day + "/" + month);
+            weekDaysAux.push(weekDays[choosedWeekDay] + " " + day + "/" + month);
 
-            choosedWeekDay = (choosedWeekDay % weekDays.length) + 1;
+            choosedWeekDay = (choosedWeekDay + 1) % weekDays.length;
             i++;
         }
 
         this.setState({
             weekDays: weekDaysAux,
-            isLoading: false,
-        })
+        });
     };
 
 
@@ -93,15 +179,19 @@ class MarkLesson extends Component {
         for(let i=startTime ; i < (length + startTime) ; i++)
             res.push(i + 'h - ' + (i + 1) + 'h');
 
-        return res;
+
+        this.setState({
+            slots : res,
+            isLoading: false,
+        });
     };
 
     handleClickStep = (idStep) => {
     };
 
-    handleClickCell = () => {
-        console.log("CELL CLICKED");
-    }
+    handleClickCell = (day) => {
+        console.log(day);
+    };
 
 
     async handleChange(date) {
@@ -112,10 +202,19 @@ class MarkLesson extends Component {
         });
 
         await this.defineWeekDays();
+
+        await this.slots(8,18);
+
+        fetchApi(
+            'get','/lessons/' +
+            'reserved_lessons?instructorID='+this.state.instructor.id+'&categoryID='+this.state.categoryChoosed.id,
+            {},  {},
+            this.successFetchReservedLessons, this.errorFetchReservedLessons
+        );
     }
 
     render() {
-        let slots = this.slots(8,18);
+        //let slots = this.slots(8,18);
 
         const tableInstructorSchedule = (
             <div>
@@ -134,16 +233,22 @@ class MarkLesson extends Component {
                     </Table.Header>
                     <Table.Body>
                         {
-                            slots.map( (hours,index) => (
+                            this.state.slots.map( (hours,index) => (
                                 <Table.Row key={index} >
                                     <Table.Cell key={index}> {hours} </Table.Cell>
                                     {
-                                        this.state.weekDays.map( (day, i) => (
+                                        this.state.schedule[index] &&
+                                        this.state.schedule[index].map( (day, i) => (
+                                            day.canReserve ?
                                             <Table.Cell key={i}
                                                         className={"tableHourAvailable"}
-                                                        selectable={false}
-                                                        onClick={() => this.handleClickCell()}
+                                                        selectable
+                                                        onClick={() => this.handleClickCell(day)}
+                                            /> :
+                                            <Table.Cell key={i}
+                                                        className={"tableHourUnavailable"}
                                             />
+
                                         ))
                                     }
                                 </Table.Row>

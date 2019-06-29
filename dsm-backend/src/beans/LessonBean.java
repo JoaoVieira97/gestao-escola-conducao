@@ -209,4 +209,40 @@ public class LessonBean implements LessonBeanLocal{
 
         return false;
     }
+
+    /**
+     * Get marked lessons from an instructor and by a category.
+     * @param instructorID
+     * @param categoryID
+     * @return
+     */
+    @Override
+    public List<PracticalLesson> getReservedLessonsInstructor(int instructorID, int categoryID) {
+
+        try {
+            List<Lesson> lessons = LessonDAO.queryLesson("InstructorUserID = "+instructorID, "StartTime");
+
+            List<PracticalLesson> aux = new ArrayList<>();
+            List<PracticalLesson> res = new ArrayList<>();
+
+            if(lessons != null)
+                aux = lessons.stream()
+                        .filter(l -> l instanceof PracticalLesson && l.getState().equals("reserved"))
+                        .map(l -> (PracticalLesson) l)
+                        .collect(Collectors.toList());
+
+            for(PracticalLesson p : aux)
+                for (Category category : Arrays.asList(p.categories.toArray()))
+                    if (category.getID() == categoryID) {
+                        res.add(p);
+                    }
+
+            return res;
+
+        } catch (PersistentException e) {
+            e.printStackTrace();
+        }
+
+        return  null;
+    }
 }

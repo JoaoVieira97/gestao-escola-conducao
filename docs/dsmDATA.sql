@@ -185,3 +185,25 @@ INSERT INTO Exam (ID, StudentUserID, StartTime, Description)
 		   (2, 2, "2019-07-02 15:30:00", 'Exame Teórico - Categoria B'),
            (3, 3, "2019-07-03 16:30:00", 'Exame Teórico - Categoria B'),
            (4, 3, "2019-08-20 11:00:00", 'Exame Prático - Categoria B');
+
+# ------------------------------------------------------------------------------------------------------------------------------------------------
+# INSTRUCTOR DATA
+# ------------------------------------------------------------------------------------------------------------------------------------------------
+
+INSERT INTO WorkingDay (ID, Name)
+  VALUES  (1, 'Domingo'),
+          (2, 'Segunda'),
+          (3, 'Terça'),
+          (4, 'Quarta'),
+          (5, 'Quinta'),
+          (6, 'Sexta'),
+          (7, 'Sábado');
+
+
+INSERT INTO Instructor_WorkingDay (InstructorUserID, WorkingDayID)
+  VALUES (4, 2),
+          (4, 4),
+          (4, 6),
+          (5, 3),
+          (5, 5),
+          (5, 7);          

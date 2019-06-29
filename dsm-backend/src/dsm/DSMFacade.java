@@ -16,6 +16,7 @@ public class DSMFacade {
     private static StudentBeanLocal studentBean = lookupStudentBeanLocal();
     private static LessonBeanLocal lessonBean = lookupLessonBeanLocal();
     private static SecretaryBeanLocal secretaryBean = lookupSecretaryBeanLocal();
+    private static InstructorBeanLocal instructorBean = lookupInstructorBeanLocal();
     private static RedisBeanLocal redisBean = lookupRedisBeanLocal();
 
     /**
@@ -89,6 +90,23 @@ public class DSMFacade {
     }
 
     /**
+     * Get and access to InstructorBean features.
+     *
+     * @return SecretaryBeanLocal
+     */
+    private static InstructorBeanLocal lookupInstructorBeanLocal() {
+        try {
+
+            Context c = new InitialContext();
+            return (InstructorBeanLocal) c.lookup("java:global/dsm_backend_war_exploded/InstructorBean!beans.InstructorBeanLocal");
+
+        } catch (NamingException ne) {
+            ne.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
      * Get and access to LessonBean features.
      *
      * @return LessonBeanLocal
@@ -132,7 +150,9 @@ public class DSMFacade {
     // ------------------------------------------------------------
 
 
-
+    //
+    // USER BEAN
+    // ------------------------------------------------------------
     /**
      * Authentication an user.
      */
@@ -165,6 +185,28 @@ public class DSMFacade {
         return userBean.getSchoolInformation(schoolId);
     }
 
+    /**
+     * Get the list of general announcements
+     */
+    public static List<Announcement> getAnnouncements() {
+
+        return userBean.getAnnouncements();
+    }
+
+    /**
+     * Get the list of most recent general announcements
+     */
+    public static List<Announcement> getRecentAnnouncements() {
+
+        return userBean.getRecentAnnouncements();
+    }
+
+    // ------------------------------------------------------------
+
+
+    //
+    // STUDENT BEAN
+    // ------------------------------------------------------------
     /**
      * Get the list of all students.
      */
@@ -199,6 +241,38 @@ public class DSMFacade {
     }
 
     /**
+     * Get the list of exams of a specific student.
+     */
+    public static List<Exam> getStudentExams(int studentId) {
+
+        return studentBean.getStudentExams(studentId);
+    }
+
+    /**
+     * Get the list of next exams of a specific student.
+     */
+    public static List<Exam> getStudentNextExams(int studentId) {
+
+        return studentBean.getStudentNextExams(studentId);
+    }
+
+    /**
+     * Get the list of all registers of a specific student.
+     */
+    public static List<Register> getStudentRegisters(int studentId) {
+
+        return studentBean.getStudentRegisters(studentId);
+    }
+
+    // ------------------------------------------------------------
+
+
+
+    //
+    // LESSON BEAN
+    // ------------------------------------------------------------
+
+    /**
      * Get the list of next practical lessons of a specific student.
      */
     public static List<Lesson> getStudentNextPracticalLessons(int studentId) {
@@ -220,46 +294,6 @@ public class DSMFacade {
     public static List<TheoreticalLesson> getRealizedThemes(int studentId, int categoryID) {
 
         return lessonBean.getRealizedThemes(studentId, categoryID);
-    }
-
-    /**
-     * Get the list of exams of a specific student.
-     */
-    public static List<Exam> getStudentExams(int studentId) {
-
-        return studentBean.getStudentExams(studentId);
-    }
-
-    /**
-     * Get the list of next exams of a specific student.
-     */
-    public static List<Exam> getStudentNextExams(int studentId) {
-
-        return studentBean.getStudentNextExams(studentId);
-    }
-
-    /**
-     * Get the list of general announcements
-     */
-    public static List<Announcement> getAnnouncements() {
-
-        return userBean.getAnnouncements();
-    }
-
-    /**
-     * Get the list of most recent general announcements
-     */
-    public static List<Announcement> getRecentAnnouncements() {
-
-        return userBean.getRecentAnnouncements();
-    }
-
-    /**
-     * Get the list of all registers of a specific student.
-     */
-    public static List<Register> getStudentRegisters(int studentId) {
-
-        return studentBean.getStudentRegisters(studentId);
     }
 
     /**
@@ -293,6 +327,22 @@ public class DSMFacade {
 
         return lessonBean.cancelLessonStudent(lessonId);
     }
+
+    /**
+     * Get marked lessons from an instructor and by a category.
+     */
+    public static  List<PracticalLesson> getReservedLessonsInstructor(int instructorID, int categoryID) {
+
+        return lessonBean.getReservedLessonsInstructor(instructorID, categoryID);
+    }
+
+    // ------------------------------------------------------------
+
+
+
+    //
+    // SECRETARY BEAN
+    // ------------------------------------------------------------
 
     /**
      * Register general announcement
@@ -357,4 +407,18 @@ public class DSMFacade {
 
         return secretaryBean.updateStudent(studentID, name, email, password, address, birth, nif, cc);
     }
+
+    // ------------------------------------------------------------
+
+
+
+    //
+    // INSTRUCTOR BEAN
+    // ------------------------------------------------------------
+
+    public static  List<WorkingDay> getWorkingDays(int instructorID){
+
+        return instructorBean.getWorkingDays(instructorID);
+    }
+
 }

@@ -80,10 +80,10 @@ class LessonsPage extends Component {
      * Handle the response fetch school information.
      * @param response
      */
-    successFetchSchoolInformation = (response) => {
+    successFetchSchoolInformation = async (response) => {
         const data = response.data.schoolInfo;
 
-        this.setState({
+        await this.setState({
             maxTimeToCancel: data.maxTimeToCancel,
             schoolStartTime: data.startTime,
             schoolEndTime: data.endTime,
@@ -394,6 +394,11 @@ class LessonsPage extends Component {
         let practicalsCategoryChoosed = [];
 
         if(categoryId !==-1){
+
+            //Register Choosed (aceder à posição 0, pois é o resultado é um array)
+            let registerChoosed = this.state.allRegisters.filter(register => (register.category.id === categoryId));
+            let instructor = registerChoosed[0].instructor;
+
             this.state.allNextPracticalLessons.forEach(practLesson => {
 
                 let categories = practLesson.categories.collection;
@@ -418,22 +423,23 @@ class LessonsPage extends Component {
                     }
                 }
             });
+
+            practicalsCategoryChoosed.sort(function(l1, l2) {
+                return new Date(l1.startTime) - new Date(l2.startTime);
+            });
+
+            await this.setState({
+                categoryChoosedId: categoryId,
+                showPracticalLessons: practicalsCategoryChoosed,
+                instructor: instructor,
+            });
+
+            fetchApi(
+                'get','/student/realized_themes?category='+categoryId,
+                {},  {},
+                this.successFetchRealizedThemes, this.errorFetchRealizedThemes
+            );
         }
-
-        practicalsCategoryChoosed.sort(function(l1, l2) {
-            return new Date(l1.startTime) - new Date(l2.startTime);
-        });
-
-        await this.setState({
-            categoryChoosedId: categoryId,
-            showPracticalLessons: practicalsCategoryChoosed,
-        });
-
-        fetchApi(
-            'get','/student/realized_themes?category='+categoryId,
-            {},  {},
-            this.successFetchRealizedThemes, this.errorFetchRealizedThemes
-        );
 
     };
 
@@ -650,7 +656,8 @@ class LessonsPage extends Component {
                                         categoryChoosed: {
                                             id: categoryChoosedId,
                                             name: categoryChoosedName,
-                                        }
+                                        },
+                                        instructor: this.state.instructor,
                                     }
                                 })}
                         > MARCAR AULA
