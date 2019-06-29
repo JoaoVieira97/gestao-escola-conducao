@@ -66,7 +66,7 @@ export default class GenericWeather extends Component {
             icon = 'CLOUDY';
         else if(type >= 6 && type <= 15)
             icon = 'RAIN';
-        else if(type >= 16 && type <= 17 || type === 26)
+        else if((type >= 16 && type <= 17) || type === 26)
             icon = 'FOG';
         else if(type === 18)
             icon = 'SNOW';

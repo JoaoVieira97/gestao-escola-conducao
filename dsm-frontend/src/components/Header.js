@@ -6,9 +6,8 @@ import {
     Container,
     Sidebar, Menu, Icon
 } from 'semantic-ui-react';
-import Authentication from '../services/session/Authentication';
+import Authentication from '../services/Authentication';
 import {headerStyle} from "../styles/styles";
-import {fetchApi} from "../services/api";
 
 
 // DSM ROUTES
@@ -178,7 +177,7 @@ const InstructorItemsMobile = (handleLogout, hideMenu) => {
 
 const DefaultItems = (
     <React.Fragment>
-        <NavLink activeClassName="active" className="ui item" to={Routes.HOME} >INÍCIO</NavLink>
+        <NavLink activeClassName="active" className="ui item" to={Routes.LOGIN} >INÍCIO</NavLink>
         <NavLink className="ui item" to={Routes.CATEGORIES} >CATEGORIAS</NavLink>
         <NavLink className="ui item" to={Routes.CONTACTS} >CONTACTOS</NavLink>
     </React.Fragment>
@@ -196,15 +195,7 @@ class Header extends React.Component {
 
     handleLogout = async () => {
 
-        fetchApi(
-            'post','/logout',
-            {},
-            {},
-            (res) => {console.log(res)},
-            (err) => {console.log(err)}
-        );
-
-        await Authentication.logout();
+        Authentication.logout();
         window.location.reload();
     };
 
