@@ -188,7 +188,7 @@ class RegisterInCategory extends Component {
 
 
         sleep(3000).then(() => {
-            this.props.history.push(Routes.HOME);
+            this.props.history.push(Routes.STUDENT_PROFILE, {student: this.state.student});
         });
         
     };
@@ -264,7 +264,14 @@ class RegisterInCategory extends Component {
                                 Alunos
                             </Breadcrumb.Section>
                             <Breadcrumb.Divider icon='right angle' />
-                            <Breadcrumb.Section active>Categorias de aluno</Breadcrumb.Section>
+                            <Breadcrumb.Section
+                                style={{color: 'grey'}}
+                                onClick={() => this.props.history.push(Routes.STUDENT_PROFILE, {student: this.state.student})}
+                            >
+                                {this.state.student.name}
+                            </Breadcrumb.Section>
+                            <Breadcrumb.Divider icon='right angle' />
+                            <Breadcrumb.Section active>Categorias</Breadcrumb.Section>
                         </Breadcrumb>
 
                     </Grid.Column>

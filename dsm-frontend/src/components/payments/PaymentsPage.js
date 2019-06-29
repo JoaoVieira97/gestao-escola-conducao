@@ -26,30 +26,36 @@ class PaymentsPage extends Component {
 
         this.state = {
             isLoading: true,
+
             nameUser: '',
             emailUser: '',
             exams: [],
+
             allRegisters: [],
-            payments: [],
             allCategories: [],
             categoryChoosed: {},
-            dateSubscription: '',
-            dateLimit: '',
-            totalTheoreticalLessons: 0,
-            theoreticalRealized: [],
-            numberTheoreticalRealized: 0,
-            totalPracticalLessons: 0,
-            practicalRealized: [],
-            numberPracticalRealized: 0,
-            nameInstructor: '',
+
+            payments: [],
             actualPaid: 0,
             totalPrice: 0,
 
-            messageCategoryNotSelected: true,
+            dateSubscription: '',
+            dateLimit: '',
+            nameInstructor: '',
+
+            totalTheoreticalLessons: 0,
+            theoreticalRealized: [],
+            numberTheoreticalRealized: 0,
+
+            totalPracticalLessons: 0,
+            practicalRealized: [],
+            numberPracticalRealized: 0,
+
+            messageCategoryNotSelected: false,
 
             _column: null,
             _direction: null,
-            _limit: 5,
+            _limit: 10,
             _page: 1,
         }
     };
@@ -57,22 +63,16 @@ class PaymentsPage extends Component {
     componentDidMount() {
 
         fetchApi(
-            'get','/student/information?id=1', //TODO Find userID
+            'get','/student/information', //TODO Find userID
             {},  {},
             this.successFetchInformation, this.errorHandler
         );
 
 
         fetchApi(
-            'get','/student/registers?id=1', //TODO Find userID
+            'get','/student/registers', //TODO Find userID
             {},  {},
             this.successFetchRegisters, this.errorHandler
-        );
-
-        fetchApi(
-            'get','/lessons/student?id=1', //TODO Find userID
-            {},  {},
-            this.successFetchLessons, this.errorHandler
         );
 
     }
@@ -81,10 +81,10 @@ class PaymentsPage extends Component {
      * Handle the response fetch registers.
      * @param response
      */
-    successFetchInformation = (response) => {
+    successFetchInformation = async (response) => {
         const data = response.data;
 
-        this.setState({
+        await this.setState({
             nameUser: data.name,
             emailUser: data.email,
             exams: data.exams,
@@ -95,12 +95,13 @@ class PaymentsPage extends Component {
      * Handle the response fetch registers.
      * @param response
      */
-    successFetchRegisters = (response) => {
+    successFetchRegisters = async (response) => {
         const data = response.data;
 
-        //key -> registers.id
+        //Cada categoria associada a um registo
         let categoriesRegister = data.registers.map(register => (register.category));
 
+        //Categorias
         let categories = categoriesRegister.map( category => {
             return {
                 key: category.id,
@@ -109,10 +110,17 @@ class PaymentsPage extends Component {
             }
         });
 
-        this.setState({
+        await this.setState({
             allRegisters: data.registers,
             allCategories: categories,
         });
+
+
+        fetchApi(
+            'get','/lessons/student', //TODO Find userID
+            {},  {},
+            this.successFetchLessons, this.errorHandler
+        );
 
     };
 
@@ -121,20 +129,128 @@ class PaymentsPage extends Component {
      * Handle the response fetch registers.
      * @param response
      */
-    successFetchLessons = (response) => {
+    successFetchLessons = async (response) => {
         const data = response.data;
 
-        this.setState({
+        await this.setState({
             theoreticalRealized : data.theoreticalLessons,
             practicalRealized : data.practicalLessons,
         });
 
-        //stop loading
-        setTimeout(()=>{
-            this.setState({isLoading: false});
-        }, 1000);
+        await this.showData(true);
     };
 
+
+    showData = (firstTime, categoryData)  => {
+
+        let categoryChoosed, categoryId, registerChoosed;
+        let dateSubscription, dateLimit, nameInstructor;
+        let theoreticalLessons, practicalLessons, numberP, numberT;
+        let  payments, actualPaid, totalPrice;
+
+        if(firstTime) {
+            categoryChoosed = this.state.allCategories[0];
+            categoryId = categoryChoosed.key;
+            registerChoosed = this.state.allRegisters[0];
+
+             dateSubscription = registerChoosed.initialDate;
+
+            let date = dateSubscription.split("/");
+            dateLimit = moment(date[2]+'-'+date[1]+'-'+date[0]).add(2,'years').format('DD/MM/YYYY');
+
+            theoreticalLessons = registerChoosed.category.theoreticalLessons;
+            practicalLessons = registerChoosed.category.practicalLessons;
+            totalPrice = registerChoosed.category.price;
+            nameInstructor = registerChoosed.instructor.name;
+
+            payments = registerChoosed.payments.collection.map( payment => {
+                return {
+                    id: payment.id,
+                    value: payment.value,
+                    description: payment.description,
+                    timestamp: payment.timestamp,
+                }
+            });
+
+            actualPaid = payments.reduce( (acc, payment) => acc + payment.value, 0);
+
+            let categoriesPracticalRealized = this.state.practicalRealized.map( practLesson => (
+                practLesson.categories.collection));
+
+            let practicalRealized = categoriesPracticalRealized.map( category => (
+                category.filter( cat => (cat.id === categoryId))));
+
+            numberP = practicalRealized.reduce( (acc, array) => acc + array.length, 0);
+
+            let categoriesTheoreticalRealized = this.state.theoreticalRealized.map( theoLesson => (
+                theoLesson.categories.collection));
+
+            let theoreticalRealized = categoriesTheoreticalRealized.map( category =>
+                (category.filter( cat => (cat.id === categoryId))));
+
+            numberT = theoreticalRealized.reduce( (acc, array) => acc + array.length, 0);
+
+        }
+        else {
+            categoryChoosed = this.state.allCategories.filter(category => (category.value === categoryData.value));
+            categoryId = categoryChoosed[0].key;
+            registerChoosed = this.state.allRegisters.filter(register => (register.category.id === categoryId));
+
+            dateSubscription = registerChoosed[0].initialDate;
+
+            let date = dateSubscription.split("/");
+            dateLimit = moment(date[2] + '-' + date[1] + '-' + date[0]).add(2, 'years').format('DD/MM/YYYY');
+
+            theoreticalLessons = registerChoosed[0].category.theoreticalLessons;
+            practicalLessons = registerChoosed[0].category.practicalLessons;
+            totalPrice = registerChoosed[0].category.price;
+            nameInstructor = registerChoosed[0].instructor.name;
+
+            payments = registerChoosed[0].payments.collection.map(payment => {
+                return {
+                    id: payment.id,
+                    value: payment.value,
+                    description: payment.description,
+                    timestamp: payment.timestamp,
+                }
+            });
+
+            actualPaid = payments.reduce((acc, payment) => acc + payment.value, 0);
+
+            let categoriesPracticalRealized = this.state.practicalRealized.map(practLesson => (
+                practLesson.categories.collection));
+
+            let practicalRealized = categoriesPracticalRealized.map(category => (
+                category.filter(cat => (cat.id === categoryId))));
+
+            numberP = practicalRealized.reduce((acc, array) => acc + array.length, 0);
+
+            let categoriesTheoreticalRealized = this.state.theoreticalRealized.map(theoLesson => (
+                theoLesson.categories.collection));
+
+            let theoreticalRealized = categoriesTheoreticalRealized.map(category =>
+                (category.filter(cat => (cat.id === categoryId))));
+
+            numberT = theoreticalRealized.reduce((acc, array) => acc + array.length, 0);
+        }
+
+        this.setState({
+            categoryChoosed: firstTime ? categoryChoosed : categoryChoosed[0],
+            dateSubscription: dateSubscription,
+            dateLimit: dateLimit,
+
+            totalTheoreticalLessons: theoreticalLessons,
+            totalPracticalLessons: practicalLessons,
+            numberPracticalRealized: numberP,
+            numberTheoreticalRealized: numberT,
+            nameInstructor: nameInstructor,
+            payments: payments,
+            actualPaid: actualPaid,
+            totalPrice: totalPrice,
+
+            isLoading: false,
+        });
+    };
 
     /**
      * Handle the error.
@@ -143,6 +259,10 @@ class PaymentsPage extends Component {
     errorHandler = (error) => {
 
         console.log(error);
+
+        this.setState({
+            messageCategoryNotSelected: true,
+        })
 
         /*
         // bad request
@@ -161,84 +281,9 @@ class PaymentsPage extends Component {
         }*/
     };
 
-    handleChange = (event, data) => {
+    handleChangeCategory = (event, data) => {
 
-        if(data.value){
-
-            let categoryChoosed = this.state.allCategories.filter(category => (category.value === data.value));
-            let categoryId = categoryChoosed[0].key;
-
-            let registerChoosed = this.state.allRegisters.filter(register => (register.category.id === categoryId));
-
-            let dateSubscription = registerChoosed[0].initialDate;
-
-            let date = dateSubscription.split("/");
-            let dateLimit = moment(date[2]+'-'+date[1]+'-'+date[0]).add(2,'years').format('DD/MM/YYYY');
-            let theoreticalLessons = registerChoosed[0].category.theoreticalLessons;
-            let practicalLessons = registerChoosed[0].category.practicalLessons;
-            let totalPrice = registerChoosed[0].category.price;
-            let nameInstructor = registerChoosed[0].instructor.name;
-
-            //collection ou iterator??
-            let payments = registerChoosed[0].payments.collection.map( payment => {
-                return {
-                    id: payment.id,
-                    value: payment.value,
-                    description: payment.description,
-                    timestamp: payment.timestamp,
-                }
-            });
-
-            let actualPaid = payments.reduce( (acc, payment) => acc + payment.value, 0);
-
-            let categoriesPracticalRealized = this.state.practicalRealized.map( practLesson => (
-                practLesson.categories.collection));
-
-            let practicalRealized = categoriesPracticalRealized.map( category => (
-                category.filter( cat => (cat.id === categoryId))));
-
-            let numberP = practicalRealized.reduce( (acc, array) => acc + array.length, 0);
-
-            let categoriesTheoreticalRealized = this.state.theoreticalRealized.map( theoLesson => (
-                theoLesson.categories.collection));
-
-            let theoreticalRealized = categoriesTheoreticalRealized.map( category =>
-                (category.filter( cat => (cat.id === categoryId))));
-
-            let numberT = theoreticalRealized.reduce( (acc, array) => acc + array.length, 0);
-
-            this.setState({
-                //categoryChoosed: registerChoosed[0].category,
-                dateSubscription: dateSubscription,
-                dateLimit: dateLimit,
-                totalTheoreticalLessons: theoreticalLessons,
-                totalPracticalLessons: practicalLessons,
-                numberPracticalRealized: numberP,
-                numberTheoreticalRealized: numberT,
-                nameInstructor: nameInstructor,
-                payments: payments,
-                actualPaid: actualPaid,
-                totalPrice: totalPrice,
-                messageCategoryNotSelected: false,
-            });
-        }
-        else{
-            this.setState({
-                //categoryChoosed: registerChoosed[0].category,
-                dateSubscription: '',
-                dateLimit: '',
-                totalTheoreticalLessons: 0,
-                totalPracticalLessons: 0,
-                numberPracticalRealized: 0,
-                numberTheoreticalRealized: 0,
-                nameInstructor: '',
-                payments: [],
-                actualPaid: 0,
-                totalPrice: 0,
-                messageCategoryNotSelected: true,
-            });
-
-        }
+        this.showData(false, data);
 
     };
 
@@ -404,17 +449,18 @@ class PaymentsPage extends Component {
                                 shadowRadius: 2.22,
                                 elevation: 3}}
                             >
+                                { this.state.categoryChoosed &&
                                 <Header as='h3' textAlign='left'>
                                     Categoria: <Dropdown
-                                    placeholder="Selecione uma categoria"
+                                    //placeholder="Selecione uma categoria"
                                     selection
-                                    clearable
+                                    //clearable
                                     options={this.state.allCategories}
-                                    //defaultValue={this.state.categoryChoosed.value}
-                                    onChange={this.handleChange}
-
+                                    onChange={this.handleChangeCategory}
+                                    value={this.state.categoryChoosed.value}
                                 />
                                 </Header>
+                                }
                             </div>
                             <div style={{ width: '100%',
                                             marginTop: 10,
@@ -470,8 +516,8 @@ class PaymentsPage extends Component {
                                         onDismiss={this.handleDismiss}
                                         size={'large'}
                                         error
-                                        header={'Categoria não selecionada'}
-                                        content={'Tem de selecionar uma categoria para verificar os respetivos pagamentos.'}
+                                        header={'Erro no registo'}
+                                        content={'Não tem registos associados.'}
                                     />
                                     {tablePayments}
                                 </div>

@@ -205,9 +205,6 @@ class RegisterStudent extends Component {
 
     render() {
 
-        console.log(this.state.instructor)
-        console.log(this.state.category)
-
         return (
             <Container>
                 <Dimmer inverted active={this.state.isLoading}>
@@ -301,7 +298,7 @@ class RegisterStudent extends Component {
                                             <input
                                                 title="9 dígitos"
                                                 type="text"
-                                                maxlength="9"
+                                                maxLength="9"
                                                 name={"nif"}
                                                 placeholder="NIF"
                                                 pattern="[0-9]{9}"
@@ -321,7 +318,7 @@ class RegisterStudent extends Component {
                                         <div className="ui input">
                                             <input
                                                 type="text"
-                                                maxlength="12"
+                                                maxLength="12"
                                                 title="8 dígitos mais 4 carateres (dígitos ou letras maiúsculas)"
                                                 name={"cc"}
                                                 placeholder="CC"

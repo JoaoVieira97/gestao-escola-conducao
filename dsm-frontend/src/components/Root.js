@@ -28,6 +28,7 @@ import AllStudents from './students/AllStudents';
 import RegisterStudent from './students/RegisterStudent';
 import Announcements from './announcements/Announcements';
 import RegisterGeneralAnnouncement from './announcements/RegisterGeneralAnnouncement';
+import RegisterPersonalAnnouncement from './students/RegisterPersonalAnnouncement';
 import RegisterInCategory from './students/RegisterInCategory';
 import RegisterExam from './students/RegisterExam';
 import RegisterPayment from './students/RegisterPayment';
@@ -78,6 +79,7 @@ const Root = ({ store }) => {
                 <PrivateRoute exact path={Routes.REGISTER_STUDENT_CATEGORY} component={RegisterInCategory} />
                 <PrivateRoute exact path={Routes.REGISTER_STUDENT_EXAM} component={RegisterExam} />
                 <PrivateRoute exact path={Routes.REGISTER_STUDENT_PAYMENT} component={RegisterPayment} />
+                <PrivateRoute exact path={Routes.REGISTER_STUDENT_ANNOUNCEMENT} component={RegisterPersonalAnnouncement} />
                 <PrivateRoute exact path={Routes.REGISTER_GENERAL_ANNOUNCEMENT} component={RegisterGeneralAnnouncement} />
                 <PrivateRoute exact path={Routes.STUDENT_PROFILE} component={StudentProfile} />
                 <Route exact path={Routes.CONTACTS} render={ props => <ErrorPage {...props} />} />
