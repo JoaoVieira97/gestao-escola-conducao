@@ -22,7 +22,9 @@ class MarkLesson extends Component {
         super(props);
 
         const todayRaw = new Date();
-        const endDate = moment(todayRaw).add(6, 'day').format('YYYY-MM-DD');
+        const endDate = moment(todayRaw).add(6, 'day')
+            .set({hour:23,minute:59,second:0,millisecond:0})
+            .toISOString();
 
         this.state = {
             //all
@@ -31,13 +33,15 @@ class MarkLesson extends Component {
             stepId: 1,
             instructor: {name: 'A carregar...'},
             category: {name: 'A carregar...'},
+            isStepOneDisabled: false,
 
             // first step
             startDate: todayRaw,
             endDate: new Date(endDate),
+            isStepTwoDisabled: true,
 
             // second step
-            selectedDay: todayRaw
+            selectedDay: undefined
         }
     };
 
@@ -60,17 +64,39 @@ class MarkLesson extends Component {
     }
 
     /**
-     * When user press on day in first step.
+     * When user press one day in the first step.
      * @param date
      */
     onChangeDate = (date) => {
 
-        const endDate = moment(date).add(6, 'day').format('YYYY-MM-DD');
+        const endDate = moment(date).add(6, 'day')
+            .set({hour:23,minute:59,second:0,millisecond:0})
+            .toISOString();
+
         this.setState({
             startDate: date,
             endDate: new Date(endDate),
-            selectedDay: date
         });
+    };
+
+    /**
+     * When user press on day in the second step.
+     * @param dayString
+     */
+    onSelectDay = (dayString) => {
+
+        this.setState({
+            selectedDay: dayString,
+            isStepTwoDisabled: false,
+        })
+    };
+
+    onRemoveDay = () => {
+
+        this.setState({
+            selectedDay: undefined,
+            isStepTwoDisabled: true,
+        })
     };
 
     render() {
@@ -83,12 +109,13 @@ class MarkLesson extends Component {
             component: (
                 <SelectWeek
                     key={'1'}
+                    step={'begin'}
                     startDate={this.state.startDate}
                     endDate={this.state.endDate}
                     onChange={this.onChangeDate.bind(this)}
                     instructor={this.state.instructor}
                     category={this.state.category}
-                    isDisabled={false}
+                    isDisabled={this.state.isStepOneDisabled}
                     onConfirmWeek={() => this.setState(state => ({stepId: state.stepId + 1}))}
                     onCancelWeek={() => this.props.history.push(Routes.LESSONS)}
                 />
@@ -101,11 +128,14 @@ class MarkLesson extends Component {
             component: (
                 <SelectDay
                     key={'2'}
+                    step={'middle'}
                     startDate={this.state.startDate}
                     endDate={this.state.endDate}
                     selectedDay={this.state.selectedDay}
+                    onSelectDay={this.onSelectDay.bind(this)}
+                    onRemoveDay={this.onRemoveDay.bind(this)}
                     instructor={this.state.instructor}
-                    isDisabled={true}
+                    isDisabled={this.state.isStepTwoDisabled}
                     onConfirmDay={() => this.setState(state => ({stepId: state.stepId + 1}))}
                     onCancelDay={() => this.setState(state => ({stepId: state.stepId - 1}))}
                 />
@@ -141,7 +171,7 @@ class MarkLesson extends Component {
                                         key={item.title}
                                         active={item.id === this.state.stepId}
                                         disabled={item.id > this.state.stepId}
-                                        onClick={() => this.setState({stepId: item.id})}
+                                        //onClick={() => this.setState({stepId: item.id})}
                                     >
                                         <Icon name={item.icon} />
                                         <Step.Content>

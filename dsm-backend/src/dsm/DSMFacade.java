@@ -331,9 +331,9 @@ public class DSMFacade {
     /**
      * Get marked lessons from an instructor and by a category.
      */
-    public static  List<PracticalLesson> getReservedLessonsInstructor(int instructorID, int categoryID) {
+    public static  List<PracticalLesson> getReservedLessonsInstructor(int instructorID, long startTimestamp, long endTimeStap) {
 
-        return lessonBean.getReservedLessonsInstructor(instructorID, categoryID);
+        return lessonBean.getReservedLessonsInstructor(instructorID, startTimestamp, endTimeStap);
     }
 
     // ------------------------------------------------------------

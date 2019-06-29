@@ -6,6 +6,7 @@ import org.orm.PersistentSession;
 
 import javax.ejb.Local;
 import javax.ejb.Stateless;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -213,31 +214,28 @@ public class LessonBean implements LessonBeanLocal{
     /**
      * Get marked lessons from an instructor and by a category.
      * @param instructorID
-     * @param categoryID
      * @return
      */
     @Override
-    public List<PracticalLesson> getReservedLessonsInstructor(int instructorID, int categoryID) {
+    public List<PracticalLesson> getReservedLessonsInstructor(int instructorID, long startTimestamp, long endTimestamp) {
 
         try {
-            List<Lesson> lessons = LessonDAO.queryLesson("InstructorUserID = "+instructorID, "StartTime");
+            List<Lesson> lessons = LessonDAO.queryLesson(
+                    "InstructorUserID = " + instructorID
+                            + " AND StartTime >= '" + (new Timestamp(startTimestamp)).toString()
+                            + "' AND StartTime <= '" + (new Timestamp(endTimestamp)).toString() + "'",
+                    "StartTime"
+            );
 
-            List<PracticalLesson> aux = new ArrayList<>();
             List<PracticalLesson> res = new ArrayList<>();
-
             if(lessons != null)
-                aux = lessons.stream()
-                        .filter(l -> l instanceof PracticalLesson && l.getState().equals("reserved"))
+                res = lessons.stream()
+                        .filter(l -> l instanceof PracticalLesson)
                         .map(l -> (PracticalLesson) l)
                         .collect(Collectors.toList());
 
-            for(PracticalLesson p : aux)
-                for (Category category : Arrays.asList(p.categories.toArray()))
-                    if (category.getID() == categoryID) {
-                        res.add(p);
-                    }
-
             return res;
+
 
         } catch (PersistentException e) {
             e.printStackTrace();

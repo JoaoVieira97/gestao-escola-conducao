@@ -10,11 +10,17 @@ export class MarkLessonHeader extends Component {
             <Container textAlign={'right'} style={{paddingBottom: 20}}>
                 <Button.Group>
                     <Button onClick={this.props.onCancel}>
-                        Cancelar
+                        {
+                            this.props.step === 'begin' ?
+                                'Cancelar' : 'Voltar'
+                        }
                     </Button>
                     <Button.Or text={'ou'} />
                     <Button positive onClick={this.props.onConfirm} disabled={this.props.isDisabled}>
-                        Confirmar
+                        {
+                            this.props.step === 'end' ?
+                                'Confimar' : 'Avançar'
+                        }
                     </Button>
                 </Button.Group>
             </Container>
@@ -24,6 +30,7 @@ export class MarkLessonHeader extends Component {
 
 
 MarkLessonHeader.propTypes = {
+    step: PropTypes.string.isRequired,
     isDisabled: PropTypes.bool.isRequired,
     onConfirm: PropTypes.func.isRequired,
     onCancel: PropTypes.func.isRequired,

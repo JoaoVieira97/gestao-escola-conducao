@@ -2,11 +2,14 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {MarkLessonHeader} from "./MarkLessonHeader";
-import {Container, Dimmer, Loader} from "semantic-ui-react";
+import {Container, Dimmer, Loader, Table} from "semantic-ui-react";
 import {fetchApi} from "../../services/api";
 import Authentication from "../../services/Authentication";
+import moment from "moment";
 
-//const weekDays = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+
+const weekDays = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+
 
 class SelectDay extends Component {
 
@@ -14,17 +17,84 @@ class SelectDay extends Component {
         super(props);
 
         this.state = {
+            isLoading: true,
             isLoadingWorkingDays: true,
             isLoadingInstructorLessons: true,
-            isLoadingText: 'A carregar...'
+            isLoadingText: 'A carregar...',
+
+            workingDays: [],
+            practicalLessons: [],
+
+            matrix: [],
+
+            minHour: 9,
+            maxHour: 18,
         }
     }
 
-    componentDidMount() {
+    async componentDidMount() {
 
+        await this.defineMatrix();
         this.fetchInstructorWorkingDays();
-        //this.fetchInstructorLessons();
     }
+
+    /**
+     * Define the week days to show in table to student mark lesson.
+     */
+    defineMatrix = async () => {
+
+        const weekDayNumber = this.props.startDate.getDay();
+        let auxMatrix = [];
+        let current = 0;
+        let i = weekDayNumber;
+
+        do {
+            auxMatrix.push({
+                name: weekDays[i],
+                disabled: false,
+                hours: this.createHours(current)
+            });
+
+            current++;
+            i++;
+            i = i % weekDays.length;
+        } while (i !== weekDayNumber);
+
+        await this.setState({
+            isLoading: false,
+            matrix: auxMatrix,
+        });
+    };
+
+    /**
+     * Define hours of day, starting from 9 to 18.
+     */
+    createHours = (current) => {
+
+        const currentDate = moment(this.props.startDate)
+            .add(current, 'day')
+            .toISOString().split('T');
+
+        const auxDate = currentDate[0].split('-');
+        const date = auxDate[2] + '/' + auxDate[1] + '/' + auxDate[0];
+
+        let hours = {};
+        for (let i = this.state.minHour; i <= this.state.maxHour; i++) {
+
+            let hour;
+            if(i < 10) {
+                hour = '0' + i + ':00';
+            }
+            else {
+                hour = i + ':00';
+            }
+
+            hours[date + ' ' + hour] = {
+                disabled: false
+            };
+        }
+        return hours;
+    };
 
     /**
      * Fetching all working days of current instructor.
@@ -40,7 +110,27 @@ class SelectDay extends Component {
     };
     successHandlerWorkingDays = (response) => {
 
-        console.log(response.data);
+        if(response.status === 200 && response.data) {
+
+            const matrix = this.state.matrix;
+            const workingDaysRaw = response.data.workingDays;
+
+
+            for (let i = 0; i < matrix.length; i++) {
+
+                const aux = workingDaysRaw.find(item => item.name === matrix[i].name);
+                if(aux) {
+                    matrix[i].disabled = true;
+                }
+            }
+
+            this.setState({
+                matrix: matrix
+            });
+
+            this.fetchInstructorLessons();
+        }
+
         this.setState({
             isLoadingWorkingDays: false
         });
@@ -71,7 +161,33 @@ class SelectDay extends Component {
     };
     successHandlerInstructorLessons = (response) => {
 
-        console.log(response.data);
+        if(response.status === 200 && response.data) {
+
+            let matrix = this.state.matrix;
+            const practicalLessons = response.data.practicalLessons;
+
+            for (let i = 0; i < matrix.length; i++) {
+
+                const dayHours = Object.keys(matrix[i].hours);
+                const aux = practicalLessons.find(item => dayHours.includes(item.startTime));
+
+                if(aux) {
+
+                    const lessonStartTime = aux.startTime;
+                    matrix[i].hours[lessonStartTime] = {
+                        disabled: true,
+                        ...aux
+                    }
+                }
+            }
+
+            this.setState({matrix: matrix});
+            this.checkIfUserAsSelected();
+        }
+
+        this.setState({
+            isLoadingInstructorLessons: false
+        });
     };
     errorHandlerInstructorLessons = (error) => {
 
@@ -82,304 +198,121 @@ class SelectDay extends Component {
         }
     };
 
+    checkIfUserAsSelected = () => {
 
-
-    /*
-    async componentDidMount() {
-
-
-        await this.setState({
-            categoryChoosed: this.props.history.location.state.categoryChoosed,
-            instructor: this.props.history.location.state.instructor,
-        });
-
-        //isLoading: false nesta função
-        await this.defineWeekDays();
-
-        //falta obter school information
-        await this.slots(8, 18);
-
-        fetchApi(
-            'get', '/lessons/' +
-            'reserved_lessons?instructorID=' + this.state.instructor.id + '&categoryID=' + this.state.categoryChoosed.id,
-            {}, {},
-            this.successFetchReservedLessons, this.errorFetchReservedLessons
-        );
-    }
-
-    successFetchReservedLessons = async (response) => {
-        console.log("SUCESSO");
-
-        const reservedLessons = response.data.practicalLessons;
-
-        //Não está bem!! porque também pode ser do próximo ano
-        let year = this.state.startDate.getFullYear();
-
-        let schedule = [];
-
-        this.state.slots.forEach(slot => {
-            let aux = [];
-            let initHour = slot.split("h")[0];
-
-            this.state.weekDays.forEach(weekDay => {
-
-                let weekDaySplit = weekDay.split(" ");
-
-                let weekDate = moment(weekDaySplit[1] + "/" + year + " " + initHour + ":00", "DD/MM/YYYY HH:mm")
-                    .format("DD/MM/YYYY HH:mm");
-
-                let reserved = reservedLessons.find(function (lesson) {
-
-                    return lesson.startTime === weekDate;
-                });
-
-                let canReserve = true;
-                if (reserved) canReserve = false;
-
-                let dayId = weekDays.indexOf(weekDaySplit[0]);
-
-                aux.push({
-                    date: weekDate,
-                    canReserve: canReserve,
-                    dayId: dayId,
-                });
-
-            });
-
-            schedule.push(aux);
-        });
-
-        await this.setState({
-            schedule: schedule,
-        });
-
-
-        fetchApi(
-            'get', '/instructor/working_days?instructorID=' + this.state.instructor.id,
-            {}, {},
-            this.successFetchWorkingDays, this.errorFetchWorkingDays
-        );
-    };
-
-    successFetchWorkingDays = async (response) => {
-        const workingDays = response.data.workingDays;
-        console.log(workingDays);
-
-        const schedule = this.state.schedule;
-
-        let scheduleAux = [];
-
-        schedule.forEach(row => {
-            let aux = [];
-
-            row.forEach(day => {
-
-                let working = workingDays.find(function (workingDay) {
-
-                    return workingDay.id === (day.dayId + 1);
-                });
-
-                let canReserve = working ? true : false;
-
-                aux.push({
-                    date: day.date,
-                    canReserve: canReserve,
-                    dayId: day.dayId,
-                });
-            });
-
-            scheduleAux.push(aux);
-        });
-
-        await this.setState({
-            schedule: scheduleAux,
-            isLoading: false,
-        });
-    };
-
-    errorFetchWorkingDays = (error) => {
-        console.log("ERRO2");
-        console.log(error);
-    };
-
-    errorFetchReservedLessons = (error) => {
-        console.log("ERRO");
-        console.log(error);
-    };
-
-    defineWeekDays = () => {
-
-        //Segunda-> 0, Terça->1 , Quarta->2 , ....
-        let choosedWeekDay = this.state.startDate.getDay();
-        let dateAux = new Date(this.state.startDate);
-
-        let i = 0, weekDaysAux = [];
-
-        while (i < weekDays.length) {
-
-            let dayAux = i === 0 ? dateAux.getDate() : dateAux.getDate() + 1;
-            dateAux.setDate(dayAux);
-
-            let day = dateAux.getDate();
-            let month = dateAux.getMonth() + 1;
-
-            weekDaysAux.push(weekDays[choosedWeekDay] + " " + day + "/" + month);
-
-            choosedWeekDay = (choosedWeekDay + 1) % weekDays.length;
-            i++;
+        if(this.props.selectedDay !== undefined) {
+            this.onSelectDay(this.props.selectedDay);
         }
-
-        this.setState({
-            weekDays: weekDaysAux,
-        });
     };
 
-    slots = (startTime, endTime) => {
-
-        let length = endTime - startTime;
-        let res = [];
-
-        for (let i = startTime; i < (length + startTime); i++)
-            res.push(i + 'h - ' + (i + 1) + 'h');
+    onSelectDay = (day) => {
 
 
-        this.setState({
-            slots: res,
-        });
+
+        if(this.props.selectedDay !== undefined) {
+            this.props.onRemoveDay();
+            this.props.onSelectDay(day);
+        }
     };
-
-
-    handleClickCell = (day) => {
-        this.props.history.push({
-            pathname: Routes.CONFIRM_NEW_LESSON,
-            state: {
-                categoryChoosed: this.state.categoryChoosed,
-                instructor: this.state.instructor,
-                date: day.date,
-            }
-        });
-    };
-
-
-    async handleChange(date) {
-
-        await this.setState({
-            isLoading: true,
-            startDate: date,
-        });
-
-        await this.defineWeekDays();
-
-        await this.slots(8, 18);
-
-        fetchApi(
-            'get', '/lessons/' +
-            'reserved_lessons?instructorID=' + this.state.instructor.id + '&categoryID=' + this.state.categoryChoosed.id,
-            {}, {},
-            this.successFetchReservedLessons, this.errorFetchReservedLessons
-        );
-    }
-    */
 
     render() {
 
-        /*
-        const tableInstructorSchedule = (
-            <div>
-                <Table textAlign={'center'} sortable celled striped stackable color={'blue'}>
+        let hours = [];
+        for (let i = this.state.minHour; i <= this.state.maxHour; i++) {
+            if(i<10)
+                hours.push('0'+i+':00h');
+            else
+                hours.push(i+ ':00h');
+        }
+
+        return (
+            <Container>
+                <Dimmer
+                    inverted
+                    active={this.state.isLoadingWorkingDays ||
+                        this.state.isLoadingInstructorLessons ||
+                        this.state.isLoading
+                    }
+                >
+                    <Loader>{this.state.isLoadingText}</Loader>
+                </Dimmer>
+                <MarkLessonHeader
+                    step={this.props.step}
+                    isDisabled={this.props.isDisabled}
+                    onConfirm={this.props.onConfirmDay}
+                    onCancel={this.props.onCancelDay}
+                />
+                <Table textAlign={'center'} celled striped stackable color={'blue'}>
                     <Table.Header>
                         <Table.Row textAlign={'center'}>
-                            <Table.HeaderCell/>
+                            <Table.HeaderCell />
                             {
-                                this.state.weekDays.map((day, i) => (
-                                    <Table.HeaderCell key={i}>
-                                        {day}
-                                    </Table.HeaderCell>
-                                ))
+                                this.state.matrix.map(item => {
+
+                                    let hourKey = Object.keys(item.hours)[0];
+
+                                    return (
+                                        <Table.HeaderCell
+                                            key={item.name}
+                                            disabled={item.disabled}
+                                            selectable={false}
+                                        >
+                                            <React.Fragment>
+                                                {item.name}
+                                            </React.Fragment>
+                                            <p>
+                                                <i style={{color: '#838383', fontWeight: '500'}}>
+                                                    {hourKey.slice(0,10)}
+                                                </i>
+                                            </p>
+                                        </Table.HeaderCell>
+                                    )
+                                })
                             }
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
                         {
-                            this.state.slots.map((hours, index) => (
+                            hours.map((item, index) => (
                                 <Table.Row key={index}>
-                                    <Table.Cell key={index}> {hours} </Table.Cell>
+                                    <Table.Cell>{item}</Table.Cell>
                                     {
-                                        this.state.schedule[index] &&
-                                        this.state.schedule[index].map((day, i) => (
-                                            day.canReserve ?
-                                                <Table.Cell key={i}
-                                                            className={"tableHourAvailable"}
-                                                            selectable
-                                                            onClick={() => this.handleClickCell(day)}
-                                                /> :
-                                                <Table.Cell key={i}
-                                                            className={"tableHourUnavailable"}
-                                                />
+                                        this.state.matrix.map(day => {
 
-                                        ))
+                                            let hourKey = Object.keys(day.hours)[index];
+                                            let hourObject = day.hours[hourKey];
+
+                                            if(day.disabled) {
+                                                return (
+                                                    <Table.Cell key={hourKey} active>
+                                                        {'Indisponível'}
+                                                    </Table.Cell>
+                                                )
+                                            }
+                                            else if(hourObject.disabled) {
+                                                return (
+                                                    <Table.Cell key={hourKey} error>
+                                                        {'Marcada'}
+                                                    </Table.Cell>
+                                                )
+                                            }
+
+
+                                            return (
+                                                <Table.Cell
+                                                    key={hourKey}
+                                                    selectable
+                                                    className={"tableHourAvailable"}
+                                                    onClick={() => this.onSelectDay(hourKey)}
+                                                />
+                                            )
+                                        })
                                     }
                                 </Table.Row>
-
                             ))
                         }
                     </Table.Body>
                 </Table>
-            </div>
-        );
-        */
-
-        return (
-            <Container>
-                <Dimmer active={this.state.isLoadingWorkingDays || this.state.isLoadingInstructorLessons}>
-                    <Loader>{this.state.isLoadingText}</Loader>
-                </Dimmer>
-                <MarkLessonHeader
-                    isDisabled={this.props.isDisabled}
-                    onConfirm={this.props.onConfirmDay}
-                    onCancel={this.props.onCancelDay}
-                />
-                {
-                    /*
-                <Container textAlign={'left'}>
-                    <Form size='large'>
-                        <Form.Field
-                            //className={(this.state.error && this.state.data === '') ? "error field" : "field"}
-                            //control={Input}
-                            //label='Data da aula'
-                            //placeholder='Data da aula'
-                            //name={"data"}
-                            //type="datetime-local"
-                            //onChange={this.handleInputChange}
-                            //control={DatePicker}
-                            //selected={this.state.startDate}
-                            //onChange={this.handleChange.bind(this)}
-                            //dateFormat="Pp"
-                        >
-                            <label>Data da aula</label>
-                            <DatePicker
-                                selected={this.state.startDate}
-                                onChange={this.handleChange.bind(this)}
-                                name="startDate"
-                                dateFormat="dd/MM/yyyy"
-                            />
-                        </Form.Field>
-                    </Form>
-                    {tableInstructorSchedule}
-                    <Container textAlign={'center'} style={{marginTop: '5px',}}>
-                        <Label color={'grey'}
-                               size={'large'}>
-                            Não é possível escolher
-                        </Label>
-
-                        <Label style={{marginLeft: '15px'}}
-                               size={'large'}>
-                            É possível escolher
-                        </Label>
-                    </Container>
-                </Container>
-                     */
-                }
             </Container>
         );
     }
@@ -387,8 +320,12 @@ class SelectDay extends Component {
 
 
 SelectDay.propTypes = {
+    step: PropTypes.string.isRequired,
     startDate: PropTypes.object.isRequired,
     endDate: PropTypes.object.isRequired,
+    selectedDay: PropTypes.string.isRequired,
+    onSelectDay: PropTypes.func.isRequired,
+    onRemoveDay: PropTypes.func.isRequired,
     instructor: PropTypes.object.isRequired,
     isDisabled: PropTypes.bool.isRequired,
     onConfirmDay: PropTypes.func.isRequired,

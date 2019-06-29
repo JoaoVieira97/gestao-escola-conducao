@@ -12,6 +12,7 @@ class SelectWeek extends Component {
         return (
             <Container>
                 <MarkLessonHeader
+                    step={this.props.step}
                     isDisabled={this.props.isDisabled}
                     onConfirm={this.props.onConfirmWeek}
                     onCancel={this.props.onCancelWeek}
@@ -54,6 +55,7 @@ class SelectWeek extends Component {
 
 
 SelectWeek.propTypes = {
+    step: PropTypes.string.isRequired,
     startDate: PropTypes.object.isRequired,
     endDate: PropTypes.object.isRequired,
     onChange: PropTypes.func.isRequired,

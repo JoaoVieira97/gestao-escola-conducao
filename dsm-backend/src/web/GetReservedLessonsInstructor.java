@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dsm.DSMFacade;
 import dsm.PracticalLesson;
-import dsm.Register;
 import utils.Utils;
 
 import javax.servlet.ServletException;
@@ -15,9 +14,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Logger;
 
 @WebServlet(name = "GetReservedLessonsInstructor", urlPatterns = {"/api/lessons/reserved_lessons"})
 public class GetReservedLessonsInstructor extends HttpServlet {
+
+    private final static Logger log = Logger.getLogger(GetReservedLessonsInstructor.class.getName());
+
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
@@ -36,11 +40,18 @@ public class GetReservedLessonsInstructor extends HttpServlet {
             String instructorID = request.getParameter("instructorID");
             int instID = Integer.parseInt(instructorID);
 
-            String categoryID = request.getParameter("categoryID");
-            int catID = Integer.parseInt(categoryID);
+            String startDate = request.getParameter("startDate");
+            long startTimestamp = Long.parseLong(startDate);
 
-            List<PracticalLesson> practicalLessons = DSMFacade.getReservedLessonsInstructor(instID,catID);
-            if(practicalLessons!= null) {
+            String endDate = request.getParameter("endDate");
+            long endTimestamp = Long.parseLong(endDate);
+
+            List<PracticalLesson> practicalLessons = DSMFacade.getReservedLessonsInstructor(
+                    instID,
+                    startTimestamp,
+                    endTimestamp
+            );
+            if(practicalLessons != null) {
 
                 ArrayNode practJSON = mapper.valueToTree(practicalLessons);
                 responseNode.putArray("practicalLessons").addAll(practJSON);
