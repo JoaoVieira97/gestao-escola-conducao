@@ -13,6 +13,7 @@
 - name: Create DSM database
   mysql_db:
     name: '{{ dsm_database_name }}'
+    encoding: 'utf8'
     state: present
 
 - name: Copy the DSM schema file

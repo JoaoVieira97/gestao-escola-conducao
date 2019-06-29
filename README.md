@@ -59,7 +59,7 @@ FLUSH PRIVILEGES;
 - with mysql client (`mysql -u dsm -p`), create `dsm` database:
 
 ```sql
-CREATE DATABASE dsm;
+CREATE DATABASE dsm CHARACTER SET utf8;
 ```
 
 - create `dsm` database schema:
