@@ -39,8 +39,6 @@ public class GetReservedLessonsInstructor extends HttpServlet {
             String categoryID = request.getParameter("categoryID");
             int catID = Integer.parseInt(categoryID);
 
-            System.out.println(instID + " " + catID);
-
             List<PracticalLesson> practicalLessons = DSMFacade.getReservedLessonsInstructor(instID,catID);
             if(practicalLessons!= null) {
 

@@ -11,7 +11,7 @@ import {
     Breadcrumb,
     Grid,
     Form,
-    Table
+    Table, Label
 } from 'semantic-ui-react';
 
 import Routes from "../../services/Routes";
@@ -48,6 +48,7 @@ class MarkLesson extends Component {
     };
 
      async componentDidMount() {
+
         await this.setState({
             categoryChoosed: this.props.history.location.state.categoryChoosed,
             instructor : this.props.history.location.state.instructor,
@@ -97,9 +98,12 @@ class MarkLesson extends Component {
                 let canReserve = true;
                 if(reserved) canReserve = false;
 
+                let dayId = weekDays.indexOf(weekDaySplit[0]);
+
                 aux.push({
                     date: weekDate,
                     canReserve: canReserve,
+                    dayId: dayId,
                 });
 
             });
@@ -119,12 +123,40 @@ class MarkLesson extends Component {
         );
     };
 
-    successFetchWorkingDays = (response) => {
-        console.log("SUCESSO2");
-        const workingDays = response.data;
-
+    successFetchWorkingDays = async (response) => {
+        const workingDays = response.data.workingDays;
         console.log(workingDays);
 
+        const schedule = this.state.schedule;
+
+        let scheduleAux = [];
+
+        schedule.forEach( row => {
+            let aux = [];
+
+            row.forEach( day => {
+
+                let working = workingDays.find(function (workingDay) {
+
+                    return workingDay.id === (day.dayId + 1);
+                });
+
+                let canReserve = working ? true : false;
+
+                aux.push({
+                    date: day.date,
+                    canReserve : canReserve,
+                    dayId: day.dayId,
+                });
+            });
+
+            scheduleAux.push(aux);
+        });
+
+        await this.setState({
+            schedule: scheduleAux,
+            isLoading: false,
+        });
     };
 
     errorFetchWorkingDays = (error) => {
@@ -167,7 +199,6 @@ class MarkLesson extends Component {
         });
     };
 
-
     /**
         Define how many slots the instructor have.
      */
@@ -182,7 +213,6 @@ class MarkLesson extends Component {
 
         this.setState({
             slots : res,
-            isLoading: false,
         });
     };
 
@@ -190,7 +220,14 @@ class MarkLesson extends Component {
     };
 
     handleClickCell = (day) => {
-        console.log(day);
+        this.props.history.push({
+            pathname: Routes.CONFIRM_NEW_LESSON,
+            state: {
+                categoryChoosed: this.state.categoryChoosed,
+                instructor: this.state.instructor,
+                date: day.date,
+            }
+        });
     };
 
 
@@ -309,6 +346,17 @@ class MarkLesson extends Component {
                             </Form.Field>
                         </Form>
                         {tableInstructorSchedule}
+                        <Container textAlign={'center'} style={{marginTop: '5px',}}>
+                             <Label color={'grey'}
+                                    size={'large'}>
+                                 Não é possível escolher
+                             </Label>
+
+                            <Label style={{ marginLeft: '15px'}}
+                                   size={'large'}>
+                                É possível escolher
+                            </Label>
+                        </Container>
                     </Container>
                 </Container>
                 <Container style={{marginTop:'25%'}}>

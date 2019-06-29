@@ -11,6 +11,7 @@ export default {
     // STUDENT
     HOME_ANNOUNCEMENTS: '/home/announcements',
     NEW_LESSON: '/lessons/new',
+    CONFIRM_NEW_LESSON: '/lessons/new/confirm',
     PAYMENTS: '/payments',
     LESSONS: '/lessons',
 

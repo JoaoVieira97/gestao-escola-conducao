@@ -34,6 +34,7 @@ import RegisterPayment from './students/RegisterPayment';
 import StudentProfile from './students/StudentProfile';
 import MarkLesson from "./lessons/MarkLesson";
 import InstructorHome from "./instructor/InstructorHome";
+import ConfirmNewLesson from "./lessons/ConfirmNewLesson";
 
 /**
  * Returns the component just if user is authenticated.
@@ -64,6 +65,7 @@ const Root = ({ store }) => {
                 <PrivateRoute exact path={Routes.PAYMENTS} component={PaymentsPage} />
                 <PrivateRoute exact path={Routes.HOME_ANNOUNCEMENTS} component={Announcements} />
                 <PrivateRoute exact path={Routes.NEW_LESSON} component={MarkLesson} />
+                <PrivateRoute exact path={Routes.CONFIRM_NEW_LESSON} component={ConfirmNewLesson} />
                 <Route exact path={Routes.CONTACTS} render={ props => <ErrorPage {...props} />} />
                 <Redirect from="/" exact to={Routes.HOME} />
                 <Route path="/" component={ErrorPage} />
