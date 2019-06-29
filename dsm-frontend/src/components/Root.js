@@ -69,6 +69,7 @@ const Root = ({ store }) => {
                 <PrivateRoute exact path={Routes.CONFIRM_NEW_LESSON} component={ConfirmNewLesson} />
                 <Route exact path={Routes.CONTACTS} render={ props => <ErrorPage {...props} />} />
                 <Redirect from="/" exact to={Routes.HOME} />
+                <Redirect from="/login" exact to={Routes.HOME} />
                 <Route path="/" component={ErrorPage} />
             </Switch>
         ),
@@ -84,6 +85,7 @@ const Root = ({ store }) => {
                 <PrivateRoute exact path={Routes.STUDENT_PROFILE} component={StudentProfile} />
                 <Route exact path={Routes.CONTACTS} render={ props => <ErrorPage {...props} />} />
                 <Redirect from="/" exact to={Routes.HOME} />
+                <Redirect from="/login" exact to={Routes.HOME} />
                 <Route path="/" component={ErrorPage} />
             </Switch>
         ),
