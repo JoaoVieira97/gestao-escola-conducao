@@ -9,6 +9,7 @@ import ReactAnimatedWeather from 'react-animated-weather';
 import moment from 'moment';
 import localization from 'moment/locale/pt'
 import {fetchApi} from "../../services/api";
+import Authentication from "../../services/Authentication";
 
 
 const defaults = {
@@ -32,8 +33,9 @@ export default class GenericWeather extends Component {
             today: moment().locale("pt", localization).format('LL'),
             todayMax: 0,
             todayMin: 0,
-            todayIcon: undefined,
-            updatedDate: ''
+            todayIcon: defaults.icon,
+            updatedDate: '',
+            color: defaults.color
         }
     }
 
@@ -56,7 +58,8 @@ export default class GenericWeather extends Component {
 
         // https://www.ipma.pt/bin/file.data/weathertypes.json
         // https://github.com/divyanshu013/react-animated-weather
-        let icon;
+        let icon = this.state.todayIcon;
+        let color = this.state.color;
         const type = today.idWeatherType;
         if(type === 1)
             icon = 'CLEAR_DAY';
@@ -73,18 +76,26 @@ export default class GenericWeather extends Component {
         else if(type >= 20 && type <= 21)
             icon = 'SLEET';
 
+        const hr = (new Date()).getHours();
+        if(!(hr >= 6 && hr <= 19)) {
+            color = '#2a528d';
+        }
+
         this.setState({
             isLoading: false,
             todayIcon: icon,
             todayMax: today.tMax,
-            todayMin: today.tMin
+            todayMin: today.tMin,
+            color: color
         });
     };
 
     errorHandler = (error) => {
 
-        if(error.response.status === 401) {
-           alert("Unauthorized")
+        if(error.response && error.response.status && error.response.status === 401) {
+           Authentication.clearData();
+           window.location.reload();
+           alert("As suas credenciais já não são válidas.");
         }
     };
 
@@ -102,8 +113,8 @@ export default class GenericWeather extends Component {
                     textAlign: 'center'
                 }}>
                     <ReactAnimatedWeather
-                        icon={this.state.todayIcon ? this.state.todayIcon : defaults.icon}
-                        color={defaults.color}
+                        icon={this.state.todayIcon}
+                        color={this.state.color}
                         size={defaults.size}
                         animate={defaults.animate}
                     />
@@ -124,9 +135,12 @@ export default class GenericWeather extends Component {
                         size={'large'}
                         name={'thermometer three quarters'}
                     />
-                    {
-                        this.state.todayMax + "/" + this.state.todayMin + ' ºC'
-                    }
+                    <b
+                        style={{color: this.state.color}}
+                    >
+                        {this.state.todayMax + "/"}
+                    </b>
+                    {this.state.todayMin + ' ºC'}<i>{' (max/min)'}</i>
                 </Card.Content>
             </Card>
         );

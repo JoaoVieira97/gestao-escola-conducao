@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {Container, Card, Feed, Icon, Loader, Dimmer, List, Header, Button, Popup} from 'semantic-ui-react';
 import {fetchApi} from "../../services/api";
 import Routes from "../../services/Routes";
+import GenericWeather from "../weather/GenericWeather";
+import Authentication from "../../services/Authentication";
 
 class HomePage extends Component {
 
@@ -9,7 +11,14 @@ class HomePage extends Component {
         super(props);
 
         this.state = {
-            isLoading: true,
+
+            // loading state
+            isLoadingText: 'A carregar...',
+            isLoadingGeneralAnnouncements: true,
+            isLoadingPersonalAnnouncements: true,
+            isLoadingNextEvents: true,
+
+            // data
             personal_announcements: [],
             general_announcements: [],
             next_practical_lessons: [],
@@ -22,124 +31,123 @@ class HomePage extends Component {
     }
 
     componentDidMount() {
-        
+
         fetchApi(
-            'get','/student/personal_announcements',
+            'get',
+            '/user/announcements?filter=recent',
             {},  {},
-            this.successHandlerPA, this.errorHandlerPA
+            this.successHandlerGeneralAnnouncements,
+            this.errorHandlerGeneralAnnouncements.bind(this)
         );
 
         fetchApi(
-            'get','/user/announcements?filter=recent',
+            'get',
+            '/student/personal_announcements',
             {},  {},
-            this.successHandlerA, this.errorHandlerA
+            this.successHandlerPersonalAnnouncements.bind(this),
+            this.errorHandlerPersonalAnnouncements.bind(this)
         );
 
         fetchApi(
-            'get','/student/next_practical_lessons',
+            'get',
+            '/student/next_practical_lessons',
             {},  {},
-            this.successHandlerPL, this.errorHandlerE
+            this.successHandlerNextLessons.bind(this),
+            this.errorHandlerNextLessons.bind(this)
         );
 
         fetchApi(
-            'get','/student/next_exams',
+            'get',
+            '/student/next_exams',
             {},  {},
-            this.successHandlerE, this.errorHandlerE
+            this.successHandlerNextExams.bind(this),
+            this.errorHandlerNextExams.bind(this)
         );
-        
     }
 
-    /**
-     * Handle the response of personnalAnnouncements.
-     * @param response
-     */
-    successHandlerPA = async (response) => {
-
-        await this.setState({
-    		personal_announcements: response.data.announcements,
-        });
-
+    successHandlerGeneralAnnouncements = (response) => {
+        if(response.data) {
+            this.setState({
+                general_announcements: response.data.announcements,
+                isLoadingGeneralAnnouncements: false
+            });
+        }
+    };
+    successHandlerPersonalAnnouncements = (response) => {
+        if(response.data) {
+            this.setState({
+                personal_announcements: response.data.announcements,
+                isLoadingPersonalAnnouncements: false
+            });
+        }
+    };
+    successHandlerNextLessons = (response) => {
+        if(response.data) {
+            this.setState({
+                next_practical_lessons: response.data.lessons,
+                isLoadingNextEvents: false
+            });
+        }
+    };
+    successHandlerNextExams = (response) => {
+        if(response.data) {
+            this.setState({
+                next_exams: response.data.exams,
+                isLoadingNextEvents: false
+            });
+        }
     };
 
-    /**
-     * Handle the response of general Announcements.
-     * @param response
-     */
-    successHandlerA = async (response) => {
+    errorHandlerGeneralAnnouncements = (error) => {
 
-        await this.setState({
-       		general_announcements: response.data.announcements,
+        if(error.response && error.response.status && error.response.status === 401) {
+            Authentication.clearData();
+            window.location.reload();
+            alert("As suas credenciais já não são válidas.");
+        }
+
+        this.setState({
+            isLoadingGeneralAnnouncements: false
         });
-    
+    };
+    errorHandlerPersonalAnnouncements = (error) => {
+
+        if(error.response && error.response.status && error.response.status === 401) {
+            Authentication.clearData();
+            window.location.reload();
+            alert("As suas credenciais já não são válidas.");
+        }
+
+        this.setState({
+            isLoadingPersonalAnnouncements: false
+        });
+    };
+    errorHandlerNextLessons = (error) => {
+
+        if(error.response && error.response.status && error.response.status === 401) {
+            Authentication.clearData();
+            window.location.reload();
+            alert("As suas credenciais já não são válidas.");
+        }
+
+        this.setState({
+            isLoadingNextEvents: false
+        });
+    };
+    errorHandlerNextExams = (error) => {
+
+        if(error.response && error.response.status && error.response.status === 401) {
+            Authentication.clearData();
+            window.location.reload();
+            alert("As suas credenciais já não são válidas.");
+        }
+
+        this.setState({
+            isLoadingNextEvents: false
+        });
     };
 
-    /**
-     * Handle the response of next student practical lessons.
-     * @param response
-     */
-    successHandlerPL = async (response) => {
 
-        await this.setState({
-            next_practical_lessons: response.data.lessons,
-        });
-
-    };
-
-    /**
-     * Handle the response of next student exams.
-     * @param response
-     */
-    successHandlerE = async (response) => {
-
-        await this.setState({
-            next_exams: response.data.exams,
-            isLoading: false
-        });
-
-    };
-
-    /**
-     * Handle the error retrieving student personal announcements.
-     * @param error
-     */
-    errorHandlerPA = async (error) => {
-
-    	console.log('error retrieving personal announcements')
-        console.log(error)
-        await this.setState({
-            message_pa: 'Não foi possível obter avisos pessoais.'
-        });
-
-    };
-
-    /**
-     * Handle the error retrieving general announcements.
-     * @param error
-     */
-    errorHandlerA = async (error) => {
-
-    	console.log('error retrieving general announcements')
-        console.log(error)
-        await this.setState({
-            message_ga: 'Não foi possível obter avisos gerais.'
-        });
-
-    };
-
-    /**
-     * Handle the error retrieving next student events.
-     * @param error
-     */
-    errorHandlerE = async (error) => {
-
-    	console.log('error retrieving next events')
-        console.log(error)
-        await this.setState({
-            message_e: 'Não foi possível obter avisos gerais.',
-            isLoading: false
-        });
-
-    };
 
     viewedAnnouncement(pa){
 
@@ -190,6 +198,9 @@ class HomePage extends Component {
 
         const personalAnnouncements = (
             <div className={"ui fluid card grey"}>
+                <Dimmer inverted active={this.state.isLoadingPersonalAnnouncements}>
+                    <Loader>{this.state.isLoadingText}</Loader>
+                </Dimmer>
                 <Card.Content>
                     <Card.Header>
       					<Icon.Group style={{marginRight: "8px"}}>
@@ -237,6 +248,9 @@ class HomePage extends Component {
 
         const generalAnnouncements = (
             <div className={"ui fluid card grey"}>
+                <Dimmer inverted active={this.state.isLoadingGeneralAnnouncements}>
+                    <Loader>{this.state.isLoadingText}</Loader>
+                </Dimmer>
                 <Card.Content>
                     <Card.Header>
                     	<Icon.Group style={{marginRight: "8px"}}>
@@ -283,6 +297,9 @@ class HomePage extends Component {
 
         const nextEvents = (
         	<div className={"ui fluid card grey"}>
+                <Dimmer inverted active={this.state.isLoadingNextEvents}>
+                    <Loader>{this.state.isLoadingText}</Loader>
+                </Dimmer>
 	        	<Card.Content>
 	                <Card.Header>
 	                	<Icon.Group style={{marginRight: "8px"}}>
@@ -320,9 +337,6 @@ class HomePage extends Component {
 
         return (
             <Container>
-                <Dimmer inverted active={this.state.isLoading}>
-                    <Loader>A carregar</Loader>
-                </Dimmer>
                 <div className="ui stackable two column centered grid" style={{marginBottom: "65px"}}>
                     <div className="column">
                         {personalAnnouncements}
@@ -330,6 +344,7 @@ class HomePage extends Component {
                     </div>
                     <div className="column">
                         {nextEvents}
+                        <GenericWeather />
                     </div>
                 </div>
             </Container>

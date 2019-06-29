@@ -11,37 +11,27 @@ export default class Authentication {
     static isAuthenticated () {
 
         // check on local storage
-        if (localStorage.getItem('userToken') !== null &&
-            localStorage.getItem('userType') !== null) {
-
-            return true;
-        }
-        else
-        // check on redux
-        if (store.getState().user.userToken !== null &&
-            store.getState().user.userType !== null){
-
-            return true;
-        }
-
-        return false;
+        return localStorage.getItem('userToken') !== null &&
+            localStorage.getItem('userType') !== null;
     }
 
     /**
      * User authentication
      * @param email
      * @param password
+     * @param rememberMe
      * @param successHandler
      * @param errorHandler
      */
-    static login(email, password, successHandler, errorHandler) {
+    static login(email, password, rememberMe=true, successHandler, errorHandler) {
 
         fetchApi(
             'post',
             '/authentication',
             {
                 email: email,
-                password: password
+                password: password,
+                rememberMe: rememberMe
             },  {},
             successHandler,
             errorHandler
@@ -81,9 +71,6 @@ export default class Authentication {
 
         if(localStorage.getItem('userType') !== null)
             return localStorage.getItem('userType');
-
-        else if(store.getState().user.userType !== null)
-            return store.getState().user.userType;
 
         return null;
     }

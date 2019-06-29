@@ -66,7 +66,7 @@ const Root = ({ store }) => {
                 <PrivateRoute exact path={Routes.NEW_LESSON} component={MarkLesson} />
                 <Route exact path={Routes.CONTACTS} render={ props => <ErrorPage {...props} />} />
                 <Redirect from="/" exact to={Routes.HOME} />
-                <Route path="/" render={ props => <ErrorPage {...props} />} />
+                <Route path="/" component={ErrorPage} />
             </Switch>
         ),
         secretary: (
@@ -80,7 +80,7 @@ const Root = ({ store }) => {
                 <PrivateRoute exact path={Routes.STUDENT_PROFILE} component={StudentProfile} />
                 <Route exact path={Routes.CONTACTS} render={ props => <ErrorPage {...props} />} />
                 <Redirect from="/" exact to={Routes.HOME} />
-                <Route path="/" render={ props => <ErrorPage {...props} />} />
+                <Route path="/" component={ErrorPage} />
             </Switch>
         ),
         instructor: (
@@ -88,16 +88,16 @@ const Root = ({ store }) => {
                 <PrivateRoute exact path={Routes.HOME} component={InstructorHome} />
                 <PrivateRoute exact path={Routes.STUDENTS} component={AllStudents} />
                 <Route exact path={Routes.CONTACTS} render={ props => <ErrorPage {...props} />} />
-                <Redirect from="/home" exact to={Routes.STUDENTS} />
                 <Redirect from="/" exact to={Routes.HOME} />
-                <Route path="/" render={ props => <ErrorPage {...props} />} />
+                <Redirect from="/login" exact to={Routes.HOME} />
+                <Route path="/" component={ErrorPage} />
             </Switch>
         ),
         default: (
             <Switch>
                 <Route exact path={Routes.LOGIN} component={LoginPage} />
-                <Route exact path={Routes.CATEGORIES} render={ props => <ErrorPage {...props} />} />
-                <Route exact path={Routes.CONTACTS} render={ props => <ErrorPage {...props} />} />
+                <Route exact path={Routes.CATEGORIES} component={ErrorPage} />
+                <Route exact path={Routes.CONTACTS} component={ErrorPage} />
                 <Redirect from="/" to={Routes.LOGIN} />
             </Switch>
         )

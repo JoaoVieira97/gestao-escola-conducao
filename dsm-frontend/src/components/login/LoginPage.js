@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import {Button, Form, Message} from 'semantic-ui-react'
 import Authentication from "../../services/Authentication";
 import Routes from "../../services/Routes";
-import { setUserTokenAndType } from "../../redux/actions/user";
+
+
 
 class LoginPage extends Component {
 
@@ -34,7 +35,7 @@ class LoginPage extends Component {
 
     handleLoginSubmit = () => {
 
-        const { email, password } = this.state;
+        const { email, password, rememberMe } = this.state;
         if(email !== '' && password !== '') {
 
             this.setState({isLoading: true}, () => {
@@ -42,6 +43,7 @@ class LoginPage extends Component {
                 Authentication.login(
                     email,
                     password,
+                    rememberMe,
                     this.successHandler,
                     this.errorHandler
                 )
@@ -61,16 +63,8 @@ class LoginPage extends Component {
             const userToken = response.data.userToken;
             const userType = response.data.userType;
 
-            // save on localStorage
-            if(this.state.rememberMe) {
-
-                localStorage.setItem('userToken', userToken);
-                localStorage.setItem('userType', userType);
-            }
-            // save on redux
-            else {
-                this.props.setUserTokenAndType(userToken, userType);
-            }
+            localStorage.setItem('userToken', userToken);
+            localStorage.setItem('userType', userType);
 
             setTimeout(() =>{
 
@@ -155,9 +149,7 @@ class LoginPage extends Component {
                                     <i className="lock icon" />
                                 </div>
                             </div>
-                            {
-                                /*
-                                <div className="field">
+                            <div className="field">
                                 <div className="ui checkbox">
                                     <input
                                         type="checkbox"
@@ -169,8 +161,6 @@ class LoginPage extends Component {
                                     <label>Lembrar o meu acesso</label>
                                 </div>
                             </div>
-                                 */
-                            }
                             <div style={{marginTop: 30}}>
                                 <Button
                                     type="submit"
@@ -191,11 +181,6 @@ class LoginPage extends Component {
 
 const mapStateToProps = state => ({});
 
-const mapDispatchToProps = dispatch => ({
-
-    setUserTokenAndType: (token, type) => {
-        dispatch(setUserTokenAndType(token, type))
-    }
-});
+const mapDispatchToProps = dispatch => ({});
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);
