@@ -32,7 +32,7 @@ class AllStudents extends Component {
             _column: null,
             _direction: null,
             _page: 1,
-            _limit: 10,
+            _limit: 5,
 
             userType: '',
 
@@ -80,7 +80,7 @@ class AllStudents extends Component {
             allStudents: response.data.students,
             students: response.data.students
                         .slice((this.state._page - 1) * this.state._limit ,
-                            (this.state._page * this.state._limit) - 1),
+                            (this.state._page * this.state._limit)),
             totalCount: response.data.students.length
         });
 
@@ -166,7 +166,7 @@ class AllStudents extends Component {
                 _page: 1,
                 students: students
                             .slice((this.state._page - 1) * this.state._limit ,
-                                (this.state._page * this.state._limit) - 1),
+                                (this.state._page * this.state._limit)),
                 //isSearching: true
             });
         }
@@ -176,7 +176,7 @@ class AllStudents extends Component {
                 _page: 1,
                 students: this.state.allStudents
                             .slice((this.state._page - 1) * this.state._limit ,
-                                (this.state._page * this.state._limit) - 1),
+                                (this.state._page * this.state._limit)),
                 //isSearching: true
             });
         }
@@ -188,7 +188,7 @@ class AllStudents extends Component {
             this.setState({
                 _page: activePage,
                 students: this.state.allStudents
-                                .slice((activePage - 1) * this.state._limit , (activePage * this.state._limit) - 1),
+                                .slice((activePage - 1) * this.state._limit , (activePage * this.state._limit)),
             });
         }
     };
@@ -218,9 +218,10 @@ class AllStudents extends Component {
         const { students, _column, _direction } = this.state;
 
         const limitOptions = [
-            {key: '0', value: 10, text: '10'},
-            {key: '1', value: 25, text: '25'},
-            {key: '2', value: 50, text: '50'}
+            {key: '0', value: 5, text: '5'},
+            {key: '1', value: 10, text: '10'},
+            {key: '2', value: 25, text: '25'},
+            {key: '3', value: 50, text: '50'}
         ];
 
         const studentsRows = _.map(students, item => (
@@ -240,20 +241,13 @@ class AllStudents extends Component {
 
         return (
             <Container style={{marginTop: '30px', marginBottom: '70px'}}>
-                <Statistic.Group size={'tiny'} widths={'two'}>
-                    <Statistic >
-                        <Statistic.Value>
-                            <Icon name='user' />
-                            100
-                        </Statistic.Value>
-                        <Statistic.Label>Alunos</Statistic.Label>
-                    </Statistic>
-                    <Statistic >
-                        <Statistic.Value>
-                            <Icon name='check' />
-                            {this.state.totalCount}
-                        </Statistic.Value>
-                        <Statistic.Label>Ativos</Statistic.Label>
+                <Statistic.Group size={'small'} widths={'one'}>
+                    <Statistic>
+                      <Statistic.Value>
+                        <Icon name='user' color='grey'/>
+                        {this.state.totalCount}
+                      </Statistic.Value>
+                      <Statistic.Label>ALUNOS ATIVOS</Statistic.Label>
                     </Statistic>
                 </Statistic.Group>
                 <Segment loading={this.state.isLoading}>
@@ -285,7 +279,7 @@ class AllStudents extends Component {
                             style={{marginLeft: '5px'}}
                             options={limitOptions}
                             defaultValue={this.state._limit}
-                            //onChange={this.onChangeLimit.bind(this)}
+                            onChange={this.onChangeLimit.bind(this)}
                         />
                     </React.Fragment>
                     <Table celled selectable sortable >
