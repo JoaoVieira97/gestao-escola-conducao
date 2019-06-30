@@ -16,6 +16,7 @@ import {
 } from 'semantic-ui-react';
 import { fetchApi } from '../../services/api/index';
 import Routes from "../../services/Routes";
+import moment from 'moment';
 
 
 class RegisterPayment extends Component {
@@ -134,7 +135,7 @@ class RegisterPayment extends Component {
         await this.setState({
             register: register[0],
             category: data.value,
-            actualPaid: actualPaid
+            actualPaid: Number(actualPaid)
         })
     }
 
@@ -168,14 +169,19 @@ class RegisterPayment extends Component {
      */
     successHandlerP = (response) => {
 
+        let register = this.state.register
+        
+        register.payments.push({
+            description: this.state.description,
+            value: Number(this.state.value),
+            timestamp: moment(new Date()).format('DD/MM/YYYY')
+        })
+
         this.setState({
+            register: register,
+            actualPaid: Number(this.state.actualPaid) + Number(this.state.value),
             message: 'Pagamento registado com sucesso',
             error: ''
-        });
-
-
-        sleep(3000).then(() => {
-            this.props.history.push(Routes.STUDENT_PROFILE, {student: this.state.student});
         });
         
     };
@@ -199,7 +205,7 @@ class RegisterPayment extends Component {
 
         const paymentsR = (this.state.register !== undefined) ?
             (this.state.register.payments.map(payment => (
-                    <Table.Row key={payment.id}>
+                    <Table.Row key={this.state.register.payments.indexOf(payment)}>
                         <Table.Cell>{payment.timestamp}</Table.Cell>
                         <Table.Cell>{payment.description} </Table.Cell>
                         <Table.Cell>{payment.value}€</Table.Cell>
@@ -272,7 +278,7 @@ class RegisterPayment extends Component {
 
                     </Grid.Column>
                     <Grid.Column width={8} style={{marginTop: "30px"}}>
-                        <Segment>
+                        <Segment color='orange'>
                             <Header 
                                 className='centered' 
                                 as='h1'
@@ -317,7 +323,7 @@ class RegisterPayment extends Component {
                         </Segment>
                     </Grid.Column>
                     <Grid.Column width={8} style={{marginTop: "30px"}}>
-                    <Segment>
+                    <Segment color='orange'>
                         <Header>Categoria:</Header>
                         <Dropdown
                             placeholder='Selecione a categoria'
@@ -345,10 +351,6 @@ class RegisterPayment extends Component {
             </Container>
         );
     }
-}
-
-const sleep = (milliseconds) => {
-    return new Promise(resolve => setTimeout(resolve, milliseconds))
 }
 
 export default RegisterPayment;

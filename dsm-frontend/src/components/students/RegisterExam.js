@@ -17,6 +17,7 @@ import {
 } from 'semantic-ui-react';
 import { fetchApi } from '../../services/api/index';
 import Routes from "../../services/Routes";
+import moment from 'moment';
 
 
 class RegisterExam extends Component {
@@ -154,15 +155,22 @@ class RegisterExam extends Component {
      */
     successHandler = (response) => {
 
+
+        let description = this.state.exam + ' - ' + this.state.category
+        let exam_date = moment(this.state.date).format('DD/MM/YYYY HH:mm')
+
+        let exams = this.state.exams
+        exams.push({
+            description: description,
+            startTime: exam_date
+        })
+
         this.setState({
+            exams: exams,
             message: 'Exame registado com sucesso',
             error: ''
         });
 
-
-        sleep(3000).then(() => {
-            this.props.history.push(Routes.STUDENT_PROFILE, {student: this.state.student});
-        });
         
     };
 
@@ -197,8 +205,8 @@ class RegisterExam extends Component {
 
         const exams = (
             this.state.exams.length>0 ? this.state.exams.map( exam =>
-                    <List.Item key={exam.id}>
-                        <Icon size='large' name='clipboard' />
+                    <List.Item key={this.state.exams.indexOf(exam)}>
+                        <Icon size='large' name='clipboard' color='grey'/>
                         <List.Content>
                             <List.Header>{exam.description}</List.Header>
                             <List.Description style={{marginTop: "3px"}}>
@@ -216,11 +224,11 @@ class RegisterExam extends Component {
         );
 
         const cardExams = (
-            <div className={"ui fluid card grey"}>
+            <div className={"ui fluid card orange"}>
                 <Card.Content>
                     <Card.Header>
                         <Icon.Group style={{marginRight: "8px"}}>
-                            <Icon color='grey' name='calendar' />
+                            <Icon color='orange' name='calendar' />
                         </Icon.Group>
                         Exames de {this.state.student.name}
                     </Card.Header>
@@ -262,7 +270,7 @@ class RegisterExam extends Component {
 
                     </Grid.Column>
                     <Grid.Column width={8} style={{marginTop: "30px"}}>
-                        <Segment>
+                        <Segment color="orange">
                             <Header 
                                 className='centered' 
                                 as='h1'
@@ -326,10 +334,6 @@ class RegisterExam extends Component {
             </Container>
         );
     }
-}
-
-const sleep = (milliseconds) => {
-    return new Promise(resolve => setTimeout(resolve, milliseconds))
 }
 
 export default RegisterExam;

@@ -127,10 +127,11 @@ public class StudentBean implements StudentBeanLocal {
 
             PersonalAnnouncement pa = PersonalAnnouncementDAO.getPersonalAnnouncementByORMID(announcementID);
 
-            pa.setViewed(true);
+            /*pa.setViewed(true);
 
             PersonalAnnouncementDAO.save(pa);
-            return true;
+            return true;*/
+            return PersonalAnnouncementDAO.delete(pa);
 
         } catch (PersistentException e) {
             e.printStackTrace();

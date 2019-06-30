@@ -73,7 +73,7 @@ class RegisterInCategory extends Component {
             let dateLimit = moment(date[2]+'-'+date[1]+'-'+date[0]).add(2,'years').format('DD/MM/YYYY');
 
             categories.push({
-                id: register.id,
+                //id: register.id,
                 name: 'Categoria ' + register.category.name,
                 initial_date: register.initialDate,
                 end_date: dateLimit,
@@ -81,7 +81,6 @@ class RegisterInCategory extends Component {
             })
         })
 
-        console.log(categories)
         this.setState({
             categories: categories
         })
@@ -181,14 +180,30 @@ class RegisterInCategory extends Component {
      */
     successHandlerC = (response) => {
 
+        let category = this.state.categories_options.filter(cat => {
+            return cat.key === this.state.category
+        })
+
+        let instructor = this.state.instructors_options.filter(inst => {
+            return inst.key === this.state.instructor
+        })
+
+        let today = new Date();
+        let dateLimit = moment(today).add(2,'years').format('DD/MM/YYYY');
+        let initialDate = moment(today).format('DD/MM/YYYY');
+
+        let categories = this.state.categories
+        categories.push({
+            name: category[0].text,
+            initial_date: initialDate,
+            end_date: dateLimit,
+            instructor: instructor[0].text
+        })
+
         this.setState({
+            categories: categories,
             message: 'Aluno registado com sucesso na categoria pretendida',
             error: ''
-        });
-
-
-        sleep(3000).then(() => {
-            this.props.history.push(Routes.STUDENT_PROFILE, {student: this.state.student});
         });
         
     };
@@ -211,11 +226,11 @@ class RegisterInCategory extends Component {
     render() {
 
         const categories = (
-            <div className={"ui fluid card grey"}>
+            <div className={"ui fluid card orange"}>
                 <Card.Content>
                     <Card.Header>
                         <Icon.Group style={{marginRight: "8px"}}>
-                            <Icon color='grey' name='car' />
+                            <Icon color='orange' name='car' />
                         </Icon.Group>
                         Categorias de {this.state.student.name}
                     </Card.Header>
@@ -224,8 +239,8 @@ class RegisterInCategory extends Component {
                     <List divided>
                         {(this.state.categories.length > 0) ?
                             this.state.categories.map(c => (
-                                <List.Item key={c.id} style={{marginBottom: "10px"}}>
-                                    <Icon name='file alternate outline' />
+                                <List.Item key={this.state.categories.indexOf(c)} style={{marginBottom: "10px"}}>
+                                    <Icon name='file alternate outline' color='grey'/>
                                     <List.Content>
                                         <List.Header>{c.name}</List.Header>
                                         <List.Description style={{marginTop: "3px"}}>
@@ -276,7 +291,7 @@ class RegisterInCategory extends Component {
 
                     </Grid.Column>
                     <Grid.Column width={8} style={{marginTop: "30px"}}>
-                        <Segment>
+                        <Segment color='orange'>
                             <Header 
                                 className='centered' 
                                 as='h3'
@@ -331,10 +346,6 @@ class RegisterInCategory extends Component {
             </Container>
         );
     }
-}
-
-const sleep = (milliseconds) => {
-    return new Promise(resolve => setTimeout(resolve, milliseconds))
 }
 
 export default RegisterInCategory;
