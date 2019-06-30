@@ -159,6 +159,7 @@ class RegisterPayment extends Component {
             fetchApi(
                 'post','/secretary/register_student_payment',
                 {
+                    studentID: this.state.student.id,
                     registerID: category,
                     value: value,
                     description: description

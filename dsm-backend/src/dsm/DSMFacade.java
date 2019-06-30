@@ -252,9 +252,9 @@ public class DSMFacade {
     /**
      * Set specific student personalAnnouncement as viewed
      */
-    public static boolean viewedPersonalAnnouncement(int announcementID) {
+    public static boolean viewedPersonalAnnouncement(int announcementID, int studentID) {
 
-        return studentBean.setPersonalAnnouncementAsViewed(announcementID);
+        return studentBean.setPersonalAnnouncementAsViewed(announcementID, studentID);
     }
 
     /**
@@ -396,9 +396,9 @@ public class DSMFacade {
     /**
      * Register new student payment
      */
-    public static boolean registerStudentPayment(int registerID, String description, String value, int secretaryID) {
+    public static boolean registerStudentPayment(int studentID, int registerID, String description, String value, int secretaryID) {
 
-        return secretaryBean.registerStudentPayment(registerID, description, value, secretaryID);
+        return secretaryBean.registerStudentPayment(studentID, registerID, description, value, secretaryID);
     }
 
     /**

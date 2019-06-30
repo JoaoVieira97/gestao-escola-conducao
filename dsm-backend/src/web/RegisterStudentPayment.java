@@ -37,11 +37,12 @@ public class RegisterStudentPayment extends HttpServlet {
 
                 // parsing data
                 // ------------------------------------------------------------
+                int studentID = (Integer) JSON.get("studentID");
                 int registerID = (Integer) JSON.get("registerID");
                 String description = (String) JSON.get("description");
                 String value = (String) JSON.get("value");
 
-                boolean registered = DSMFacade.registerStudentPayment(registerID, description, value, secretaryID);
+                boolean registered = DSMFacade.registerStudentPayment(studentID, registerID, description, value, secretaryID);
                 if (registered) {
                     responseNode.put("success", registered);
                     response.setStatus(HttpServletResponse.SC_OK);

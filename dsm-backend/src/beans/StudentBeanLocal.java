@@ -12,7 +12,7 @@ public interface StudentBeanLocal {
     List<Student> getStudents();
     List<Register> getStudentRegisters(int studentID);
     List<PersonalAnnouncement> getStudentPersonalAnnouncements(int studentID);
-    boolean setPersonalAnnouncementAsViewed(int announcementID);
+    boolean setPersonalAnnouncementAsViewed(int announcementID, int studentID);
     List<Exam> getStudentExams(int studentID);
     List<Exam> getStudentNextExams(int studentID);
 

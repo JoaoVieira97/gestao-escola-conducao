@@ -116,6 +116,7 @@ public class SecretaryBean implements SecretaryBeanLocal{
             s.registers.add(register);
 
             StudentDAO.save(s);
+            RegisterDAO.save(register);
             return true;
 
         } catch (Exception e) {
@@ -141,7 +142,7 @@ public class SecretaryBean implements SecretaryBeanLocal{
                 Exam e = new Exam();
 
                 e.setDescription(description);
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 Date parsedDate = dateFormat.parse(startTime);
                 Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
                 e.setStartTime(timestamp);
@@ -161,6 +162,8 @@ public class SecretaryBean implements SecretaryBeanLocal{
                 pa.setTimestamp(new Timestamp(System.currentTimeMillis()));
                 student.announcements.add(pa);
 
+                PersonalAnnouncementDAO.save(pa);
+                ExamDAO.save(e);
                 StudentDAO.save(student);
 
                 return true;
@@ -182,10 +185,10 @@ public class SecretaryBean implements SecretaryBeanLocal{
      * @return
      */
     @Override
-    public boolean registerStudentPayment(int registerID, String description, String value, int secretaryID){
+    public boolean registerStudentPayment(int studentID, int registerID, String description, String value, int secretaryID){
 
         try {
-
+            /*
             Register register = RegisterDAO.getRegisterByORMID(registerID);
             Secretary secretary = SecretaryDAO.getSecretaryByORMID(secretaryID);
 
@@ -202,6 +205,36 @@ public class SecretaryBean implements SecretaryBeanLocal{
             RegisterDAO.save(register);
 
             return true;
+            */
+
+            Student student = StudentDAO.getStudentByORMID(studentID);
+
+            Register register = null;
+            for (Object r : student.registers.getCollection()){
+                Register aux = (Register) r;
+                if (aux.getID() == registerID) {
+                    register = aux;
+                    break;
+                }
+            }
+            if (register != null){
+                Secretary secretary = SecretaryDAO.getSecretaryByORMID(secretaryID);
+
+                Payment payment = new Payment();
+                payment.setDescription(description);
+                float aux_value = Float.parseFloat(value);
+                payment.setValue(aux_value);
+                payment.setSecretary(secretary);
+                payment.setTimestamp(new Timestamp(System.currentTimeMillis()));
+
+                register.payments.add(payment);
+
+                PaymentDAO.save(payment);
+                RegisterDAO.save(register);
+                RegisterDAO.save(register);
+
+                return true;
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -263,6 +296,7 @@ public class SecretaryBean implements SecretaryBeanLocal{
 
             student.registers.add(register);
 
+            RegisterDAO.save(register);
             StudentDAO.save(student);
 
             return true;
@@ -275,7 +309,7 @@ public class SecretaryBean implements SecretaryBeanLocal{
     }
 
     /**
-     * Register student
+     * Update student
      * @param studentID
      * @param name
      * @param email
@@ -313,7 +347,7 @@ public class SecretaryBean implements SecretaryBeanLocal{
     }
 
     /**
-     * Register general announcement
+     * Register personal announcement
      * @param studentID
      * @param title
      * @param description
@@ -332,6 +366,7 @@ public class SecretaryBean implements SecretaryBeanLocal{
             pa.setTimestamp(new Timestamp(System.currentTimeMillis()));
             student.announcements.add(pa);
 
+            PersonalAnnouncementDAO.save(pa);
             StudentDAO.save(student);
 
             return true;

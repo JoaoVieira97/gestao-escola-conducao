@@ -29,23 +29,29 @@ public class SetPersonalAnnouncementAsViewed extends HttpServlet {
         String accessToken = Utils.getAuthenticationToken(request);
         if(accessToken != null && DSMFacade.isTokenValid(accessToken)) {
 
-            // get post data
-            // ------------------------------------------------------------
-            Map<String, Object> JSON = Utils.getPostData(mapper, request);
+            int studentID = DSMFacade.getUserIDByToken(accessToken);
+            if(studentID != -1) {
+                // get post data
+                // ------------------------------------------------------------
+                Map<String, Object> JSON = Utils.getPostData(mapper, request);
 
-            // parsing data
-            // ------------------------------------------------------------
-            int id = (Integer) JSON.get("id");
+                // parsing data
+                // ------------------------------------------------------------
+                int id = (Integer) JSON.get("id");
 
-            boolean viewed = DSMFacade.viewedPersonalAnnouncement(id);
-            if(viewed) {
+                boolean viewed = DSMFacade.viewedPersonalAnnouncement(id, studentID);
+                if (viewed) {
 
-                responseNode.put("success", viewed);
-                response.setStatus(HttpServletResponse.SC_OK);
+                    responseNode.put("success", viewed);
+                    response.setStatus(HttpServletResponse.SC_OK);
+                } else {
+                    responseNode.put("error", Utils.ERROR_FETCHING_DATA);
+                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                }
             }
             else {
-                responseNode.put("error", Utils.ERROR_FETCHING_DATA);
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                responseNode.put("error", Utils.INVALID_USER_TOKEN);
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             }
         }
         else {
