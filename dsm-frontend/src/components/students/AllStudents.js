@@ -247,7 +247,7 @@ class AllStudents extends Component {
                         <Icon name='user' color='grey'/>
                         {this.state.totalCount}
                       </Statistic.Value>
-                      <Statistic.Label>ALUNOS ATIVOS</Statistic.Label>
+                      <Statistic.Label>ALUNOS</Statistic.Label>
                     </Statistic>
                 </Statistic.Group>
                 <Segment loading={this.state.isLoading}>
