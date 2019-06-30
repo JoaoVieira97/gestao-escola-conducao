@@ -208,7 +208,7 @@ public class LessonBean implements LessonBeanLocal{
 
                 for(Student student : students) {
                     student.lessons.remove(lesson);
-                    StudentDAO.save(student);
+                    //StudentDAO.save(student);
 
                 }
                 //LessonDAO.save(lesson);
