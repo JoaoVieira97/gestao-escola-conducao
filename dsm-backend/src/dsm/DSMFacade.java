@@ -10,6 +10,7 @@ import javax.naming.NamingException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class DSMFacade {
 
@@ -127,7 +128,7 @@ public class DSMFacade {
 
 
     //
-    // REDIS CODE
+    // REDIS BEAN
     // ------------------------------------------------------------
     public static void setUserToken(String token, int id) {
 
@@ -147,6 +148,21 @@ public class DSMFacade {
     public static boolean isTokenValid(String token) {
 
         return redisBean.isTokenValid(token);
+    }
+
+    public static Map<String, Long> getUsersViewing() {
+
+        return redisBean.getUsersViewing();
+    }
+
+    public static boolean addUsersViewing(String instructorID, String datetime) {
+
+        return redisBean.addUsersViewing(instructorID, datetime);
+    }
+
+    public static boolean removeUsersViewing(String instructorID, String datetime) {
+
+        return redisBean.removeUsersViewing(instructorID, datetime);
     }
     // ------------------------------------------------------------
 
@@ -440,5 +456,4 @@ public class DSMFacade {
 
         return instructorBean.getInstructorStudents(instructorID);
     }
-
 }
