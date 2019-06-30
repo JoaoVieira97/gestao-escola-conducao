@@ -396,9 +396,9 @@ public class DSMFacade {
     /**
      * Register new student payment
      */
-    public static boolean registerStudentPayment(int studentID, int registerID, String description, String value, int secretaryID) {
+    public static boolean registerStudentPayment(int registerID, String description, String value, int secretaryID) {
 
-        return secretaryBean.registerStudentPayment(studentID, registerID, description, value, secretaryID);
+        return secretaryBean.registerStudentPayment(registerID, description, value, secretaryID);
     }
 
     /**

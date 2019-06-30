@@ -185,10 +185,9 @@ public class SecretaryBean implements SecretaryBeanLocal{
      * @return
      */
     @Override
-    public boolean registerStudentPayment(int studentID, int registerID, String description, String value, int secretaryID){
+    public boolean registerStudentPayment(int registerID, String description, String value, int secretaryID){
 
         try {
-            /*
             Register register = RegisterDAO.getRegisterByORMID(registerID);
             Secretary secretary = SecretaryDAO.getSecretaryByORMID(secretaryID);
 
@@ -205,36 +204,6 @@ public class SecretaryBean implements SecretaryBeanLocal{
             RegisterDAO.save(register);
 
             return true;
-            */
-
-            Student student = StudentDAO.getStudentByORMID(studentID);
-
-            Register register = null;
-            for (Object r : student.registers.getCollection()){
-                Register aux = (Register) r;
-                if (aux.getID() == registerID) {
-                    register = aux;
-                    break;
-                }
-            }
-            if (register != null){
-                Secretary secretary = SecretaryDAO.getSecretaryByORMID(secretaryID);
-
-                Payment payment = new Payment();
-                payment.setDescription(description);
-                float aux_value = Float.parseFloat(value);
-                payment.setValue(aux_value);
-                payment.setSecretary(secretary);
-                payment.setTimestamp(new Timestamp(System.currentTimeMillis()));
-
-                register.payments.add(payment);
-
-                PaymentDAO.save(payment);
-                RegisterDAO.save(register);
-                RegisterDAO.save(register);
-
-                return true;
-            }
 
         } catch (Exception e) {
             e.printStackTrace();
