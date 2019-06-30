@@ -152,7 +152,7 @@ public class SecretaryBean implements SecretaryBeanLocal{
 
                 pa.setTitle("Exame marcado");
                 SimpleDateFormat output = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-                if (description.contains("teórico")){
+                if (description.contains("Teórico")){
                     pa.setDescription("O seu exame teórico foi marcado para " + output.format(parsedDate) + ".");
                 } else {
                     pa.setDescription("O seu exame prático foi marcado para " + output.format(parsedDate) + ".");
@@ -198,6 +198,7 @@ public class SecretaryBean implements SecretaryBeanLocal{
 
             register.payments.add(payment);
 
+            PaymentDAO.save(payment);
             RegisterDAO.save(register);
 
             return true;

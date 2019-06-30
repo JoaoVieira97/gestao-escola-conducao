@@ -68,9 +68,12 @@ public class StudentBean implements StudentBeanLocal {
     public List<Register> getStudentRegisters(int studentID) {
 
         try {
-
+            /*
             Student student = StudentDAO.getStudentByORMID(studentID);
             return new ArrayList<Register>(student.registers.getCollection());
+            */
+            List<Register> res = RegisterDAO.queryRegister("StudentUserID="+studentID, "ID");
+            return res;
 
         } catch (PersistentException e) {
             e.printStackTrace();
@@ -89,17 +92,20 @@ public class StudentBean implements StudentBeanLocal {
 
         try {
 
-            Student student = StudentDAO.getStudentByORMID(studentID);
+            /*Student student = StudentDAO.getStudentByORMID(studentID);
             if (student != null) {
                 List<PersonalAnnouncement> announcements = new ArrayList<PersonalAnnouncement>(
                         student.announcements.getCollection()
                 );
 
+             */
+                List<PersonalAnnouncement> announcements = PersonalAnnouncementDAO.queryPersonalAnnouncement("StudentUserID="+studentID, "AnnouncementID");
+
                 return announcements.stream()
                                     .filter(a -> !a.getViewed())
                                     .sorted(Comparator.comparing(Announcement::getTimestamp).reversed())
                                     .collect(Collectors.toList());
-            }
+            //}
 
         } catch (PersistentException e) {
             e.printStackTrace();
@@ -120,12 +126,12 @@ public class StudentBean implements StudentBeanLocal {
         try {
 
             PersonalAnnouncement pa = PersonalAnnouncementDAO.getPersonalAnnouncementByORMID(announcementID);
-            if (pa != null){
-                pa.setViewed(true);
 
-                PersonalAnnouncementDAO.save(pa);
-                return true;
-            }
+            pa.setViewed(true);
+
+            PersonalAnnouncementDAO.save(pa);
+            return true;
+
         } catch (PersistentException e) {
             e.printStackTrace();
         }

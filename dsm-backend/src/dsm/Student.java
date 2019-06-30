@@ -51,7 +51,7 @@ public class Student extends dsm.User {
 	
 	private String address;
 
-	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy", timezone="Europe/Lisbon")
 	private java.util.Date birth;
 	
 	private java.util.Set ORM_lessons = new java.util.HashSet();
