@@ -10,9 +10,8 @@ import {
     Dimmer,
     Message,
     Button,
-    Table, Container, Modal,
+    Table, Container, Modal, Segment
 } from 'semantic-ui-react';
-import {categoryStyle} from "../../styles/styles";
 import {fetchApi} from "../../services/api";
 import moment from 'moment';
 import Routes from "../../services/Routes";
@@ -23,13 +22,25 @@ class LessonsPage extends Component {
         super(props);
 
         this.state = {
+
+            // Loading
+            isLoading : true,
+            isLoadingText: 'A carregar...',
+
+            // Top Message Success or Error
+            messageVisible: true,
+
+            // Top Navigation
+            activeMenu: '',
+
+
             allRegisters: [],
             allCategories: [],
             allNextPracticalLessons:[],
             showPracticalLessons:[],
             instructor: undefined,
 
-            messageLesson: 'Sem aulas marcadas.',
+            messageLesson: 'Sem aulas futuras marcadas.',
             messageRegisters:'Sem registos efetuados',
 
             nextTheoreticalLessons:[],
@@ -55,9 +66,7 @@ class LessonsPage extends Component {
             maxTimeToCancel: undefined,
             modalCancelOpen: false,
 
-            categoryChoosedName: '',
             categoryChoosedId: -1,
-            isLoading : true,
         };
     }
 
@@ -70,11 +79,6 @@ class LessonsPage extends Component {
         );
     }
 
-
-
-    /**
-        -------------------- SUCESS FETCHS ---------------------------
-     */
 
     /**
      * Handle the response fetch school information.
@@ -101,6 +105,7 @@ class LessonsPage extends Component {
      * @param response
      */
     successFetchLessons = async (response) => {
+
         const data = response.data;
 
         await this.setState({
@@ -181,7 +186,7 @@ class LessonsPage extends Component {
             numberTheoreticalRealized: numberT,
             instructor: instructor,
 
-            categoryChoosedName: categories[0].name,
+            activeMenu: categories[0].name,
             categoryChoosedId: categoryId,
         });
 
@@ -292,11 +297,10 @@ class LessonsPage extends Component {
 
 
 
+
     /**
      -------------------- ERROR FETCHS ---------------------------
      */
-
-
 
     /**
      * Handle the error fetch school information.
@@ -374,7 +378,7 @@ class LessonsPage extends Component {
             tableNextTheoLessons: false,
             messageRealizedTheoLessons: false,
             messageNextTheoLessons: false,
-            categoryChoosedName: data.name,
+            activeMenu: data.name,
         });
 
         let limit = this.state.maxTimeToCancel.split(":");
@@ -626,65 +630,53 @@ class LessonsPage extends Component {
 
 
     render() {
-        const {  allCategories, showPracticalLessons,
-                categoryChoosedId, categoryChoosedName } = this.state;
+        const {showPracticalLessons, categoryChoosedId, activeMenu} = this.state;
 
-        let categories;
-        categories = (
-            allCategories.map( category => {
-                return (
-                    <Menu.Item
-                        key={category.id}
-                        name={category.name}
-                        active={categoryChoosedName === category.name}
-                        onClick={this.handleCategoryClicked}
-                    >
-                    </Menu.Item>
-                )
-            })
-        );
 
         const nextPracticalLessons = (
-            <div className={"ui fluid card grey"}>
+            <Card fluid raised>
                 <Card.Content>
-                    <Card.Header>
-                        <Button floated='right'
-                                color={'black'}
-                                onClick={() => this.props.history.push({
-                                    pathname: Routes.NEW_LESSON,
-                                    state: {
-                                        categoryChoosed: {
-                                            id: categoryChoosedId,
-                                            name: categoryChoosedName,
-                                        },
-                                        instructor: this.state.instructor,
-                                    }
-                                })}
-                        > MARCAR AULA
-                        </Button>
+                    <Card.Header style={{color: '#2185d0'}}>
                         <Icon.Group style={{marginRight: "8px"}}>
-                            <Icon color='grey' name='calendar' />
+                            <Icon color='blue' name='calendar' />
                         </Icon.Group>
-                        Próximas aulas práticas
+                        {'Aulas Práticas Futuras'}
                     </Card.Header>
                 </Card.Content>
                 <Card.Content>
                     <List divided>
-                        {(showPracticalLessons.length > 0) ?
+                        <List.Item disabled style={{marginBottom: 20}}>
+                            <Icon size='large' color={'black'} name='clipboard check' />
+                            <List.Content>
+                                <List.Header style={{marginTop: 3}}>
+                                    {"Realizadas: x / XX "}
+                                </List.Header>
+                            </List.Content>
+                        </List.Item>
+                        {
+                            showPracticalLessons.length === 0 ?
+                            <List.Item disabled>
+                                <List.Content>
+                                    <Header as='h4' color='grey'>{this.state.messageLesson}</Header>
+                                </List.Content>
+                            </List.Item>
+                            :
                             showPracticalLessons.map(lesson => (
                                 <List.Item key={lesson.id} style={{marginBottom: "10px"}}>
 
                                     <Modal trigger={
-                                            lesson.canCancel &&
-                                            <Button floated='right' icon labelPosition='right'
-                                                    inverted color='red' onClick={ () => this.setState({modalCancelOpen:true})}>
-                                                <Icon name='times circle outline'/>
-                                                Cancelar aula
-                                            </Button>
+                                        lesson.canCancel &&
+                                        <Button floated='right' icon labelPosition='right'
+                                                inverted color='red' onClick={ () => this.setState({modalCancelOpen:true})}>
+                                            <Icon name='times circle outline'/>
+                                            {
+                                                'Cancelar'
                                             }
-                                            size='small'
-                                            open={this.state.modalCancelOpen}
-                                            onClose={() => this.setState({modalCancelOpen:false})}
+                                        </Button>
+                                    }
+                                           size='small'
+                                           open={this.state.modalCancelOpen}
+                                           onClose={() => this.setState({modalCancelOpen:false})}
                                     >
                                         <Header icon='delete calendar' content='Cancelar Aula' />
                                         <Modal.Content>
@@ -715,31 +707,35 @@ class LessonsPage extends Component {
                                         </List.Description>
                                     </List.Content>
                                 </List.Item>
-                            )) :
-                            <Header as='h4' color='grey'>{this.state.messageLesson}</Header>
+                            ))
                         }
                     </List>
                 </Card.Content>
-            </div>
+            </Card>
         );
 
         const theoLessons = (
-            <div className={"ui fluid card grey"}>
+            <Card fluid raised>
                 <Card.Content>
-                    <Card.Header>
+                    <Card.Header  style={{color: '#f2711c'}}>
                         <Icon.Group style={{marginRight: "8px"}}>
-                            <Icon color='grey' name='calendar' />
+                            <Icon color='orange' name='calendar' />
                         </Icon.Group>
-                        Aulas Teóricas
+                        {'Aulas Teóricas'}
                     </Card.Header>
                 </Card.Content>
                 <Card.Content>
                     <List animated divided relaxed={'very'} verticalAlign='middle'>
-                        <List.Item >
-                            <Icon size='large' name='clipboard check' />
+                        <List.Item disabled style={{marginBottom: 12}}>
+                            <Icon size='large' color={'black'} name='clipboard check' />
                             <List.Content>
-                                <List.Header>Aulas Realizadas:
-                                    {" " + this.state.numberTheoreticalRealized} / {this.state.totalTheoreticalLessons}  </List.Header>
+                                <List.Header style={{marginTop: 3}}>
+                                    {
+                                        "Frequentadas: " +
+                                        this.state.numberTheoreticalRealized + "/" +
+                                        this.state.totalTheoreticalLessons
+                                    }
+                                </List.Header>
                             </List.Content>
                         </List.Item>
                         <List.Item style={{cursor: 'pointer'}} onClick={this.handleRealizedTheoreticalLessons}>
@@ -748,7 +744,9 @@ class LessonsPage extends Component {
                             </List.Content>
                             <Icon size='large' name='tasks' />
                             <List.Content >
-                                <List.Header>Consultar Aulas Realizadas </List.Header>
+                                <List.Header>
+                                    {'Aulas Frequentadas'}
+                                </List.Header>
                                 <List.Description style={{marginTop: "3px"}}>
                                     Consultar temas em que esteve presente.
                                 </List.Description>
@@ -768,7 +766,7 @@ class LessonsPage extends Component {
                         </List.Item>
                     </List>
                 </Card.Content>
-            </div>
+            </Card>
         );
 
 
@@ -874,66 +872,118 @@ class LessonsPage extends Component {
             </div>
         );
 
-        let renderCategories = allCategories.length > 0 ?
-            (
-                <div>
-                    <div style={categoryStyle}>
-                        <Menu pointing secondary >
-                            {categories}
-                        </Menu>
+
+        let messageTop = null;
+        if(this.props.history.location.state && this.props.history.location.state.fromNewLessonSuccess) {
+            if(this.props.history.location.state.fromNewLessonSuccess === 'success') {
+                messageTop = (
+                    <Message
+                        success
+                        header='Sucesso'
+                        content='A sua aula foi marcada com sucesso!'
+                        onDismiss={() => {
+                            this.setState({messageVisible: false});
+                            this.props.history.replace({
+                                pathname: this.props.location.pathname,
+                                state: {}
+                            });
+                        }}
+                    />
+                );
+            }
+            else if(this.props.history.location.state.fromNewLessonSuccess === 'error') {
+                messageTop = (
+                    <Message
+                        negative
+                        header='Erro'
+                        content='Houve um erro ao tentar marcar a sua aula. Tente novamente.'
+                    />
+                );
+            }
+        }
+
+        return (
+            <Container style={{marginTop: 30}}>
+                {
+                    this.state.messageVisible &&
+                    messageTop
+                }
+                <Dimmer page inverted active={this.state.isLoading}>
+                    <Loader>{this.state.isLoadingText}</Loader>
+                </Dimmer>
+                <Menu attached='top'>
+                    {
+                        this.state.allCategories.map( category => {
+                            return (
+                                <Menu.Item
+                                    key={category.id}
+                                    name={category.name}
+                                    active={this.state.activeMenu === category.name}
+                                    onClick={this.handleCategoryClicked}
+                                >
+                                </Menu.Item>
+                            )
+                        })
+                    }
+                </Menu>
+                <Segment attached={'bottom'}>
+                    <div style={{marginLeft: 12}}>
+                        <Button
+                            primary
+                            onClick={() => this.props.history.push({
+                                pathname: Routes.NEW_LESSON,
+                                state: {
+                                    categoryChoosed: {
+                                        id: categoryChoosedId,
+                                        name: activeMenu,
+                                    },
+                                    instructor: this.state.instructor,
+                                }
+                            })}
+                        >
+                            {'MARCAR AULA PRÁTICA'}
+                        </Button>
                     </div>
-                    <Container>
-                        <Grid columns={2} stackable>
-                            <Grid.Column width={8} >
-                                {nextPracticalLessons}
-                                {theoLessons}
-                            </Grid.Column>
-                            <Grid.Column width={8} >
+                    <Grid divided={'vertically'}>
+                        <Grid.Row>
+                            <Grid stackable centered columns={2}>
+                                <Grid.Column>
+                                    {nextPracticalLessons}
+                                </Grid.Column>
+                                <Grid.Column>
+                                    {theoLessons}
+                                </Grid.Column>
+                            </Grid>
+                        </Grid.Row>
+                        <Grid.Row>
+                            <Grid.Column>
                                 {
                                     this.state.tableRealizedTheoLessons  ?
                                         tableThemesRealized :
-                                    this.state.tableNextTheoLessons ?
-                                        tableNextTheoreticalLessons :
-                                    this.state.messageRealizedTheoLessons ?
-                                            <Message
-                                                //onDismiss
-                                                size={'large'}
-                                                error
-                                                header={'Registo de aulas teóricas'}
-                                                content={'Não compareceu a nenhuma aula teórica.'}
-                                            /> :
-                                        this.state.messageNextTheoLessons &&
-                                            <Message
-                                                //onDismiss
-                                                size={'large'}
-                                                error
-                                                header={'Registo de aulas teóricas'}
-                                                content={'Não há registo de aulas teóricas futuras.'}
-                                            />
+                                        this.state.tableNextTheoLessons ?
+                                            tableNextTheoreticalLessons :
+                                            this.state.messageRealizedTheoLessons ?
+                                                <Message
+                                                    //onDismiss
+                                                    size={'large'}
+                                                    error
+                                                    header={'Registo de aulas teóricas'}
+                                                    content={'Não compareceu a nenhuma aula teórica.'}
+                                                /> :
+                                                this.state.messageNextTheoLessons &&
+                                                <Message
+                                                    //onDismiss
+                                                    size={'large'}
+                                                    error
+                                                    header={'Registo de aulas teóricas'}
+                                                    content={'Não há registo de aulas teóricas futuras.'}
+                                                />
                                 }
                             </Grid.Column>
-                        </Grid>
-                    </Container>
-                </div>
-            ) :
-            (
-                <div>
-                    <Message
-                        size={'big'}
-                        error
-                        header={'Erro ao obter registos'}
-                        content={this.state.messageRegisters}
-                    />
-                </div>
-            );
-
-        return (
-            <div>
-                <Dimmer page inverted active={this.state.isLoading}>
-                    <Loader>A carregar</Loader>
-                </Dimmer>
-                {renderCategories}
-            </div>
+                        </Grid.Row>
+                    </Grid>
+                </Segment>
+            </Container>
         )
     }
 }

@@ -17,7 +17,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.logging.Logger;
 
-@WebServlet(name = "RegisterStudent", urlPatterns = {"/api/lesson/student/new"})
+@WebServlet(name = "NewStudentLesson", urlPatterns = {"/api/lesson/student/new"})
 public class NewStudentLesson extends HttpServlet {
 
     private final static Logger log = Logger.getLogger(NewStudentLesson.class.getName());
@@ -53,14 +53,11 @@ public class NewStudentLesson extends HttpServlet {
             int instructorID = (Integer) JSON.get("instructorID");
             String startDate = (String) JSON.get("startDate");
 
-            log.info(startDate);
-
             try {
 
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
                 Date parsedDate = dateFormat.parse(startDate);
                 Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
-                log.info(timestamp.toString());
 
                 boolean created = DSMFacade.createNewLesson(id, instructorID, categoryID, timestamp);
                 if(created) {

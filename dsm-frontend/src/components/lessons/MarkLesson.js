@@ -15,6 +15,7 @@ import SelectWeek from "./SelectWeek";
 import ConfirmNewLesson from "./ConfirmNewLesson";
 import "react-datepicker/dist/react-datepicker.css";
 import {fetchApi} from "../../services/api";
+import Authentication from "../../services/Authentication";
 
 
 class MarkLesson extends Component {
@@ -110,8 +111,6 @@ class MarkLesson extends Component {
      */
     onSubmit = () => {
 
-        console.log(this.state.selectedDay);
-
         this.setState({isLoading: true});
         fetchApi(
             'post',
@@ -126,12 +125,44 @@ class MarkLesson extends Component {
         );
     };
     successHandler = (response) => {
-        console.log(response);
-        this.props.history.push(Routes.LESSONS);
+
+        if(response.status === 200 && response.data) {
+            this.props.history.push({
+                pathname: Routes.LESSONS,
+                state: {
+                    fromNewLessonSuccess: 'success',
+                    fromNewLessonCategory: this.state.category.id
+                }
+            });
+        }
+        else {
+            this.props.history.push({
+                pathname: Routes.LESSONS,
+                state: {
+                    fromNewLessonSuccess: 'error',
+                    fromNewLessonCategory: this.state.category.id
+                }
+            });
+        }
     };
     errorHandler = (error) => {
-        console.log(error);
+
+        // bad request
+        if(error.response && error.response.status && error.response.status === 404) {
+            this.props.history.push({
+                pathname: Routes.LESSONS,
+                state: {
+                    fromNewLessonSuccess: 'error',
+                    fromNewLessonCategory: this.state.category.id
+                }
+            });
+        }
+        // invalid API access token
+        else {
+            Authentication.clearData();
+        }
     };
+
 
     render() {
 

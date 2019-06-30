@@ -164,8 +164,6 @@ class SelectDay extends Component {
 
         if(response.status === 200 && response.data) {
 
-            console.log(response.data);
-
             let matrix = this.state.matrix;
             const practicalLessons = response.data.practicalLessons;
 
