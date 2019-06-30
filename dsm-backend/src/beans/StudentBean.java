@@ -121,17 +121,17 @@ public class StudentBean implements StudentBeanLocal {
      * @return
      */
     @Override
-    public boolean setPersonalAnnouncementAsViewed(int announcementID){
+    public boolean setPersonalAnnouncementAsViewed(int announcementID, int studentID){
 
         try {
 
             PersonalAnnouncement pa = PersonalAnnouncementDAO.getPersonalAnnouncementByORMID(announcementID);
+            Student student = StudentDAO.getStudentByORMID(studentID);
 
-            /*pa.setViewed(true);
+            student.announcements.remove(pa);
+            PersonalAnnouncementDAO.delete(pa);
 
-            PersonalAnnouncementDAO.save(pa);
-            return true;*/
-            return PersonalAnnouncementDAO.delete(pa);
+            return true;
 
         } catch (PersistentException e) {
             e.printStackTrace();

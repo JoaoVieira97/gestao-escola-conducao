@@ -116,6 +116,7 @@ public class SecretaryBean implements SecretaryBeanLocal{
             s.registers.add(register);
 
             StudentDAO.save(s);
+            RegisterDAO.save(register);
             return true;
 
         } catch (Exception e) {
@@ -141,7 +142,7 @@ public class SecretaryBean implements SecretaryBeanLocal{
                 Exam e = new Exam();
 
                 e.setDescription(description);
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 Date parsedDate = dateFormat.parse(startTime);
                 Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
                 e.setStartTime(timestamp);
@@ -161,6 +162,8 @@ public class SecretaryBean implements SecretaryBeanLocal{
                 pa.setTimestamp(new Timestamp(System.currentTimeMillis()));
                 student.announcements.add(pa);
 
+                PersonalAnnouncementDAO.save(pa);
+                ExamDAO.save(e);
                 StudentDAO.save(student);
 
                 return true;
@@ -185,7 +188,6 @@ public class SecretaryBean implements SecretaryBeanLocal{
     public boolean registerStudentPayment(int registerID, String description, String value, int secretaryID){
 
         try {
-
             Register register = RegisterDAO.getRegisterByORMID(registerID);
             Secretary secretary = SecretaryDAO.getSecretaryByORMID(secretaryID);
 
@@ -263,6 +265,7 @@ public class SecretaryBean implements SecretaryBeanLocal{
 
             student.registers.add(register);
 
+            RegisterDAO.save(register);
             StudentDAO.save(student);
 
             return true;
@@ -275,7 +278,7 @@ public class SecretaryBean implements SecretaryBeanLocal{
     }
 
     /**
-     * Register student
+     * Update student
      * @param studentID
      * @param name
      * @param email
@@ -313,7 +316,7 @@ public class SecretaryBean implements SecretaryBeanLocal{
     }
 
     /**
-     * Register general announcement
+     * Register personal announcement
      * @param studentID
      * @param title
      * @param description
@@ -332,6 +335,7 @@ public class SecretaryBean implements SecretaryBeanLocal{
             pa.setTimestamp(new Timestamp(System.currentTimeMillis()));
             student.announcements.add(pa);
 
+            PersonalAnnouncementDAO.save(pa);
             StudentDAO.save(student);
 
             return true;

@@ -9,6 +9,7 @@ import javax.ejb.Stateless;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -164,6 +165,7 @@ public class LessonBean implements LessonBeanLocal{
         if (lessons!= null){
             pratical_lessons = lessons.stream()
                     .filter(l -> l instanceof PracticalLesson && l.getState().equals("reserved"))
+                    .sorted(Comparator.comparing(Lesson::getStartTime))
                     .collect(Collectors.toList());
         }
 

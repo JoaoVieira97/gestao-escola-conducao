@@ -252,9 +252,9 @@ public class DSMFacade {
     /**
      * Set specific student personalAnnouncement as viewed
      */
-    public static boolean viewedPersonalAnnouncement(int announcementID) {
+    public static boolean viewedPersonalAnnouncement(int announcementID, int studentID) {
 
-        return studentBean.setPersonalAnnouncementAsViewed(announcementID);
+        return studentBean.setPersonalAnnouncementAsViewed(announcementID, studentID);
     }
 
     /**

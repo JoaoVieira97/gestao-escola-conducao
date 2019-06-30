@@ -24,6 +24,7 @@ export default {
     REGISTER_STUDENT_PAYMENT: '/students/student/payments',
     REGISTER_STUDENT_ANNOUNCEMENT: '/students/student/announcement',
     REGISTER_GENERAL_ANNOUNCEMENT: '/register_general_announcement',
+    STUDENT_NEXT_PRACTICAL_LESSONS : '/students/student/next_practical_lessons',
 
     // INSTRUCTOR
     // ...
