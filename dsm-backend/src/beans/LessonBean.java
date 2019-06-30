@@ -202,8 +202,20 @@ public class LessonBean implements LessonBeanLocal{
         try {
             Lesson lesson = LessonDAO.getLessonByORMID(lessonId);
 
-            if(lesson != null)
-                return LessonDAO.deleteAndDissociate(lesson);
+            if(lesson!=null){
+
+                List<Student> students = Arrays.asList(lesson.students.toArray());
+
+                for(Student student : students) {
+                    student.lessons.remove(lesson);
+                    //StudentDAO.save(student);
+
+                }
+                //LessonDAO.save(lesson);
+                PracticalLesson practicalLesson = (PracticalLesson) lesson;
+
+                return PracticalLessonDAO.delete(practicalLesson);
+            }
 
         } catch (PersistentException e) {
             e.printStackTrace();

@@ -400,6 +400,31 @@ class LessonsPage extends Component {
             let registerChoosed = this.state.allRegisters.filter(register => (register.category.id === categoryId));
             let instructor = registerChoosed[0].instructor;
 
+
+            //Nº total teóricas
+            let theoreticalLessons = registerChoosed[0].category.theoreticalLessons;
+            //Nº total práticas
+            let practicalLessons = registerChoosed[0].category.practicalLessons;
+
+            let categoriesPracticalRealized = this.state.practicalRealized.map( practLesson => (
+                practLesson.categories.collection));
+
+            let practicalRealized = categoriesPracticalRealized.map( category => (
+                category.filter( cat => (cat.id === categoryId))));
+
+            //Nº práticas realizadas
+            let numberP = practicalRealized.reduce( (acc, array) => acc + array.length, 0);
+
+            let categoriesTheoreticalRealized = this.state.theoreticalRealized.map( theoLesson => (
+                theoLesson.categories.collection));
+
+            let theoreticalRealized = categoriesTheoreticalRealized.map( category =>
+                (category.filter( cat => (cat.id === categoryId))));
+
+            //Nº teóricas realizadas
+            let numberT = theoreticalRealized.reduce( (acc, array) => acc + array.length, 0);
+
+
             this.state.allNextPracticalLessons.forEach(practLesson => {
 
                 let categories = practLesson.categories.collection;
@@ -433,6 +458,13 @@ class LessonsPage extends Component {
                 categoryChoosedId: categoryId,
                 showPracticalLessons: practicalsCategoryChoosed,
                 instructor: instructor,
+
+                numberTheoreticalRealized: numberT,
+                totalTheoreticalLessons: theoreticalLessons,
+
+                numberPracticalRealized: numberP,
+                totalPracticalLessons: practicalLessons,
+
             });
 
             fetchApi(
@@ -579,6 +611,7 @@ class LessonsPage extends Component {
      * When user select cancel practical lesson.
      */
     handleLessonCancel = (lessonId) => {
+        console.log(lessonId);
 
         this.setState({
             isLoading: true,
@@ -592,6 +625,7 @@ class LessonsPage extends Component {
             },  {},
             this.successHandlerCanceled, this.errorHandlerCanceled
         );
+
     };
 
     /**
@@ -646,7 +680,11 @@ class LessonsPage extends Component {
                             <Icon size='large' color={'black'} name='clipboard check' />
                             <List.Content>
                                 <List.Header style={{marginTop: 3}}>
-                                    {"Realizadas: x / XX "}
+                                    {
+                                        "Realizadas: " +
+                                        this.state.numberPracticalRealized + "/" +
+                                        this.state.totalPracticalLessons
+                                    }
                                 </List.Header>
                             </List.Content>
                         </List.Item>
@@ -660,38 +698,39 @@ class LessonsPage extends Component {
                             :
                             showPracticalLessons.map(lesson => (
                                 <List.Item key={lesson.id} style={{marginBottom: "10px"}}>
-
-                                    <Modal trigger={
-                                        lesson.canCancel &&
-                                        <Button floated='right' icon labelPosition='right'
-                                                inverted color='red' onClick={ () => this.setState({modalCancelOpen:true})}>
-                                            <Icon name='times circle outline'/>
-                                            {
-                                                'Cancelar'
-                                            }
-                                        </Button>
+                                    {lesson.canCancel &&
+                                        <Modal trigger={
+                                            <Button floated='right' icon labelPosition='right'
+                                                    inverted color='red'
+                                                    onClick={() => this.setState({modalCancelOpen: true})}>
+                                                <Icon name='times circle outline'/>
+                                                {
+                                                    'Cancelar'
+                                                }
+                                            </Button>
+                                        }
+                                               size='small'
+                                               open={this.state.modalCancelOpen}
+                                               onClose={() => this.setState({modalCancelOpen: false})}
+                                        >
+                                            <Header icon='delete calendar' content='Cancelar Aula'/>
+                                            <Modal.Content>
+                                                <p>
+                                                    Tem a certeza que pretende cancelar esta aula?
+                                                </p>
+                                            </Modal.Content>
+                                            <Modal.Actions>
+                                                <Button color='red' inverted
+                                                        onClick={() => this.setState({modalCancelOpen: false})}>
+                                                    <Icon name='remove'/> Não
+                                                </Button>
+                                                <Button color='green' inverted
+                                                        onClick={() => this.handleLessonCancel(lesson.id)}>
+                                                    <Icon name='checkmark'/> Sim
+                                                </Button>
+                                            </Modal.Actions>
+                                        </Modal>
                                     }
-                                           size='small'
-                                           open={this.state.modalCancelOpen}
-                                           onClose={() => this.setState({modalCancelOpen:false})}
-                                    >
-                                        <Header icon='delete calendar' content='Cancelar Aula' />
-                                        <Modal.Content>
-                                            <p>
-                                                Tem a certeza que pretende cancelar esta aula?
-                                            </p>
-                                        </Modal.Content>
-                                        <Modal.Actions>
-                                            <Button  color='red' inverted
-                                                     onClick={ () => this.setState({modalCancelOpen:false})}>
-                                                <Icon name='remove' /> Não
-                                            </Button>
-                                            <Button color='green' inverted
-                                                    onClick={ () => this.handleLessonCancel(lesson.id) }>
-                                                <Icon name='checkmark' /> Sim
-                                            </Button>
-                                        </Modal.Actions>
-                                    </Modal>
                                     <Icon name='calendar outline' />
                                     <List.Content>
                                         <List.Header>Aula Prática</List.Header>
