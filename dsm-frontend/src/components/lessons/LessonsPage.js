@@ -6,8 +6,6 @@ import {
     Card,
     Grid,
     List,
-    Loader,
-    Dimmer,
     Message,
     Button,
     Table, Container, Modal, Segment
@@ -25,7 +23,6 @@ class LessonsPage extends Component {
 
             // Loading
             isLoading : true,
-            isLoadingText: 'A carregar...',
 
             // Top Message Success or Error
             messageVisible: true,
@@ -908,9 +905,6 @@ class LessonsPage extends Component {
                     this.state.messageVisible &&
                     messageTop
                 }
-                <Dimmer page inverted active={this.state.isLoading}>
-                    <Loader>{this.state.isLoadingText}</Loader>
-                </Dimmer>
                 <Menu attached='top'>
                     {
                         this.state.allCategories.map( category => {
@@ -926,7 +920,7 @@ class LessonsPage extends Component {
                         })
                     }
                 </Menu>
-                <Segment attached={'bottom'}>
+                <Segment attached={'bottom'} loading={this.state.isLoading}>
                     <div style={{marginLeft: 12}}>
                         <Button
                             primary
