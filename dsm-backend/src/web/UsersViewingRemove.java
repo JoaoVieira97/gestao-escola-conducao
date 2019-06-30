@@ -1,10 +1,8 @@
 package web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dsm.DSMFacade;
-import dsm.PracticalLesson;
 import utils.Utils;
 
 import javax.servlet.ServletException;
@@ -13,20 +11,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
-import java.util.logging.Logger;
+import java.util.Map;
 
-@WebServlet(name = "GetReservedLessonsInstructor", urlPatterns = {"/api/lessons/reserved_lessons"})
-public class GetReservedLessonsInstructor extends HttpServlet {
-
-    private final static Logger log = Logger.getLogger(GetReservedLessonsInstructor.class.getName());
+@WebServlet(name = "UsersViewingRemove", urlPatterns = {"/api/lessons/remove/viewing"})
+public class UsersViewingRemove extends HttpServlet {
 
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-    }
-
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         request.setCharacterEncoding("UTF-8");
 
@@ -37,24 +28,20 @@ public class GetReservedLessonsInstructor extends HttpServlet {
         String accessToken = Utils.getAuthenticationToken(request);
         if(accessToken != null && DSMFacade.isTokenValid(accessToken)) {
 
-            String instructorID = request.getParameter("instructorID");
-            int instID = Integer.parseInt(instructorID);
+            // get post data
+            // ------------------------------------------------------------
+            Map<String, Object> JSON = Utils.getPostData(mapper, request);
 
-            String startDate = request.getParameter("startDate");
-            long startTimestamp = Long.parseLong(startDate);
+            // parsing data
+            // ------------------------------------------------------------
+            String instructorID = String.valueOf(JSON.get("instructorID"));
+            String datetime = (String) JSON.get("datetime");
 
-            String endDate = request.getParameter("endDate");
-            long endTimestamp = Long.parseLong(endDate);
 
-            List<PracticalLesson> practicalLessons = DSMFacade.getReservedLessonsInstructor(
-                    instID,
-                    startTimestamp,
-                    endTimestamp
-            );
-            if(practicalLessons != null) {
+            boolean success = DSMFacade.removeUsersViewing(instructorID, datetime);
+            if(success) {
 
-                ArrayNode practJSON = mapper.valueToTree(practicalLessons);
-                responseNode.putArray("practicalLessons").addAll(practJSON);
+                responseNode.put("success", true);
                 response.setStatus(HttpServletResponse.SC_OK);
             }
             else {
@@ -68,11 +55,13 @@ public class GetReservedLessonsInstructor extends HttpServlet {
         }
 
 
-
         response.setContentType("application/json;charset=UTF-8");
         response.getWriter().write(
                 mapper.writerWithDefaultPrettyPrinter().writeValueAsString(responseNode)
         );
+    }
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
 }

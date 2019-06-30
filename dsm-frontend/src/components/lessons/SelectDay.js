@@ -152,7 +152,7 @@ class SelectDay extends Component {
 
         fetchApi(
             'get',
-            '/lessons/reserved_lessons?' +
+            '/lessons/instructor/between_dates?' +
                 `instructorID=${this.props.instructor.id}` +
                 `&startDate=${this.props.startDate.getTime()}` +
                 `&endDate=${this.props.endDate.getTime()}`,
@@ -166,16 +166,29 @@ class SelectDay extends Component {
 
             let matrix = this.state.matrix;
             const practicalLessons = response.data.practicalLessons;
+            const views = response.data.views;
 
             for (let i = 0; i < matrix.length; i++) {
 
                 const dayHours = Object.keys(matrix[i].hours);
                 for (let j = 0; j < dayHours.length; j++) {
 
+                    if (dayHours[j] in views) {
+
+                        const viewsCounter = views[dayHours[j]];
+
+                        matrix[i].hours[dayHours[j]] = {
+                            views: viewsCounter
+                        }
+                    }
+
                     const aux = practicalLessons.find(item => dayHours[j] === item.startTime);
                     if(aux) {
                         const lessonStartTime = aux.startTime;
+
                         matrix[i].hours[lessonStartTime] = {
+
+                            ...matrix[i].hours[lessonStartTime],
                             disabled: true,
                             ...aux
                         }
@@ -353,7 +366,19 @@ class SelectDay extends Component {
                                                     </Table.Cell>
                                                 )
                                             }
-
+                                            else if(hourObject.views > 0) {
+                                                return (
+                                                    <Table.Cell
+                                                        key={hourKey}
+                                                        warning
+                                                        className={"tableHourAvailable"}
+                                                        onClick={() => this.onSelectDay(hourKey)}
+                                                    >
+                                                        <Icon name='eye' />
+                                                        {hourObject.views + ' a ver'}
+                                                    </Table.Cell>
+                                                )
+                                            }
                                             return (
                                                 <Table.Cell
                                                     key={hourKey}

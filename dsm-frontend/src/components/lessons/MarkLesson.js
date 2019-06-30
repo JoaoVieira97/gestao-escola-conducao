@@ -112,6 +112,7 @@ class MarkLesson extends Component {
     onSubmit = () => {
 
         this.setState({isLoading: true});
+        this.removeNewViewUser();
         fetchApi(
             'post',
             '/lesson/student/new',
@@ -148,7 +149,7 @@ class MarkLesson extends Component {
     errorHandler = (error) => {
 
         // bad request
-        if(error.response && error.response.status && error.response.status === 404) {
+        if(error.response && error.response.status && error.response.status === 400) {
             this.props.history.push({
                 pathname: Routes.LESSONS,
                 state: {
@@ -163,6 +164,37 @@ class MarkLesson extends Component {
         }
     };
 
+    /**
+     * Add a view on current day
+     */
+    addNewViewUser = () => {
+        fetchApi(
+            'post',
+            '/lessons/add/viewing',
+            {
+                instructorID: this.state.instructor.id,
+                datetime: this.state.selectedDay
+            },
+            {},
+            (success) => {}, (error) => {}
+        );
+    };
+
+    /**
+     * Remove a view on current day
+     */
+    removeNewViewUser = () => {
+        fetchApi(
+            'post',
+            '/lessons/remove/viewing',
+            {
+                instructorID: this.state.instructor.id,
+                datetime: this.state.selectedDay
+            },
+            {},
+            (success) => {}, (error) => {}
+        );
+    };
 
     render() {
 
@@ -201,7 +233,10 @@ class MarkLesson extends Component {
                     onRemoveDay={this.onRemoveDay.bind(this)}
                     instructor={this.state.instructor}
                     isDisabled={this.state.isStepTwoDisabled}
-                    onConfirmDay={() => this.setState(state => ({stepId: state.stepId + 1}))}
+                    onConfirmDay={() => {
+                        this.setState(state => ({stepId: state.stepId + 1}));
+                        this.addNewViewUser();
+                    }}
                     onCancelDay={() => this.setState(state => ({stepId: state.stepId - 1}))}
                 />
             )
@@ -219,7 +254,10 @@ class MarkLesson extends Component {
                     category={this.state.category}
                     isDisabled={false}
                     onSubmit={this.onSubmit.bind(this)}
-                    onCancel={() => this.setState(state => ({stepId: state.stepId - 1}))}
+                    onCancel={() => {
+                        this.setState(state => ({stepId: state.stepId - 1}));
+                        this.removeNewViewUser();
+                    }}
                 />
             )
         }];
