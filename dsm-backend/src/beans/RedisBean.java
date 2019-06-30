@@ -141,6 +141,7 @@ public class RedisBean implements RedisBeanLocal {
 
             // redis increment (all values are long)
             jedis.incr(key);
+            jedis.expire(key, 180); // after 3 seconds this key will expire
             return true;
         }
         catch (Exception e) {
