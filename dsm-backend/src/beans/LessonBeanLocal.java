@@ -24,4 +24,12 @@ public interface LessonBeanLocal {
     boolean cancelLessonStudent(int lessonId);
     List<PracticalLesson> getReservedLessonsInstructor(int instructorID, long startTimestamp, long endTimeStamp);
     boolean createNewLesson(int studentID, int instructorID, int categoryID, Timestamp timestamp);
+
+    List<PracticalLesson> getNextPracticalLessonsInstructor(int instructorID);
+
+    List<PracticalLesson> getOpenedPracticalLessonsInstructor(int instructorID);
+
+    List<TheoreticalLesson> getNextTheoreticalLessonsInstructor(int instructorID);
+
+    List<TheoreticalLesson> getOpenedTheoreticalLessonsInstructor(int instructorID);
 }

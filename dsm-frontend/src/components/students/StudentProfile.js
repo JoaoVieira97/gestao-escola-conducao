@@ -156,6 +156,45 @@ class StudentProfile extends Component {
     };
     
     render() {
+        const buttonsHeader = this.state.userType === 'ROLE_SECRETARY' ?
+            (
+                <div>
+                    <Button
+                        style={{marginBottom: '3px'}}
+                        icon='edit'
+                        content='Clique para editar'
+                        color={(!this.state.edit) ? 'blue' : 'black'}
+                        onClick={() => this.setState({edit: !this.state.edit})}
+                    />
+                    <Button
+                        style={{marginBottom: '3px'}}
+                        icon='calendar'
+                        content='Marcar Aula'
+                        color={'green'}
+                        //onClick={() => this.setState({edit: !this.state.edit})}
+                    />
+                    <Button
+                        style={{marginBottom: '3px'}}
+                        color={(!this.state.manage) ? 'orange' : 'black'}
+                        icon='student'
+                        content='Gerir'
+                        onClick={() => this.setState({manage: !this.state.manage})}
+                    />
+                </div>
+            ) :
+            (
+                <div>
+                    <Button
+                        style={{marginBottom: '3px'}}
+                        icon='calendar'
+                        content='Marcar Aula'
+                        color={'green'}
+                        //onClick={() => this.setState({edit: !this.state.edit})}
+                    />
+                </div>
+            );
+
+
         return (
             <Container style={{marginBottom: "65px"}}>
                 <Dimmer inverted active={this.state.isLoading}>
@@ -178,64 +217,51 @@ class StudentProfile extends Component {
 
                     </Grid.Column>
                     <Grid.Column width={10} style={{marginTop: "30px"}}>
-                        { this.state.userType === 'ROLE_SECRETARY' &&
-                            <div>
+                        <div>
+                            {buttonsHeader}
+                            <Segment
+                                className="ui center aligned"
+                                color="orange"
+                                hidden={!this.state.manage}
+                            >
                                 <Button
-                                    icon='edit'
-                                    content='Clique para editar'
-                                    color={(!this.state.edit) ? 'blue' : 'black'}
-                                    onClick={() => this.setState({edit: !this.state.edit})}
-                                />
-                                <Button
-                                    color={(!this.state.manage) ? 'orange' : 'black'}
-                                    icon='student'
-                                    content='Gerir'
-                                    onClick={() => this.setState({manage: !this.state.manage})}
-                                />
-                                <Segment
-                                    className="ui center aligned"
-                                    color="orange"
-                                    hidden={!this.state.manage}
+                                    style={{marginBottom: '3px'}}
+                                    icon
+                                    labelPosition='left'
+                                    onClick={() => this.props.history.push(Routes.REGISTER_STUDENT_CATEGORY, {student: this.state.student})}
                                 >
-                                    <Button
-                                        style={{marginBottom: '3px'}}
-                                        icon
-                                        labelPosition='left'
-                                        onClick={() => this.props.history.push(Routes.REGISTER_STUDENT_CATEGORY, {student: this.state.student})}
-                                    >
-                                        <Icon name='file alternate outline' color='orange'/>
-                                        <p>Categorias</p>
-                                    </Button>
-                                    <Button
-                                        style={{marginBottom: '3px'}}
-                                        icon
-                                        labelPosition='left'
-                                        onClick={() => this.props.history.push(Routes.REGISTER_STUDENT_PAYMENT, {student: this.state.student})}
-                                    >
-                                        <Icon name='euro sign' color='orange'/>
-                                        <p>Pagamentos</p>
-                                    </Button>
-                                    <Button
-                                        style={{marginBottom: '3px'}}
-                                        icon
-                                        labelPosition='left'
-                                        onClick={() => this.props.history.push(Routes.REGISTER_STUDENT_EXAM, {student: this.state.student})}
-                                    >
-                                        <Icon name='clipboard outline' color='orange'/>
-                                        <p>Exames</p>
-                                    </Button>
-                                    <Button
-                                        style={{marginBottom: '3px'}}
-                                        icon
-                                        labelPosition='left'
-                                        onClick={() => this.props.history.push(Routes.REGISTER_STUDENT_ANNOUNCEMENT, {student: this.state.student})}
-                                    >
-                                        <Icon name='bell outline' color='orange'/>
-                                        <p>Enviar aviso</p>
-                                    </Button>
-                                </Segment>
-                            </div>
-                        }
+                                    <Icon name='file alternate outline' color='orange'/>
+                                    <p>Categorias</p>
+                                </Button>
+                                <Button
+                                    style={{marginBottom: '3px'}}
+                                    icon
+                                    labelPosition='left'
+                                    onClick={() => this.props.history.push(Routes.REGISTER_STUDENT_PAYMENT, {student: this.state.student})}
+                                >
+                                    <Icon name='euro sign' color='orange'/>
+                                    <p>Pagamentos</p>
+                                </Button>
+                                <Button
+                                    style={{marginBottom: '3px'}}
+                                    icon
+                                    labelPosition='left'
+                                    onClick={() => this.props.history.push(Routes.REGISTER_STUDENT_EXAM, {student: this.state.student})}
+                                >
+                                    <Icon name='clipboard outline' color='orange'/>
+                                    <p>Exames</p>
+                                </Button>
+                                <Button
+                                    style={{marginBottom: '3px'}}
+                                    icon
+                                    labelPosition='left'
+                                    onClick={() => this.props.history.push(Routes.REGISTER_STUDENT_ANNOUNCEMENT, {student: this.state.student})}
+                                >
+                                    <Icon name='bell outline' color='orange'/>
+                                    <p>Enviar aviso</p>
+                                </Button>
+                            </Segment>
+                        </div>
                         <Segment>
                             <Header 
                                 className='centered' 
