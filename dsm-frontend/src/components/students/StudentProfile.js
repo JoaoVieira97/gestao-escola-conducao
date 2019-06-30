@@ -219,6 +219,15 @@ class StudentProfile extends Component {
                                         style={{marginBottom: '3px'}}
                                         icon
                                         labelPosition='left'
+                                        onClick={() => this.props.history.push(Routes.STUDENT_NEXT_PRACTICAL_LESSONS, {student: this.state.student})}
+                                    >
+                                        <Icon name='clock outline' color='orange'/>
+                                        <p>Próximas aulas</p>
+                                    </Button>
+                                    <Button
+                                        style={{marginBottom: '3px'}}
+                                        icon
+                                        labelPosition='left'
                                         onClick={() => this.props.history.push(Routes.REGISTER_STUDENT_EXAM, {student: this.state.student})}
                                     >
                                         <Icon name='clipboard outline' color='orange'/>
