@@ -14,6 +14,7 @@ import {
 } from 'semantic-ui-react';
 import {fetchApi} from "../../services/api";
 import Routes from "../../services/Routes";
+import Authentication from "../../services/Authentication";
 
 class RegisterPersonalAnnouncement extends Component {
 
@@ -98,23 +99,28 @@ class RegisterPersonalAnnouncement extends Component {
      */
     errorHandler = (error) => {
 
-    	console.log(error)
-
-    	this.setState({
-    		message: '',
-    		error: 'Ocorreu um erro. Tente novamente.'
-    	})
+    	if(error.response && error.response.status && error.response.status === 400) {
+            this.setState({
+                message: '',
+                error: 'Ocorreu um erro. Tente novamente.'
+            })
+        }
+        else if(error.response && error.response.status && error.response.status === 401) {
+            Authentication.clearData();
+            window.location.reload();
+            alert("As suas credenciais já não são válidas.");
+        }
         
     };
 
     render(){
 
         return(
-            <Container>
+            <Container style={{marginBottom: "65px"}}>
                 <Dimmer inverted active={this.state.isLoading}>
                     <Loader>A carregar</Loader>
                 </Dimmer>
-                <Grid className="ui stackable two column centered grid" style={{marginBottom: "65px"}}>
+                <Grid className="ui stackable two column centered grid">
                     <Grid.Column width={16}>
 
                         <Breadcrumb size='large'>

@@ -206,12 +206,12 @@ class RegisterStudent extends Component {
     render() {
 
         return (
-            <Container>
+            <Container style={{marginBottom: "65px"}}>
                 <Dimmer inverted active={this.state.isLoading}>
                     <Loader>A carregar</Loader>
                 </Dimmer>
 
-                <Grid centered style={{marginBottom: "65px"}}>
+                <Grid centered>
                     
                     <Grid.Column width={16}>
 

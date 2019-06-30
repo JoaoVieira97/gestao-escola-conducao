@@ -11,6 +11,7 @@ import {
 } from 'semantic-ui-react';
 import {fetchApi} from "../../services/api";
 import Routes from "../../services/Routes";
+import Authentication from "../../services/Authentication";
 
 class RegisterGeneralAnnouncement extends Component {
 
@@ -83,12 +84,17 @@ class RegisterGeneralAnnouncement extends Component {
      */
     errorHandler = (error) => {
 
-    	console.log(error)
-
-    	this.setState({
-    		message: '',
-    		error: 'Ocorreu um erro. Tente novamente.'
-    	})
+    	if(error.response && error.response.status && error.response.status === 400) {
+            this.setState({
+                message: '',
+                error: 'Ocorreu um erro. Tente novamente.'
+            })
+        }
+        else if(error.response && error.response.status && error.response.status === 401) {
+            Authentication.clearData();
+            window.location.reload();
+            alert("As suas credenciais já não são válidas.");
+        }
         
     };
 

@@ -141,22 +141,27 @@ class StudentProfile extends Component {
      */
     errorHandler = (error) => {
 
-        console.log(error)
-
-        this.setState({
-            message: '',
-            error: 'Ocorreu um erro. Tente novamente.'
-        })
+        if(error.response && error.response.status && error.response.status === 400) {
+            this.setState({
+                message: '',
+                error: 'Ocorreu um erro. Tente novamente.'
+            })
+        }
+        else if(error.response && error.response.status && error.response.status === 401) {
+            Authentication.clearData();
+            window.location.reload();
+            alert("As suas credenciais já não são válidas.");
+        }
         
     };
     
     render() {
         return (
-            <Container>
+            <Container style={{marginBottom: "65px"}}>
                 <Dimmer inverted active={this.state.isLoading}>
                     <Loader>A carregar</Loader>
                 </Dimmer>
-                <Grid centered style={{marginBottom: "65px"}}>
+                <Grid centered>
                     <Grid.Column width={16}>
 
                         <Breadcrumb size='large'>

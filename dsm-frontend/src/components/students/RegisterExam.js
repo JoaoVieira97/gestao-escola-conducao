@@ -18,6 +18,7 @@ import {
 import { fetchApi } from '../../services/api/index';
 import Routes from "../../services/Routes";
 import moment from 'moment';
+import Authentication from "../../services/Authentication";
 
 
 class RegisterExam extends Component {
@@ -107,10 +108,18 @@ class RegisterExam extends Component {
      */
     errorHandler = (error) => {
 
-        console.log(error);
-        this.setState({
-            isLoading: false
-        })
+        if(error.response && error.response.status && error.response.status === 400) {
+            this.setState({
+                isLoading: false,
+                message: '',
+                error: 'Ocorreu um erro. Tente novamente.'
+            })
+        }
+        else if(error.response && error.response.status && error.response.status === 401) {
+            Authentication.clearData();
+            window.location.reload();
+            alert("As suas credenciais já não são válidas.");
+        }
 
     };
 
@@ -180,12 +189,17 @@ class RegisterExam extends Component {
      */
     errorHandlerE = (error) => {
 
-        console.log(error)
-
-        this.setState({
-            message: '',
-            error: 'Ocorreu um erro. Tente novamente.'
-        })
+        if(error.response && error.response.status && error.response.status === 400) {
+            this.setState({
+                message: '',
+                error: 'Ocorreu um erro. Tente novamente.'
+            })
+        }
+        else if(error.response && error.response.status && error.response.status === 401) {
+            Authentication.clearData();
+            window.location.reload();
+            alert("As suas credenciais já não são válidas.");
+        }
         
     };
 
@@ -242,12 +256,12 @@ class RegisterExam extends Component {
         );
 
         return (
-            <Container>
+            <Container style={{marginBottom: "65px"}}>
 
                 <Dimmer inverted active={this.state.isLoading}>
                     <Loader>A carregar</Loader>
                 </Dimmer>
-                <Grid className="ui stackable two column centered grid" style={{marginBottom: "65px"}}>
+                <Grid className="ui stackable two column centered grid">
                     <Grid.Column width={16}>
 
                         <Breadcrumb size='large'>

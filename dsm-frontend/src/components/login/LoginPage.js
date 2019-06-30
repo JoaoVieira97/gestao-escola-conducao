@@ -88,7 +88,7 @@ class LoginPage extends Component {
     errorHandler = (error) => {
 
         // bad request
-        if(error.response && error.response.status && error.response.status === 400) {
+        if(error.response && error.response.status && error.response.status === 403) {
             this.setState({
                 isLoading: false,
                 loginError: true,

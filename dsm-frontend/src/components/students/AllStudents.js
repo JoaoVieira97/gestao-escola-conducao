@@ -18,7 +18,6 @@ import Routes from "../../services/Routes";
 import Authentication from "../../services/Authentication";
 
 
-
 class AllStudents extends Component {
 
     constructor(props) {
@@ -95,8 +94,17 @@ class AllStudents extends Component {
      * @param error
      */
     errorHandler = (error) => {
-
-        console.log(error);
+        // bad request
+        if(error.response && error.response.status && error.response.status === 400) {
+            this.setState({
+                isLoading: false
+            })
+        }
+        else if(error.response && error.response.status && error.response.status === 401) {
+            Authentication.clearData();
+            window.location.reload();
+            alert("As suas credenciais já não são válidas.");
+        }
     };
 
     onChangeLimit(event, data) {
