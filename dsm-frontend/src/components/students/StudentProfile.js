@@ -332,14 +332,16 @@ class StudentProfile extends Component {
                                         </div>
                                     </div>
                                 </Form.Group>
-                                <Button 
-                                    disabled={!this.state.edit}
-                                    type="submit"
-                                    className="ui button"
-                                    onClick={this.handleSubmit.bind(this)}
-                                >
-                                    GUARDAR
-                                </Button>
+                                { this.state.userType === 'ROLE_SECRETARY' && 
+                                    <Button 
+                                        disabled={!this.state.edit}
+                                        type="submit"
+                                        className="ui button"
+                                        onClick={this.handleSubmit.bind(this)}
+                                    >
+                                        GUARDAR
+                                    </Button>
+                                }
                                 <Message positive hidden={!this.state.message}>
                                     <Message.Header>Sucesso</Message.Header>
                                     <p>{this.state.message}</p>
