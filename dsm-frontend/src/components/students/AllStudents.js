@@ -84,9 +84,7 @@ class AllStudents extends Component {
             totalCount: response.data.students.length
         });
 
-        setTimeout(()=>{
-            this.setState({isLoading: false});
-        }, 1000);
+        this.setState({isLoading: false});
     };
 
     /**
