@@ -36,6 +36,7 @@ import StudentProfile from './students/StudentProfile';
 import MarkLesson from "./lessons/MarkLesson";
 import InstructorHome from "./instructor/InstructorHome";
 import ConfirmNewLesson from "./lessons/ConfirmNewLesson";
+import InstructorLessons from "./instructor/InstructorLessons";
 import NextPracticalLessons from './students/NextPracticalLessons';
 
 /**
@@ -97,6 +98,7 @@ const Root = ({ store }) => {
                 <PrivateRoute exact path={Routes.STUDENTS} component={AllStudents} />
                 <PrivateRoute exact path={Routes.STUDENT_PROFILE} component={StudentProfile} />
                 <PrivateRoute exact path={Routes.HOME_ANNOUNCEMENTS} component={Announcements} />
+                <PrivateRoute exact path={Routes.LESSONS} component={InstructorLessons} />
                 <Route exact path={Routes.CONTACTS} render={ props => <ErrorPage {...props} />} />
                 <Redirect from="/" exact to={Routes.HOME} />
                 <Redirect from="/login" exact to={Routes.HOME} />

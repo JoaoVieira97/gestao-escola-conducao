@@ -361,6 +361,27 @@ public class DSMFacade {
         return lessonBean.createNewLesson(studentID, instructorID, categoryID, timestamp);
     }
 
+
+    public static List<PracticalLesson> getNextPracticalLessonsInstructor(int instructorID){
+
+        return lessonBean.getNextPracticalLessonsInstructor(instructorID);
+    }
+
+    public static List<PracticalLesson> getOpenedPracticalLessonsInstructor(int instructorID){
+
+        return lessonBean.getOpenedPracticalLessonsInstructor(instructorID);
+    }
+
+    public static List<TheoreticalLesson> getNextTheoreticalLessonsInstructor(int instructorID){
+
+        return lessonBean.getNextTheoreticalLessonsInstructor(instructorID);
+    }
+
+    public static List<TheoreticalLesson> getOpenedTheoreticalLessonsInstructor(int instructorID){
+
+        return lessonBean.getOpenedTheoreticalLessonsInstructor(instructorID);
+    }
+
     // ------------------------------------------------------------
 
 

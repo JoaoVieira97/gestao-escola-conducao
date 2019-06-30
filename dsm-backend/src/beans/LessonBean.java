@@ -290,4 +290,104 @@ public class LessonBean implements LessonBeanLocal{
 
         return false;
     }
+
+    @Override
+    public List<PracticalLesson> getNextPracticalLessonsInstructor(int instructorID){
+
+        try {
+
+            List<Lesson> lessons = LessonDAO
+                                                .queryLesson("InstructorUserID = " + instructorID +
+                                                                        "AND State='reserved'",
+                                                            "StartTime");
+
+            List<PracticalLesson> practicalLessons = new ArrayList<>();
+
+            if(lessons !=null) {
+                 practicalLessons = lessons.stream().filter(l -> l instanceof PracticalLesson)
+                        .map(l -> (PracticalLesson) l).collect(Collectors.toList());
+            }
+            return practicalLessons;
+
+        } catch (PersistentException e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
+    @Override
+    public List<PracticalLesson> getOpenedPracticalLessonsInstructor(int instructorID){
+
+        try {
+
+            List<Lesson> lessons = LessonDAO
+                    .queryLesson("InstructorUserID = " + instructorID +
+                                    "AND State='opened'",
+                            "StartTime");
+
+            List<PracticalLesson> practicalLessons = new ArrayList<>();
+
+            if(lessons !=null) {
+                practicalLessons = lessons.stream().filter(l -> l instanceof PracticalLesson)
+                        .map(l -> (PracticalLesson) l).collect(Collectors.toList());
+            }
+            return practicalLessons;
+
+        } catch (PersistentException e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
+    @Override
+    public List<TheoreticalLesson> getNextTheoreticalLessonsInstructor(int instructorID){
+
+        try {
+
+            List<Lesson> lessons = LessonDAO
+                    .queryLesson("InstructorUserID = " + instructorID +
+                                    "AND State='reserved'",
+                            "StartTime");
+
+            List<TheoreticalLesson> theoreticalLessons = new ArrayList<>();
+
+            if(lessons !=null) {
+                theoreticalLessons = lessons.stream().filter(l -> l instanceof TheoreticalLesson)
+                        .map(l -> (TheoreticalLesson) l).collect(Collectors.toList());
+            }
+            return theoreticalLessons;
+
+        } catch (PersistentException e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
+    @Override
+    public List<TheoreticalLesson> getOpenedTheoreticalLessonsInstructor(int instructorID){
+
+        try {
+
+            List<Lesson> lessons = LessonDAO
+                    .queryLesson("InstructorUserID = " + instructorID +
+                                    "AND State='opened'",
+                            "StartTime");
+
+            List<TheoreticalLesson> theoreticalLessons = new ArrayList<>();
+
+            if(lessons !=null) {
+                theoreticalLessons = lessons.stream().filter(l -> l instanceof TheoreticalLesson)
+                        .map(l -> (TheoreticalLesson) l).collect(Collectors.toList());
+            }
+            return theoreticalLessons;
+
+        } catch (PersistentException e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
 }
