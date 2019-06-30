@@ -15,6 +15,7 @@ import _ from 'lodash';
 import { fetchApi } from '../../services/api/index';
 import {StudentFilter} from "./StudentFilter";
 import Routes from "../../services/Routes";
+import Authentication from "../../services/Authentication";
 
 
 
@@ -34,22 +35,40 @@ class AllStudents extends Component {
             _page: 1,
             _limit: 10,
 
+            userType: '',
+
             isSearching: false,
             isLoading: true
         }
     };
 
-    componentDidMount() {
+    async componentDidMount() {
 
-        fetchApi(
-            'get','/students',
-            {},  {},
-            this.successHandler, this.errorHandler
-        );
+        const userType = Authentication.getUserType();
 
-        setTimeout(()=>{
-            this.setState({isLoading: false});
-        }, 1000);
+        await this.setState({
+            userType : userType,
+        });
+
+        if(userType === 'ROLE_SECRETARY'){
+
+            fetchApi(
+                'get','/students',
+                {},  {},
+                this.successHandler, this.errorHandler
+            );
+        }
+        else{
+
+            //ROLE_INSTRUCTOR
+            fetchApi(
+                'get','/instructor/students',
+                {},  {},
+                this.successHandler, this.errorHandler
+            );
+        }
+
+
     }
 
     /**
@@ -60,9 +79,15 @@ class AllStudents extends Component {
 
         this.setState({
             allStudents: response.data.students,
-            students: response.data.students,
+            students: response.data.students
+                        .slice((this.state._page - 1) * this.state._limit ,
+                            (this.state._page * this.state._limit) - 1),
             totalCount: response.data.students.length
         });
+
+        setTimeout(()=>{
+            this.setState({isLoading: false});
+        }, 1000);
     };
 
     /**
@@ -114,18 +139,51 @@ class AllStudents extends Component {
         }
     }
 
+    contains = (field, query) => {
+        return !!field.includes(query);
+    };
+
     onSubmitFilter(filter) {
+
         if (filter !== this.state.query) {
-            this.setState({ query: filter, _page: 1, loading: true });
+            const formatText = _.capitalize(filter);
+
+            //Filtrar os AllStudents ou só os da própria página?
+            const students = _.filter(this.state.allStudents, student => {
+                return this.contains(student.name, formatText);
+            });
+
+            this.setState({
+                query: filter,
+                _page: 1,
+                students: students
+                            .slice((this.state._page - 1) * this.state._limit ,
+                                (this.state._page * this.state._limit) - 1),
+                //isSearching: true
+            });
+        }
+        else if(filter === ''){
+            this.setState({
+                query: filter,
+                _page: 1,
+                students: this.state.allStudents
+                            .slice((this.state._page - 1) * this.state._limit ,
+                                (this.state._page * this.state._limit) - 1),
+                //isSearching: true
+            });
         }
     }
 
-    onChangePage(event, data) {
+    onChangePage = (e, data) => {
         const {activePage} = data;
         if (activePage !== this.state._page) {
-            this.setState({ _page: activePage });
+            this.setState({
+                _page: activePage,
+                students: this.state.allStudents
+                                .slice((activePage - 1) * this.state._limit , (activePage * this.state._limit) - 1),
+            });
         }
-    }
+    };
 
     handleSort = clickedColumn => () => {
 
@@ -193,14 +251,16 @@ class AllStudents extends Component {
                 <Segment loading={this.state.isLoading}>
                     <Form>
                         <Form.Group widths='equal'>
-                            <Button icon labelPosition='left'
-                                    size='small' color='grey'
-                                    style={{marginTop: '10px', marginLeft: '5px'}}
-                                    onClick={() => this.props.history.push(Routes.REGISTER_STUDENT)}
-                            >
-                                <Icon name='user' />
-                                <p>Adicionar</p>
-                            </Button>
+                            {this.state.userType === 'ROLE_SECRETARY' &&
+                                <Button icon labelPosition='left'
+                                        size='small' color='grey'
+                                        style={{marginTop: '10px', marginLeft: '5px'}}
+                                        onClick={() => this.props.history.push(Routes.REGISTER_STUDENT)}
+                                >
+                                    <Icon name='user'/>
+                                    <p>Adicionar</p>
+                                </Button>
+                            }
                             <StudentFilter
                                 filter={this.state.query}
                                 totalCount={this.state.totalCount}
@@ -253,7 +313,7 @@ class AllStudents extends Component {
                                         secondary
                                         totalPages={Math.ceil(this.state.totalCount / this.state._limit)}
                                         activePage={this.state._page}
-                                        onPageChange={this.onChangePage.bind(this)}
+                                        onPageChange={this.onChangePage}
                                     />
                                 </Table.HeaderCell>
                             </Table.Row>

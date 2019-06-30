@@ -46,7 +46,7 @@ public class InstructorBean implements InstructorBeanLocal{
 
 
     /**
-     * Get user lessons.
+     * Get instructor's working days.
      * @param instructorID
      * @return
      */
@@ -58,6 +58,42 @@ public class InstructorBean implements InstructorBeanLocal{
             Instructor instructor = InstructorDAO.getInstructorByORMID(instructorID);
             if(instructor != null)
                 return Arrays.asList(instructor.workingDays.toArray());
+
+        } catch (PersistentException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    /**
+     * Get user lessons.
+     * @param instructorID
+     * @return
+     */
+    @Override
+    public List<Student> getInstructorStudents(int instructorID) {
+
+        try {
+
+            List<Student> allStudents = StudentDAO.queryStudent("UserID>0", null);
+
+            List<Student> res = new ArrayList<>();
+
+            for(Student student : allStudents){
+
+                List<Register> registers = RegisterDAO.queryRegister("StudentUserID="+student.getID(),
+                                            "InitialDate");
+
+                for(Register register : registers) {
+                    if (register.getInstructor().getID() == instructorID){
+                        res.add(student);
+                        break;
+                    }
+                }
+            }
+
+            return res;
 
         } catch (PersistentException e) {
             e.printStackTrace();

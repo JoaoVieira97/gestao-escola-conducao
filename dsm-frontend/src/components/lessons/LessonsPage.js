@@ -900,7 +900,7 @@ class LessonsPage extends Component {
         }
 
         return (
-            <Container style={{marginTop: 30}}>
+            <Container style={{marginTop: 30, marginBottom:'20%'}}>
                 {
                     this.state.messageVisible &&
                     messageTop

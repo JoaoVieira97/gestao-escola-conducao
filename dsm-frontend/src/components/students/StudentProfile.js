@@ -16,6 +16,7 @@ import {
 } from 'semantic-ui-react';
 import { fetchApi } from '../../services/api/index';
 import Routes from "../../services/Routes";
+import Authentication from "../../services/Authentication";
 
 
 class StudentProfile extends Component {
@@ -32,11 +33,15 @@ class StudentProfile extends Component {
             nif: '',
             cc: '',
             edit: false,
-            manage: false
+            manage: false,
+
+            userType: '',
         }
     }
 
     async componentDidMount(){
+
+        const userType = Authentication.getUserType();
 
         let birth = this.props.location.state.student.birth
         let birth_aux = birth.split("/")
@@ -49,7 +54,9 @@ class StudentProfile extends Component {
             email: this.props.location.state.student.email,
             address: this.props.location.state.student.address,
             nif: this.props.location.state.student.nif.toString(),
-            cc: this.props.location.state.student.cc
+            cc: this.props.location.state.student.cc,
+
+            userType: userType
         })
 
     }
@@ -144,10 +151,8 @@ class StudentProfile extends Component {
     };
     
     render() {
-
         return (
             <Container>
-
                 <Dimmer inverted active={this.state.isLoading}>
                     <Loader>A carregar</Loader>
                 </Dimmer>
@@ -157,7 +162,8 @@ class StudentProfile extends Component {
                         <Breadcrumb size='large'>
                             <Breadcrumb.Section
                                 style={{color: 'grey'}}
-                                onClick={() => this.props.history.push(Routes.HOME)}
+
+                                onClick={() => this.props.history.goBack()}
                             >
                                 Alunos
                             </Breadcrumb.Section>
@@ -167,60 +173,64 @@ class StudentProfile extends Component {
 
                     </Grid.Column>
                     <Grid.Column width={10} style={{marginTop: "30px"}}>
-                        <Button 
-                            icon='edit'
-                            content='Clique para editar'
-                            color={(!this.state.edit) ? 'blue' : 'black'} 
-                            onClick={() => this.setState({edit: !this.state.edit})}
-                        />
-                        <Button 
-                            color={(!this.state.manage) ? 'orange' : 'black'}
-                            icon='student' 
-                            content='Gerir'
-                            onClick={() => this.setState({manage: !this.state.manage})}
-                        />
-                        <Segment 
-                            className="ui center aligned"
-                            color="orange" 
-                            hidden={!this.state.manage}
-                        >
-                            <Button
-                                style={{marginBottom: '3px'}}
-                                icon
-                                labelPosition='left'
-                                onClick={() => this.props.history.push(Routes.REGISTER_STUDENT_CATEGORY, {student: this.state.student})}
-                            >
-                                <Icon name='file alternate outline' color='orange'/>
-                                <p>Categorias</p>
-                            </Button>
-                            <Button
-                                style={{marginBottom: '3px'}}
-                                icon
-                                labelPosition='left'
-                                onClick={() => this.props.history.push(Routes.REGISTER_STUDENT_PAYMENT, {student: this.state.student})}
-                            >
-                                <Icon name='euro sign' color='orange'/>
-                                <p>Pagamentos</p>
-                            </Button>
-                            <Button
-                                style={{marginBottom: '3px'}}
-                                icon
-                                labelPosition='left'
-                                onClick={() => this.props.history.push(Routes.REGISTER_STUDENT_EXAM, {student: this.state.student})}
-                            >
-                                <Icon name='clipboard outline' color='orange'/>
-                                <p>Exames</p>
-                            </Button>
-                            <Button
-                                style={{marginBottom: '3px'}}
-                                icon
-                                labelPosition='left'
-                                onClick={() => this.props.history.push(Routes.REGISTER_STUDENT_ANNOUNCEMENT, {student: this.state.student})}
-                            >
-                                <Icon name='bell outline' color='orange'/>
-                                <p>Enviar aviso</p>
-                            </Button>
-                        </Segment>
+                        { this.state.userType === 'ROLE_SECRETARY' &&
+                            <div>
+                                <Button
+                                    icon='edit'
+                                    content='Clique para editar'
+                                    color={(!this.state.edit) ? 'blue' : 'black'}
+                                    onClick={() => this.setState({edit: !this.state.edit})}
+                                />
+                                <Button
+                                    color={(!this.state.manage) ? 'orange' : 'black'}
+                                    icon='student'
+                                    content='Gerir'
+                                    onClick={() => this.setState({manage: !this.state.manage})}
+                                />
+                                <Segment
+                                    className="ui center aligned"
+                                    color="orange"
+                                    hidden={!this.state.manage}
+                                >
+                                    <Button
+                                        style={{marginBottom: '3px'}}
+                                        icon
+                                        labelPosition='left'
+                                        onClick={() => this.props.history.push(Routes.REGISTER_STUDENT_CATEGORY, {student: this.state.student})}
+                                    >
+                                        <Icon name='file alternate outline' color='orange'/>
+                                        <p>Categorias</p>
+                                    </Button>
+                                    <Button
+                                        style={{marginBottom: '3px'}}
+                                        icon
+                                        labelPosition='left'
+                                        onClick={() => this.props.history.push(Routes.REGISTER_STUDENT_PAYMENT, {student: this.state.student})}
+                                    >
+                                        <Icon name='euro sign' color='orange'/>
+                                        <p>Pagamentos</p>
+                                    </Button>
+                                    <Button
+                                        style={{marginBottom: '3px'}}
+                                        icon
+                                        labelPosition='left'
+                                        onClick={() => this.props.history.push(Routes.REGISTER_STUDENT_EXAM, {student: this.state.student})}
+                                    >
+                                        <Icon name='clipboard outline' color='orange'/>
+                                        <p>Exames</p>
+                                    </Button>
+                                    <Button
+                                        style={{marginBottom: '3px'}}
+                                        icon
+                                        labelPosition='left'
+                                        onClick={() => this.props.history.push(Routes.REGISTER_STUDENT_ANNOUNCEMENT, {student: this.state.student})}
+                                    >
+                                        <Icon name='bell outline' color='orange'/>
+                                        <p>Enviar aviso</p>
+                                    </Button>
+                                </Segment>
+                            </div>
+                        }
                         <Segment>
                             <Header 
                                 className='centered' 

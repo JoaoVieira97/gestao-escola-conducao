@@ -1,10 +1,7 @@
 package beans;
 
 
-import dsm.Lesson;
-import dsm.PracticalLesson;
-import dsm.TheoreticalLesson;
-import dsm.WorkingDay;
+import dsm.*;
 
 import javax.ejb.Local;
 import java.util.List;
@@ -14,4 +11,6 @@ public interface InstructorBeanLocal {
 
 
     List<WorkingDay> getWorkingDays(int instructorID);
+
+    List<Student> getInstructorStudents(int instructorID);
 }

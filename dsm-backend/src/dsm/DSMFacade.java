@@ -436,4 +436,9 @@ public class DSMFacade {
         return instructorBean.getWorkingDays(instructorID);
     }
 
+    public static List<Student> getInstructorStudents(int instructorID) {
+
+        return instructorBean.getInstructorStudents(instructorID);
+    }
+
 }

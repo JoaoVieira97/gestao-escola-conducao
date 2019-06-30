@@ -93,6 +93,8 @@ const Root = ({ store }) => {
             <Switch>
                 <PrivateRoute exact path={Routes.HOME} component={InstructorHome} />
                 <PrivateRoute exact path={Routes.STUDENTS} component={AllStudents} />
+                <PrivateRoute exact path={Routes.STUDENT_PROFILE} component={StudentProfile} />
+                <PrivateRoute exact path={Routes.HOME_ANNOUNCEMENTS} component={Announcements} />
                 <Route exact path={Routes.CONTACTS} render={ props => <ErrorPage {...props} />} />
                 <Redirect from="/" exact to={Routes.HOME} />
                 <Redirect from="/login" exact to={Routes.HOME} />
