@@ -142,9 +142,16 @@ public class StudentBean implements StudentBeanLocal {
     public List<Exam> getStudentExams(int studentID) {
 
         try {
+            /*
             Student student =  StudentDAO.getStudentByORMID(studentID);
+            System.out.println("GET STUDENT" + student.exams);
+
             if (student != null)
-                return new ArrayList<>(student.exams.getCollection());
+                return Arrays.asList(student.exams.toArray());*/
+
+            List<Exam> res = ExamDAO.queryExam("StudentUserID="+studentID, "StartTime");
+
+            return res;
 
         } catch (PersistentException e) {
             e.printStackTrace();
