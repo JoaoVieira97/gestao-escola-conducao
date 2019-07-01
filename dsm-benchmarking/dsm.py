@@ -7,3 +7,13 @@ students_info = [
     ['joao@gmail.com', 'password'],
     ['raphael@gmail.com', 'password']
 ]
+
+instructors_info = [
+    ['instrutor_1@gmail.com', 'password'],
+    ['instrutor_2@gmail.com', 'password']
+]
+
+secretaries_info = [
+    ['secretary_1@gmail.com', 'password'],
+    ['secretary_1@gmail.com', 'password']
+]
