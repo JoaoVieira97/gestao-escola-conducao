@@ -6,9 +6,10 @@ import {
     Grid,
     List,
     Button,
-    Container, Modal,
+    Container, Modal, Loader, Dimmer,
 } from 'semantic-ui-react';
 import {fetchApi} from "../../services/api";
+import Routes from "../../services/Routes";
 
 class InstructorLessons extends Component {
 
@@ -29,6 +30,10 @@ class InstructorLessons extends Component {
             openedTheoreticalLessons: [],
 
             modalCancelOpen: false,
+            lessonCanceled: -1,
+
+            modalFinalizePractical: false,
+            lessonFinalize: -1,
         };
     }
 
@@ -58,6 +63,10 @@ class InstructorLessons extends Component {
             this.successFetchOpenedTheoreticalLessons, this.errorFetchOpenedTheoreticalLessons
         );
 
+        setTimeout(
+            () => this.setState({
+            isLoading: false,}) , 1000);
+
     }
 
     /**
@@ -80,9 +89,6 @@ class InstructorLessons extends Component {
     };
 
     successFetchNextTheoreticalLessons = async (response) => {
-
-        //buscar com state 'opened'
-
         const data = response.data;
 
         await this.setState({
@@ -95,8 +101,6 @@ class InstructorLessons extends Component {
 
     successFetchOpenedPracticalLessons = async (response) => {
 
-        //buscar com state 'reserved'
-
         const data = response.data;
 
         await this.setState({
@@ -108,8 +112,6 @@ class InstructorLessons extends Component {
     };
 
     successFetchOpenedTheoreticalLessons = async (response) => {
-
-        //
 
         const data = response.data;
 
@@ -131,7 +133,6 @@ class InstructorLessons extends Component {
      * @param error
      */
     errorFetchNextPracticalLessons = (error) => {
-
 
         console.log('ERROR1');
         console.log(error);
@@ -181,6 +182,117 @@ class InstructorLessons extends Component {
 
 
     /**
+     * Handle the cancel of a practical lesson
+     * @param lesson
+     */
+    handleCancelPracticalLesson = (lesson) => {
+
+        this.setState({modalFinalizePractical: false})
+
+        console.log(lesson);
+    };
+
+    /**
+     * Render Modal to cancel practical lesson
+     * @param lesson
+     * @returns {*}
+     */
+    renderModalCancelPractical(lesson) {
+        return (
+            <Modal trigger={
+                <Button floated='right' icon labelPosition='right'
+                        inverted color='red'
+                        onClick={() => this.setState({modalCancelOpen: true, lessonCanceled: lesson.id})}>
+                    <Icon name='times circle outline'/>
+                    {
+                        'Cancelar'
+                    }
+                </Button>
+            }
+                   size='small'
+                   open={this.state.modalCancelOpen}
+                   onClose={() => this.setState({modalCancelOpen: false})}
+            >
+                <Header icon='delete calendar' content='Cancelar Aula'/>
+                <Modal.Content>
+                    <p>
+                        Tem a certeza que pretende cancelar esta aula?
+                    </p>
+                </Modal.Content>
+                <Modal.Actions>
+                    <Button color='red' inverted
+                            onClick={() => this.setState({modalCancelOpen: false})}>
+                        <Icon name='remove'/> Não
+                    </Button>
+                    <Button color='green' inverted
+                            onClick={() => this.handleCancelPracticalLesson(this.state.lessonCanceled)}>
+                        <Icon name='checkmark'/> Sim
+                    </Button>
+                </Modal.Actions>
+            </Modal>
+        )
+    }
+
+
+    /**
+     * Handle the finalize practical lesson
+     * @param response
+     * @param lesson
+     */
+    handleFinalizePracticalLesson = (response, lesson) => {
+
+        this.setState({modalFinalizePractical: false});
+
+        console.log(response);
+        console.log(lesson);
+
+        //state reserved -> realized
+        //response=true -> mudar isStudentPresent
+        //
+    };
+
+    /**
+     * Render Modal to finalize practical Lesson
+     * @param lesson
+     * @returns {*}
+     */
+    renderModalPractical(lesson) {
+        return (
+            <Modal trigger={
+                <Button floated='right' icon labelPosition='right'
+                        inverted color='blue'
+                    onClick={() => this.setState({modalFinalizePractical: true, lessonFinalize: lesson.id})}
+                >
+                    <Icon name='tasks'/>
+                    {'Registar Presença'}
+                </Button>
+            }
+                   size='small'
+                   open={this.state.modalFinalizePractical}
+                   onClose={() => this.setState({modalFinalizePractical: false})}
+            >
+                <Header icon='clipboard check' content='Registar Presença Aula Prática'/>
+                <Modal.Content>
+                    <p>
+                        O aluno compareceu à aula?
+                    </p>
+                </Modal.Content>
+                <Modal.Actions>
+                    <Button color='red' inverted
+                            onClick={() => this.handleFinalizePracticalLesson(false, this.state.lessonFinalize)}>
+                        <Icon name='remove'/> Não
+                    </Button>
+                    <Button color='green' inverted
+                            onClick={() => this.handleFinalizePracticalLesson(true, this.state.lessonFinalize)}>
+                        <Icon name='checkmark'/> Sim
+                    </Button>
+                </Modal.Actions>
+            </Modal>
+        )
+    }
+
+
+    /**
      * Enable scroll or not
      * @param array
      * @returns {*}
@@ -223,39 +335,7 @@ class InstructorLessons extends Component {
                                 :
                                 this.state.nextPracticalLessons.map(lesson => (
                                     <List.Item key={lesson.id} style={{marginBottom: "10px"}}>
-                                        {
-                                        <Modal trigger={
-                                            <Button floated='right' icon labelPosition='right'
-                                                    inverted color='red'
-                                                    onClick={() => this.setState({modalCancelOpen: true})}>
-                                                <Icon name='times circle outline'/>
-                                                {
-                                                    'Cancelar'
-                                                }
-                                            </Button>
-                                        }
-                                               size='small'
-                                               open={this.state.modalCancelOpen}
-                                               onClose={() => this.setState({modalCancelOpen: false})}
-                                        >
-                                            <Header icon='delete calendar' content='Cancelar Aula'/>
-                                            <Modal.Content>
-                                                <p>
-                                                    Tem a certeza que pretende cancelar esta aula?
-                                                </p>
-                                            </Modal.Content>
-                                            <Modal.Actions>
-                                                <Button color='red' inverted
-                                                        onClick={() => this.setState({modalCancelOpen: false})}>
-                                                    <Icon name='remove'/> Não
-                                                </Button>
-                                                <Button color='green' inverted
-                                                        onClick={() => this.handleLessonCancel(lesson.id)}>
-                                                    <Icon name='checkmark'/> Sim
-                                                </Button>
-                                            </Modal.Actions>
-                                        </Modal>
-                                        }
+                                        {this.renderModalCancelPractical(lesson)}
                                         <Icon name='calendar outline' />
                                         <List.Content>
                                             <List.Header>Aula Prática</List.Header>
@@ -265,6 +345,9 @@ class InstructorLessons extends Component {
                                             </List.Description>
                                             <List.Description style={{marginTop: "3px"}}>
                                                 <b>Duração:</b> {lesson.duration +" min"}
+                                            </List.Description>
+                                            <List.Description style={{marginTop: "3px"}}>
+                                                <b>Aluno:</b> {lesson.students.collection[0].name}
                                             </List.Description>
                                         </List.Content>
                                     </List.Item>
@@ -279,6 +362,12 @@ class InstructorLessons extends Component {
             <Card fluid raised color={'orange'}>
                 <Card.Content>
                     <Card.Header style={{color: '#f2711c'}}>
+                        <Button floated='right'
+                                color='black'
+                                //onClick={() => this.setState({modalFinalizePractical: true, lessonFinalize: lesson.id})}
+                        >
+                            {'MARCAR AULA'}
+                        </Button>
                         <Icon.Group style={{marginRight: "8px"}}>
                             <Icon color='orange' name='calendar' />
                         </Icon.Group>
@@ -341,13 +430,7 @@ class InstructorLessons extends Component {
                                     :
                                     this.state.openedPracticalLessons.map(lesson => (
                                         <List.Item key={lesson.id} style={{marginBottom: "10px"}}>
-                                            <Button floated='right' icon labelPosition='right'
-                                                    inverted color='blue'
-                                                    //onClick={() => }
-                                            >
-                                                <Icon name='tasks'/>
-                                                {'Registar Presença'}
-                                            </Button>
+                                            {this.renderModalPractical(lesson)}
                                             <Icon name='calendar outline' />
                                             <List.Content>
                                                 <List.Header>Aula Prática</List.Header>
@@ -357,6 +440,9 @@ class InstructorLessons extends Component {
                                                 </List.Description>
                                                 <List.Description style={{marginTop: "3px"}}>
                                                     <b>Duração:</b> {lesson.duration +" min"}
+                                                </List.Description>
+                                                <List.Description style={{marginTop: "3px"}}>
+                                                    <b>Aluno:</b> {lesson.students.collection[0].name}
                                                 </List.Description>
                                             </List.Content>
                                         </List.Item>
@@ -393,7 +479,12 @@ class InstructorLessons extends Component {
                                         <List.Item key={lesson.id} style={{marginBottom: "10px"}}>
                                             <Button floated='right' icon labelPosition='right'
                                                     inverted color='orange'
-                                                //onClick={() => }
+                                                    onClick={() => this.props.history.push({
+                                                        pathname: Routes.FINALIZE_THEORETICAL,
+                                                        state: {
+                                                            lesson: lesson,
+                                                        }
+                                                    })}
                                             >
                                                 <Icon name='tasks'/>
                                                 {'Registar Presenças'}
@@ -419,7 +510,10 @@ class InstructorLessons extends Component {
         );
 
         return (
-            <Container style={{marginTop: 30, marginBottom:'20%'}}>
+            <Container style={{marginTop: 30, marginBottom:'10%'}}>
+                <Dimmer inverted active={this.state.isLoading}>
+                    <Loader>A carregar</Loader>
+                </Dimmer>
                 <Grid divided={'vertically'}>
                     <Grid.Row>
                         <Grid stackable centered columns={2}>

@@ -7,10 +7,7 @@ import org.orm.PersistentSession;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -309,18 +306,16 @@ public class LessonBean implements LessonBeanLocal{
     public List<PracticalLesson> getNextPracticalLessonsInstructor(int instructorID){
 
         try {
-            Timestamp ts = new Timestamp(new Date());
+            Timestamp ts = new Timestamp((new Date().getTime()));
 
-
-            List<Lesson> lessons = LessonDAO
-                                                .queryLesson("InstructorUserID = " + instructorID +
-                                                                        "AND State='reserved'",
-                                                            "StartTime");
+            List<Lesson> lessons = LessonDAO.queryLesson("InstructorUserID = " + instructorID +
+                            "AND StartTime > '"+ts.toString()+"'",
+                    "StartTime");
 
             List<PracticalLesson> practicalLessons = new ArrayList<>();
 
             if(lessons !=null) {
-                 practicalLessons = lessons.stream().filter(l -> l instanceof PracticalLesson)
+                practicalLessons = lessons.stream().filter(l -> l instanceof PracticalLesson)
                         .map(l -> (PracticalLesson) l).collect(Collectors.toList());
             }
             return practicalLessons;
@@ -339,7 +334,7 @@ public class LessonBean implements LessonBeanLocal{
 
             List<Lesson> lessons = LessonDAO
                     .queryLesson("InstructorUserID = " + instructorID +
-                                    "AND State='opened'",
+                                    "AND State='reserved'",
                             "StartTime");
 
             List<PracticalLesson> practicalLessons = new ArrayList<>();
@@ -362,11 +357,11 @@ public class LessonBean implements LessonBeanLocal{
 
         try {
 
-            List<Lesson> lessons = LessonDAO
-                    .queryLesson("InstructorUserID = " + instructorID +
-                                    "AND State='reserved'",
-                            "StartTime");
+            Timestamp ts = new Timestamp((new Date().getTime()));
 
+            List<Lesson> lessons = LessonDAO.queryLesson("InstructorUserID = " + instructorID +
+                            "AND StartTime > '"+ts.toString()+"'",
+                    "StartTime");
             List<TheoreticalLesson> theoreticalLessons = new ArrayList<>();
 
             if(lessons !=null) {
@@ -387,10 +382,9 @@ public class LessonBean implements LessonBeanLocal{
 
         try {
 
-            List<Lesson> lessons = LessonDAO
-                    .queryLesson("InstructorUserID = " + instructorID +
-                                    "AND State='opened'",
-                            "StartTime");
+            List<Lesson> lessons = LessonDAO.queryLesson("InstructorUserID = " + instructorID +
+                            "AND State='opened'",
+                    "StartTime");
 
             List<TheoreticalLesson> theoreticalLessons = new ArrayList<>();
 
