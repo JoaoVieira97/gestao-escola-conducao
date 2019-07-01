@@ -9,8 +9,6 @@ import {
     Container, Modal,
 } from 'semantic-ui-react';
 import {fetchApi} from "../../services/api";
-import moment from 'moment';
-import Routes from "../../services/Routes";
 
 class InstructorLessons extends Component {
 
@@ -68,6 +66,8 @@ class InstructorLessons extends Component {
      */
     successFetchNextPracticalLessons = async (response) => {
 
+        //buscar com a data futura
+
         const data = response.data;
 
         await this.setState({
@@ -81,6 +81,8 @@ class InstructorLessons extends Component {
 
     successFetchNextTheoreticalLessons = async (response) => {
 
+        //buscar com state 'opened'
+
         const data = response.data;
 
         await this.setState({
@@ -93,6 +95,8 @@ class InstructorLessons extends Component {
 
     successFetchOpenedPracticalLessons = async (response) => {
 
+        //buscar com state 'reserved'
+
         const data = response.data;
 
         await this.setState({
@@ -104,6 +108,8 @@ class InstructorLessons extends Component {
     };
 
     successFetchOpenedTheoreticalLessons = async (response) => {
+
+        //
 
         const data = response.data;
 
@@ -174,10 +180,28 @@ class InstructorLessons extends Component {
      */
 
 
+    /**
+     * Enable scroll or not
+     * @param array
+     * @returns {*}
+     */
+    styleCard = (array) => {
+
+        if( array.length >= 5) {
+            return {
+                height:'350px',
+                overflow:'auto' ,
+                overflowY:'350px',
+            }
+        }
+        else return {};
+    };
+
     render() {
 
         const cardNextPracticalLessons = (
             <Card fluid raised color={'blue'} >
+
                 <Card.Content>
                     <Card.Header style={{color: '#2185d0'}}>
                         <Icon.Group style={{marginRight: "8px"}}>
@@ -187,7 +211,7 @@ class InstructorLessons extends Component {
                     </Card.Header>
                 </Card.Content>
                 <Card.Content >
-                    <div style={{ width:'100%', height:'200px', overflowY:'200px'}}>
+                    <div style={this.styleCard(this.state.nextPracticalLessons)}>
                         <List divided >
                             {
                             this.state.nextPracticalLessons.length === 0 ?
@@ -262,6 +286,7 @@ class InstructorLessons extends Component {
                     </Card.Header>
                 </Card.Content>
                 <Card.Content>
+                    <div style={this.styleCard(this.state.nextTheoreticalLessons)}>
                     <List divided>
                         {
                             this.state.nextTheoreticalLessons.length === 0 ?
@@ -288,11 +313,110 @@ class InstructorLessons extends Component {
                                 ))
                         }
                     </List>
+                    </div>
                 </Card.Content>
             </Card>
         );
-        //const cardOpenedPracticalLessons;
-        //const cardOpenedTHeoreticalLessons;
+        const cardOpenedPracticalLessons = (
+            <Card fluid raised color={'blue'} >
+
+                <Card.Content>
+                    <Card.Header style={{color: '#2185d0'}}>
+                        <Icon.Group style={{marginRight: "8px"}}>
+                            <Icon color='blue' name='calendar' />
+                        </Icon.Group>
+                        {'Aulas Práticas em Aberto'}
+                    </Card.Header>
+                </Card.Content>
+                <Card.Content >
+                    <div style={this.styleCard(this.state.openedPracticalLessons)}>
+                        <List divided >
+                            {
+                                this.state.openedPracticalLessons.length === 0 ?
+                                    <List.Item disabled>
+                                        <List.Content>
+                                            <Header as='h4' color='grey'>{'Sem aulas práticas em aberto.'}</Header>
+                                        </List.Content>
+                                    </List.Item>
+                                    :
+                                    this.state.openedPracticalLessons.map(lesson => (
+                                        <List.Item key={lesson.id} style={{marginBottom: "10px"}}>
+                                            <Button floated='right' icon labelPosition='right'
+                                                    inverted color='blue'
+                                                    //onClick={() => }
+                                            >
+                                                <Icon name='tasks'/>
+                                                {'Registar Presença'}
+                                            </Button>
+                                            <Icon name='calendar outline' />
+                                            <List.Content>
+                                                <List.Header>Aula Prática</List.Header>
+                                                <List.Description style={{marginTop: "3px"}}>
+                                                    <b>Início:</b> {" "+ lesson.startTime.split(" ")[0]} às
+                                                    {" " + lesson.startTime.split(" ")[1].replace(":","h")+"min"}
+                                                </List.Description>
+                                                <List.Description style={{marginTop: "3px"}}>
+                                                    <b>Duração:</b> {lesson.duration +" min"}
+                                                </List.Description>
+                                            </List.Content>
+                                        </List.Item>
+                                    ))
+                            }
+                        </List>
+                    </div>
+                </Card.Content>
+            </Card>
+        );
+        const cardOpenedTheoreticalLessons = (
+            <Card fluid raised color={'orange'} >
+
+                <Card.Content>
+                    <Card.Header style={{color: '#f2711c'}}>
+                        <Icon.Group style={{marginRight: "8px"}}>
+                            <Icon color='orange' name='calendar' />
+                        </Icon.Group>
+                        {'Aulas Teóricas em Aberto'}
+                    </Card.Header>
+                </Card.Content>
+                <Card.Content >
+                    <div style={this.styleCard(this.state.openedTheoreticalLessons)}>
+                        <List divided >
+                            {
+                                this.state.openedTheoreticalLessons.length === 0 ?
+                                    <List.Item disabled>
+                                        <List.Content>
+                                            <Header as='h4' color='grey'>{'Sem aulas teóricas em aberto.'}</Header>
+                                        </List.Content>
+                                    </List.Item>
+                                    :
+                                    this.state.openedTheoreticalLessons.map(lesson => (
+                                        <List.Item key={lesson.id} style={{marginBottom: "10px"}}>
+                                            <Button floated='right' icon labelPosition='right'
+                                                    inverted color='orange'
+                                                //onClick={() => }
+                                            >
+                                                <Icon name='tasks'/>
+                                                {'Registar Presenças'}
+                                            </Button>
+                                            <Icon name='calendar outline' />
+                                            <List.Content>
+                                                <List.Header>Aula Prática</List.Header>
+                                                <List.Description style={{marginTop: "3px"}}>
+                                                    <b>Início:</b> {" "+ lesson.startTime.split(" ")[0]} às
+                                                    {" " + lesson.startTime.split(" ")[1].replace(":","h")+"min"}
+                                                </List.Description>
+                                                <List.Description style={{marginTop: "3px"}}>
+                                                    <b>Duração:</b> {lesson.duration +" min"}
+                                                </List.Description>
+                                            </List.Content>
+                                        </List.Item>
+                                    ))
+                            }
+                        </List>
+                    </div>
+                </Card.Content>
+            </Card>
+        );
 
         return (
             <Container style={{marginTop: 30, marginBottom:'20%'}}>
@@ -300,20 +424,16 @@ class InstructorLessons extends Component {
                     <Grid.Row>
                         <Grid stackable centered columns={2}>
                             <Grid.Column>
-                                {cardNextPracticalLessons}
+                                <Grid.Row>
+                                    {cardNextPracticalLessons}
+                                    {cardOpenedPracticalLessons}
+                                </Grid.Row>
                             </Grid.Column>
                             <Grid.Column>
+                                <Grid.Row>
                                 {cardNextTheoreticalLessons}
-                            </Grid.Column>
-                        </Grid>
-                    </Grid.Row>
-                    <Grid.Row>
-                        <Grid stackable centered columns={2}>
-                            <Grid.Column>
-                                {cardNextPracticalLessons}
-                            </Grid.Column>
-                            <Grid.Column>
-                                {cardNextTheoreticalLessons}
+                                {cardOpenedTheoreticalLessons}
+                                </Grid.Row>
                             </Grid.Column>
                         </Grid>
                     </Grid.Row>
