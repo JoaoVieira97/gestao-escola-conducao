@@ -382,6 +382,11 @@ public class DSMFacade {
         return lessonBean.getOpenedTheoreticalLessonsInstructor(instructorID);
     }
 
+    public static List<Theme> getAllThemes(){
+
+        return lessonBean.getAllThemes();
+    }
+
     // ------------------------------------------------------------
 
 

@@ -32,4 +32,6 @@ public interface LessonBeanLocal {
     List<TheoreticalLesson> getNextTheoreticalLessonsInstructor(int instructorID);
 
     List<TheoreticalLesson> getOpenedTheoreticalLessonsInstructor(int instructorID);
+
+    List<Theme> getAllThemes();
 }

@@ -418,4 +418,22 @@ public class LessonBean implements LessonBeanLocal{
         return null;
 
     }
+
+    @Override
+    public List<Theme> getAllThemes(){
+
+        try {
+
+            List<Theme> themes = ThemeDAO.queryTheme("ID>0", "ID");
+
+            return themes;
+
+        } catch (PersistentException e) {
+            e.printStackTrace();
+        }
+        return null;
+
+
+    }
+
 }
