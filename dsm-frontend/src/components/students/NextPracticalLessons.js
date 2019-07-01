@@ -50,7 +50,7 @@ class RegisterPersonalAnnouncement extends Component {
 
     successFetchSchoolInformation = async (response) => {
         const data = response.data.schoolInfo;
-        console.log(data)
+        //console.log(data)
 
         await this.setState({
             maxTimeToCancel: data.maxTimeToCancel
@@ -64,7 +64,7 @@ class RegisterPersonalAnnouncement extends Component {
     };
 
     successFetchNextPracticalLessons = (response) => {
-        console.log(response.data.lessons)
+        //console.log(response.data.lessons)
 
         let lessons = []
         let limit = this.state.maxTimeToCancel.split(":");
@@ -93,7 +93,7 @@ class RegisterPersonalAnnouncement extends Component {
             })
         })
 
-        console.log(lessons)
+        //console.log(lessons)
         this.setState({
             lessons: lessons,
             isLoading: false
@@ -118,12 +118,10 @@ class RegisterPersonalAnnouncement extends Component {
     /**
      * When user select cancel practical lesson.
      */
-    handleLessonCancel = async (lessonId) => {
-        console.log(lessonId);
-
-        await this.setState({
-            modalCancelOpen: false,
-            lesson_canceled: lessonId
+    handleLessonCancel = (lessonId) => {
+        
+        this.setState({
+            modalCancelOpen: false
         });
 
         fetchApi(
@@ -175,6 +173,42 @@ class RegisterPersonalAnnouncement extends Component {
         }
     };
 
+    renderModal(lesson) {
+        return (
+            <Modal trigger={
+                <Button floated='right' icon labelPosition='right'
+                        inverted color='red'
+                        onClick={() => this.setState({modalCancelOpen: true, lesson_canceled: lesson.id})}>
+                    <Icon name='times circle outline'/>
+                    {
+                        'Cancelar'
+                    }
+                </Button>
+            }
+                   size='small'
+                   open={this.state.modalCancelOpen}
+                   onClose={() => this.setState({modalCancelOpen: false})}
+            >
+                <Header icon='delete calendar' content='Cancelar Aula'/>
+                <Modal.Content>
+                    <p>
+                        Tem a certeza que pretende cancelar esta aula?
+                    </p>
+                </Modal.Content>
+                <Modal.Actions>
+                    <Button color='red' inverted
+                            onClick={() => this.setState({modalCancelOpen: false})}>
+                        <Icon name='remove'/> Não
+                    </Button>
+                    <Button color='green' inverted
+                            onClick={() => this.handleLessonCancel(this.state.lesson_canceled)}>
+                        <Icon name='checkmark'/> Sim
+                    </Button>
+                </Modal.Actions>
+            </Modal>
+        )
+    }
+
     render(){
 
         const nextPracticalLessons = (
@@ -200,37 +234,7 @@ class RegisterPersonalAnnouncement extends Component {
                             this.state.lessons.map(lesson => (
                                 <List.Item key={lesson.id} style={{marginBottom: "10px"}}>
                                     {lesson.canCancel &&
-                                        <Modal trigger={
-                                            <Button floated='right' icon labelPosition='right'
-                                                    inverted color='red'
-                                                    onClick={() => this.setState({modalCancelOpen: true})}>
-                                                <Icon name='times circle outline'/>
-                                                {
-                                                    'Cancelar'
-                                                }
-                                            </Button>
-                                        }
-                                               size='small'
-                                               open={this.state.modalCancelOpen}
-                                               onClose={() => this.setState({modalCancelOpen: false})}
-                                        >
-                                            <Header icon='delete calendar' content='Cancelar Aula'/>
-                                            <Modal.Content>
-                                                <p>
-                                                    Tem a certeza que pretende cancelar esta aula?
-                                                </p>
-                                            </Modal.Content>
-                                            <Modal.Actions>
-                                                <Button color='red' inverted
-                                                        onClick={() => this.setState({modalCancelOpen: false})}>
-                                                    <Icon name='remove'/> Não
-                                                </Button>
-                                                <Button color='green' inverted
-                                                        onClick={() => this.handleLessonCancel(lesson.id)}>
-                                                    <Icon name='checkmark'/> Sim
-                                                </Button>
-                                            </Modal.Actions>
-                                        </Modal>
+                                        this.renderModal(lesson)
                                     }
                                     <Icon name='calendar outline' />
                                     <List.Content>

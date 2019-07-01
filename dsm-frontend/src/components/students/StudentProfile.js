@@ -4,7 +4,6 @@ import {
     Header,
     Dimmer,
     Loader,
-    Grid,
     Breadcrumb,
     Segment,
     Form,

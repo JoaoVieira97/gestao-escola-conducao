@@ -64,6 +64,8 @@ class LessonsPage extends Component {
             modalCancelOpen: false,
 
             categoryChoosedId: -1,
+
+            lesson_canceled: ''
         };
     }
 
@@ -612,7 +614,7 @@ class LessonsPage extends Component {
      */
     handleLessonCancel = (lessonId) => {
         console.log(lessonId);
-
+        
         this.setState({
             isLoading: true,
             modalCancelOpen: false,
@@ -625,7 +627,7 @@ class LessonsPage extends Component {
             },  {},
             this.successHandlerCanceled, this.errorHandlerCanceled
         );
-
+        
     };
 
     /**
@@ -657,6 +659,42 @@ class LessonsPage extends Component {
         //TODO UMA MENSAGEM DE ERRO APARECER
         console.log(error);
     };
+
+    renderModal(lesson) {
+        return (
+            <Modal trigger={
+                <Button floated='right' icon labelPosition='right'
+                        inverted color='red'
+                        onClick={() => this.setState({modalCancelOpen: true, lesson_canceled: lesson.id})}>
+                    <Icon name='times circle outline'/>
+                    {
+                        'Cancelar'
+                    }
+                </Button>
+            }
+                   size='small'
+                   open={this.state.modalCancelOpen}
+                   onClose={() => this.setState({modalCancelOpen: false})}
+            >
+                <Header icon='delete calendar' content='Cancelar Aula'/>
+                <Modal.Content>
+                    <p>
+                        Tem a certeza que pretende cancelar esta aula?
+                    </p>
+                </Modal.Content>
+                <Modal.Actions>
+                    <Button color='red' inverted
+                            onClick={() => this.setState({modalCancelOpen: false})}>
+                        <Icon name='remove'/> Não
+                    </Button>
+                    <Button color='green' inverted
+                            onClick={() => this.handleLessonCancel(this.state.lesson_canceled)}>
+                        <Icon name='checkmark'/> Sim
+                    </Button>
+                </Modal.Actions>
+            </Modal>
+        )
+    }
 
 
 
@@ -699,37 +737,7 @@ class LessonsPage extends Component {
                             showPracticalLessons.map(lesson => (
                                 <List.Item key={lesson.id} style={{marginBottom: "10px"}}>
                                     {lesson.canCancel &&
-                                        <Modal trigger={
-                                            <Button floated='right' icon labelPosition='right'
-                                                    inverted color='red'
-                                                    onClick={() => this.setState({modalCancelOpen: true})}>
-                                                <Icon name='times circle outline'/>
-                                                {
-                                                    'Cancelar'
-                                                }
-                                            </Button>
-                                        }
-                                               size='small'
-                                               open={this.state.modalCancelOpen}
-                                               onClose={() => this.setState({modalCancelOpen: false})}
-                                        >
-                                            <Header icon='delete calendar' content='Cancelar Aula'/>
-                                            <Modal.Content>
-                                                <p>
-                                                    Tem a certeza que pretende cancelar esta aula?
-                                                </p>
-                                            </Modal.Content>
-                                            <Modal.Actions>
-                                                <Button color='red' inverted
-                                                        onClick={() => this.setState({modalCancelOpen: false})}>
-                                                    <Icon name='remove'/> Não
-                                                </Button>
-                                                <Button color='green' inverted
-                                                        onClick={() => this.handleLessonCancel(lesson.id)}>
-                                                    <Icon name='checkmark'/> Sim
-                                                </Button>
-                                            </Modal.Actions>
-                                        </Modal>
+                                        this.renderModal(lesson)
                                     }
                                     <Icon name='calendar outline' />
                                     <List.Content>
