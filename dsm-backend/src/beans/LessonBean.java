@@ -45,6 +45,8 @@ public class LessonBean implements LessonBeanLocal{
         return session;
     }
 
+    private static final int limit = 10;
+
     /**
      * Get user lessons.
      * @param studentId
@@ -56,9 +58,19 @@ public class LessonBean implements LessonBeanLocal{
         try {
 
             Student student = StudentDAO.getStudentByORMID(studentId);
-            if(student != null)
-                return new ArrayList<Lesson>(student.lessons.getCollection());
+            if(student != null) {
 
+                long today = (new Timestamp((new Date().getTime()))).getTime();
+
+                List<Lesson> lessons = new ArrayList<Lesson>(student.lessons.getCollection());
+                List<Lesson> limited = lessons.stream()
+                        .filter(l -> l.getStartTime().getTime() >= today)
+                        .sorted(Comparator.comparing(Lesson::getStartTime))
+                        .limit(limit)
+                        .collect(Collectors.toList());
+
+                return limited;
+            }
         } catch (PersistentException e) {
             e.printStackTrace();
         }
@@ -340,8 +352,11 @@ public class LessonBean implements LessonBeanLocal{
             List<PracticalLesson> practicalLessons = new ArrayList<>();
 
             if(lessons !=null) {
-                practicalLessons = lessons.stream().filter(l -> l instanceof PracticalLesson)
-                        .map(l -> (PracticalLesson) l).collect(Collectors.toList());
+                practicalLessons = lessons.stream()
+                        .filter(l -> l instanceof PracticalLesson)
+                        .map(l -> (PracticalLesson) l)
+                        .limit(limit)
+                        .collect(Collectors.toList());
             }
             return practicalLessons;
 
@@ -389,8 +404,11 @@ public class LessonBean implements LessonBeanLocal{
             List<TheoreticalLesson> theoreticalLessons = new ArrayList<>();
 
             if(lessons !=null) {
-                theoreticalLessons = lessons.stream().filter(l -> l instanceof TheoreticalLesson)
-                        .map(l -> (TheoreticalLesson) l).collect(Collectors.toList());
+                theoreticalLessons = lessons.stream()
+                        .filter(l -> l instanceof TheoreticalLesson)
+                        .map(l -> (TheoreticalLesson) l)
+                        .limit(limit)
+                        .collect(Collectors.toList());
             }
             return theoreticalLessons;
 
