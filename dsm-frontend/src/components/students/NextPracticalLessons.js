@@ -64,9 +64,7 @@ class RegisterPersonalAnnouncement extends Component {
     };
 
     successFetchNextPracticalLessons = (response) => {
-        console.log(response.data.lessons)
-
-        let lessons = []
+        let lessons = [];
         let limit = this.state.maxTimeToCancel.split(":");
         let amount, unit;
 
@@ -78,7 +76,7 @@ class RegisterPersonalAnnouncement extends Component {
 
         let dateLimitCancel = moment().add(amount,unit).format();
 
-        response.data.lessons.forEach(function(lesson) {
+        response.data.lessons.forEach(lesson => {
 
             const practDateSplit = lesson.startTime.split(/[/ ]/);
             let isoPractDate = practDateSplit[2] + "-" + practDateSplit[1] + "-" + practDateSplit[0] + "T" + practDateSplit[3];
@@ -89,16 +87,15 @@ class RegisterPersonalAnnouncement extends Component {
                 startTime: lesson.startTime,
                 duration: lesson.duration,
                 canCancel: canCancel,  
-                category: lesson.categories.collection[0].name      
-            })
-        })
+                category: lesson.categories.collection.length > 0 ? lesson.categories.collection[0].name : ' (Não definida)',
+            });
+        });
 
-        //console.log(lessons)
         this.setState({
             lessons: lessons,
-            isLoading: false
-        })
-    }
+            isLoading: false,
+        });
+    };
 
     errorFetch = (error) => {
         if(error.response && error.response.status && error.response.status === 400) {
@@ -140,7 +137,7 @@ class RegisterPersonalAnnouncement extends Component {
      */
     successHandlerCanceled = (response) => {
 
-        let lesson_canceled = this.state.lesson_canceled
+        let lesson_canceled = this.state.lesson_canceled;
 
         if(response.data.success){
             let new_lessons = this.state.lessons.filter(function(less) { return less.id !== lesson_canceled})
