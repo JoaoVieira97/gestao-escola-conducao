@@ -38,6 +38,7 @@ import InstructorHome from "./instructor/InstructorHome";
 import ConfirmNewLesson from "./lessons/ConfirmNewLesson";
 import InstructorLessons from "./instructor/InstructorLessons";
 import NextPracticalLessons from './students/NextPracticalLessons';
+import CategoriesPage from './CategoriesPage';
 
 /**
  * Returns the component just if user is authenticated.
@@ -108,7 +109,7 @@ const Root = ({ store }) => {
         default: (
             <Switch>
                 <Route exact path={Routes.LOGIN} component={LoginPage} />
-                <Route exact path={Routes.CATEGORIES} component={ErrorPage} />
+                <Route exact path={Routes.CATEGORIES} component={CategoriesPage} />
                 <Route exact path={Routes.CONTACTS} component={ErrorPage} />
                 <Redirect from="/" to={Routes.LOGIN} />
             </Switch>
