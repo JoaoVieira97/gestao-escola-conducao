@@ -27,5 +27,5 @@ export default {
     STUDENT_NEXT_PRACTICAL_LESSONS : '/students/student/next_practical_lessons',
 
     // INSTRUCTOR
-    // ...
+    FINALIZE_THEORETICAL:'/lessons/lesson'
 };
