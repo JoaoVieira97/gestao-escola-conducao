@@ -7,7 +7,6 @@ import redis.clients.jedis.JedisPool;
 
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Logger;
 

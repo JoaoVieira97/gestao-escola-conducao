@@ -278,7 +278,9 @@ class RegisterPersonalAnnouncement extends Component {
                                 {this.state.student.name}
                             </Breadcrumb.Section>
                             <Breadcrumb.Divider icon='right angle' />
-                            <Breadcrumb.Section active>Aulas práticas futuras</Breadcrumb.Section>
+                            <Breadcrumb.Section active>
+                                {'Próximas aulas'}
+                            </Breadcrumb.Section>
                         </Breadcrumb>
 
                     </Grid.Column>

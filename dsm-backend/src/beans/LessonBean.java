@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
 
 @Local(LessonBeanLocal.class)
 @Stateless(name = "LessonBean")
