@@ -309,6 +309,8 @@ public class LessonBean implements LessonBeanLocal{
     public List<PracticalLesson> getNextPracticalLessonsInstructor(int instructorID){
 
         try {
+            Timestamp ts = new Timestamp(new Date());
+
 
             List<Lesson> lessons = LessonDAO
                                                 .queryLesson("InstructorUserID = " + instructorID +
