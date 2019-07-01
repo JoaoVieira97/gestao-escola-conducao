@@ -202,21 +202,35 @@ public class LessonBean implements LessonBeanLocal{
     public boolean cancelLessonStudent(int lessonId) {
 
         try {
-            Lesson lesson = LessonDAO.getLessonByORMID(lessonId);
+            PracticalLesson lesson = PracticalLessonDAO.getPracticalLessonByORMID(lessonId);
 
             if(lesson!=null){
 
-                List<Student> students = Arrays.asList(lesson.students.toArray());
+                List<Instructor> instructors = InstructorDAO.queryInstructor("ID>0", "ID");
+                Instructor instructor = null;
+                for (Instructor i : instructors){
+                    if (i.lessons.contains(lesson)){
+                        instructor = i;
+                        break;
+                    }
+                }
 
-                for(Student student : students) {
-                    student.lessons.remove(lesson);
-                    //StudentDAO.save(student);
+                if (instructor != null) {
+
+                    List<Student> students = new ArrayList<Student>(lesson.students.getCollection());
+
+                    for(Student student : students) {
+                        student.lessons.remove(lesson);
+                        StudentDAO.save(student);
+                    }
+
+                    instructor.lessons.remove(lesson);
+
+                    PracticalLessonDAO.delete(lesson);
+
+                    return true;
 
                 }
-                //LessonDAO.save(lesson);
-                PracticalLesson practicalLesson = (PracticalLesson) lesson;
-
-                return PracticalLessonDAO.delete(practicalLesson);
             }
 
         } catch (PersistentException e) {
@@ -275,17 +289,17 @@ public class LessonBean implements LessonBeanLocal{
             lesson.setState("reserved");
             lesson.setIsStudentPresent(false); // by default false
 
+            student.lessons.add(lesson);
             instructor.lessons.add(lesson);
 
-            boolean success = PracticalLessonDAO.save(lesson);
-            if(success) {
-                InstructorDAO.save(instructor);
-                return true;
-            }
+            StudentDAO.save(student);
+            InstructorDAO.save(instructor);
+            PracticalLessonDAO.save(lesson);
+
+            return true;
 
         } catch (PersistentException e) {
             e.printStackTrace();
-            return false;
         }
 
         return false;

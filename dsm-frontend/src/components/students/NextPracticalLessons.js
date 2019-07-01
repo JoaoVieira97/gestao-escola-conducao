@@ -64,7 +64,7 @@ class RegisterPersonalAnnouncement extends Component {
     };
 
     successFetchNextPracticalLessons = (response) => {
-        //console.log(response.data.lessons)
+        console.log(response.data.lessons)
 
         let lessons = []
         let limit = this.state.maxTimeToCancel.split(":");
