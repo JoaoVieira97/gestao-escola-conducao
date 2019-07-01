@@ -65,7 +65,7 @@ class InstructorLessons extends Component {
 
         setTimeout(
             () => this.setState({
-            isLoading: false,}) , 1000);
+            isLoading: false,}) , 2000);
 
     }
 
@@ -83,9 +83,6 @@ class InstructorLessons extends Component {
            nextPracticalLessons: data.practicalLessons,
         });
 
-        console.log('FETCH1');
-        console.log(data);
-
     };
 
     successFetchNextTheoreticalLessons = async (response) => {
@@ -95,8 +92,7 @@ class InstructorLessons extends Component {
             nextTheoreticalLessons: data.theoreticalLessons,
         });
 
-        console.log('FETCH2');
-        console.log(data);
+
     };
 
     successFetchOpenedPracticalLessons = async (response) => {
@@ -107,8 +103,6 @@ class InstructorLessons extends Component {
             openedPracticalLessons: data.practicalLessons,
         });
 
-        console.log('FETCH3');
-        console.log(data);
     };
 
     successFetchOpenedTheoreticalLessons = async (response) => {
@@ -119,8 +113,6 @@ class InstructorLessons extends Component {
             openedTheoreticalLessons: data.theoreticalLessons,
         });
 
-        console.log('FETCH4');
-        console.log(data);
     };
 
     /**
@@ -134,8 +126,6 @@ class InstructorLessons extends Component {
      */
     errorFetchNextPracticalLessons = (error) => {
 
-        console.log('ERROR1');
-        console.log(error);
         this.setState({
             //messageLesson: 'Não foi possível obter as suas próximas aulas marcadas.',
             isLoading: false,
@@ -146,8 +136,7 @@ class InstructorLessons extends Component {
 
     errorFetchNextTheoreticalLessons = (error) => {
 
-        console.log('ERROR2');
-        console.log(error);
+
         this.setState({
             //messageLesson: 'Não foi possível obter as suas próximas aulas marcadas.',
             isLoading: false,
@@ -158,7 +147,6 @@ class InstructorLessons extends Component {
 
     errorFetchOpenedPracticalLessons = (error) => {
 
-        console.log('ERROR3');console.log(error);
         this.setState({
             //messageLesson: 'Não foi possível obter as suas próximas aulas marcadas.',
             isLoading: false,
@@ -168,7 +156,6 @@ class InstructorLessons extends Component {
 
     errorFetchOpenedTheoreticalLessons = (error) => {
 
-        console.log('ERROR4');console.log(error);
         this.setState({
             messageLesson: 'Não foi possível obter as suas próximas aulas marcadas.',
             isLoading: false,
@@ -187,9 +174,8 @@ class InstructorLessons extends Component {
      */
     handleCancelPracticalLesson = (lesson) => {
 
-        this.setState({modalFinalizePractical: false})
+        this.setState({modalCancelOpen: false})
 
-        console.log(lesson);
     };
 
     /**
@@ -364,7 +350,10 @@ class InstructorLessons extends Component {
                     <Card.Header style={{color: '#f2711c'}}>
                         <Button floated='right'
                                 color='black'
-                                //onClick={() => this.setState({modalFinalizePractical: true, lessonFinalize: lesson.id})}
+                                onClick={() => this.props.history.push({
+                                    pathname: Routes.NEW_THEORETICAL,
+                                    //state: {}
+                                })}
                         >
                             {'MARCAR AULA'}
                         </Button>
