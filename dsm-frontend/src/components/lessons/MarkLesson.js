@@ -50,6 +50,7 @@ class MarkLesson extends Component {
             userType: '',
 
             categoryChoosed: {},
+            student:{},
         }
     };
 
@@ -70,8 +71,10 @@ class MarkLesson extends Component {
         }
         else {
 
+            //SECRETARY OR INSTRUCTOR
             this.setState({
                userType: userType,
+               student: this.props.history.location.state.student,
             });
 
             //fetch categories
@@ -198,6 +201,7 @@ class MarkLesson extends Component {
                 {
                     startDate: this.state.selectedDay,
                     categoryID: this.state.category.id,
+                    studentID: this.state.student.id,
                 },
                 {},
                 this.successHandler, this.errorHandler
@@ -327,13 +331,14 @@ class MarkLesson extends Component {
             id: 3,
             icon: 'calendar check',
             title: 'Confirmar',
-            description: 'Confirme o diae horário da aula prática',
+            description: 'Confirme o dia e horário da aula prática',
             component: (
                 <ConfirmNewLesson
                     key={'2'}
                     step={'end'}
                     selectedDay={this.state.selectedDay}
                     instructor={this.state.instructor}
+                    userType={this.state.userType}
                     category={this.state.category}
                     isDisabled={false}
                     onSubmit={this.onSubmit.bind(this)}
@@ -346,18 +351,54 @@ class MarkLesson extends Component {
         }];
 
         return (
-            <Container>
+            <Container style={{marginBottom:'10%'}}>
                 <React.Fragment>
-                    <Breadcrumb size='large'>
-                        <Breadcrumb.Section
-                            style={{color: 'grey'}}
-                            onClick={() => this.props.history.push(Routes.LESSONS)}
-                        >
-                            Aulas
-                        </Breadcrumb.Section>
-                        <Breadcrumb.Divider icon='right angle'/>
-                        <Breadcrumb.Section active>Marcar Aula </Breadcrumb.Section>
-                    </Breadcrumb>
+                    { this.state.userType === 'ROLE_STUDENT' ?
+                        <Breadcrumb size='large'>
+                            <Breadcrumb.Section
+                                style={{color: 'grey'}}
+                                onClick={() => this.props.history.push(Routes.LESSONS)}
+                            >
+                                Aulas
+                            </Breadcrumb.Section>
+                            <Breadcrumb.Divider icon='right angle'/>
+                            <Breadcrumb.Section active>Marcar Aula </Breadcrumb.Section>
+                        </Breadcrumb>
+                        :
+
+                        <Breadcrumb size='large'>
+                            { this.state.userType === 'ROLE_SECRETARY' ?
+                                <Breadcrumb.Section
+                                    style={{color: 'grey'}}
+                                    onClick={() => this.props.history.push(Routes.HOME)}
+                                >
+                                    Alunos
+                                </Breadcrumb.Section>
+                                :
+                                <Breadcrumb.Section
+                                    style={{color: 'grey'}}
+                                    onClick={() => this.props.history.push(Routes.STUDENTS)}
+                                >
+                                    Alunos
+                                </Breadcrumb.Section>
+                            }
+                            <Breadcrumb.Divider icon='right angle' />
+                            <Breadcrumb.Section
+                                style={{color: 'grey'}}
+                                onClick={() => this.props.history.push({
+                                    pathname: Routes.STUDENT_PROFILE,
+                                    state: {
+                                        student: this.state.student,
+                                    }
+                                })}
+                            >
+                                {this.state.student.name}
+                            </Breadcrumb.Section>
+                            <Breadcrumb.Divider icon='right angle' />
+                            <Breadcrumb.Section active>{'Marcar Aula'}</Breadcrumb.Section>
+                        </Breadcrumb>
+
+                    }
                 </React.Fragment>
                 <Container textAlign={'center'}>
                     <div style={{marginTop: 20}}>

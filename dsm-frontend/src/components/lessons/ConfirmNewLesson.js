@@ -60,18 +60,20 @@ class ConfirmNewLesson extends Component {
                             </Card.Content>
                         </Card>
                     </Grid.Column>
-                    <Grid.Column>
-                        <Card fluid raised>
-                            <Card.Content header={'Instrutor'} />
-                            <Card.Content>
-                                <Header as='h1' color={'blue'}>
-                                    {
-                                        this.props.instructor.name
-                                    }
-                                </Header>
-                            </Card.Content>
-                        </Card>
-                    </Grid.Column>
+                    { this.props.userType === 'ROLE_STUDENT' &&
+                        <Grid.Column>
+                            <Card fluid raised>
+                                <Card.Content header={'Instrutor'}/>
+                                <Card.Content>
+                                    <Header as='h1' color={'blue'}>
+                                        {
+                                            this.props.instructor.name
+                                        }
+                                    </Header>
+                                </Card.Content>
+                            </Card>
+                        </Grid.Column>
+                    }
                     <Grid.Column>
                         <Card fluid raised>
                             <Card.Content header={'Dia'} />
@@ -99,6 +101,7 @@ ConfirmNewLesson.propTypes = {
     category: PropTypes.object.isRequired,
     onSubmit: PropTypes.func.isRequired,
     onCancel: PropTypes.func.isRequired,
+    userType: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = state => ({});

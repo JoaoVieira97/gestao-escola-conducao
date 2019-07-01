@@ -42,8 +42,8 @@ class StudentProfile extends Component {
 
         const userType = Authentication.getUserType();
 
-        let birth = this.props.location.state.student.birth
-        let birth_aux = birth.split("/")
+        let birth = this.props.location.state.student.birth;
+        let birth_aux = birth.split("/");
         let new_date = birth_aux[2] + "-" + birth_aux[1] + "-" + birth_aux[0]
 
         await this.setState({
@@ -56,7 +56,7 @@ class StudentProfile extends Component {
             cc: this.props.location.state.student.cc,
 
             userType: userType
-        })
+        });
 
     }
 
@@ -173,7 +173,9 @@ class StudentProfile extends Component {
                         color={'green'}
                         onClick={() => this.props.history.push({
                             pathname: Routes.MARK_LESSON,
-                            //state: {}
+                            state: {
+                                student: this.state.student,
+                            }
                         })}
                     />
                     <Button
@@ -194,7 +196,9 @@ class StudentProfile extends Component {
                         color={'green'}
                         onClick={() => this.props.history.push({
                             pathname: Routes.MARK_LESSON,
-                            //state: {}
+                            state: {
+                                student: this.state.student,
+                            }
                         })}
                     />
                 </React.Fragment>
