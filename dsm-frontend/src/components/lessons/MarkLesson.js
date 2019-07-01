@@ -117,11 +117,12 @@ class MarkLesson extends Component {
     onChangeCategory = async (event, data) => {
 
         let nameCategory = this.state.allCategories.filter(category => (category.value === data.value));
-        
+
         await this.setState({
             categoryChoosed: data.value,
             category: {
-                name: nameCategory[0].text
+                name: nameCategory[0].text,
+                id: data.value,
                 }
         });
 
@@ -175,17 +176,33 @@ class MarkLesson extends Component {
 
         this.setState({isLoading: true});
         this.removeNewViewUser();
-        fetchApi(
-            'post',
-            '/lesson/student/new',
-            {
-                startDate: this.state.selectedDay,
-                categoryID: this.state.category.id,
-                instructorID: this.state.instructor.id,
-            },
-            {},
-            this.successHandler, this.errorHandler
-        );
+
+        if(this.state.userType === 'ROLE_STUDENT') {
+            fetchApi(
+                'post',
+                '/lesson/student/new',
+                {
+                    startDate: this.state.selectedDay,
+                    categoryID: this.state.category.id,
+                    instructorID: this.state.instructor.id,
+                },
+                {},
+                this.successHandler, this.errorHandler
+            );
+        }
+        else {
+
+            fetchApi(
+                'post',
+                '/lesson/student/new',
+                {
+                    startDate: this.state.selectedDay,
+                    categoryID: this.state.category.id,
+                },
+                {},
+                this.successHandler, this.errorHandler
+            );
+        }
     };
     successHandler = (response) => {
 
