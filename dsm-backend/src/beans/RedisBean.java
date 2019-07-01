@@ -5,13 +5,14 @@ import dsm.PracticalLesson;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
+import javax.ejb.*;
 import java.util.*;
 import java.util.logging.Logger;
 
 @Startup
 @Singleton(name = "RedisBean")
+@ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
+@AccessTimeout(value = 5000)
 public class RedisBean implements RedisBeanLocal {
 
 
@@ -31,6 +32,7 @@ public class RedisBean implements RedisBeanLocal {
      * @param id User id
      */
     @Override
+    @Lock(LockType.READ)
     public void setUserToken(String token, int id) {
 
         // Opens and close it-self
@@ -45,6 +47,7 @@ public class RedisBean implements RedisBeanLocal {
      * @param token Generated token
      */
     @Override
+    @Lock(LockType.READ)
     public void removeUserToken(String token) {
 
         // Opens and close it-self
@@ -61,13 +64,17 @@ public class RedisBean implements RedisBeanLocal {
      * @return User id
      */
     @Override
+    @Lock(LockType.READ)
     public int getUserIDByToken(String token) {
 
         // Opens and close it-self
         try (Jedis jedis = this.jedisPool.getResource()) {
 
             if (jedis.exists(token)) {
-                return Integer.parseInt(jedis.get(token));
+                String id = jedis.get(token);
+                if(id != null) {
+                    return Integer.parseInt(id);
+                }
             }
 
             return -1;
@@ -80,6 +87,7 @@ public class RedisBean implements RedisBeanLocal {
      * @return
      */
     @Override
+    @Lock(LockType.READ)
     public boolean isTokenValid(String token) {
 
         // Opens and close it-self
@@ -94,6 +102,7 @@ public class RedisBean implements RedisBeanLocal {
      * @return
      */
     @Override
+    @Lock(LockType.READ)
     public Map<String, Long> getUsersViewing() {
 
         // Opens and close it-self
@@ -131,6 +140,7 @@ public class RedisBean implements RedisBeanLocal {
      * @return
      */
     @Override
+    @Lock(LockType.READ)
     public boolean addUsersViewing(String instructorID, String datetime) {
 
         // Opens and close it-self
@@ -156,6 +166,7 @@ public class RedisBean implements RedisBeanLocal {
      * @return
      */
     @Override
+    @Lock(LockType.READ)
     public boolean removeUsersViewing(String instructorID, String datetime) {
 
         // Opens and close it-self

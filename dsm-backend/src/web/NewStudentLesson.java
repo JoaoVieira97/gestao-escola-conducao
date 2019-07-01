@@ -49,35 +49,42 @@ public class NewStudentLesson extends HttpServlet {
                 // coming from student
                 id = DSMFacade.getUserIDByToken(accessToken);
             }
-            int categoryID = (Integer) JSON.get("categoryID");
-            int instructorID = (Integer) JSON.get("instructorID");
-            String startDate = (String) JSON.get("startDate");
 
-            try {
+            if(id == -1) {
+                responseNode.put("error", Utils.INVALID_USER_TOKEN);
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            }
+            else {
+                int categoryID = (Integer) JSON.get("categoryID");
+                int instructorID = (Integer) JSON.get("instructorID");
+                String startDate = (String) JSON.get("startDate");
 
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-                Date parsedDate = dateFormat.parse(startDate);
-                Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
+                try {
 
-                boolean created = DSMFacade.createNewLesson(id, instructorID, categoryID, timestamp);
-                if(created) {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                    Date parsedDate = dateFormat.parse(startDate);
+                    Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
 
-                    responseNode.put("success", true);
-                    response.setStatus(HttpServletResponse.SC_OK);
-                }
-                else {
+                    boolean created = DSMFacade.createNewLesson(id, instructorID, categoryID, timestamp);
+                    if(created) {
+
+                        responseNode.put("success", true);
+                        response.setStatus(HttpServletResponse.SC_OK);
+                    }
+                    else {
+                        responseNode.put("error", Utils.ERROR_FETCHING_DATA);
+                        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                    }
+
+                } catch(Exception e) {
+
                     responseNode.put("error", Utils.ERROR_FETCHING_DATA);
                     response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                    response.setContentType("application/json;charset=UTF-8");
+                    response.getWriter().write(
+                            mapper.writerWithDefaultPrettyPrinter().writeValueAsString(responseNode)
+                    );
                 }
-
-            } catch(Exception e) {
-
-                responseNode.put("error", Utils.ERROR_FETCHING_DATA);
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                response.setContentType("application/json;charset=UTF-8");
-                response.getWriter().write(
-                        mapper.writerWithDefaultPrettyPrinter().writeValueAsString(responseNode)
-                );
             }
         }
         else {
