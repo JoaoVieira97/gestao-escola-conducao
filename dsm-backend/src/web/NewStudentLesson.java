@@ -40,24 +40,47 @@ public class NewStudentLesson extends HttpServlet {
 
             // parsing data
             // ------------------------------------------------------------
-            int id;
-            String studentID = (String) JSON.get("studentID");
-            if (studentID != null){
-                // not coming from student
-                id = Integer.parseInt(studentID);
-            } else{
-                // coming from student
-                id = DSMFacade.getUserIDByToken(accessToken);
+            int categoryID = -1;
+            String startDate = null;
+            int studentID;
+            int instructorID;
+
+            //coming from all
+            if(JSON.get("categoryID") != null) {
+                if(JSON.get("categoryID") instanceof Integer)
+                    categoryID = (Integer) JSON.get("categoryID");
+                else
+                    categoryID = Integer.parseInt((String) JSON.get("categoryID"));
+            }
+            if(JSON.get("startDate") != null) {
+                startDate = (String) JSON.get("startDate");
             }
 
-            if(id == -1) {
-                responseNode.put("error", Utils.INVALID_USER_TOKEN);
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            // coming from instructor or secretary
+            if(JSON.get("studentID") != null) {
+                if(JSON.get("studentID") instanceof Integer)
+                    studentID = (Integer) JSON.get("studentID");
+                else
+                    studentID = Integer.parseInt((String) JSON.get("studentID"));
             }
+            // coming from student
             else {
-                int categoryID = (Integer) JSON.get("categoryID");
-                int instructorID = (Integer) JSON.get("instructorID");
-                String startDate = (String) JSON.get("startDate");
+                studentID = DSMFacade.getUserIDByToken(accessToken);
+            }
+
+            // coming from student or secretary
+            if(JSON.get("instructorID") != null) {
+                if(JSON.get("instructorID") instanceof Integer)
+                    instructorID = (Integer) JSON.get("instructorID");
+                else
+                    instructorID = Integer.parseInt((String) JSON.get("studentID"));
+            }
+            // coming from instructor
+            else {
+                instructorID = DSMFacade.getUserIDByToken(accessToken);
+            }
+
+            if(categoryID != -1 && startDate != null && studentID != -1 && instructorID != -1) {
 
                 try {
 
@@ -65,7 +88,7 @@ public class NewStudentLesson extends HttpServlet {
                     Date parsedDate = dateFormat.parse(startDate);
                     Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
 
-                    boolean created = DSMFacade.createNewLesson(id, instructorID, categoryID, timestamp);
+                    boolean created = DSMFacade.createNewLesson(studentID, instructorID, categoryID, timestamp);
                     if(created) {
 
                         responseNode.put("success", true);

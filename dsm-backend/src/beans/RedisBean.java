@@ -1,7 +1,5 @@
 package beans;
 
-import dsm.Lesson;
-import dsm.PracticalLesson;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
