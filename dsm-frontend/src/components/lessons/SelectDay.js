@@ -102,12 +102,23 @@ class SelectDay extends Component {
      */
     fetchInstructorWorkingDays = () => {
 
-        fetchApi(
-            'get',
-            `/instructor/working_days?instructorID=${this.props.instructor.id}`,
-            {}, {},
-            this.successHandlerWorkingDays, this.errorHandlerWorkingDays
-        );
+        if(this.props.userType === 'ROLE_STUDENT') {
+
+            fetchApi(
+                'get',
+                `/instructor/working_days?instructorID=${this.props.instructor.id}`,
+                {}, {},
+                this.successHandlerWorkingDays, this.errorHandlerWorkingDays
+            );
+        }
+        else {
+            fetchApi(
+                'get',
+                '/instructor/working_days',
+                {}, {},
+                this.successHandlerWorkingDays, this.errorHandlerWorkingDays
+            );
+        }
     };
     successHandlerWorkingDays = (response) => {
 
@@ -150,15 +161,28 @@ class SelectDay extends Component {
      */
     fetchInstructorLessons = () => {
 
-        fetchApi(
-            'get',
-            '/lessons/instructor/between_dates?' +
-                `instructorID=${this.props.instructor.id}` +
-                `&startDate=${this.props.startDate.getTime()}` +
+        if(this.props.userType === 'ROLE_STUDENT') {
+            fetchApi(
+                'get',
+                '/lessons/instructor/between_dates?' +
+                    `instructorID=${this.props.instructor.id}` +
+                    `&startDate=${this.props.startDate.getTime()}` +
+                    `&endDate=${this.props.endDate.getTime()}`,
+                {}, {},
+                this.successHandlerInstructorLessons, this.errorHandlerInstructorLessons
+            );
+        }
+        else {
+
+            fetchApi(
+                'get',
+                '/lessons/instructor/between_dates?' +
+                `startDate=${this.props.startDate.getTime()}` +
                 `&endDate=${this.props.endDate.getTime()}`,
-            {}, {},
-            this.successHandlerInstructorLessons, this.errorHandlerInstructorLessons
-        );
+                {}, {},
+                this.successHandlerInstructorLessons, this.errorHandlerInstructorLessons
+            );
+        }
     };
     successHandlerInstructorLessons = (response) => {
 
@@ -411,6 +435,7 @@ SelectDay.propTypes = {
     isDisabled: PropTypes.bool.isRequired,
     onConfirmDay: PropTypes.func.isRequired,
     onCancelDay: PropTypes.func.isRequired,
+    userType: PropTypes.string.isRequired,
 };
 
 

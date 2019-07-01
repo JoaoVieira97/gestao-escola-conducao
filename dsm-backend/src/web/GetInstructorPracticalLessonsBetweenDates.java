@@ -40,7 +40,13 @@ public class GetInstructorPracticalLessonsBetweenDates extends HttpServlet {
         if(accessToken != null && DSMFacade.isTokenValid(accessToken)) {
 
             String instructorID = request.getParameter("instructorID");
-            int instID = Integer.parseInt(instructorID);
+            int instID;
+            if(instructorID!=null){
+                instID = Integer.parseInt(instructorID);
+            }
+            else {
+                instID = DSMFacade.getUserIDByToken(accessToken);
+            }
 
             String startDate = request.getParameter("startDate");
             long startTimestamp = Long.parseLong(startDate);

@@ -33,8 +33,16 @@ public class GetWorkingDays extends HttpServlet {
         String accessToken = Utils.getAuthenticationToken(request);
         if(accessToken != null && DSMFacade.isTokenValid(accessToken)) {
 
+
+
             String instructorID = request.getParameter("instructorID");
-            int instID = Integer.parseInt(instructorID);
+            int instID;
+            if(instructorID!=null){
+                instID = Integer.parseInt(instructorID);
+            }
+            else {
+                instID = DSMFacade.getUserIDByToken(accessToken);
+            }
 
             List<WorkingDay> workingDays = DSMFacade.getWorkingDays(instID);
             if(workingDays!= null) {

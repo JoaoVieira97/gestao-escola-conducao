@@ -153,7 +153,7 @@ class StudentProfile extends Component {
         }
         
     };
-    
+
     render() {
 
         const buttonsHeader = this.state.userType === 'ROLE_SECRETARY' ?
@@ -171,7 +171,10 @@ class StudentProfile extends Component {
                         icon='calendar'
                         content='Marcar Aula'
                         color={'green'}
-                        //onClick={() => this.setState({edit: !this.state.edit})}
+                        onClick={() => this.props.history.push({
+                            pathname: Routes.MARK_LESSON,
+                            //state: {}
+                        })}
                     />
                     <Button
                         style={{marginBottom: '3px'}}
@@ -189,7 +192,10 @@ class StudentProfile extends Component {
                         icon='calendar'
                         content='Marcar Aula'
                         color={'green'}
-                        //onClick={() => this.setState({edit: !this.state.edit})}
+                        onClick={() => this.props.history.push({
+                            pathname: Routes.MARK_LESSON,
+                            //state: {}
+                        })}
                     />
                 </React.Fragment>
             );

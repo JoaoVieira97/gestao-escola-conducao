@@ -1,14 +1,71 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {Container, Grid, Card, Header} from "semantic-ui-react";
+import {Container, Grid, Card, Header, Dropdown} from "semantic-ui-react";
 import {MarkLessonHeader} from "./MarkLessonHeader";
 import DatePicker from "react-datepicker";
 
 
 class SelectWeek extends Component {
 
+
+
+
     render() {
+
+        const roleStudent = (
+          <Grid.Column>
+              <Grid.Row style={{paddingBottom: 20}}>
+                  <Grid.Column>
+                      <Card fluid raised>
+                          <Card.Content header={'Categoria'} />
+                          <Card.Content>
+                              <Header as='h1' color={'blue'}>
+                                  {this.props.category.name.split(' ')[1]}
+                              </Header>
+                          </Card.Content>
+                      </Card>
+                  </Grid.Column>
+              </Grid.Row>
+              <Grid.Row>
+                  <Grid.Column>
+                      <Card fluid raised>
+                          <Card.Content header={'Instrutor'} />
+                          <Card.Content>
+                              <Header as='h1' color={'blue'}>
+                                  {
+                                      this.props.instructor.name
+                                  }
+                              </Header>
+                          </Card.Content>
+                      </Card>
+                  </Grid.Column>
+              </Grid.Row>
+          </Grid.Column>
+        );
+
+        const roleInstructorOrSecretary = (
+            <Grid.Column>
+              <Grid.Row style={{paddingBottom: 20}}>
+                  <Grid.Column>
+                      <Card fluid raised>
+                          <Card.Content header={'Categoria'} />
+                          <Card.Content>
+                              <Dropdown
+                                  placeholder='Selecione uma categoria'
+                                  fluid
+                                  selection
+                                  options={this.props.allCategories}
+                                  onChange={this.props.onChangeCategory}
+
+                              />
+                          </Card.Content>
+                      </Card>
+                  </Grid.Column>
+              </Grid.Row>
+            </Grid.Column>
+        );
+
         return (
             <Container>
                 <MarkLessonHeader
@@ -35,36 +92,10 @@ class SelectWeek extends Component {
                             />
                         </Card>
                     </Grid.Column>
-                    <Grid.Column>
-                        <Grid.Row style={{paddingBottom: 20}}>
-                            <Grid.Column>
-                                <Card fluid raised>
-                                    <Card.Content header={'Categoria'} />
-                                    <Card.Content>
-                                        <Header as='h1' color={'blue'}>
-                                            {
-                                                this.props.category.name.split(' ')[1]
-                                            }
-                                        </Header>
-                                    </Card.Content>
-                                </Card>
-                            </Grid.Column>
-                        </Grid.Row>
-                        <Grid.Row>
-                            <Grid.Column>
-                                <Card fluid raised>
-                                    <Card.Content header={'Instrutor'} />
-                                    <Card.Content>
-                                        <Header as='h1' color={'blue'}>
-                                            {
-                                                this.props.instructor.name
-                                            }
-                                        </Header>
-                                    </Card.Content>
-                                </Card>
-                            </Grid.Column>
-                        </Grid.Row>
-                    </Grid.Column>
+                        {this.props.userType === 'ROLE_STUDENT' ?
+                            roleStudent :
+                            roleInstructorOrSecretary
+                        }
                     <Grid.Column textAlign={'left'}>
                         <DatePicker
                             inline
@@ -97,6 +128,9 @@ SelectWeek.propTypes = {
     isDisabled: PropTypes.bool.isRequired,
     onConfirmWeek: PropTypes.func.isRequired,
     onCancelWeek: PropTypes.func.isRequired,
+    userType: PropTypes.string.isRequired,
+    allCategories: PropTypes.array.isRequired,
+    onChangeCategory: PropTypes.func.isRequired,
 };
 
 

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {
     Container, Loader, Dimmer, Breadcrumb, Icon, Card, List,
-    Button, Divider, Dropdown, Pagination, Segment, Form, Table, Header, Grid,
+    Button, Divider, Dropdown, Pagination, Segment, Form, Table, Grid,
 } from 'semantic-ui-react';
 
 import {fetchApi} from "../../services/api";

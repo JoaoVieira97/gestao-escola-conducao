@@ -1,14 +1,13 @@
 import React, {Component} from 'react';
 import {
-    Container, Loader, Dimmer, Breadcrumb, Icon, Card, List,
-    Button, Divider, Dropdown, Pagination, Segment, Form, Table, Header, Grid, Message, Input
+    Container, Loader, Dimmer, Breadcrumb,
+    Button, Segment, Form, Header, Message, Input
 } from 'semantic-ui-react';
 
 import {fetchApi} from "../../services/api";
 import Routes from "../../services/Routes";
 
-import {StudentFilter} from "../students/StudentFilter";
-import _ from "lodash";
+
 import Authentication from "../../services/Authentication";
 
 import moment from 'moment'
@@ -143,7 +142,6 @@ class MarkTheoreticalLesson extends Component {
             categoriesChoosed : categoriesChoosed,
         });
 
-        console.log(this.state.categoriesChoosed);
     };
 
     handleSelectThemeChange = (event, data) => {
@@ -156,13 +154,12 @@ class MarkTheoreticalLesson extends Component {
             themesChoosed : themesChoosed,
         });
 
-        console.log(this.state.themesChoosed);
     };
 
     handleSubmit = () => {
 
         const { categoriesChoosed, themesChoosed , date} = this.state;
-        if(categoriesChoosed.length > 0 && categoriesChoosed.length > 0 && date!=='') {
+        if(categoriesChoosed.length > 0 && themesChoosed.length > 0 && date!=='') {
 
 
         } else {

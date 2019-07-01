@@ -100,6 +100,7 @@ const Root = ({ store }) => {
                 <PrivateRoute exact path={Routes.HOME} component={InstructorHome} />
                 <PrivateRoute exact path={Routes.STUDENTS} component={AllStudents} />
                 <PrivateRoute exact path={Routes.STUDENT_PROFILE} component={StudentProfile} />
+                <PrivateRoute exact path={Routes.MARK_LESSON} component={MarkLesson} />
                 <PrivateRoute exact path={Routes.HOME_ANNOUNCEMENTS} component={Announcements} />
                 <PrivateRoute exact path={Routes.LESSONS} component={InstructorLessons} />
                 <PrivateRoute exact path={Routes.FINALIZE_THEORETICAL} component={FinalizeTheoreticalLesson} />

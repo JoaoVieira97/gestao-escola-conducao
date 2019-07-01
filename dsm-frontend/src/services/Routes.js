@@ -26,7 +26,9 @@ export default {
     REGISTER_GENERAL_ANNOUNCEMENT: '/register_general_announcement',
     STUDENT_NEXT_PRACTICAL_LESSONS : '/students/student/next_practical_lessons',
 
+    MARK_LESSON: '/students/student/new_lesson',
+
     // INSTRUCTOR
     FINALIZE_THEORETICAL:'/lessons/lesson',
-    NEW_THEORETICAL:'/lessons/new_theoretical'
+    NEW_THEORETICAL:'/lessons/new_theoretical',
 };

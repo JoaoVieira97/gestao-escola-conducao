@@ -35,6 +35,7 @@ class MarkLesson extends Component {
             stepId: 1,
             instructor: {name: 'A carregar...'},
             category: {name: 'A carregar...'},
+            allCategories: [],
             isStepOneDisabled: false,
 
             // first step
@@ -43,17 +44,25 @@ class MarkLesson extends Component {
             isStepTwoDisabled: true,
 
             // second step
-            selectedDay: ''
+            selectedDay: '',
+
+            //STUDENT OR OTHER
+            userType: '',
+
+            categoryChoosed: {},
         }
     };
 
     componentDidMount() {
 
+        const userType = Authentication.getUserType();
+
         if(this.props.history.location.state &&
             this.props.history.location.state.categoryChoosed &&
             this.props.history.location.state.instructor
         ) {
-            this.setState({
+             this.setState({
+                userType : userType,
                 instructor: this.props.history.location.state.instructor,
                 category: this.props.history.location.state.categoryChoosed,
                 isLoading: false
@@ -61,9 +70,62 @@ class MarkLesson extends Component {
         }
         else {
 
-            this.props.history.push(Routes.LESSONS);
+            this.setState({
+               userType: userType,
+            });
+
+            //fetch categories
+            fetchApi(
+                'get','/school/categories_and_instructors',
+                {},  {},
+                this.successFetchCategories, this.errorHandler
+            );
+            //this.props.history.push(Routes.LESSONS);
         }
     }
+
+    /**
+     * Handle the response fetch catgories.
+     * @param response
+     */
+    successFetchCategories = async (response) => {
+
+        const data = response.data;
+
+        let categories_options = [];
+
+        data.categories.forEach(function(category) {
+            categories_options.push({
+                key: category.id,
+                text: 'Categoria ' + category.name,
+                value: category.id
+            })
+        });
+
+        await this.setState({
+            allCategories: categories_options,
+            isLoading: false,
+        })
+
+    };
+
+
+    /**
+     * When instructor choose the category's lesson.
+     * @param date
+     */
+    onChangeCategory = async (event, data) => {
+
+        let nameCategory = this.state.allCategories.filter(category => (category.value === data.value));
+        
+        await this.setState({
+            categoryChoosed: data.value,
+            category: {
+                name: nameCategory[0].text
+                }
+        });
+
+    };
 
     /**
      * When user press one day in the first step.
@@ -215,6 +277,9 @@ class MarkLesson extends Component {
                     isDisabled={this.state.isStepOneDisabled}
                     onConfirmWeek={() => this.setState(state => ({stepId: state.stepId + 1}))}
                     onCancelWeek={() => this.props.history.push(Routes.LESSONS)}
+                    userType={this.state.userType}
+                    allCategories={this.state.allCategories}
+                    onChangeCategory={this.onChangeCategory.bind(this)}
                 />
             )
         }, {
@@ -232,6 +297,7 @@ class MarkLesson extends Component {
                     onSelectDay={this.onSelectDay.bind(this)}
                     onRemoveDay={this.onRemoveDay.bind(this)}
                     instructor={this.state.instructor}
+                    userType={this.state.userType}
                     isDisabled={this.state.isStepTwoDisabled}
                     onConfirmDay={() => {
                         this.setState(state => ({stepId: state.stepId + 1}));
