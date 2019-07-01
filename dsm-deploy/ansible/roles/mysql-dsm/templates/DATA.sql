@@ -1,6 +1,7 @@
 USE dsm;
 
-SET time_zone = '+00:00';
+# DO NOT SET THIS
+# SET time_zone = '+00:00';
 
 # ------------------------------------------------------------------------------------------------------------------------------------------------
 # SCHOOL DATA
@@ -138,14 +139,19 @@ INSERT INTO Lesson (ID, InstructorUserID, StartTime, Duration, State)
            (7, 4, '2019-06-22 10:00:00', 60, 'realized'),
            (8, 5, '2019-08-05 17:00:00', 60, 'realized'),
            (9, 5, '2019-08-10 10:00:00', 60, 'realized'),
-           (10, 4, '2019-06-28 10:00:00', 60, 'opened');
+           (10, 4, '2019-06-28 10:00:00', 60, 'opened'),
+           (11, 4, '2019-06-29 10:00:00', 60, 'reserved'),
+           (12, 4, '2019-06-30 10:00:00', 60, 'reserved'),
+           (13, 4, '2019-06-28 10:00:00', 60, 'reserved');
 
 INSERT INTO Student_Lesson (StudentUserID, LessonID)
 	VALUES (1, 1), (2, 2),
            (3, 3), (3, 4),
            (1, 5), (1, 6),
            (1, 7), (1, 8),
-           (1, 9), (1,10);
+           (1, 9), (1,10),
+           (1, 11), (1,12),
+           (1,13);
 
 INSERT INTO PracticalLesson (IsStudentPresent, LessonID)
 	VALUES (false, 1),
@@ -154,7 +160,11 @@ INSERT INTO PracticalLesson (IsStudentPresent, LessonID)
            (false, 4),
            (true, 5),
            (false, 6),
-           (true, 8);
+           (true, 8),
+           (true, 11),
+           (true, 12),
+           (true, 13);
+           
 INSERT INTO TheoreticalLesson (LessonID)
     VALUES (7), (9), (10);
 
@@ -169,7 +179,7 @@ INSERT INTO Theme_TheoreticalLesson (ThemeID, TheoreticalLessonLessonID)
             (8, 10),
             (4, 10),
             (2, 10),
-            (6, 10);    
+            (6, 10);
 
 INSERT INTO Lesson_Category (LessonID, CategoryID)
     VALUES (1, 6),
@@ -178,10 +188,35 @@ INSERT INTO Lesson_Category (LessonID, CategoryID)
            (7, 6),
            (8, 3),
            (9, 3),
-           (10, 6);               
+           (10, 6),
+           (11, 6),
+           (12, 6),
+           (13, 6);
 
 INSERT INTO Exam (ID, StudentUserID, StartTime, Description)
 	VALUES (1, 1, "2019-07-01 14:30:00", 'Exame Teórico - Categoria B'),
 		   (2, 2, "2019-07-02 15:30:00", 'Exame Teórico - Categoria B'),
            (3, 3, "2019-07-03 16:30:00", 'Exame Teórico - Categoria B'),
            (4, 3, "2019-08-20 11:00:00", 'Exame Prático - Categoria B');
+
+# ------------------------------------------------------------------------------------------------------------------------------------------------
+# INSTRUCTOR DATA
+# ------------------------------------------------------------------------------------------------------------------------------------------------
+
+INSERT INTO WorkingDay (ID, Name)
+  VALUES  (1, 'Domingo'),
+          (2, 'Segunda'),
+          (3, 'Terça'),
+          (4, 'Quarta'),
+          (5, 'Quinta'),
+          (6, 'Sexta'),
+          (7, 'Sábado');
+
+
+INSERT INTO Instructor_WorkingDay (InstructorUserID, WorkingDayID)
+  VALUES (4, 2),
+          (4, 4),
+          (4, 6),
+          (5, 3),
+          (5, 5),
+          (5, 7);          
