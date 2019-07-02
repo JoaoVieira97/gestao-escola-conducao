@@ -45,7 +45,7 @@ public class LessonBean implements LessonBeanLocal{
         return session;
     }
 
-    private static final int limit = 10;
+    private static final int limit = 20;
 
     /**
      * Get user lessons.
@@ -86,15 +86,27 @@ public class LessonBean implements LessonBeanLocal{
     @Override
     public List<Lesson> getRealizedLessonsStudent(int studentId) {
 
-        List<Lesson> lessons = this.getLessonsStudent(studentId);
-        List<Lesson> res = new ArrayList<>();
+        try {
 
-        if(lessons!=null)
-            res = lessons.stream()
-                    .filter(l -> l.getState().equals("realized"))
-                    .collect(Collectors.toList());
+            Student student = StudentDAO.getStudentByORMID(studentId);
+            if(student != null) {
 
-        return res;
+                List<Lesson> lessons = new ArrayList<Lesson>(student.lessons.getCollection());
+                List<Lesson> limited = lessons.stream()
+                        .filter(l -> l.getState().equals("realized"))
+                        .sorted(Comparator.comparing(Lesson::getStartTime))
+                        .limit(limit)
+                        .collect(Collectors.toList());
+
+                return limited;
+            }
+
+        } catch (PersistentException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return null;
     }
 
     /**
@@ -108,12 +120,11 @@ public class LessonBean implements LessonBeanLocal{
         List<Lesson> lessons = this.getRealizedLessonsStudent(studentId);
         List<PracticalLesson> practicalLessons = new ArrayList<>();
 
-        if(lessons!=null){
+        if(lessons!=null) {
             practicalLessons = lessons.stream()
-                                        .filter(l -> l instanceof PracticalLesson &&
-                                                    ((PracticalLesson) l).getIsStudentPresent())
-                                        .map(l -> (PracticalLesson) l)
-                                        .collect(Collectors.toList());
+                .filter(l -> l instanceof PracticalLesson)
+                .map(l -> (PracticalLesson) l)
+                .collect(Collectors.toList());
         }
 
         return practicalLessons;
@@ -168,17 +179,26 @@ public class LessonBean implements LessonBeanLocal{
     @Override
     public List<Lesson> getStudentNextPracticalLessons(int studentID) {
 
-        List<Lesson> pratical_lessons = null;
-        List<Lesson> lessons = this.getLessonsStudent(studentID);
+        try {
 
-        if (lessons!= null){
-            pratical_lessons = lessons.stream()
-                    .filter(l -> l instanceof PracticalLesson && l.getState().equals("reserved"))
-                    .sorted(Comparator.comparing(Lesson::getStartTime))
-                    .collect(Collectors.toList());
+            Student student = StudentDAO.getStudentByORMID(studentID);
+            if(student != null) {
+
+                long today = (new Timestamp((new Date().getTime()))).getTime();
+
+                List<Lesson> lessons = new ArrayList<Lesson>(student.lessons.getCollection());
+                return lessons.stream()
+                        .filter(l -> l.getStartTime().getTime() >= today)
+                        .filter(l -> l instanceof PracticalLesson && l.getState().equals("reserved"))
+                        .sorted(Comparator.comparing(Lesson::getStartTime))
+                        .limit(limit)
+                        .collect(Collectors.toList());
+            }
+        } catch (PersistentException e) {
+            e.printStackTrace();
         }
 
-        return pratical_lessons;
+        return null;
     }
 
     /**
@@ -189,17 +209,27 @@ public class LessonBean implements LessonBeanLocal{
     @Override
     public List<TheoreticalLesson> getStudentNextTheoreticalLessons(int studentID) {
 
-        List<TheoreticalLesson> theoreticalLessons = new ArrayList<>();
-        List<Lesson> lessons = this.getLessonsStudent(studentID);
+        try {
 
-        if (lessons!= null){
-            theoreticalLessons = lessons.stream()
-                    .filter(l -> l instanceof TheoreticalLesson && l.getState().equals("opened"))
-                    .map(l -> (TheoreticalLesson) l)
-                    .collect(Collectors.toList());
+            Student student = StudentDAO.getStudentByORMID(studentID);
+            if(student != null) {
+
+                long today = (new Timestamp((new Date().getTime()))).getTime();
+
+                List<Lesson> lessons = new ArrayList<Lesson>(student.lessons.getCollection());
+                return lessons.stream()
+                        .filter(l -> l.getStartTime().getTime() >= today)
+                        .filter(l -> l instanceof TheoreticalLesson && l.getState().equals("opened"))
+                        .map(l -> (TheoreticalLesson) l)
+                        .sorted(Comparator.comparing(Lesson::getStartTime))
+                        .limit(limit)
+                        .collect(Collectors.toList());
+            }
+        } catch (PersistentException e) {
+            e.printStackTrace();
         }
 
-        return theoreticalLessons;
+        return null;
     }
 
     /**
