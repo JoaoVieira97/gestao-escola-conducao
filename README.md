@@ -1,14 +1,14 @@
-# DRIVING SCHOOLS MANAGEMENT - Web Application
+# DRIVING SCHOOL MANAGEMENT - Web Application
 
 Application Engineering Project 2018/19, Computer and Software Engineering Course @ University of Minho, Braga - Portugal
 
 - _Gestão de Escolas de Condução_
 
-The main goal of this project is to **develop a web application** capable of managing multiple **Driving Schools**. In this project, we are using a lot of technologies that allow us to develop this management application, such as:
+The main goal of this project is to **develop a web application** capable of managing any **Driving School**. In this project, we are using a lot of technologies that allow us to develop this management application, such as:
 
 - **UML** modelation using [Visual Paradigm](https://www.visual-paradigm.com/);
 
-- The **backend** is being developed using Java EE and [Hibernate](https://hibernate.org/) (MySQL);
+- The **backend** is being developed using Java EE, [Hibernate](https://hibernate.org/) (MySQL) and Redis;
 
 - Our **frontend** is being developed using [React](https://reactjs.org/) and [Redux](https://redux.js.org/introduction/getting-started).
 
